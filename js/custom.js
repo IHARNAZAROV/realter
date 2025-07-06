@@ -470,7 +470,7 @@ function home_projects_filter(){
 		margin:30,
 		nav:true,
 		dots: false,
-		navText: ['Prev', 'Next'],
+		navText: ['Предыдущий', 'Следующий'],
 		responsive:{
 			0:{
 				items:1,
