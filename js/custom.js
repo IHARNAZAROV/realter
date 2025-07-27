@@ -9,10 +9,6 @@ All JavaScript fuctions Start
 		document.ready ALL FUNCTION START
 	---------------------------------------------------------------------------------------------*/
 
-	//  Shop Product Price Range Slider function by = bootstrap-slider.min.js ========================== //
-	function shop_product_price() {
-		jQuery("#ex2").slider({});
-	}
 
 	// > TouchSpin box function by  = jquery.bootstrap-touchspin.js =============== // 
 	function input_number_vertical_form() {
@@ -20,25 +16,6 @@ All JavaScript fuctions Start
 			verticalbuttons: true,
 			verticalupclass: 'fa fa-plus',
 			verticaldownclass: 'fa fa-minus'
-		});
-	}
-	// Bootstrap Select box function by  = bootstrap-select.min.js
-	function Bootstrap_Select() {
-		jQuery('.selectpicker').selectpicker();
-	}
-
-	//________Top Search bar Show Hide function by = custom.js________//	
-
-	function site_search() {
-		jQuery('a[href="#search"]').on('click', function (event) {
-			jQuery('#search').addClass('open');
-			jQuery('#search > form > input[type="search"]').focus();
-		});
-
-		jQuery('#search, #search button.close').on('click keyup', function (event) {
-			if (event.target === this || event.target.className === 'close') {
-				jQuery(this).removeClass('open');
-			}
 		});
 	}
 
@@ -131,54 +108,6 @@ All JavaScript fuctions Start
 			jQuery('.bg-moving').bgscroll({ scrollSpeed: 20, direction: 'h' });
 		});
 	}
-
-	//________input type file function by = custom.js________//	
-
-	function input_type_file_form() {
-		jQuery(document).on('change', '.btn-file :file', function () {
-			var input = jQuery(this)
-			numFiles = input.get(0).files ? input.get(0).files.length : 1,
-				label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-			input.trigger('fileselect', [numFiles, label]);
-		});
-
-		jQuery('.btn-file :file').on('fileselect', function (event, numFiles, label) {
-			var input = jQuery(this).parents('.input-group').find(':text'),
-				log = numFiles > 10 ? numFiles + ' files selected' : label;
-			if (input.length) {
-				input.val(log);
-			} else {
-				if (log) alert(log);
-			}
-		});
-	}
-
-
-	//________ input Placeholder in IE9 function by = custom.js________//	
-
-	function placeholderSupport() {
-		/* input placeholder for ie9 & ie8 & ie7 */
-		jQuery.support.placeholder = ('placeholder' in document.createElement('input'));
-		/* input placeholder for ie9 & ie8 & ie7 end*/
-		/*fix for IE7 and IE8  */
-		if (!jQuery.support.placeholder) {
-			jQuery("[placeholder]").on('focus', function () {
-				if (jQuery(this).val() === jQuery(this).attr("placeholder")) jQuery(this).val("");
-			}).blur(function () {
-				if (jQuery(this).val() === "") jQuery(this).val(jQuery(this).attr("placeholder"));
-			}).blur();
-
-			jQuery("[placeholder]").parents("form").on('submit', function () {
-				jQuery(this).find('[placeholder]').each(function () {
-					if (jQuery(this).val() === jQuery(this).attr("placeholder")) {
-						jQuery(this).val("");
-					}
-				});
-			});
-		}
-		/*fix for IE7 and IE8 end */
-	}
-
 
 
 	//________ footer fixed on bottom function by = custom.js________//	
@@ -305,59 +234,7 @@ All JavaScript fuctions Start
 			}
 		});
 	}
-	//________home_client_carouse function by = owl.carousel.js ________//	
 
-	function home_client_carousel() {
-		jQuery('.home-client-carousel').owlCarousel({
-			loop: true,
-			margin: 10,
-			nav: true,
-			dots: false,
-			navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-			responsive: {
-				0: {
-					items: 2
-				},
-				480: {
-					items: 3
-				},
-				767: {
-					items: 4
-				},
-				1000: {
-					items: 5
-				}
-			}
-		});
-	}
-
-
-	//________home_client_carouse function by = owl.carousel.js________//	
-
-	function home_client_carousel_2() {
-		jQuery('.home-client-carousel-2').owlCarousel({
-			loop: true,
-			margin: 30,
-			autoplay: true,
-			nav: false,
-			dots: false,
-			navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-			responsive: {
-				0: {
-					items: 2
-				},
-				480: {
-					items: 3
-				},
-				767: {
-					items: 4
-				},
-				1000: {
-					items: 6
-				}
-			}
-		});
-	}
 
 
 	//________ Project carousel  function by = owl.carousel.js________//	
@@ -393,43 +270,6 @@ All JavaScript fuctions Start
 		});
 	}
 
-
-	//________ Project carousel  function by = owl.carousel.js________//	
-
-	function project_carousel3() {
-		jQuery('.project-carousel3').owlCarousel({
-			loop: true,
-			autoplay: false,
-			center: false,
-			items: 3,
-			margin: 40,
-			nav: true,
-			dots: false,
-			navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-			responsive: {
-				0: {
-					items: 1,
-					margin: 15,
-				},
-				640: {
-					items: 2,
-					margin: 15
-				},
-				768: {
-					items: 2,
-					margin: 15
-				},
-				991: {
-					items: 3,
-					margin: 15
-				},
-				1200: {
-					items: 3
-				}
-
-			}
-		});
-	}
 
 
 	//________ Project carousel  function by = owl.carousel.js________//	
@@ -513,66 +353,7 @@ All JavaScript fuctions Start
 
 
 	}
-	//________ Services  function by = owl.carousel.js________//	
-
-	function services_slider() {
-		jQuery('.service-slider').owlCarousel({
-			loop: true,
-			autoplay: false,
-			center: false,
-			margin: 0,
-			nav: true,
-			dots: false,
-			navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-			responsive: {
-				0: {
-					items: 1
-				},
-				768: {
-					items: 2
-				},
-				991: {
-					items: 3
-				},
-				1200: {
-					items: 4
-				}
-
-			}
-		});
-	}
-
-	//________ Services  function by = owl.carousel.js________//	
-
-	function services_slider_two() {
-		jQuery('.service-slider-two').owlCarousel({
-			loop: true,
-			autoplay: false,
-			center: false,
-			margin: 0,
-			nav: true,
-			dots: false,
-			navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-			responsive: {
-				0: {
-					items: 1
-				},
-				640: {
-					items: 2
-				},
-				768: {
-					items: 2
-				},
-				991: {
-					items: 3
-				},
-				1200: {
-					items: 5
-				}
-
-			}
-		});
-	}
+	
 
 
 	function contact_slide() {
@@ -744,13 +525,11 @@ All JavaScript fuctions Start
 	---------------------------------------------------------------------------------------------*/
 	jQuery(document).ready(function () {
 		//  Shop Product Price Range Slider function by = bootstrap-slider.min.js ========================== //
-		shop_product_price(),
+
 			// > TouchSpin box function by  = jquery.bootstrap-touchspin.js =============== // 
 			input_number_vertical_form(),
-			// Bootstrap Select box function by  = bootstrap-select.min.js
-			Bootstrap_Select(),
-			//________Top Search bar Show Hide function by = custom.js ________//	 		
-			site_search(),
+		
+			
 			contact_slide(),
 			//________  Sidebar sticky  when scroll down function by = theia-sticky-sidebar.js ========== //		
 			sticky_sidebar(),
@@ -770,10 +549,6 @@ All JavaScript fuctions Start
 		sticky_header(),
 			//________page scroll top on button click function by = custom.js________//		
 			scroll_top(),
-			//________input type file function by = custom.js	 ________//		
-			input_type_file_form(),
-			//________ input Placeholder in IE9 function by = custom.js	________//		
-			placeholderSupport(),
 			//________footer fixed on bottom function by = custom.js________//		
 			footer_fixed(),
 			//________accordion active calss function by = custom.js ________//	
@@ -788,11 +563,6 @@ All JavaScript fuctions Start
 			testimonial_home_two(),
 			//________Home page testimonial function by = owl.carousel.js________//	
 			about_home()
-		//________Client logo Carousel function by = owl.carousel.js________//	
-		home_client_carousel(),
-			//________Client logo Carousel function by = owl.carousel.js________//	
-			home_client_carousel_2()
-
 
 
 	});
@@ -812,15 +582,9 @@ All JavaScript fuctions Start
 			//________project carousel  function by = owl.carousel.js________//	
 			project_carousel4()
 		//________project carousel  function by = owl.carousel.js________//	
-		project_carousel3()
-		//________project carousel  function by = owl.carousel.js________//	
 		project_carousel1()
 		//________Projects carousel  function by = owl.carousel.js________//	
 		home_projects_filter()
-		//________ Services Slider  function by = owl.carousel.js________//	
-		services_slider()
-		//________ Services  function by = owl.carousel.js________//	
-		services_slider_two()
 		// ________ Fade slider function by = owl.carousel.js ========================== //
 		owl_fade_slider()
 		//________skills bar function function by  = custom.js________//				

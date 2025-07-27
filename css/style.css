@@ -7400,45 +7400,7 @@ background-attachment:fixed
 background-attachment:scroll
 }
 
-.home-client-carousel.owl-btn-center-v.owl-carousel .owl-nav {
-position:absolute;
-margin-top:0;
-top:-10px;
-left:-80px
-}
 
-.home-client-carousel.owl-btn-center-v.owl-carousel .owl-nav .owl-prev {
-left:40px;
-position:relative;
-background-color:#23252d;
-margin:0
-}
-
-.home-client-carousel.owl-btn-center-v.owl-carousel .owl-nav .owl-next {
-left:5px;
-position:relative;
-top:40px;
-background-color:#23252d;
-margin:0
-}
-
-@media only screen and (max-width:800px) {
-.home-client-carousel.owl-btn-center-v.owl-carousel .owl-nav {
-left:auto;
-right:5px;
-top:auto;
-bottom:-47px
-}
-
-.home-client-carousel.owl-btn-center-v.owl-carousel .owl-nav .owl-prev {
-left:0
-}
-
-.home-client-carousel.owl-btn-center-v.owl-carousel .owl-nav .owl-next {
-left:5px;
-top:0
-}
-}
 
 .contact-one {
 position:relative
@@ -11397,19 +11359,7 @@ margin-bottom:0
 }
 }
 
-.project-carousel3 .project-mas {
-margin:0
-}
 
-@media only screen and (max-width:767px) {
-.project-carousel3 {
-padding:0
-}
-
-.project-carousel3 .project-mas.hover-shadow {
-box-shadow:none
-}
-}
 
 .get-in-touch-btn {
 position:relative;

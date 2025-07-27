@@ -2,8 +2,8 @@
   "devDependencies": {
     "purgecss": "^7.0.2"
   },
-"scripts": {
-        "build:css": "purgecss --config purgecss.config.js"
-      }
-
+  "scripts": {},
+  "dependencies": {
+    "lazysizes": "^5.3.2"
+  }
 }
