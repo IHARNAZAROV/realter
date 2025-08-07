@@ -1,6 +1,6 @@
 // purgecss.config.js
 
 export default {
-  content: ['./index-optimized.html'],
+  content: ['./*.html'],
   css: ['./css/style.css']
 };

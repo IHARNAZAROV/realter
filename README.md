@@ -16,8 +16,7 @@ This is a portfolio website for Olga Turko, a real estate agent based in Lida, B
 *   **Build Tools:**
     *   Node.js
     *   npm
-    *   `critical` for inlining critical CSS
-    *   `purgecss` for removing unused CSS
+    *   `esbuild` for JavaScript bundling.
 
 ## Setup and Installation
 
@@ -40,30 +39,27 @@ This is a portfolio website for Olga Turko, a real estate agent based in Lida, B
 
 ## Build Process
 
-The project includes scripts to optimize the CSS for better performance.
+The project includes a build script to optimize CSS, bundle JavaScript, and self-host fonts.
 
-*   **Generate Critical CSS:** To extract and inline the critical-path CSS, run the following command:
+*   **Run the build:** To perform all optimizations, run the following command:
     ```bash
-    npm run build-critical
+    npm run build
     ```
-    This will generate a `index-critical.html` file with the critical CSS inlined.
-
-*   **Purge Unused CSS:** To remove unused CSS from the stylesheets, run:
-    ```bash
-    npm run purge-css
-    ```
-    This will create a `css/style-purged.css` file.
+    This will generate an `index-optimized.html` file in the root directory with all optimizations applied.
 
 ## Project Structure
 
-*   `index.html`: The main HTML file for the website.
+*   `index.html`: The main source HTML file for the website.
+*   `index-optimized.html`: The final, optimized HTML file.
 *   `css/`: Contains the CSS files.
-    *   `style.css`: The main stylesheet.
     *   `style-purged.css`: The optimized stylesheet.
 *   `js/`: Contains the JavaScript files.
+    *   `bundle.min.js`: The bundled and minified JavaScript.
+*   `fonts/`: Contains self-hosted font files.
+*   `webfonts/`: Contains self-hosted Font Awesome files.
 *   `images/`: Contains all the images used in the website.
 *   `node_modules/`: Contains the installed Node.js modules.
 *   `package.json`: Defines the project's dependencies and scripts.
-*   `build-critical.js`: The script for generating critical CSS.
-*   `build-purge.js`: The script for purging unused CSS.
+*   `build-critical.js`: The main build script that handles all optimizations.
+*   `build-js.js`: The script for bundling JavaScript.
 *   `README.md`: This file.
