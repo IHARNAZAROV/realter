@@ -6620,101 +6620,6 @@ ol.commentlist li::after {
   top: -50px;
 }
 
-.our-story {
-  position: relative;
-  z-index: 0;
-  display: flex;
-  margin-bottom: 30px;
-  border-bottom: 1px dashed #404040;
-  background-color: #1d1f26;
-  padding: 20px;
-}
-
-.our-story:last-child {
-  margin-bottom: 0;
-}
-
-.our-story-detail {
-  margin-left: 40px;
-}
-
-.our-story-time {
-  min-width: 30px;
-}
-
-.our-story-detail p {
-  margin-bottom: 0;
-}
-
-.our-story-time .date {
-  display: block;
-  font-size: 18px;
-  line-height: 18px;
-  font-weight: 600;
-}
-
-.our-story-time .month {
-  display: block;
-}
-
-.our-story-year {
-  padding-left: 20px;
-  margin-left: 20px;
-  border-left: 1px solid #fff;
-  margin-bottom: 0;
-  color: #218362;
-}
-
-.experience .our-story {
-  position: relative;
-  z-index: 0;
-  display: flex;
-  margin-bottom: 30px;
-  border: 1px dashed #ddd;
-  background-color: #fff;
-  padding: 20px;
-}
-
-@media only screen and (max-width: 640px) {
-  .our-story {
-    display: block;
-  }
-
-  .our-story .our-story-info {
-    display: block !important;
-    justify-content: inherit !important;
-    margin-bottom: 10px;
-  }
-
-  .our-story-year {
-    border-left: 0;
-    padding-left: 0;
-    margin-left: 0;
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .our-story-time {
-    min-width: auto;
-    display: inline-block;
-  }
-
-  .our-story-time .date,
-  .our-story-time .month {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .our-story-time .date {
-    padding-right: 3px;
-  }
-
-  .our-story-detail {
-    margin-left: 0;
-  }
-}
 
 .btn-filter-wrap,
 .btn-filter-wrap2 {
@@ -10836,4 +10741,48 @@ ol.commentlist li::after {
     overflow: auto;
     max-height: 100%;
   }
+}
+
+/* ================= СТИЛИ ДЛЯ CSS GRID ================= */
+.grid-container {
+  column-count: 3 !important; /* 3 колонки для больших экранов */
+  column-gap: 30px !important; /* Отступ между колонками */
+}
+
+@media (max-width: 991px) {
+  .grid-container {
+    column-count: 2 !important; /* 2 колонки для планшетов */
+  }
+}
+
+@media (max-width: 767px) {
+  .grid-container {
+    column-count: 1 !important; /* 1 колонка для мобильных устройств */
+  }
+}
+
+.grid-item {
+  display: inline-block !important;
+  width: 100% !important;
+  margin-bottom: 30px !important;
+  break-inside: avoid !important; /* Предотвращает разрыв элемента между колонками */
+}
+
+.grid-item img {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Стили для фильтров */
+.filter-button {
+  cursor: pointer;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.filter-button.active {
+  background-color: #007bff;
+  color: #fff;
 }
