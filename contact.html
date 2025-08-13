@@ -27,8 +27,6 @@
 
     <!-- BOOTSTRAP STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <!-- FONTAWESOME STYLE SHEET -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <!-- OWL CAROUSEL STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css">
     <!-- MAGNIFIC POPUP STYLE SHEET -->
@@ -45,9 +43,11 @@
 
 
     <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+    rel="stylesheet">
 
 
 </head>
@@ -442,15 +442,30 @@
     </div>
     <!-- LOADING AREA  END ====== -->
 
-    <!-- JAVASCRIPT  FILES ========================================= -->
-    <script src="js/jquery-3.7.1.min.js"></script><!-- JQUERY.MIN JS -->
-    <script src="js/magnific-popup.min.js" defer></script><!-- MAGNIFIC-POPUP JS -->
-    <script src="js/waypoints.min.js" defer></script><!-- WAYPOINTS JS -->
-    <script src="js/isotope.pkgd.min.js" defer></script><!-- MASONRY  -->
-    <script src="js/owl.carousel.min.js" defer></script><!-- OWL  SLIDER  -->
-    <script src="js/jquery.owl-filter.js" defer></script>
-    <script src="js/customgpt.js" defer></script><!-- CUSTOM FUCTIONS  -->
-<script src="js/lazysizes.min.js" async=""></script> <!--Lazy images-->
+  <!-- JAVASCRIPT FILES ========================================= -->
+
+<!-- 1. jQuery (должен быть первым, без defer/async) -->
+<script src="js/jquery-3.7.1.min.js"></script>
+
+<!-- 2. Плагины jQuery -->
+<script src="js/magnific-popup.min.js" defer></script>
+<script src="js/waypoints.min.js" defer></script>
+<script src="js/isotope.pkgd.min.js" defer></script>
+<script src="js/owl.carousel.min.js" defer></script>
+<script src="js/jquery.owl-filter.js" defer></script>
+
+<!-- 3. Пользовательские скрипты (после плагинов) -->
+<script src="js/customgpt.js" defer></script>
+<script src="js/rev-script-1.js" defer></script>
+
+<!-- 4. Независимые скрипты -->
+<script src="js/lazysizes.min.js" async></script>
+<script src="https://kit.fontawesome.com/c16c7d78ea.js" crossorigin="anonymous" defer></script>
+
+<!-- 5. Revolution Slider -->
+<script src="plugins/revolution/revolution/js/jquery.themepunch.tools.min.js" defer></script>
+<script src="plugins/revolution/revolution/js/jquery.themepunch.revolution.min.js" defer></script>
+<script src="plugins/revolution/revolution/js/extensions/revolution-plugin.js" defer></script>
 
 
 </body>
