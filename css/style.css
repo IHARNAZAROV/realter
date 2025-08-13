@@ -4204,7 +4204,14 @@ position:fixed;
 left:0;
 top:0;
 z-index:9999;
-overflow:hidden
+overflow:hidden;
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.faded-out {
+  /* Конечные состояния для анимации */
+  opacity: 0;
+  visibility: hidden;
 }
 
 .loading-box {
@@ -10431,6 +10438,34 @@ bottom:0;
 position:absolute;
 top:auto;
 left:0
+}
+
+/* Стили для содержимого аккордеона */
+/* Основные стили для аккордеона */
+.acod-body {
+    max-height: 0; /* Изначально блок с ответом скрыт */
+    overflow: hidden; /* Скрываем контент, который выходит за пределы */
+    transition: max-height 0.6s ease-out; /* Добавляем плавный переход */
+    padding: 0 15px; /* Убираем padding, так как он будет мешать max-height */
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+/* Стили для внутреннего контента, который будет всегда видимым внутри аккордеона */
+.acod-content {
+    padding: 15px 0; /* Возвращаем padding, но уже внутри, чтобы не мешал анимации */
+}
+
+/* Активное состояние: блок с ответом становится видимым */
+.acod-head.acc-actives + .acod-body {
+    max-height: 500px; /* Устанавливаем достаточно большое значение, чтобы контент поместился */
+}
+
+.is-stuck {
+    position: fixed;
+    top: 0;
+    width: 100%; /* Убедитесь, что заголовок не "сожмется" */
+    z-index: 100;
 }
 
 @media (max-width: 778px) {
