@@ -1,7 +1,6 @@
 @font-face {
   font-family: "Flaticon";
-  src: url("../fonts/Flaticon.woff2") format("woff2"),
-       url("../fonts/Flaticon.woff") format("woff");
+  src:       url("../fonts/Flaticon.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -13,6 +12,9 @@
 }
 [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
 [class^="flaticon-"]:after, [class*=" flaticon-"]:after{font-family:Flaticon;font-style:normal;}
+[class^="flaticon-"]::before, [class*=" flaticon-"]::before {
+  color: #218362; 
+}
 
 .mt-icon-box-xl [class^="flaticon-"]:before, .mt-icon-box-xl [class*=" flaticon-"]:before,
 .mt-icon-box-xl [class^="flaticon-"]:after, .mt-icon-box-xl [class*=" flaticon-"]:after{font-size:96px;}

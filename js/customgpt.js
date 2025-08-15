@@ -13,7 +13,7 @@
    * @param {string} container - селектор элементов, которые нужно выровнять
    */
   function equalHeight(container) {
-    let currentTallest = 0;
+
     const elements = $(container);
     if (!elements.length) return;
 
