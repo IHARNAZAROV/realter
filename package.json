@@ -14,8 +14,8 @@
     "purge-css": "node build-purge.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
- "lint:css": "stylelint \"css/style.css\"",
-  "lint:css:fix": "stylelint \"css/style.css\" --fix"
+    "lint:css": "stylelint \"css/style.css\"",
+    "lint:css:fix": "stylelint \"css/style.css\" --fix"
   },
   "dependencies": {
     "lazysizes": "^5.3.2"

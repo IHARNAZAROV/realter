@@ -1800,6 +1800,9 @@ recent-posts-entry-date .sx-post-info .post-title {
   .navbar-collapse.collapse {
     display: none !important;
   }
+  .navbar-collapse.collapse.show {
+    display: block !important;
+  }
   .header-nav {
     clear: both;
     margin: 0 -15px;
@@ -3757,11 +3760,6 @@ a {
   width: 100%;
   z-index: 100;
 }
-@media (max-width: 778px) {
-  .rev-slider-white-block {
-    display: none !important;
-  }
-}
 .page-notfound strong {
   display: block;
   font-size: 24px;
@@ -4150,6 +4148,9 @@ a {
   .header-style-1 .navbar-collapse.collapse {
     display: inherit !important;
   }
+  .header-style-1 .navbar-collapse.collapse.show {
+    display: inherit !important;
+  }
   .header-style-1 .header-nav {
     margin: 0;
   }
@@ -4203,6 +4204,9 @@ a {
   .nav-transparent .navbar-collapse.collapse {
     display: inherit !important;
   }
+  .nav-transparent .navbar-collapse.collapse.show {
+    display: inherit !important;
+  }
   .nav-transparent .header-nav {
     margin: 0;
   }
@@ -4243,4 +4247,18 @@ a {
     right: 100px;
     opacity: 0;
   }
+}
+
+/* Скрытие прелоадера после загрузки */
+.loading-area.faded-out {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loading-box.faded-out,
+.loading-pic.faded-out {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
 }
