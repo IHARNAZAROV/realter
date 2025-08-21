@@ -281,7 +281,7 @@ loadingArea.classList.add('faded-out');
       margin: 30,
       nav: true,
       dots: false,
-      navText: ["Предыдущий", "Следующий"],
+      navText: ["<", ">"],
       responsive: {
         0: { items: 1 },
         540: { items: 2 },

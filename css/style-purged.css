@@ -4262,3 +4262,121 @@ a {
   visibility: hidden;
   transition: opacity 0.6s ease, visibility 0.6s ease;
 }
+.owl-carousel .owl-nav {
+  margin-top: 30px;
+  text-align: center;
+}
+.owl-carousel .owl-nav .disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.owl-carousel .owl-dots {
+  text-align: center;
+  margin-top: 20px;
+}
+.owl-carousel .owl-dots .owl-dot {
+  display: inline-block;
+}
+.owl-carousel .owl-dots .owl-dot span {
+  width: 10px;
+  height: 10px;
+  margin: 5px;
+  background: #444;
+  display: block;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
+  -webkit-transition: opacity 0.2s ease;
+  -moz-transition: opacity 0.2s ease;
+  -ms-transition: opacity 0.2s ease;
+  -o-transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease;
+  -webkit-transition: all 0.5s linear;
+  -moz-transition: all 0.5s linear;
+  -ms-transition: all 0.5s linear;
+  -o-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+.owl-carousel .owl-dots .owl-dot.active span,
+.owl-carousel .owl-dots .owl-dot:hover span {
+  background: #218362;
+}
+.owl-btn-top-center .owl-nav,
+.owl-btn-top-left .owl-nav,
+.owl-btn-top-right .owl-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+}
+.owl-btn-top-center .owl-stage-outer,
+.owl-btn-top-left .owl-stage-outer,
+.owl-btn-top-right .owl-stage-outer {
+  padding-top: 40px;
+}
+.owl-btn-top-center .owl-nav {
+  text-align: center;
+}
+.owl-btn-top-left .owl-nav {
+  text-align: left;
+}
+.owl-btn-top-right .owl-nav {
+  text-align: right;
+}
+.owl-btn-bottom-center .owl-nav {
+  text-align: center;
+}
+.owl-btn-bottom-left .owl-nav {
+  text-align: left;
+}
+.owl-btn-bottom-right .owl-nav {
+  text-align: right;
+}
+.owl-btn-vertical-center .owl-nav {
+  margin: 0;
+}
+.owl-btn-vertical-center .owl-nav .owl-next,
+.owl-btn-vertical-center .owl-nav .owl-prev {
+  position: absolute;
+  top: 50%;
+  margin: -15px 0;
+}
+.owl-btn-vertical-center .owl-nav .owl-prev {
+  left: 0;
+}
+.owl-btn-vertical-center .owl-nav .owl-next {
+  right: 0;
+}
+.owl-next,
+.owl-prev {
+  background-color: #fff;
+  border-color: #fff;
+  color: #218362;
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 24px;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+.owl-prev {
+  margin-right: 5px;
+}
+.owl-next {
+  margin-left: 5px;
+}
+.owl-next:active,
+.owl-next:focus,
+.owl-next:hover,
+.owl-prev:active,
+.owl-prev:focus,
+.owl-prev:hover {
+  background-color: #212121;
+  border-color: #212121;
+  color: #fff;
+  opacity: 0.9;
+}
