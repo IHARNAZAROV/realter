@@ -27,8 +27,6 @@
 
     <!-- BOOTSTRAP STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <!-- FONTAWESOME STYLE SHEET -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <!-- OWL CAROUSEL STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css">
     <!-- MAGNIFIC POPUP STYLE SHEET -->
@@ -45,9 +43,11 @@
 
 
     <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
-        rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+    rel="stylesheet">
 
 
 </head>
@@ -58,7 +58,7 @@
 
         <!-- HEADER START -->
         <header class="site-header nav-wide nav-transparent mobile-sider-drawer-menu">
-            <div class="sticky-header main-bar-wraper navbar-expand-lg">
+            <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
                 <div class="main-bar">
                     <div class="container clearfix">
                         <div class="logo-header">
@@ -230,13 +230,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="sx-icon-box-wraper left">
-                                            <div class="icon-xs"><i class="fa fa-map-marker"></i></div>
-                                            <div class="icon-content">
-                                                <h5 class="m-t0">Адрес</h5>
-                                                <p>город Лида, улица Советская, дом 35</p>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -246,9 +239,6 @@
 
                 </div>
             </div>
-            <iframe
-                src="https://yandex.ru/map-widget/v1/?um=constructor%3A51f420a2760349f05b054204104dc01c0fe7cd32cab4047450389ec6d7a198f9&amp;source=constructor"
-                width="100%" height="400" frameborder="0"></iframe>
             <!-- SECTION CONTENT END -->
 
         </div>
@@ -366,7 +356,6 @@
                             <div class="widget widget_address_outer">
                                 <h5 class="widget-title">Пора поговорить о вашем доме</h5>
                                 <ul class="widget_address">
-                                    <li>город Лида, улица Советская, дом 35</li>
                                     <li>olgaturko1975@gmail.com</li>
                                     <li>(+375) 29 180 95 16</li>
                                     <li>(+375) 44 501 90 90</li>
@@ -442,22 +431,30 @@
     </div>
     <!-- LOADING AREA  END ====== -->
 
-    <!-- JAVASCRIPT  FILES ========================================= -->
-    <script src="js/jquery-1.12.4.min.js"></script><!-- JQUERY.MIN JS -->
-    <script src="js/popper.min.js"></script><!-- POPPER.MIN JS -->
-    <script src="js/bootstrap.min.js"></script><!-- BOOTSTRAP.MIN JS -->
-    <script src="js/magnific-popup.min.js"></script><!-- MAGNIFIC-POPUP JS -->
-    <script src="js/waypoints.min.js"></script><!-- WAYPOINTS JS -->
-    <script src="js/counterup.min.js"></script><!-- COUNTERUP JS -->
-    <script src="js/waypoints-sticky.min.js"></script><!-- sticky header JS -->
-    <script src="js/isotope.pkgd.min.js"></script><!-- MASONRY  -->
-    <script src="js/owl.carousel.min.js"></script><!-- OWL  SLIDER  -->
-    <script src="js/jquery.owl-filter.js"></script>
-    <script src="js/stellar.min.js"></script><!-- PARALLAX BG IMAGE   -->
-    <script src="js/jquery.bootstrap-touchspin.js"></script><!-- FORM JS -->
-    <script src="js/custom.js"></script><!-- CUSTOM FUCTIONS  -->
-    <script src="js/jquery.bgscroll.js"></script><!-- BACKGROUND SCROLL -->
-    <script src="js/theia-sticky-sidebar.js"></script><!--sticky content-->
+  <!-- JAVASCRIPT FILES ========================================= -->
+
+<!-- 1. jQuery (должен быть первым, без defer/async) -->
+<script src="js/jquery-3.7.1.min.js"></script>
+
+<!-- 2. Плагины jQuery -->
+<script src="js/magnific-popup.min.js" defer></script>
+<script src="js/waypoints.min.js" defer></script>
+<script src="js/isotope.pkgd.min.js" defer></script>
+<script src="js/owl.carousel.min.js" defer></script>
+<script src="js/jquery.owl-filter.js" defer></script>
+
+<!-- 3. Пользовательские скрипты (после плагинов) -->
+<script src="js/customgpt.js" defer></script>
+<script src="js/rev-script-1.js" defer></script>
+
+<!-- 4. Независимые скрипты -->
+<script src="js/lazysizes.min.js" async></script>
+<script src="https://kit.fontawesome.com/c16c7d78ea.js" crossorigin="anonymous" defer></script>
+
+<!-- 5. Revolution Slider -->
+<script src="plugins/revolution/revolution/js/jquery.themepunch.tools.min.js" defer></script>
+<script src="plugins/revolution/revolution/js/jquery.themepunch.revolution.min.js" defer></script>
+<script src="plugins/revolution/revolution/js/extensions/revolution-plugin.js" defer></script>
 
 
 </body>
