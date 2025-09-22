@@ -56,7 +56,7 @@
   margin-bottom: 30px;
 }
 .sx-text-primary {
-  color: #0d5f39;
+  color: #0f4d33;
 }
 .bg-repeat {
   background-repeat: repeat;
@@ -777,13 +777,13 @@ ul li {
   position: relative;
 }
 .sx-bg-primary {
-  background-color: #0d5f39;
+  background-color: #0f4d33;
 }
 .bg-white {
   background-color: #fff;
 }
 .bg-gray {
-  background-color: #eef1f2;
+  background-color: #fff5f0;
 }
 .bg-parallax {
   background-attachment: fixed;
@@ -865,7 +865,7 @@ ul li {
   }
 }
 .site-button-secondry {
-  background-color: #0d5f39;
+  background-color: #0f4d33;
   color: #fff;
 }
 .btn-half span {
@@ -999,14 +999,14 @@ ul li {
 .testimonial-2 .testimonial-text {
   background-color: #fff;
   padding: 30px 30px 70px;
-  border: 1px solid #eef1f2;
+  border: 1px solid #fff5f0;
 }
 .testimonial-2 .fa-quote-right {
   position: absolute;
   right: 15px;
   top: 0;
   font-size: 70px;
-  color: #0d5f39;
+  color: #0f4d33;
 }
 .testimonial-2 .testimonial-detail {
   padding: 0;
@@ -1238,7 +1238,7 @@ ul li {
   top: -11px;
   position: absolute;
   width: 3000px;
-  background-color: #eef1f2;
+  background-color: #fff5f0;
   z-index: -1;
   bottom: -11px;
 }
@@ -1331,7 +1331,7 @@ ul li {
 }
 .header-nav .nav > li.active > a {
   background-color: transparent;
-  color: #0d5f39;
+  color: #0f4d33;
 }
 @media only screen and (max-width: 991px) {
   .header-style-1 .header-left-gray-block .logo-header:after {
@@ -1410,7 +1410,7 @@ ul li {
 button.scroltop {
   height: 40px;
   width: 40px;
-  background: #0d5f39;
+  background: #0f4d33;
   border: none;
   position: fixed;
   right: 15px;
@@ -1609,7 +1609,7 @@ button.scroltop span {
 }
 .contact-nav .contact-nav-info {
   position: relative;
-  border: 10px solid #0d5f39;
+  border: 10px solid #0f4d33;
   padding: 30px;
 }
 .contact-nav .contact_close {
@@ -1658,7 +1658,7 @@ button.scroltop span {
   display: inline-block;
   font-size: 80px;
   line-height: 80px;
-  color: #0d5f39;
+  color: #0f4d33;
   font-weight: 700;
   letter-spacing: 20px;
   transform: rotate(270deg);
@@ -1681,7 +1681,7 @@ button.scroltop span {
 }
 .from-top:before {
   bottom: 0;
-  border: 1px solid #0d5f39;
+  border: 1px solid #0f4d33;
   border-top: 0;
   border-bottom: 0;
 }
@@ -1872,7 +1872,7 @@ button.scroltop span {
   height: 2px;
   width: 0;
   content: "";
-  background-color: #0d5f39;
+  background-color: #0f4d33;
 }
 .sx-title-swip:after {
   left: 0;
@@ -1907,7 +1907,7 @@ button.scroltop span {
   text-transform: uppercase;
   display: inline-block;
   font-weight: 600;
-  border: 1px solid #eef1f2;
+  border: 1px solid #fff5f0;
 }
 .get-in-touch-btn:after,
 .get-in-touch-btn:before {
@@ -1980,12 +1980,12 @@ button.scroltop span {
   }
 }
 ::-webkit-selection {
-  background: #0d5f39;
+  background: #0f4d33;
 }
 .about-home-left,
 .from-top::before,
 .get-in-touch-btn.from-top::before {
-  border-color: #0d5f39;
+  border-color: #0f4d33;
 }
 .rev_slider_wrapper {
   position: relative;
