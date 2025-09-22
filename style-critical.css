@@ -56,7 +56,7 @@
   margin-bottom: 30px;
 }
 .sx-text-primary {
-  color: #218362;
+  color: #0d5f39;
 }
 .bg-repeat {
   background-repeat: repeat;
@@ -777,7 +777,7 @@ ul li {
   position: relative;
 }
 .sx-bg-primary {
-  background-color: #218362;
+  background-color: #0d5f39;
 }
 .bg-white {
   background-color: #fff;
@@ -865,7 +865,7 @@ ul li {
   }
 }
 .site-button-secondry {
-  background-color: #218362;
+  background-color: #0d5f39;
   color: #fff;
 }
 .btn-half span {
@@ -1006,7 +1006,7 @@ ul li {
   right: 15px;
   top: 0;
   font-size: 70px;
-  color: #218362;
+  color: #0d5f39;
 }
 .testimonial-2 .testimonial-detail {
   padding: 0;
@@ -1331,7 +1331,7 @@ ul li {
 }
 .header-nav .nav > li.active > a {
   background-color: transparent;
-  color: #218362;
+  color: #0d5f39;
 }
 @media only screen and (max-width: 991px) {
   .header-style-1 .header-left-gray-block .logo-header:after {
@@ -1410,7 +1410,7 @@ ul li {
 button.scroltop {
   height: 40px;
   width: 40px;
-  background: #218362;
+  background: #0d5f39;
   border: none;
   position: fixed;
   right: 15px;
@@ -1609,7 +1609,7 @@ button.scroltop span {
 }
 .contact-nav .contact-nav-info {
   position: relative;
-  border: 10px solid #218362;
+  border: 10px solid #0d5f39;
   padding: 30px;
 }
 .contact-nav .contact_close {
@@ -1658,7 +1658,7 @@ button.scroltop span {
   display: inline-block;
   font-size: 80px;
   line-height: 80px;
-  color: #218362;
+  color: #0d5f39;
   font-weight: 700;
   letter-spacing: 20px;
   transform: rotate(270deg);
@@ -1681,7 +1681,7 @@ button.scroltop span {
 }
 .from-top:before {
   bottom: 0;
-  border: 1px solid #218362;
+  border: 1px solid #0d5f39;
   border-top: 0;
   border-bottom: 0;
 }
@@ -1872,7 +1872,7 @@ button.scroltop span {
   height: 2px;
   width: 0;
   content: "";
-  background-color: #218362;
+  background-color: #0d5f39;
 }
 .sx-title-swip:after {
   left: 0;
@@ -1980,12 +1980,12 @@ button.scroltop span {
   }
 }
 ::-webkit-selection {
-  background: #218362;
+  background: #0d5f39;
 }
 .about-home-left,
 .from-top::before,
 .get-in-touch-btn.from-top::before {
-  border-color: #218362;
+  border-color: #0d5f39;
 }
 .rev_slider_wrapper {
   position: relative;
