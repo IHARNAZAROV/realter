@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Автопрокрутка (новый синтаксис)
     autoplay: {
       delay: 2500,
-      disableOnInteraction: true, // Продолжать после клика
+      disableOnInteraction: false, // Продолжать после клика
     },
 
     // Если нужна пагинация (точки)

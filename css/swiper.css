@@ -195,7 +195,7 @@ template {
 
 
 .main__title {
-  color: #f2f3f3;
+  color: #fff5f0;
   text-transform: uppercase;
   font-family: Montserrat, sans-serif;
   font-weight: 900;
@@ -205,7 +205,7 @@ template {
 }
 
 .main__title span {
-  color: #ff2d71;
+  color: #155945;
 }
 
 .main__subtitle {
@@ -213,7 +213,7 @@ template {
   font-weight: 700;
   font-family: Montserrat, sans-serif;
   font-size: 0.9em;
-  color: #f2f3f3;
+  color: #fff5f0;
 }
 
 @media (min-width: 768px) {
@@ -222,8 +222,8 @@ template {
   }
 }
 .main__subtitle span {
-  font-family: "Patua One", cursive;
-  color: #00a8af;
+ font-family: Poppins, sans-serif;
+  color: #155945;
   font-style: italic;
 }
 
@@ -234,11 +234,11 @@ template {
   text-decoration: none;
   color: #21272b;
   font-family: Montserrat, sans-serif;
-  font-size: 0.7em;
-  font-weight: 400;
+  font-size: 1em;
+  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #00a8af !important;
+  color: #155945 !important;
   transition: all 0.3s ease-in-out;
 }
 
@@ -373,7 +373,7 @@ template {
   }
 
   .swiper-slide__block .swiper-slide__block__text:before {
-    content: "";
+    
     display: block;
     width: 200px;
     max-width: 408px;
@@ -396,7 +396,7 @@ template {
 }
 
 .swiper-slide__block .main__title span {
-  color: #ff2d71;
+  color: #155945;
 }
 
 @media (min-width: 768px) {
@@ -425,7 +425,7 @@ template {
 .swiper-slide__block .main__subtitle span {
  font-family: Poppins, sans-serif;
   font-style: normal;
-  color: #00a8af;
+  color: #155945;
   letter-spacing: 1px;
 }
 
@@ -467,7 +467,7 @@ template {
 .section__slider {
   width: 100%;
   height: auto;
-  background-color: #f2f3f3;
+  background-color: #fff5f0;
 }
 
 @media (min-width: 1200px) {
@@ -497,7 +497,7 @@ template {
     bottom: 0;
     left: 0;
     z-index: 2;
-    background: linear-gradient(to top, #f2f3f3, rgba(248, 248, 248, 0));
+    background: linear-gradient(to top, #fff5f0, rgba(248, 248, 248, 0));
   }
 }
 @media (min-width: 992px) {

@@ -1219,7 +1219,6 @@ a.bg-danger:focus, a.bg-danger:hover, button.bg-danger:focus, button.bg-danger:h
 a.bg-light:focus, a.bg-light:hover, button.bg-light:focus, button.bg-light:hover{background-color:#dae0e5!important}
 .bg-dark{background-color:#343a40!important}
 a.bg-dark:focus, a.bg-dark:hover, button.bg-dark:focus, button.bg-dark:hover{background-color:#1d2124!important}
-.bg-white{background-color:#fff!important}
 .bg-transparent{background-color:transparent!important}
 .border{border:1px solid #dee2e6!important}
 .border-top{border-top:1px solid #dee2e6!important}
