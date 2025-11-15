@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
       disableOnInteraction: false, // Продолжать после клика
     },
 =======
-      disableOnInteraction: false // Продолжать после клика
+      disableOnInteraction: true // Продолжать после клика
     }
 >>>>>>> 95ff0dfbc7282ffa4dc4acd6debf2901b8062b90
 
