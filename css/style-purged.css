@@ -9,6 +9,7 @@ body {
   overflow-x: hidden;
 }
 
+
 a {
   color: #23252d;
   outline: 0 none;
@@ -1349,11 +1350,11 @@ a:not([href]):not([tabindex]) {
 }
 
 .sx-breadcrumb li a {
-  color: #155945;
+  color: #fff;
 }
 
 .sx-breadcrumb li a:hover {
-  color: #155945;
+  color: #fff;
 }
 
 .sx-breadcrumb li:last-child {
@@ -2336,8 +2337,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .sx-bnr-inr {
-  height: 500px;
-  background-position: center center;
+  height: 35vh;
   display: table;
   width: 100%;
   -webkit-background-size: cover;
@@ -2888,7 +2888,7 @@ a {
 }
 
 .bg-top-center {
-  background-position: top center;
+  background-position: top center !important;
 }
 
 .bg-bottom-left {
@@ -3924,7 +3924,7 @@ a {
   width: 100%;
   height: auto;
   background-color: transparent;
-  border: 20px solid #23252d;
+  border: 20px solid #155945;
   z-index: 0;
   bottom: -40px;
 }
@@ -5184,3 +5184,4 @@ a {
   color: #fff;
   opacity: 0.9;
 }
+
