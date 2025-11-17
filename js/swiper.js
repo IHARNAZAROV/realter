@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Автопрокрутка (новый синтаксис)
     autoplay: {
       delay: 2500,
-      disableOnInteraction: false, // Продолжать после клика
-    },
+      disableOnInteraction: false // Продолжать после клика
+    }
 
     // Если нужна пагинация (точки)
     // 1. Добавьте <div class="swiper-pagination"></div> в HTML
