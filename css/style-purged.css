@@ -1154,6 +1154,7 @@ a:not([href]):not([tabindex]) {
 
 .testimonial-2 {
   position: relative;
+  cursor: default;
 }
 
 .testimonial-2 .testimonial-text {
@@ -1542,6 +1543,13 @@ a:not([href]):not([tabindex]) {
 .widget_address li {
   margin-bottom: 20px;
 }
+
+.widget_address a {
+    text-decoration: none; 
+    color: inherit;        
+    transition: color 0.3s;
+}
+
 
 .widget_address_outer .social-icons li {
   padding-right: 10px;
