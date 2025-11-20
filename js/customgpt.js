@@ -9,36 +9,6 @@
   /* ================= ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ================= */
 
   /**
-   * Выравнивает высоту элементов в контейнере по наибольшему значению в каждой строке
-   * @param {string} container - селектор элементов, которые нужно выровнять
-   */
-  function equalHeight (container) {
-    const elements = $(container)
-    if (!elements.length) return
-
-    elements.css('height', 'auto')
-    const groupedByRow = {}
-    elements.each(function () {
-      const topPosition = $(this).position().top
-      if (!groupedByRow[topPosition]) {
-        groupedByRow[topPosition] = []
-      }
-      groupedByRow[topPosition].push($(this))
-    })
-
-    for (const row in groupedByRow) {
-      const rowElements = groupedByRow[row]
-      let maxHeight = 0
-      rowElements.forEach((el) => {
-        maxHeight = Math.max(maxHeight, el.height())
-      })
-      rowElements.forEach((el) => {
-        el.height(maxHeight)
-      })
-    }
-  }
-
-  /**
    * Анимация увеличения-уменьшения элементов при фильтрации слайдера Owl Carousel
    */
   function owlAnimateFilter () {
@@ -48,50 +18,8 @@
     }, 500)
   }
 
-  /**
-   * Счётчик чисел, который запускается при появлении элемента в зоне видимости
-   * @param {string} selector - селектор элементов с числовыми значениями
-   * @param {object} options - настройки { delay, time }
-   */
-  function counterUp (selector, options) {
-    const settings = {
-      delay: 10,
-      time: 4000,
-      ...options
-    }
 
-    const elements = document.querySelectorAll(selector)
 
-    elements.forEach(element => {
-      const finalValue = parseFloat(element.textContent.replace(/,/g, ''))
-      const increment = finalValue / (settings.time / settings.delay)
-      let current = 0
-      const isFloat = finalValue % 1 !== 0
-
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const counter = () => {
-              current += increment
-              if (current >= finalValue) {
-                current = finalValue
-                observer.unobserve(element)
-              }
-
-              element.textContent = isFloat ? current.toFixed(2) : Math.floor(current)
-
-              if (current < finalValue) {
-                setTimeout(counter, settings.delay)
-              }
-            }
-            counter()
-          }
-        })
-      }, { threshold: 0.5 })
-
-      observer.observe(element)
-    })
-  }
 
   /**
    * Центрирование Bootstrap-модалок по вертикали
@@ -100,19 +28,6 @@
     const $dialog = $(this).find('.modal-dialog')
     $(this).css('display', 'block')
     $dialog.css('margin-top', Math.max(0, ($window.height() - $dialog.height()) / 2))
-  }
-
-  /**
-   * Фиксированный футер с учётом высоты
-   */
-  function setFooterFixed () {
-    const $footer = $('.site-footer')
-    if ($footer.length) {
-      $footer.css({ display: 'block', height: 'auto' })
-      const footerHeight = $footer.outerHeight()
-      $('.footer-fixed > .page-wraper').css('padding-bottom', footerHeight)
-      $footer.css('height', footerHeight)
-    }
   }
 
   /**
@@ -171,14 +86,20 @@
     })
 
     // Галерея изображений
-    $('.mfp-gallery').magnificPopup({
-      delegate: '.mfp-link',
-      type: 'image',
-      gallery: { enabled: true }
-    })
+ const lightbox = GLightbox({
+    selector: '.mfp-link', 
+    touchNavigation: true,
+    loop: true
+});
 
     // Видеопопап
-    $('.mfp-video').magnificPopup({ type: 'iframe' })
+  // Инициализация видео-попапа
+const videoLightbox = GLightbox({
+    selector: '.mfp-video',
+    touchNavigation: true,
+    loop: true,
+    autoplayVideos: true // Автовоспроизведение при открытии
+});
 
     // Центровка модалок
     $('.modal').on('show.bs.modal', repositionModals)
@@ -193,9 +114,6 @@
       $('button.scroltop').fadeToggle($window.scrollTop() > 900 ? 1000 : 0)
     })
 
-    // Фиксированный футер
-    setFooterFixed()
-    $window.on('resize', setFooterFixed)
 
     // Мобильное меню
     $('.sub-menu, .mega-menu').parent('li').addClass('has-child')
@@ -240,10 +158,54 @@
     $('.contact-slide-show').on('click', () => $('.contact-slide-hide').animate({ right: '0px' }))
     $('.contact_close').on('click', () => $('.contact-slide-hide').animate({ right: '100%' }))
 
-    // Счётчик чисел
-    window.onload = function () {
-      counterUp('.counter', { delay: 10, time: 5000 })
-    }
+ /* ================= ЗАМЕНА WAYPOINTS (СЧЕТЧИК ЧИСЕЛ) ================= */
+  
+  function initCounterUp() {
+    const counters = document.querySelectorAll('.counter');
+    if (!counters.length) return;
+
+    // Настройки: анимация сработает, когда элемент появится на 50% экрана
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          // Убираем запятые, если есть, и парсим число
+          const finalValue = parseFloat(el.innerText.replace(/,/g, ''));
+          const duration = 5000; // Длительность 5 секунды
+          const start = performance.now();
+
+          const animate = (currentTime) => {
+            const elapsed = currentTime - start;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Плавное замедление (Easing)
+            const easeOutQuad = (t) => t * (2 - t);
+            
+            const currentVal = progress === 1 
+                ? finalValue 
+                : Math.floor(easeOutQuad(progress) * finalValue);
+            
+            el.innerText = currentVal;
+
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            } else {
+              obs.unobserve(el); // Выключаем наблюдение после завершения
+            }
+          };
+          requestAnimationFrame(animate);
+        }
+      });
+    }, observerOptions);
+
+    counters.forEach(counter => observer.observe(counter));
+  }
+
+
+  initCounterUp();
+
   }
 
   /* ================= ИНИЦИАЛИЗАЦИЯ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ ================= */
@@ -321,12 +283,9 @@
 
   $window.on('load', function () {
     initOnLoadFunctions()
-    equalHeight('.equal-wraper .equal-col')
+
   })
 
-  $window.on('resize', function () {
-    equalHeight('.equal-wraper .equal-col')
-  })
 
   $window.on('scroll', function () {
     initOnScrollFunctions()
