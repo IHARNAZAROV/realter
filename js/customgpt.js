@@ -18,9 +18,6 @@
     }, 500)
   }
 
-
-
-
   /**
    * Центрирование Bootstrap-модалок по вертикали
    */
@@ -86,20 +83,20 @@
     })
 
     // Галерея изображений
- const lightbox = GLightbox({
-    selector: '.mfp-link', 
-    touchNavigation: true,
-    loop: true
-});
+    const lightbox = GLightbox({
+      selector: '.mfp-link',
+      touchNavigation: true,
+      loop: true
+    })
 
     // Видеопопап
-  // Инициализация видео-попапа
-const videoLightbox = GLightbox({
-    selector: '.mfp-video',
-    touchNavigation: true,
-    loop: true,
-    autoplayVideos: true // Автовоспроизведение при открытии
-});
+    // Инициализация видео-попапа
+    const videoLightbox = GLightbox({
+      selector: '.mfp-video',
+      touchNavigation: true,
+      loop: true,
+      autoplayVideos: true // Автовоспроизведение при открытии
+    })
 
     // Центровка модалок
     $('.modal').on('show.bs.modal', repositionModals)
@@ -113,7 +110,6 @@ const videoLightbox = GLightbox({
     $window.on('scroll', () => {
       $('button.scroltop').fadeToggle($window.scrollTop() > 900 ? 1000 : 0)
     })
-
 
     // Мобильное меню
     $('.sub-menu, .mega-menu').parent('li').addClass('has-child')
@@ -158,54 +154,52 @@ const videoLightbox = GLightbox({
     $('.contact-slide-show').on('click', () => $('.contact-slide-hide').animate({ right: '0px' }))
     $('.contact_close').on('click', () => $('.contact-slide-hide').animate({ right: '100%' }))
 
- /* ================= ЗАМЕНА WAYPOINTS (СЧЕТЧИК ЧИСЕЛ) ================= */
-  
-  function initCounterUp() {
-    const counters = document.querySelectorAll('.counter');
-    if (!counters.length) return;
+    /* ================= ЗАМЕНА WAYPOINTS (СЧЕТЧИК ЧИСЕЛ) ================= */
 
-    // Настройки: анимация сработает, когда элемент появится на 50% экрана
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 };
+    function initCounterUp () {
+      const counters = document.querySelectorAll('.counter')
+      if (!counters.length) return
 
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          // Убираем запятые, если есть, и парсим число
-          const finalValue = parseFloat(el.innerText.replace(/,/g, ''));
-          const duration = 5000; // Длительность 5 секунды
-          const start = performance.now();
+      // Настройки: анимация сработает, когда элемент появится на 50% экрана
+      const observerOptions = { root: null, rootMargin: '0px', threshold: 0.5 }
 
-          const animate = (currentTime) => {
-            const elapsed = currentTime - start;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Плавное замедление (Easing)
-            const easeOutQuad = (t) => t * (2 - t);
-            
-            const currentVal = progress === 1 
-                ? finalValue 
-                : Math.floor(easeOutQuad(progress) * finalValue);
-            
-            el.innerText = currentVal;
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target
+            // Убираем запятые, если есть, и парсим число
+            const finalValue = parseFloat(el.innerText.replace(/,/g, ''))
+            const duration = 5000 // Длительность 5 секунды
+            const start = performance.now()
 
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            } else {
-              obs.unobserve(el); // Выключаем наблюдение после завершения
+            const animate = (currentTime) => {
+              const elapsed = currentTime - start
+              const progress = Math.min(elapsed / duration, 1)
+
+              // Плавное замедление (Easing)
+              const easeOutQuad = (t) => t * (2 - t)
+
+              const currentVal = progress === 1
+                ? finalValue
+                : Math.floor(easeOutQuad(progress) * finalValue)
+
+              el.innerText = currentVal
+
+              if (progress < 1) {
+                requestAnimationFrame(animate)
+              } else {
+                obs.unobserve(el) // Выключаем наблюдение после завершения
+              }
             }
-          };
-          requestAnimationFrame(animate);
-        }
-      });
-    }, observerOptions);
+            requestAnimationFrame(animate)
+          }
+        })
+      }, observerOptions)
 
-    counters.forEach(counter => observer.observe(counter));
-  }
+      counters.forEach(counter => observer.observe(counter))
+    }
 
-
-  initCounterUp();
-
+    initCounterUp()
   }
 
   /* ================= ИНИЦИАЛИЗАЦИЯ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ ================= */
@@ -283,9 +277,7 @@ const videoLightbox = GLightbox({
 
   $window.on('load', function () {
     initOnLoadFunctions()
-
   })
-
 
   $window.on('scroll', function () {
     initOnScrollFunctions()
