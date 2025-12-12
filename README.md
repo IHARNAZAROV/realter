@@ -1,69 +1,129 @@
-# Project: Real Estate Agent Portfolio Website
+# Realter — Olga Turko (Realtor from Lida)
 
-This is a portfolio website for Olga Turko, a real estate agent based in Lida, Belarus. The website showcases her services, property listings, and client testimonials.
+Website for Olga Turko — realtor from Lida. This project is a lightweight, responsive, and accessible single-page website built with HTML, CSS and JavaScript to showcase Olga's services, property listings, contact details, and client testimonials.
 
-## Technologies Used
+Language composition
+- JavaScript: 46%
+- HTML: 27.1%
+- CSS: 26.9%
 
-*   **Frontend:**
-    *   HTML5
-    *   CSS3
-    *   JavaScript (ES6)
-    *   jQuery
-    *   Bootstrap
-    *   Owl Carousel
-    *   Magnific Popup
-    *   lazysizes
-*   **Build Tools:**
-    *   Node.js
-    *   npm
-    *   `critical` for inlining critical CSS
-    *   `purgecss` for removing unused CSS
+## Table of contents
+- [About](#about)
+- [Demo](#demo)
+- [Features](#features)
+- [Built with](#built-with)
+- [Installation](#installation)
+- [Development](#development)
+- [Deployment](#deployment)
+- [Customization](#customization)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author & Contact](#author--contact)
 
-## Setup and Installation
+## About
+Realter is a small professional website intended to present Olga Turko's real estate services in Lida. The site focuses on clear presentation of listings, easy contact options for prospective clients, and a simple, mobile-first design.
 
-1.  **Prerequisites:** Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed on your machine.
+## Demo
+(Replace with a live URL or GitHub Pages link when available)
+- Live site: https://turko.by
 
-2.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    ```
+## Features
+- Responsive layout for desktop, tablet, and mobile
+- Property listing cards with images and details
+- Contact form (client-side validation)
+- Testimonials / client feedback section
+- SEO-friendly markup and accessible components
+- Lightweight vanilla JavaScript for interactivity (no heavy frameworks)
 
-3.  **Navigate to the project directory:**
-    ```bash
-    cd <project-directory>
-    ```
+## Built with
+- HTML5
+- CSS3 (Flexbox / Grid)
+- JavaScript (ES6+)
+- Optional: Any task runner or bundler if used (e.g., npm scripts)
 
-4.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+## Installation
+Clone the repository and open the site locally.
 
-## Build Process
+1. Clone
+   git clone https://github.com/IHARNAZAROV/realter.git
 
-The project includes scripts to optimize the CSS for better performance.
+2. Change directory
+   cd realter
 
-*   **Generate Critical CSS:** To extract and inline the critical-path CSS, run the following command:
-    ```bash
-    npm run build-critical
-    ```
-    This will generate a `index-critical.html` file with the critical CSS inlined.
+If the project uses a simple static structure, open index.html in your browser:
+- Open the file directly: open index.html
+or serve it locally using a simple static server.
 
-*   **Purge Unused CSS:** To remove unused CSS from the stylesheets, run:
-    ```bash
-    npm run purge-css
-    ```
-    This will create a `css/style-purged.css` file.
+Optional: using a Node static server
+1. Install serve (if not installed)
+   npm install -g serve
 
-## Project Structure
+2. Serve the folder
+   serve .
 
-*   `index.html`: The main HTML file for the website.
-*   `css/`: Contains the CSS files.
-    *   `style.css`: The main stylesheet.
-    *   `style-purged.css`: The optimized stylesheet.
-*   `js/`: Contains the JavaScript files.
-*   `images/`: Contains all the images used in the website.
-*   `node_modules/`: Contains the installed Node.js modules.
-*   `package.json`: Defines the project's dependencies and scripts.
-*   `build-critical.js`: The script for generating critical CSS.
-*   `build-purge.js`: The script for purging unused CSS.
-*   `README.md`: This file.
+## Development
+If the project contains npm scripts (check package.json), typical commands:
+
+- Install dependencies
+  npm install
+
+- Start development server (if provided)
+  npm start
+
+- Build for production (if provided)
+  npm run build
+
+If there are no npm configs, edit HTML/CSS/JS files directly and refresh the browser.
+
+## Deployment
+This site can be hosted on:
+- GitHub Pages
+- Netlify
+- Vercel
+- Any static hosting / CDN
+
+Example: Deploy to GitHub Pages
+1. Push to the repository
+2. In repository settings, enable GitHub Pages from the main branch (or gh-pages branch)
+
+## Customization
+- Replace demo content (text, images, listings) in the HTML templates.
+- Update contact details in the contact section and in the form handler.
+- Adjust styles in the CSS files (variables and layout) to match branding.
+- Extend JavaScript code to integrate real backend APIs (for forms or listings).
+
+## Contributing
+Contributions are welcome — especially for:
+- Accessibility improvements
+- SEO enhancements
+- Performance optimizations
+- Bug fixes and modernizing code
+
+Suggested workflow:
+1. Fork the repo
+2. Create a feature branch: git checkout -b feature/your-feature
+3. Commit your changes: git commit -m "Add feature"
+4. Push to your fork and open a Pull Request
+
+Please include a clear description of changes and screenshots if UI is affected.
+
+## License
+Specify a license for the repository (e.g., MIT). If not set, add a LICENSE file.
+
+Example (MIT):
+This project is released under the MIT License. See LICENSE for details.
+
+## Author & Contact
+- Owner: Olga Turko
+- Repository owner / maintainer: IHARNAZAROV
+- Contact / Inquiries: Add email or contact method here (e.g., grizley.tery@gmail.com)
+
+---
+
+If you'd like, I can:
+- Add a live demo URL or screenshots to this README,
+- Draft a LICENSE file (MIT, Apache-2.0, etc.),
+- Create GitHub Pages deployment instructions specifically for this repo,
+- Or produce a shorter "quick start" version for non-technical users.
+
+Tell me what you'd like next and I’ll add it. 
