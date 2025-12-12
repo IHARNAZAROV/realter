@@ -119,11 +119,3 @@ This project is released under the MIT License. See LICENSE for details.
 - Contact / Inquiries: Add email or contact method here (e.g., grizley.tery@gmail.com)
 
 ---
-
-If you'd like, I can:
-- Add a live demo URL or screenshots to this README,
-- Draft a LICENSE file (MIT, Apache-2.0, etc.),
-- Create GitHub Pages deployment instructions specifically for this repo,
-- Or produce a shorter "quick start" version for non-technical users.
-
-Tell me what you'd like next and I’ll add it. 
