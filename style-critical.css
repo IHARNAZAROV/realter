@@ -56,7 +56,7 @@
   margin-bottom: 30px;
 }
 .sx-text-primary {
-  color: var(--primary-color);
+  color: #0f4d33;
 }
 .bg-repeat {
   background-repeat: repeat;
@@ -664,7 +664,7 @@ body {
   overflow-x: hidden;
 }
 a {
-  color: var(--secondary-color);
+  color: #23252d;
   outline: 0;
   text-decoration: none;
 }
@@ -688,7 +688,7 @@ ul {
   overflow: hidden;
 }
 ::-webkit-selection {
-  background: var(--secondary-color);
+  background: #23252d;
   color: #fff;
 }
 h3,
@@ -697,7 +697,7 @@ h6 {
   margin-bottom: 10px;
 }
 h4 a {
-  color: var(--secondary-color);
+  color: #23252d;
 }
 h3 {
   font-family: Poppins, sans-serif;
@@ -777,13 +777,13 @@ ul li {
   position: relative;
 }
 .sx-bg-primary {
-  background-color: var(--primary-color);
+  background-color: #0f4d33;
 }
 .bg-white {
   background-color: #fff;
 }
 .bg-gray {
-  background-color: #eef1f2;
+  background-color: #fff5f0;
 }
 .bg-parallax {
   background-attachment: fixed;
@@ -865,7 +865,7 @@ ul li {
   }
 }
 .site-button-secondry {
-  background-color: var(--primary-color);
+  background-color: #0f4d33;
   color: #fff;
 }
 .btn-half span {
@@ -999,14 +999,14 @@ ul li {
 .testimonial-2 .testimonial-text {
   background-color: #fff;
   padding: 30px 30px 70px;
-  border: 1px solid #eef1f2;
+  border: 1px solid #fff5f0;
 }
 .testimonial-2 .fa-quote-right {
   position: absolute;
   right: 15px;
   top: 0;
   font-size: 70px;
-  color: var(--primary-color);
+  color: #0f4d33;
 }
 .testimonial-2 .testimonial-detail {
   padding: 0;
@@ -1020,10 +1020,10 @@ ul li {
   height: 100px;
 }
 .testimonial-2 .testimonial-name {
-  color: var(--secondary-color);
+  color: #23252d;
 }
 .testimonial-2 .testimonial-position {
-  color: var(--secondary-color);
+  color: #23252d;
   font-size: 14px;
 }
 @media only screen and (max-width: 768px) {
@@ -1083,7 +1083,7 @@ ul li {
 .loading-box {
   width: 100%;
   height: 100%;
-  background-color: var(--secondary-color);
+  background-color: #23252d;
   position: absolute;
   left: 0;
   top: 0;
@@ -1238,7 +1238,7 @@ ul li {
   top: -11px;
   position: absolute;
   width: 3000px;
-  background-color: #eef1f2;
+  background-color: #fff5f0;
   z-index: -1;
   bottom: -11px;
 }
@@ -1331,7 +1331,7 @@ ul li {
 }
 .header-nav .nav > li.active > a {
   background-color: transparent;
-  color: var(--primary-color);
+  color: #0f4d33;
 }
 @media only screen and (max-width: 991px) {
   .header-style-1 .header-left-gray-block .logo-header:after {
@@ -1389,7 +1389,7 @@ ul li {
     border-bottom: 1px solid #0003;
   }
   .nav-dark.header-nav .nav {
-    background-color: var(--secondary-color);
+    background-color: #23252d;
   }
   .nav-dark.header-nav .nav > li > a {
     border-top: 1px solid #0003;
@@ -1410,7 +1410,7 @@ ul li {
 button.scroltop {
   height: 40px;
   width: 40px;
-  background: var(--primary-color);
+  background: #0f4d33;
   border: none;
   position: fixed;
   right: 15px;
@@ -1609,7 +1609,7 @@ button.scroltop span {
 }
 .contact-nav .contact-nav-info {
   position: relative;
-  border: 10px solid var(--primary-color);
+  border: 10px solid #0f4d33;
   padding: 30px;
 }
 .contact-nav .contact_close {
@@ -1658,7 +1658,7 @@ button.scroltop span {
   display: inline-block;
   font-size: 80px;
   line-height: 80px;
-  color: var(--primary-color);
+  color: #0f4d33;
   font-weight: 700;
   letter-spacing: 20px;
   transform: rotate(270deg);
@@ -1681,7 +1681,7 @@ button.scroltop span {
 }
 .from-top:before {
   bottom: 0;
-  border: 1px solid var(--primary-color);
+  border: 1px solid #0f4d33;
   border-top: 0;
   border-bottom: 0;
 }
@@ -1797,7 +1797,7 @@ button.scroltop span {
 }
 #rev_slider_26_1 .tp-bannertimer {
   height: 80px;
-  background-color: var(--secondary-color)1a;
+  background-color: #23252d1a;
   z-index: 20;
   bottom: 0;
   position: absolute;
@@ -1872,7 +1872,7 @@ button.scroltop span {
   height: 2px;
   width: 0;
   content: "";
-  background-color: var(--primary-color);
+  background-color: #0f4d33;
 }
 .sx-title-swip:after {
   left: 0;
@@ -1907,7 +1907,7 @@ button.scroltop span {
   text-transform: uppercase;
   display: inline-block;
   font-weight: 600;
-  border: 1px solid #eef1f2;
+  border: 1px solid #fff5f0;
 }
 .get-in-touch-btn:after,
 .get-in-touch-btn:before {
@@ -1923,7 +1923,7 @@ button.scroltop span {
 }
 .get-in-touch-btn.from-top:before {
   bottom: 0;
-  border: 1px solid var(--secondary-color);
+  border: 1px solid #23252d;
   border-top: 0;
   border-bottom: 0;
 }
@@ -1980,85 +1980,10 @@ button.scroltop span {
   }
 }
 ::-webkit-selection {
-  background: var(--primary-color);
+  background: #0f4d33;
 }
 .about-home-left,
 .from-top::before,
 .get-in-touch-btn.from-top::before {
-  border-color: var(--primary-color);
-}
-.rev_slider_wrapper {
-  position: relative;
-  z-index: 0;
-  width: 100%;
-}
-.rev_slider {
-  position: relative;
-  overflow: visible;
-}
-.rev_slider a {
-  box-shadow: none;
-}
-.rev_slider img {
-  max-width: none !important;
-  margin: 0;
-  padding: 0;
-  border: none;
-}
-.rev_slider > ul,
-.rev_slider > ul > li,
-.rev_slider > ul > li:before {
-  list-style: none !important;
-  position: absolute;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow-x: visible;
-  overflow-y: visible;
-  background-image: none;
-  background-position: 0 0;
-  text-indent: 0;
-  top: 0;
-  left: 0;
-}
-.rev_slider > ul > li,
-.rev_slider > ul > li:before {
-  visibility: hidden;
-}
-.fullscreen-container {
-  padding: 0;
-  position: relative;
-}
-.rev_slider .tp-caption {
-  position: relative;
-  visibility: hidden;
-  white-space: nowrap;
-  display: block;
-  -webkit-font-smoothing: antialiased !important;
-  z-index: 1;
-}
-.rev-btn,
-.rev-btn:visited {
-  outline: 0 !important;
-  box-shadow: none !important;
-  text-decoration: none !important;
-  line-height: 44px;
-  font-size: 17px;
-  font-weight: 500;
-  padding: 12px 35px;
-  box-sizing: border-box;
-  font-family: Roboto, sans-serif;
-}
-.tp-bannertimer {
-  visibility: hidden;
-  width: 100%;
-  height: 5px;
-  background: #000;
-  background: rgba(0, 0, 0, 0.15);
-  position: absolute;
-  z-index: 200;
-  top: 0;
-}
-.tp-shape {
-  width: 100%;
-  height: 100%;
+  border-color: #0f4d33;
 }

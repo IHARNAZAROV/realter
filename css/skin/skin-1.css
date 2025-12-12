@@ -1,14 +1,14 @@
 ::selection {
-	background: var(--primary-color)
+	background: #155945
 }
 ::-moz-selection {
-background:var(--primary-color)
+background:#155945
 }
 ::-webkit-selection {
-background:var(--primary-color)
+background:#155945
 }
 
 /*-----Border Color-----*/
 .get-in-touch-btn.from-top::before,.about-home-left,.from-top::before, .image-effect-one .mfp-link{
-	border-color: var(--primary-color);
+	border-color: #155945;
 }

@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <!-- META -->
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="keywords"
-      content="риэлтер Лида, Ольга Турко, купить квартиру Лида, продать квартиру Лида, недвижимость Лида, вторичка Лида, новостройки Лида, помощь с документами"
+    <link
+      rel="preload"
+      as="image"
+      href="/images/main-slider/1.webp"
+      fetchpriority="high"
     />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
     <meta name="robots" content="index, follow" />
     <meta
@@ -20,70 +22,119 @@
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
 
     <!-- PAGE TITLE HERE -->
-    <title>Ольга Турко | Риэлтер | Лида | Главная</title>
+    <title>Риэлтер в Лиде — Ольга Турко | Покупка и продажа недвижимости</title>
 
     <!-- MOBILE SPECIFIC -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- BOOTSTRAP STYLE SHEET -->
 
-
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="css/bootstrap.min.css"
-        />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 
     <!-- OWL CAROUSEL STYLE SHEET -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="css/owl.carousel.min.css"
-     />
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
     <!-- MAGNIFIC POPUP STYLE SHEET -->
     <link
       rel="stylesheet"
-      type="text/css"
-      href="css/magnific-popup.min.css"
+      href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"
     />
-    <!-- LOADER STYLE SHEET -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="css/loader.min.css"
-     />
     <!-- FLATICON STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
     <!-- MAIN STYLE SHEET -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="css/style.css"
-    />
+    <link rel="stylesheet" type="text/css" href="css/style-purged.css" />
     <!-- Color Theme Change Css -->
     <link
       rel="stylesheet"
       class="skin"
       type="text/css"
       href="css/skin/skin-1.css"
-     />
-    <!-- REVOLUTION SLIDER CSS -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="plugins/revolution/revolution/css/settings.css"
     />
-    <!-- REVOLUTION NAVIGATION STYLE -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="plugins/revolution/revolution/css/navigation.css"
-    />
+    <link rel="stylesheet" href="/css/swiper-bundle.css" />
+    <link rel="stylesheet" href="/css/swiper.css" />
 
     <!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ольга Турко, риэлтер в Лиде" />
+    <meta
+      property="og:description"
+      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
+    />
+    <meta property="og:url" content="https://turko.by" />
+
+    <meta
+      property="og:image"
+      content="https:/turko.by/images/main-slider/2.webp"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ольга Турко, риэлтер в Лиде" />
+    <meta
+      name="twitter:description"
+      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
+    />
+    <meta
+      name="twitter:image"
+      content="https:/turko.by/images/main-slider/2.webp"
+    />
+    <meta name="twitter:image:width" content="1200" />
+    <meta name="twitter:image:height" content="630" />
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+          if (document.scripts[j].src === r) {
+            return;
+          }
+        }
+        (k = e.createElement(t)),
+          (a = e.getElementsByTagName(t)[0]),
+          (k.async = 1),
+          (k.src = r),
+          a.parentNode.insertBefore(k, a);
+      })(
+        window,
+        document,
+        "script",
+        "https://mc.yandex.ru/metrika/tag.js?id=105770392",
+        "ym"
+      );
+
+      ym(105770392, "init", {
+        ssr: true,
+        webvisor: true,
+        clickmap: true,
+        ecommerce: "dataLayer",
+        accurateTrackBounce: true,
+        trackLinks: true,
+      });
+    </script>
+    <noscript
+      ><div>
+        <img
+          src="https://mc.yandex.ru/watch/105770392"
+          style="position: absolute; left: -9999px"
+          alt=""
+        /></div
+    ></noscript>
+    <!-- /Yandex.Metrika counter -->
 
     <!-- Chema.org -->
     <script type="application/ld+json">
@@ -91,14 +142,14 @@
         "@context": "https://schema.org",
         "@type": "RealEstateAgent",
         "name": "Ольга Турко - Риэлтер в Лиде",
-        "image": "https://ваш-сайт.by/olga-turko.jpg",
-        "url": "https://ваш-сайт.by",
+        "image": "https:/turko.by/images/main-slider/2.webp",
+        "url": "https://turko.by",
         "telephone": "+375291809516",
         "email": "olgaturko1975@gmail.com",
         "priceRange": "$",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "ул. Советская, 35",
+          "streetAddress": "бульвар Князя Гедимина, дом 12",
           "addressLocality": "Лида",
           "addressRegion": "Гродненская область",
           "postalCode": "231300",
@@ -106,18 +157,18 @@
         },
         "geo": {
           "@type": "GeoCoordinates",
-          "latitude": "53.886071",
-          "longitude": "25.303964"
+          "latitude": "53.885517",
+          "longitude": "25.300224"
         },
         "openingHoursSpecification": [
           {
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": [
-              "Понедельник",
-              "Вторник",
-              "Среда",
-              "Четверг",
-              "Пятница"
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
             ],
             "opens": "09:00",
             "closes": "18:00"
@@ -148,8 +199,23 @@
           <div class="container">
             <div class="d-flex justify-content-end">
               <ul class="list-unstyled e-p-bx">
-                <li><span>Мой инстаграм:</span> @Rielter_olga_lida</li>
-                <li><span>Мой телефон:</span>+375 29 180 95 16</li>
+                <li>
+                  <span>Инстаграм:</span>
+                  <a
+                    href="https://instagram.com/Rielter_olga_lida"
+                    target="_blank"
+                    style="color: var(--color-primary)"
+                    >@Rielter_olga_lida</a
+                  >
+                </li>
+                <li>
+                  <span>Телефон:</span>
+                  <a
+                    href="tel:+375291809516"
+                    style="color: var(--color-primary)"
+                    >+375 29 180 95 16</a
+                  >
+                </li>
               </ul>
             </div>
           </div>
@@ -160,7 +226,10 @@
               <div class="logo-header">
                 <div class="logo-header-inner logo-header-one">
                   <a href="index.html">
-                    <img src="images/logo-dark.webp" alt="logo-dark" />
+                    <img
+                      src="images/logo-dark.webp"
+                      alt="Логотип риэлтера Ольга Турко - Недвижимость в Лиде"
+                    />
                   </a>
                 </div>
               </div>
@@ -250,7 +319,17 @@
                               <p>olgaturko1975@gmail.com</p>
                             </div>
                           </div>
-
+                          <div class="sx-icon-box-wraper left p-b30">
+                            <div
+                              class="icon-xs inline-icon m-b20 scale-in-center"
+                            >
+                              <i class="fa fa-map-marker"></i>
+                            </div>
+                            <div class="icon-content">
+                              <h6 class="m-t0">Мой адрес</h6>
+                              <p>город Лида, бульвар Князя Гедимина, 12</p>
+                            </div>
+                          </div>
                           <div class="full-social-bg">
                             <ul>
                               <li>
@@ -316,21 +395,19 @@
                             background-image: url(images/background/bg-map.webp);
                           "
                         >
-                          <form class="cons-contact-form2 form-transparent">
+                          <div class="cons-contact-info form-transparent">
                             <span class="spin"
-                              >Узнать больше, записаться на консультацию или
-                              задать вопросы!</span
+                              >Узнать больше, записаться на консультацию</span
                             >
-
                             <div class="text-left p-t10">
-                              <button
-                                type="submit"
+                              <a
+                                href="tel:+375291809516"
                                 class="site-button-secondry btn-half"
                               >
-                                <span>+375 29 180 95 16</span>
-                              </button>
+                                <span class="hermes">+375 29 180 95 16</span>
+                              </a>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -347,906 +424,131 @@
 
       <!-- CONTENT START -->
       <div class="page-content">
-        <!-- SLIDER START -->
-        <div
-          id="rev_slider_26_1_wrapper "
-          class="rev_slider_wrapper fullscreen-container home-rev-slider"
-          data-alias="mask-showcase"
-          data-source="gallery"
-        >
-          <!-- START REVOLUTION SLIDER 5.4.1 fullscreen mode -->
-          <div
-            id="rev_slider_26_1"
-            class="rev_slider fullscreenbanner"
-            style="display: none"
-            data-version="5.4.1"
-          >
-            <ul>
-              <!-- SLIDE 1 -->
-              <li
-                data-index="rs-73"
-                data-transition="fade"
-                data-slotamount="default"
-                data-hideafterloop="0"
-                data-hideslideonmobile="off"
-                data-easein="default"
-                data-easeout="default"
-                data-masterspeed="300"
-                data-thumb="images/main-slider/1.webp"
-                data-rotate="0"
-                data-saveperformance="off"
-                data-title=""
-                data-param1="1"
-                data-param2=""
-                data-param3=""
-                data-param4=""
-                data-param5=""
-                data-param6=""
-                data-param7=""
-                data-param8=""
-                data-param9=""
-                data-param10=""
-                data-description=""
-              >
-                <!-- MAIN IMAGE -->
-                <img
-                  src="images/main-slider/1.webp"
-                  data-bgcolor="#f8f8f8"
-                  alt=""
-                  data-bgposition="center center"
-                  data-bgfit="cover"
-                  data-bgrepeat="no-repeat"
-                  data-bgparallax="off"
-                  class="rev-slidebg lazyload"
-                  data-no-retina
-                />
-
-                <!-- LAYER 1  right image overlay dark-->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper rs-parallaxlevel-tobggroup"
-                  id="slide-73-layer-1"
-                  data-x="['right','right','right','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-fontweight="['100','100','400','400']"
-                  data-width="['full','full','full','full']"
-                  data-height="['full','full','full','full']"
-                  data-whitespace="nowrap"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"from":"opacity:0;","speed":1500,"to":"o:1;","delay":150,"ease":"Power2.easeInOut"},{"delay":"wait","speed":1500,"to":"opacity:0;","ease":"Power2.easeInOut"}]'
-                  data-textalign="['left','left','left','left']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 6;
-                    text-transform: left;
-                    background-color: rgba(0, 0, 0, 0.5);
-                  "
-                ></div>
-
-                <!-- LAYERS 2 number block-->
-                <div
-                  class="tp-caption rev-btn tp-resizeme slider-block sx-bg-primary"
-                  id="slide-73-layer-2"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['-220','-220','-220','50']"
-                  data-fontweight="['600','600','600','600']"
-                  data-fontsize="['120','120','80','80']"
-                  data-lineheight="['120','120','80','80']"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="button"
-                  data-responsive_offset="on"
-                  data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":1500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[10,10,10,10]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[10,10,10,10]"
-                  style="z-index: 10; font-family: 'Poppins', sans-serif"
-                >
-                  01
+        <section class="section__slider">
+          <div class="container__center">
+            <div class="swiper">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <div class="swiper-slide__block">
+                    <div
+                      class="swiper-slide__block__img"
+                      data-swiper-parallax-y="70%"
+                    >
+                      <a href="/about.html">
+                        <img
+                          width="1156"
+                          height="900"
+                          src="/images/main-slider/1.webp"
+                          fetchpriority="high"
+                          decoding="async"
+                          alt="Риэлтер Ольга Турко: помощь в покупке и продаже квартир в Лиде"
+                        />
+                      </a>
+                    </div>
+                    <div class="swiper-slide__block__text">
+                      <h1 data-swiper-parallax-x="-60%" class="main__title">
+                        Ольга <br />Турко
+                      </h1>
+                      <div data-swiper-parallax-x="-50%" class="main__subtitle">
+                        Ваш риэлтер в Лиде
+                      </div>
+                      <p data-swiper-parallax-x="-40%" class="paragraphe">
+                        Ведение переговоров, отстаивание интересов клиента и
+                        грамотный торг
+                      </p>
+                      <a
+                        data-swiper-parallax-x="-30%"
+                        class="link"
+                        target="_blank"
+                        href="viber://chat?number=%2B375291809516"
+                        >Мой вайбер</a
+                      >
+                      <span data-swiper-parallax-y="60%" class="number">1</span>
+                    </div>
+                  </div>
                 </div>
-
-                <!-- LAYER 3  Thin text title-->
-                <div
-                  class="tp-caption tp-resizeme slider-tag-line"
-                  id="slide-73-layer-3"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['-80','-80','-80','170']"
-                  data-fontsize="['64','64','60','40']"
-                  data-lineheight="['74','74','70','50']"
-                  data-width="['700','650','620','380']"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":300,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[10,10,10,10]"
-                  data-paddingright="[20,20,20,0]"
-                  data-paddingbottom="[10,10,10,10]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 10;
-                    font-weight: 200;
-                    letter-spacing: 10px;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                    text-transform: uppercase;
-                  "
-                >
-                  Ольга Турко
+                <div class="swiper-slide">
+                  <div class="swiper-slide__block">
+                    <div
+                      class="swiper-slide__block__img"
+                      data-swiper-parallax-y="70%"
+                    >
+                      <a href="/about.html">
+                        <img
+                          loading="lazy"
+                          width="1156"
+                          height="900"
+                          src="/images/main-slider/2.webp"
+                          alt="Профессиональный риэлтер Ольга Турко: подбор недвижимости и консультации"
+                        />
+                      </a>
+                    </div>
+                    <div class="swiper-slide__block__text">
+                      <div data-swiper-parallax-x="-60%" class="main__title">
+                        Ольга <br />Турко
+                      </div>
+                      <div data-swiper-parallax-x="-50%" class="main__subtitle">
+                        Ваш риэлтер в Лиде
+                      </div>
+                      <p data-swiper-parallax-x="-40%" class="paragraphe">
+                        Эффективный подбор, упаковка и продвижение недвижимости
+                        с учётом спроса в городе Лида
+                      </p>
+                      <a
+                        data-swiper-parallax-x="-30%"
+                        style="z-index: 5"
+                        class="link"
+                        target="_blank"
+                        href="https://t.me/TurkoOlga"
+                        >Мой телеграм</a
+                      >
+                      <span data-swiper-parallax-y="60%" class="number">2</span>
+                    </div>
+                  </div>
                 </div>
-
-                <!-- LAYER 4  Bold Title-->
-                <div
-                  class="tp-caption tp-resizeme"
-                  id="slide-73-layer-4"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['10','10','10','230']"
-                  data-fontsize="['64','64','60','40']"
-                  data-lineheight="['74','74','70','50']"
-                  data-width="['700','700','700','700']"
-                  data-height="none"
-                  data-whitespace="normal"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":200,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[20,20,20,10]"
-                  data-paddingbottom="[30,30,30,30]"
-                  data-paddingleft="[0,0,0,10]"
-                  style="
-                    z-index: 10;
-                    text-transform: uppercase;
-                    letter-spacing: 10px;
-                    white-space: normal;
-                    font-weight: 600;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                  "
-                >
-                  Ваш риэлтер
+                <div class="swiper-slide">
+                  <div class="swiper-slide__block">
+                    <div
+                      class="swiper-slide__block__img"
+                      data-swiper-parallax-y="70%"
+                    >
+                      <a href="/about.html">
+                        <img
+                          loading="lazy"
+                          width="1156"
+                          height="900"
+                          src="/images/main-slider/3.webp"
+                          alt="Юридическое сопровождение сделок с недвижимостью в Лиде - Ольга Турко"
+                        />
+                      </a>
+                    </div>
+                    <div class="swiper-slide__block__text">
+                      <div data-swiper-parallax-x="-60%" class="main__title">
+                        Ольга <br />Турко
+                      </div>
+                      <div data-swiper-parallax-x="-50%" class="main__subtitle">
+                        Ваш риэлтер в Лиде
+                      </div>
+                      <p data-swiper-parallax-x="-40%" class="paragraphe">
+                        Полное юридическое сопровождение сделки на всех этапах —
+                        от документов до регистрации
+                      </p>
+                      <a
+                        data-swiper-parallax-x="-30%"
+                        class="link"
+                        target="_blank"
+                        href="https://www.instagram.com/rielter_olga_lida"
+                        >Мой инстаграм</a
+                      >
+                      <span data-swiper-parallax-y="60%" class="number">3</span>
+                    </div>
+                  </div>
                 </div>
-
-                <!-- LAYER 5  Paragraph-->
-                <div
-                  class="tp-caption tp-resizeme"
-                  id="slide-73-layer-5"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['90','90','90','300']"
-                  data-fontsize="['20','20','20','20']"
-                  data-lineheight="['30','30','30','30']"
-                  data-width="['600','600','600','380']"
-                  data-height="none"
-                  data-whitespace="normal"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":200,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[20,20,20,20]"
-                  data-paddingbottom="[30,30,30,30]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 10;
-                    white-space: normal;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                  "
-                >
-                  Эффективный подбор, упаковка и продвижение недвижимости с
-                  учётом спроса в городе Лида
-                </div>
-
-                <!-- LAYER 6  Read More-->
-                <div
-                  class="tp-caption rev-btn tp-resizeme"
-                  id="slide-73-layer-6"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['180','180','180','420']"
-                  data-width="none"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="button"
-                  data-responsive_offset="on"
-                  data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":1500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="z-index: 9; line-height: 30px"
-                >
-                  <a href="about.html" class="site-button-secondry btn-half"
-                    ><span> Подробнее</span></a
-                  >
-                </div>
-
-                <!-- Border left Part -->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper"
-                  id="slide-73-layer-8"
-                  data-x="['center','center','center','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-width="full"
-                  data-height="full"
-                  data-whitespace="nowrap"
-                  data-visibility="['on','on','off','off']"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"delay":50,"speed":100,"frame":"0","from":"opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"opacity:0;","ease":"Power3.easeIn"}]'
-                  data-textalign="['inherit','inherit','inherit','inherit']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 8;
-                    background-color: rgba(0, 0, 0, 0);
-                    border-left: 40px solid #eef1f2;
-                  "
-                ></div>
-
-                <!-- Border bottom Part -->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper"
-                  id="slide-73-layer-7"
-                  data-x="['center','center','center','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-width="full"
-                  data-height="full"
-                  data-whitespace="nowrap"
-                  data-visibility="['on','on','off','off']"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"delay":50,"speed":100,"frame":"0","from":"opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"opacity:0;","ease":"Power3.easeIn"}]'
-                  data-textalign="['inherit','inherit','inherit','inherit']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 8;
-                    background-color: rgba(0, 0, 0, 0);
-                    border-bottom: 80px solid #eef1f2;
-                  "
-                ></div>
-              </li>
-
-              <!-- SLIDE 2 -->
-              <li
-                data-index="rs-74"
-                data-transition="fade"
-                data-slotamount="default"
-                data-hideafterloop="0"
-                data-hideslideonmobile="off"
-                data-easein="default"
-                data-easeout="default"
-                data-masterspeed="300"
-                data-thumb="images/main-slider/2.webp"
-                data-rotate="0"
-                data-saveperformance="off"
-                data-title=""
-                data-param1="1"
-                data-param2=""
-                data-param3=""
-                data-param4=""
-                data-param5=""
-                data-param6=""
-                data-param7=""
-                data-param8=""
-                data-param9=""
-                data-param10=""
-                data-description=""
-              >
-                <!-- MAIN IMAGE -->
-                <img
-                  src="images/main-slider/2.webp"
-                  data-bgcolor="#f8f8f8"
-                  data-bgposition="center center"
-                  data-bgfit="cover"
-                  data-bgrepeat="no-repeat"
-                  data-bgparallax="off"
-                  class="rev-slidebg lazyload"
-                  data-no-retina
-                />
-
-                <!-- LAYER 1  right image overlay dark-->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper rs-parallaxlevel-tobggroup"
-                  id="slide-74-layer-1"
-                  data-x="['right','right','right','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-fontweight="['100','100','400','400']"
-                  data-width="['full','full','full','full']"
-                  data-height="['full','full','full','full']"
-                  data-whitespace="nowrap"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"from":"opacity:0;","speed":1500,"to":"o:1;","delay":150,"ease":"Power2.easeInOut"},{"delay":"wait","speed":1500,"to":"opacity:0;","ease":"Power2.easeInOut"}]'
-                  data-textalign="['left','left','left','left']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 6;
-                    text-transform: left;
-                    background-color: rgba(0, 0, 0, 0.5);
-                  "
-                ></div>
-
-                <!-- LAYERS 2 number block-->
-                <div
-                  class="tp-caption rev-btn tp-resizeme slider-block sx-bg-primary"
-                  id="slide-74-layer-2"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['-220','-220','-220','50']"
-                  data-fontweight="['600','600','600','600']"
-                  data-fontsize="['120','120','80','80']"
-                  data-lineheight="['120','120','80','80']"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="button"
-                  data-responsive_offset="on"
-                  data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":1500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[10,10,10,10]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[10,10,10,10]"
-                  style="z-index: 10; font-family: 'Poppins', sans-serif"
-                >
-                  02
-                </div>
-
-                <!-- LAYER 3  Thin text title-->
-                <div
-                  class="tp-caption tp-resizeme slider-tag-line"
-                  id="slide-74-layer-3"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['-80','-80','-80','170']"
-                  data-fontsize="['64','64','60','40']"
-                  data-lineheight="['74','74','70','50']"
-                  data-width="['700','650','620','380']"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":300,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[10,10,10,10]"
-                  data-paddingright="[20,20,20,0]"
-                  data-paddingbottom="[10,10,10,10]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 10;
-                    font-weight: 200;
-                    letter-spacing: 10px;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                    text-transform: uppercase;
-                  "
-                >
-                  Ольга Турко
-                </div>
-
-                <!-- LAYER 4  Bold Title-->
-                <div
-                  class="tp-caption tp-resizeme"
-                  id="slide-74-layer-4"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['10','10','10','230']"
-                  data-fontsize="['64','64','60','40']"
-                  data-lineheight="['74','74','70','50']"
-                  data-width="['700','700','700','700']"
-                  data-height="none"
-                  data-whitespace="normal"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":200,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[20,20,20,10]"
-                  data-paddingbottom="[30,30,30,30]"
-                  data-paddingleft="[0,0,0,10]"
-                  style="
-                    z-index: 10;
-                    text-transform: uppercase;
-                    letter-spacing: 10px;
-                    white-space: normal;
-                    font-weight: 600;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                  "
-                >
-                  Ваш риэлтер
-                </div>
-
-                <!-- LAYER 5  Paragraph-->
-                <div
-                  class="tp-caption tp-resizeme"
-                  id="slide-74-layer-5"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['90','90','90','300']"
-                  data-fontsize="['20','20','20','20']"
-                  data-lineheight="['30','30','30','30']"
-                  data-width="['600','600','600','380']"
-                  data-height="none"
-                  data-whitespace="normal"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":200,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[20,20,20,20]"
-                  data-paddingbottom="[30,30,30,30]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 10;
-                    white-space: normal;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                  "
-                >
-                  Полное юридическое сопровождение сделки на всех этапах — от
-                  документов до регистрации
-                </div>
-
-                <!-- LAYER 6  Read More-->
-                <div
-                  class="tp-caption rev-btn tp-resizeme"
-                  id="slide-74-layer-6"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['180','180','180','410']"
-                  data-width="none"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="button"
-                  data-responsive_offset="on"
-                  data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":1500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="z-index: 9; line-height: 30px"
-                >
-                  <a href="about.html" class="site-button-secondry btn-half"
-                    ><span> Подробнее</span></a
-                  >
-                </div>
-
-                <!-- Border left Part -->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper"
-                  id="slide-74-layer-8"
-                  data-x="['center','center','center','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-width="full"
-                  data-height="full"
-                  data-whitespace="nowrap"
-                  data-visibility="['on','on','off','off']"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"delay":50,"speed":100,"frame":"0","from":"opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"opacity:0;","ease":"Power3.easeIn"}]'
-                  data-textalign="['inherit','inherit','inherit','inherit']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 8;
-                    background-color: rgba(0, 0, 0, 0);
-                    border-left: 40px solid #eef1f2;
-                  "
-                ></div>
-
-                <!-- Border bottom Part -->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper"
-                  id="slide-74-layer-7"
-                  data-x="['center','center','center','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-width="full"
-                  data-height="full"
-                  data-whitespace="nowrap"
-                  data-visibility="['on','on','off','off']"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"delay":50,"speed":100,"frame":"0","from":"opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"opacity:0;","ease":"Power3.easeIn"}]'
-                  data-textalign="['inherit','inherit','inherit','inherit']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 8;
-                    background-color: rgba(0, 0, 0, 0);
-                    border-bottom: 80px solid #eef1f2;
-                  "
-                ></div>
-              </li>
-
-              <!-- SLIDE 3 -->
-              <li
-                data-index="rs-75"
-                data-transition="fade"
-                data-slotamount="default"
-                data-hideafterloop="0"
-                data-hideslideonmobile="off"
-                data-easein="default"
-                data-easeout="default"
-                data-masterspeed="300"
-                data-thumb="images/main-slider/3.webp"
-                data-rotate="0"
-                data-saveperformance="off"
-                data-title=""
-                data-param1="1"
-                data-param2=""
-                data-param3=""
-                data-param4=""
-                data-param5=""
-                data-param6=""
-                data-param7=""
-                data-param8=""
-                data-param9=""
-                data-param10=""
-                data-description=""
-              >
-                <!-- MAIN IMAGE -->
-                <img
-                  src="images/main-slider/3.webp"
-                  data-bgcolor="#f8f8f8"
-                  alt="olga-turko"
-                  data-bgposition="center center"
-                  data-bgfit="cover"
-                  data-bgrepeat="no-repeat"
-                  data-bgparallax="off"
-                  class="rev-slidebg lazyload"
-                  data-no-retina
-                />
-
-                <!-- LAYER 1  right image overlay dark-->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper rs-parallaxlevel-tobggroup"
-                  id="slide-75-layer-1"
-                  data-x="['right','right','right','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-fontweight="['100','100','400','400']"
-                  data-width="['full','full','full','full']"
-                  data-height="['full','full','full','full']"
-                  data-whitespace="nowrap"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"from":"opacity:0;","speed":1500,"to":"o:1;","delay":150,"ease":"Power2.easeInOut"},{"delay":"wait","speed":1500,"to":"opacity:0;","ease":"Power2.easeInOut"}]'
-                  data-textalign="['left','left','left','left']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 6;
-                    text-transform: left;
-                    background-color: rgba(0, 0, 0, 0.5);
-                  "
-                ></div>
-
-                <!-- LAYERS 2 number block-->
-                <div
-                  class="tp-caption rev-btn tp-resizeme slider-block sx-bg-primary"
-                  id="slide-75-layer-2"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['-220','-220','-220','50']"
-                  data-fontweight="['600','600','600','600']"
-                  data-fontsize="['120','120','80','80']"
-                  data-lineheight="['120','120','80','80']"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="button"
-                  data-responsive_offset="on"
-                  data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":1500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[10,10,10,10]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[10,10,10,10]"
-                  style="z-index: 10; font-family: 'Poppins', sans-serif"
-                >
-                  03
-                </div>
-
-                <!-- LAYER 3  Thin text title-->
-                <div
-                  class="tp-caption tp-resizeme slider-tag-line"
-                  id="slide-75-layer-3"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['-80','-80','-80','170']"
-                  data-fontsize="['64','64','60','40']"
-                  data-lineheight="['74','74','70','50']"
-                  data-width="['700','650','620','380']"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":300,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[10,10,10,10]"
-                  data-paddingright="[20,20,20,0]"
-                  data-paddingbottom="[10,10,10,10]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 10;
-                    font-weight: 200;
-                    letter-spacing: 10px;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                    text-transform: uppercase;
-                  "
-                >
-                  Ольга Турко
-                </div>
-
-                <!-- LAYER 4  Bold Title-->
-                <div
-                  class="tp-caption tp-resizeme"
-                  id="slide-75-layer-4"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['10','10','10','230']"
-                  data-fontsize="['64','64','60','40']"
-                  data-lineheight="['74','74','70','50']"
-                  data-width="['700','700','700','700']"
-                  data-height="none"
-                  data-whitespace="normal"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":200,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[20,20,20,10]"
-                  data-paddingbottom="[30,30,30,30]"
-                  data-paddingleft="[0,0,0,10]"
-                  style="
-                    z-index: 10;
-                    text-transform: uppercase;
-                    letter-spacing: 10px;
-                    white-space: normal;
-                    font-weight: 600;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                  "
-                >
-                  Ваш риэлтер
-                </div>
-
-                <!-- LAYER 5  Paragraph-->
-                <div
-                  class="tp-caption tp-resizeme"
-                  id="slide-75-layer-5"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['90','90','90','300']"
-                  data-fontsize="['20','20','20','20']"
-                  data-lineheight="['30','30','30','30']"
-                  data-width="['600','600','600','380']"
-                  data-height="none"
-                  data-whitespace="normal"
-                  data-type="text"
-                  data-responsive_offset="on"
-                  data-frames='[{"delay":200,"speed":750,"sfxcolor":"#fff","sfx_effect":"blockfromleft","frame":"0","from":"z:0;","to":"o:1;","ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"sfxcolor":"#ffffff","sfx_effect":"blocktoleft","frame":"999","to":"z:0;","ease":"Power4.easeOut"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[20,20,20,20]"
-                  data-paddingright="[20,20,20,20]"
-                  data-paddingbottom="[30,30,30,30]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 10;
-                    white-space: normal;
-                    color: #fff;
-                    font-family: 'Poppins', sans-serif;
-                  "
-                >
-                  Ведение переговоров, отстаивание интересов клиента и грамотный
-                  торг
-                </div>
-
-                <!-- LAYER 6  Read More-->
-                <div
-                  class="tp-caption rev-btn tp-resizeme"
-                  id="slide-75-layer-6"
-                  data-x="['left','left','left','center']"
-                  data-hoffset="['60','60','30','0']"
-                  data-y="['middle','middle','middle','top']"
-                  data-voffset="['180','180','180','420']"
-                  data-width="none"
-                  data-height="none"
-                  data-whitespace="nowrap"
-                  data-type="button"
-                  data-responsive_offset="on"
-                  data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":1500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},
-                                {"delay":"wait","speed":500,"to":"y:[-100%];","mask":"x:inherit;y:inherit;s:inherit;e:inherit;","ease":"Power1.easeIn"}]'
-                  data-textalign="['left','left','left','center']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="z-index: 9; line-height: 30px"
-                >
-                  <a href="about.html" class="site-button-secondry btn-half"
-                    ><span> Подробнее</span></a
-                  >
-                </div>
-
-                <!-- Border left Part -->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper"
-                  id="slide-75-layer-8"
-                  data-x="['center','center','center','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-width="full"
-                  data-height="full"
-                  data-whitespace="nowrap"
-                  data-visibility="['on','on','off','off']"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"delay":50,"speed":100,"frame":"0","from":"opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"opacity:0;","ease":"Power3.easeIn"}]'
-                  data-textalign="['inherit','inherit','inherit','inherit']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 8;
-                    background-color: rgba(0, 0, 0, 0);
-                    border-left: 40px solid #eef1f2;
-                  "
-                ></div>
-
-                <!-- Border bottom Part -->
-                <div
-                  class="tp-caption tp-shape tp-shapewrapper"
-                  id="slide-75-layer-7"
-                  data-x="['center','center','center','center']"
-                  data-hoffset="['0','0','0','0']"
-                  data-y="['middle','middle','middle','middle']"
-                  data-voffset="['0','0','0','0']"
-                  data-width="full"
-                  data-height="full"
-                  data-whitespace="nowrap"
-                  data-visibility="['on','on','off','off']"
-                  data-type="shape"
-                  data-basealign="slide"
-                  data-responsive_offset="off"
-                  data-responsive="off"
-                  data-frames='[{"delay":50,"speed":100,"frame":"0","from":"opacity:0;","to":"o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"frame":"999","to":"opacity:0;","ease":"Power3.easeIn"}]'
-                  data-textalign="['inherit','inherit','inherit','inherit']"
-                  data-paddingtop="[0,0,0,0]"
-                  data-paddingright="[0,0,0,0]"
-                  data-paddingbottom="[0,0,0,0]"
-                  data-paddingleft="[0,0,0,0]"
-                  style="
-                    z-index: 8;
-                    background-color: rgba(0, 0, 0, 0);
-                    border-bottom: 80px solid #eef1f2;
-                  "
-                ></div>
-              </li>
-            </ul>
-            <div class="tp-bannertimer"></div>
-            <!-- left side social bar-->
-            <div class="slide-left-social">
-              <ul class="clearfix">
-                <li>
-                  <a
-                    href="https://www.instagram.com/rielter_olga_lida"
-                    target="_blank"
-                    class="sx-title-swip"
-                    data-hover="Instagram"
-                    >Instagram</a
-                  >
-                </li>
-
-                <li>
-                  <a
-                    href="https://t.me/TurkoOlga"
-                    target="_blank"
-                    class="sx-title-swip"
-                    data-hover="Telegram"
-                    >Telegram</a
-                  >
-                </li>
-
-                <li>
-                  <a
-                    href="viber://chat?number=%2B375291809516"
-                    target="_blank"
-                    class="sx-title-swip"
-                    data-hover="Viber"
-                    >Viber</a
-                  >
-                </li>
-              </ul>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+
         <!-- SLIDER END -->
 
         <!-- ABOUT COMPANY START -->
@@ -1275,7 +577,9 @@
                 <div class="col-lg-5 col-md-12 col-sm-12">
                   <div class="about-home-left">
                     <h3 class="m-t0 sx-tilte">
-                      Риэлтер в <span class="hermes">ГермессГрупп</span> — это человек, который берёт на себя всё, что настораживает вас в сделке.
+                      Риэлтер в <span class="hermes">ГермесГрупп</span> — это
+                      человек, который берёт на себя всё, что настораживает вас
+                      в сделке.
                     </h3>
                     <p>
                       Я предугадываю слабые места в сделке, вижу риски и знаю,
@@ -1299,64 +603,76 @@
                       <!-- COLUMNS 1 -->
                       <div class="item">
                         <div class="sx-img-effect zoom-slow">
-                          <a href="about.html"
+                          <a href="javascript:void(0);"
                             ><img
-                              class="lazyload"
-                              data-src="images/about-slider/1.webp"
-                              alt=""
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/1.webp"
+                              alt="Консультация по продаже недвижимости в офисе"
                           /></a>
                         </div>
                       </div>
                       <!-- COLUMNS 2 -->
                       <div class="item">
                         <div class="sx-img-effect zoom-slow">
-                          <a href="about.html"
+                          <a href="javascript:void(0);"
                             ><img
-                              class="lazyload"
-                              data-src="images/about-slider/2.webp"
-                              alt=""
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/2.webp"
+                              alt="Подготовка документов для сделки купли-продажи"
                           /></a>
                         </div>
                       </div>
                       <!-- COLUMNS 3 -->
                       <div class="item">
                         <div class="sx-img-effect zoom-slow">
-                          <a href="about.html"
+                          <a href="javascript:void(0);"
                             ><img
-                              class="lazyload"
-                              data-src="images/about-slider/3.webp"
-                              alt=""
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/3.webp"
+                              alt="Риэлтер Ольга Турко за работой с клиентами"
                           /></a>
                         </div>
                       </div>
                       <!-- COLUMNS 4 -->
                       <div class="item">
                         <div class="sx-img-effect zoom-slow">
-                          <a href="about.html"
+                          <a href="javascript:void(0);"
                             ><img
-                              class="lazyload"
-                              data-src="images/about-slider/4.webp"
-                              alt=""
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/4.webp"
+                              alt="Процесс оформления покупки квартиры в Лиде"
                           /></a>
                         </div>
                       </div>
                       <!-- COLUMNS 5 -->
                       <div class="item">
                         <div class="sx-img-effect zoom-slow">
-                          <a href="about.html"
+                          <a href="javascript:void(0);"
                             ><img
-                              class="lazyload"
-                              data-src="images/about-slider/5.webp"
-                              alt=""
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/5.webp"
+                              alt="Успешная сделка с недвижимостью"
                           /></a>
                         </div>
                       </div>
                     </div>
                     <div class="about-home-before">
                       <img
-                        class="lazyload"
-                        data-src="images/about-slider/1-ab.webp"
-                        alt=""
+                        width="360"
+                        height="477"
+                        loading="lazy"
+                        src="images/about-slider/1-ab.webp"
+                        alt="Портрет риэлтера Ольги Турко"
                       />
                     </div>
                   </div>
@@ -1397,9 +713,11 @@
                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                   <div class="number-block-one animate-in-to-top">
                     <img
-                      class="lazyload"
-                      data-src="images/pic1.webp"
-                      alt="service"
+                      width="570"
+                      height="714"
+                      loading="lazy"
+                      src="images/services/ser1.webp"
+                      alt="Подбор недвижимости в Лиде под запрос клиента"
                     />
                     <div class="figcaption bg-white text-center p-a20">
                       <h4 class="m-a0">Подбор недвижимости</h4>
@@ -1415,9 +733,11 @@
                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                   <div class="number-block-one animate-in-to-top">
                     <img
-                      class="lazyload"
-                      data-src="images/pic2.webp"
-                      alt="service"
+                      width="570"
+                      height="714"
+                      loading="lazy"
+                      src="images/services/ser3.webp"
+                      alt="Юридическое сопровождение сделок с квартирами и домами"
                     />
                     <div class="figcaption bg-white text-center p-a20">
                       <h4 class="m-a0">Юридическое сопровождение</h4>
@@ -1433,9 +753,11 @@
                 <div class="col-lg-4 col-md-6 col-sm-6 m-b30">
                   <div class="number-block-one animate-in-to-top">
                     <img
-                      class="lazyload"
-                      data-src="images/pic3.webp"
-                      alt="service"
+                      width="570"
+                      height="714"
+                      loading="lazy"
+                      src="images/services/ser2.webp"
+                      alt="Профессиональные переговоры и торг при покупке жилья"
                     />
                     <div class="figcaption bg-white text-center p-a20">
                       <h4 class="m-a0">Переговоры и торг</h4>
@@ -1595,36 +917,31 @@
                         <div class="testimonial-detail clearfix">
                           <div class="testimonial-pic shadow scale-in-center">
                             <img
-                              class="lazyload"
-                              data-src="images/testimonials/pic1.webp"
+                              loading="lazy"
+                              src="images/testimonials/pic1.webp"
                               width="100"
                               height="100"
-                              alt=""
+                              alt="Отзыв клиента Анастасия Дыбина о работе риэлтера"
                             />
                           </div>
-                          <h4 class="testimonial-name">Татьяна Федосевич</h4>
+                          <h4 class="testimonial-name">
+                            <a
+                              href="https://yandex.by/maps/user/jctzpg3u29f7ch0x6zu9yaytag"
+                              target="_blank"
+                              >Анастасия Дыбина</a
+                            >
+                          </h4>
                           <span class="testimonial-position">Продавец</span>
                           <span class="fa fa-quote-right"></span>
                         </div>
                         <div class="testimonial-text bg-white shadow-sm">
                           <p>
-                            “Доброе утро. Хочу выразить благодарность Агентству
-                            недвижимости "Юриэлт" г. Лида, это самое лучшее
-                            агентство в г. Лида. Особую благодарность хочу
-                            выразить риэлтору Ольге Турко. Она профессионал с
-                            большой буквы. Большое спасибо Ольга Вам за
-                            оперативную, качественную, душевную работу. Ваша
-                            профессиональность, выдержка, душевность, терпение
-                            вселяла в меня уверенность и безопасность в сделке.
-                            Вы работаете в интересах клиента, отдаётесь своей
-                            работе без остатка. Благодаря Ольге Турко квартира
-                            была продана в кратчайшие сроки. На каждом этапе
-                            сделки чувствовала себя уверенно, благодаря
-                            поддержке Ольги. Оперативно решались все возникающие
-                            вопросы. Ольга Вы самый лучший риэлтор г. Лида.
-                            Рекомендую всем только Ольгу Турко-профессионала и
-                            душевного человека. Большое Вам спасибо!!!Квартира
-                            продалась дороже выставленной суммы.”
+                            Очень благодарны Ольге Турко за неоценимую помощь
+                            при продаже квартиры!!! Очень оперативный и
+                            грамотный человек, знающий свою работу! За несколько
+                            дней вышли на сделку, что явлалось главным фактором,
+                            так как живем далеко! Желаем удачи и процветания в
+                            будущем!!!Спасибо!
                           </p>
                         </div>
                       </div>
@@ -1634,14 +951,20 @@
                         <div class="testimonial-detail clearfix">
                           <div class="testimonial-pic shadow scale-in-center">
                             <img
-                              class="lazyload"
-                              data-src="images/testimonials/pic2.webp"
+                              loading="lazy"
+                              src="images/testimonials/pic2.webp"
                               width="100"
                               height="100"
-                              alt=""
+                              alt="Отзыв клиента Светлана Савчук (продавец)"
                             />
                           </div>
-                          <h4 class="testimonial-name">Светлана Савчук</h4>
+                          <h4 class="testimonial-name">
+                            <a
+                              href="https://yandex.by/maps/user/jpbbqugkevgzx06p7uj6r6dwtm"
+                              target="_blank"
+                              >Светлана Савчук</a
+                            >
+                          </h4>
                           <span class="testimonial-position">Продавец</span>
                           <span class="fa fa-quote-right"></span>
                         </div>
@@ -1665,14 +988,20 @@
                         <div class="testimonial-detail clearfix">
                           <div class="testimonial-pic shadow scale-in-center">
                             <img
-                              class="lazyload"
-                              data-src="images/testimonials/pic3.webp"
+                              loading="lazy"
+                              src="images/testimonials/pic3.webp"
                               width="100"
                               height="100"
-                              alt=""
+                              alt="Отзыв клиента Наталья Филипович (покупатель)"
                             />
                           </div>
-                          <h4 class="testimonial-name">Наталья Филипович</h4>
+                          <h4 class="testimonial-name">
+                            <a
+                              href="https://yandex.by/maps/user/32p13t0fpm55guf2rpe5h9avy4"
+                              target="_blank"
+                              >Наталья Филипович</a
+                            >
+                          </h4>
                           <span class="testimonial-position">Покупатель</span>
                           <span class="fa fa-quote-right"></span>
                         </div>
@@ -1699,14 +1028,20 @@
                         <div class="testimonial-detail clearfix">
                           <div class="testimonial-pic shadow scale-in-center">
                             <img
-                              class="lazyload"
-                              data-src="images/testimonials/pic4.webp"
+                              loading="lazy"
+                              src="images/testimonials/pic4.webp"
                               width="100"
                               height="100"
-                              alt=""
+                              alt="Отзыв клиента Света Острейко"
                             />
                           </div>
-                          <h4 class="testimonial-name">Света Острейко</h4>
+                          <h4 class="testimonial-name">
+                            <a
+                              href="https://yandex.by/maps/user/tfpu86bqn1w36xcnmvn13cr4yr"
+                              target="_blank"
+                              >Света Острейко</a
+                            >
+                          </h4>
                           <span class="testimonial-position">Продавец</span>
                           <span class="fa fa-quote-right"></span>
                         </div>
@@ -1729,30 +1064,30 @@
                         <div class="testimonial-detail clearfix">
                           <div class="testimonial-pic shadow scale-in-center">
                             <img
-                              class="lazyload"
-                              data-src="images/testimonials/pic5.webp"
+                              loading="lazy"
+                              src="images/testimonials/pic5.webp"
                               width="100"
                               height="100"
-                              alt=""
+                              alt="Отзыв клиента Иван о быстрой продаже квартиры"
                             />
                           </div>
-                          <h4 class="testimonial-name">Владислав Б.</h4>
+                          <h4 class="testimonial-name">
+                            <a
+                              href="https://yandex.by/maps/user/24j2xh22vj2nxrzg1q7pkqn3cr"
+                              target="_blank"
+                              >Иван</a
+                            >
+                          </h4>
                           <span class="testimonial-position">Продавец</span>
                           <span class="fa fa-quote-right"></span>
                         </div>
                         <div class="testimonial-text bg-white shadow-sm">
                           <p>
-                            “Хочу выразить огромную благодарность сотруднице
-                            агенства Юриэлт Турко Ольге за помощь в продаже
-                            квартиры.. Профессионализм Ольги проявлялся во всем.
-                            Агент всегда была на связи, отвечала на все
-                            интересующие нас вопросы, оперативно решала
-                            возникшие у нас проблемы. Процесс продажи квартиры
-                            был грамотно организован. Мы чувствовали себя
-                            спокойно и уверенно, зная, что наше дело в надёжных
-                            руках Ольги. Рекомендую это агентство недвижимости
-                            всем, кто ищет надёжного партнёра в сфере
-                            недвижимости. С уважением и благодарностью.”
+                            “Продавал сам 3 месяца, три раза снижал цену.
+                            Обратился в Гермесгрупп. Через неделю продал. Так
+                            как было подготовлено заранее, сделка заняла час
+                            времени. Большое спасибо Ольге. Отличный специалист,
+                            знающий свое дело, с ней приятно иметь дело.”
                           </p>
                         </div>
                       </div>
@@ -1976,24 +1311,24 @@
                     class="owl-carousel owl-carousel-filter owl-btn-bottom-center mfp-gallery navigation-with-name"
                   >
                     <!-- COLUMNS 1 -->
-                    <div class="item fadingcol col-one overflow-hide">
+                    <div class="item fadingcol col-two overflow-hide">
                       <div class="sx-box image-hover-block">
                         <div class="sx-thum-bx">
                           <img
-                            class="lazyload"
-                            data-src="images/projects/portrait/pic1.webp"
-                            alt="objects"
+                            loading="lazy"
+                            src="images/projects/portrait/pic1.webp"
+                            alt="Покупка и продажа недвижимости"
                           />
                         </div>
                         <div class="sx-info p-t20 text-white">
                           <h4 class="sx-tilte">
                             <a
-                              href="https://lida.urielt.by/object/1-komnatnaya-lida-masherova-15-k2-24697"
+                              href="https://realt.by/grodno-region/sale-flats/object/3860418/"
                               target="_blank"
-                              >Однокомнатная квартира</a
+                              >Двухкомнатная квартира</a
                             >
                           </h4>
-                          <p class="m-b0">город Лида, улица Машерова</p>
+                          <p class="m-b0">город Лида, улица Докучаева</p>
                         </div>
                         <a
                           class="mfp-link"
@@ -2008,20 +1343,20 @@
                       <div class="sx-box image-hover-block">
                         <div class="sx-thum-bx">
                           <img
-                            class="lazyload"
-                            data-src="images/projects/portrait/pic2.webp"
-                            alt="objects"
+                            loading="lazy"
+                            src="images/projects/portrait/pic2.webp"
+                            alt="Покупка и продажа недвижимости"
                           />
                         </div>
                         <div class="sx-info p-t20 text-white">
                           <h4 class="sx-tilte">
                             <a
-                              href="https://lida.urielt.by/object/2-komnatnaya-lida-aleksandra-nevskogo-42-24866"
+                              href="https://realt.by/grodno-region/sale-flats/object/3867894/"
                               target="_blank"
                               >Двухкомнатная квартира</a
                             >
                           </h4>
-                          <p class="m-b0">город Лида, улица А.Невского</p>
+                          <p class="m-b0">город Лида, улица Летная</p>
                         </div>
                         <a
                           class="mfp-link"
@@ -2036,20 +1371,20 @@
                       <div class="sx-box image-hover-block">
                         <div class="sx-thum-bx">
                           <img
-                            class="lazyload"
-                            data-src="images/projects/portrait/pic3.webp"
-                            alt="objects"
+                            loading="lazy"
+                            src="images/projects/portrait/pic3.webp"
+                            alt="Покупка и продажа недвижимости"
                           />
                         </div>
                         <div class="sx-info p-t20 text-white">
                           <h4 class="sx-tilte">
                             <a
-                              href="https://lida.urielt.by/object/3-komnatnaya-lida-yujniy-gorodok-15-21219"
+                              href="https://realt.by/grodno-region/sale-flats/object/3864384/"
                               target="_blank"
                               >Трехкомнатная квартира</a
                             >
                           </h4>
-                          <p class="m-b0">город Лида, Южный городок</p>
+                          <p class="m-b0">город Лида, улица Фрунзе</p>
                         </div>
                         <a
                           class="mfp-link"
@@ -2060,24 +1395,24 @@
                       </div>
                     </div>
                     <!-- COLUMNS 4 -->
-                    <div class="item fadingcol col-four overflow-hide">
+                    <div class="item fadingcol col-two overflow-hide">
                       <div class="sx-box image-hover-block">
                         <div class="sx-thum-bx">
                           <img
-                            class="lazyload"
-                            data-src="images/projects/portrait/pic4.webp"
-                            alt="objects"
+                            loading="lazy"
+                            src="images/projects/portrait/pic4.webp"
+                            alt="Покупка и продажа недвижимости"
                           />
                         </div>
                         <div class="sx-info p-t20 text-white">
                           <h4 class="sx-tilte">
                             <a
-                              href="https://lida.urielt.by/object/zemlya-uchastok-lida-21287"
+                              href="https://realt.by/grodno-region/sale-flats/object/3867894/"
                               target="_blank"
-                              >Участок с домом</a
+                              >Двухкомнатная квартира</a
                             >
                           </h4>
-                          <p class="m-b0">Садовое товарищество Химик</p>
+                          <p class="m-b0">город Лида, улица Летная</p>
                         </div>
                         <a
                           class="mfp-link"
@@ -2088,24 +1423,26 @@
                       </div>
                     </div>
                     <!-- COLUMNS 5 -->
-                    <div class="item fadingcol col-three overflow-hide">
+                    <div class="item fadingcol col-four overflow-hide">
                       <div class="sx-box image-hover-block">
                         <div class="sx-thum-bx">
                           <img
-                            class="lazyload"
-                            data-src="images/projects/portrait/pic5.webp"
-                            alt="objects"
+                            loading="lazy"
+                            src="images/projects/portrait/pic5.webp"
+                            alt="Покупка и продажа недвижимости"
                           />
                         </div>
                         <div class="sx-info p-t20 text-white">
                           <h4 class="sx-tilte">
                             <a
-                              href="https://lida.urielt.by/object/3-komnatnaya-lida-tuhachevskogo-99-23327"
+                              href="https://realt.by/grodno-region/sale-cottages/object/3882881/"
                               target="_blank"
-                              >Трехкомнатная квартира</a
+                              >Дом с участком</a
                             >
                           </h4>
-                          <p class="m-b0">город Лида, улица Тухачевского</p>
+                          <p class="m-b0">
+                            агрогородок Крупово,улица Молодежная
+                          </p>
                         </div>
                         <a
                           class="mfp-link"
@@ -2116,24 +1453,26 @@
                       </div>
                     </div>
                     <!-- COLUMNS 6 -->
-                    <div class="item fadingcol col-two overflow-hide">
+                    <div class="item fadingcol col-four overflow-hide">
                       <div class="sx-box image-hover-block">
                         <div class="sx-thum-bx">
                           <img
-                            class="lazyload"
-                            data-src="images/projects/portrait/pic6.webp"
-                            alt="objects"
+                            loading="lazy"
+                            src="images/projects/portrait/pic6.webp"
+                            alt="Покупка и продажа недвижимости"
                           />
                         </div>
                         <div class="sx-info p-t20 text-white">
                           <h4 class="sx-tilte">
                             <a
-                              href="https://lida.urielt.by/object/2-komnatnaya-lida-gastello-49-k2-24689"
+                              href="https://realt.by/grodno-region/sale-cottages/object/3864700/"
                               target="_blank"
-                              >Двухкомнатная квартира</a
+                              >Дом с участком</a
                             >
                           </h4>
-                          <p class="m-b0">город Лида, улица Гастелло</p>
+                          <p class="m-b0">
+                            агрогородок Рожанка, улица Юбилейная
+                          </p>
                         </div>
                         <a
                           class="mfp-link"
@@ -2144,24 +1483,24 @@
                       </div>
                     </div>
                     <!-- COLUMNS 7 -->
-                    <div class="item fadingcol col-one overflow-hide">
+                    <div class="item fadingcol col-four overflow-hide">
                       <div class="sx-box image-hover-block">
                         <div class="sx-thum-bx">
                           <img
-                            class="lazyload"
-                            data-src="images/projects/portrait/pic7.webp"
-                            alt="objects"
+                            loading="lazy"
+                            src="images/projects/portrait/pic7.webp"
+                            alt="Покупка и продажа недвижимости"
                           />
                         </div>
                         <div class="sx-info p-t20 text-white">
                           <h4 class="sx-tilte">
                             <a
-                              href="https://lida.urielt.by/object/1-komnatnaya-lida-gastello-47-k3-20238"
+                              href="https://realt.by/grodno-region/sale-cottages/object/3864980/"
                               target="_blank"
-                              >Однокомнатная квартира</a
+                              >Дом с участком</a
                             >
                           </h4>
-                          <p class="m-b0">город Лида, улица Гастелло</p>
+                          <p class="m-b0">деревня Шейбаки, улица Озерная</p>
                         </div>
                         <a
                           class="mfp-link"
@@ -2204,14 +1543,16 @@
                 <div class="row justify-content-center">
                   <div class="col-lg-3 col-md-4 col-sm-6 col-6 m-b30">
                     <a
-                      href="https://bgs.by"
+                      href="https://www.belapb.by"
                       target="_blank"
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo1.webp"
-                        alt=""
+                        loading="lazy"
+                        width="500"
+                        height="300"
+                        src="images/client-logo/logo1.webp"
+                        alt="Партнер Белагропромбанк - кредитование жилья"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2225,9 +1566,11 @@
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo2.webp"
-                        alt=""
+                        loading="lazy"
+                        width="500"
+                        height="300"
+                        src="images/client-logo/logo2.webp"
+                        alt="Партнер Domovita.by - портал недвижимости"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2241,9 +1584,11 @@
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo3.webp"
-                        alt=""
+                        loading="lazy"
+                        width="500"
+                        height="300"
+                        src="images/client-logo/logo3.webp"
+                        alt="Партнер Realt.by - объявления о недвижимости"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2252,14 +1597,14 @@
                   </div>
                   <div class="col-lg-3 col-md-4 col-sm-6 col-6 m-b30">
                     <a
-                      href="https://lidapark.by"
+                      href="https://www.belinvestbank.by"
                       target="_blank"
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo4.webp"
-                        alt=""
+                        loading="lazy"
+                        src="images/client-logo/logo4.webp"
+                        alt="Партнер Белинвестбанк - ипотека и кредиты"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2268,14 +1613,16 @@
                   </div>
                   <div class="col-lg-3 col-md-4 col-sm-6 col-6 m-b30">
                     <a
-                      href="https://www.hata.by"
+                      href="https://belarusbank.by"
                       target="_blank"
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo5.webp"
-                        alt=""
+                        loading="lazy"
+                        width="500"
+                        height="300"
+                        src="images/client-logo/logo5.webp"
+                        alt="Партнер Беларусбанк - жилищные программы"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2289,9 +1636,11 @@
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo6.webp"
-                        alt=""
+                        loading="lazy"
+                        width="500"
+                        height="300"
+                        src="images/client-logo/logo6.webp"
+                        alt="YouTube канал о недвижимости"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2305,9 +1654,11 @@
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo7.webp"
-                        alt=""
+                        loading="lazy"
+                        width="500"
+                        height="300"
+                        src="images/client-logo/logo7.webp"
+                        alt="Партнер Kufar.by - недвижимость в Беларуси"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2321,9 +1672,11 @@
                       class="client-logo-pic"
                     >
                       <img
-                        class="lazyload"
-                        data-src="images/client-logo/logo9.webp"
-                        alt=""
+                        loading="lazy"
+                        width="500"
+                        height="300"
+                        src="images/client-logo/logo9.webp"
+                        alt="Партнер Onliner.by - покупка и продажа квартир"
                       />
                       <div>
                         <span>Перейти на сайт</span>
@@ -2356,7 +1709,9 @@
                   <!--<h4 class="widget-title">About Company</h4>-->
                   <div class="logo-footer clearfix p-b15">
                     <a href="index.html"
-                      ><img src="images/logo-light.webp" alt="logo"
+                      ><img
+                        src="images/logo-light.webp"
+                        alt="Логотип Ольга Турко - Профессиональные риэлтерские услуги"
                     /></a>
                   </div>
                   <p>
@@ -2409,17 +1764,18 @@
                       <div
                         class="sx-post-date text-center text-uppercase text-white"
                       >
-                        <strong class="p-date">21</strong>
-                        <span class="p-month">Январь</span>
+                        <strong class="p-date">20</strong>
+                        <span class="p-month">Октябрь</span>
                         <span class="p-year">2025</span>
                       </div>
                       <div class="sx-post-info">
                         <div class="sx-post-header">
                           <h6 class="post-title">
                             <a
-                              href="https://www.instagram.com/p/DFFKy7TtnFg/"
+                              href="https://www.instagram.com/p/DQBsgg1iLM1/"
                               target="_blank"
-                              >Брачный договор</a
+                              >Ребенок-собственник: как купить квартиру на
+                              несовершеннолетнего</a
                             >
                           </h6>
                         </div>
@@ -2436,18 +1792,18 @@
                       <div
                         class="sx-post-date text-center text-uppercase text-white"
                       >
-                        <strong class="p-date">28</strong>
-                        <span class="p-month">Декабрь</span>
-                        <span class="p-year">2024</span>
+                        <strong class="p-date">23</strong>
+                        <span class="p-month">Октябрь</span>
+                        <span class="p-year">2025</span>
                       </div>
                       <div class="sx-post-info">
                         <div class="sx-post-header">
                           <h6 class="post-title">
                             <a
-                              href="https://www.instagram.com/p/DEFOLIuo3lZ/"
+                              href="https://www.instagram.com/p/DQJjVgCCEeN"
                               target="_blank"
-                              >Как расторгнуть договор купли-продажи
-                              недвижимости</a
+                              >Почему Беларусь стала новой жемчужиной для
+                              иностранных инвесторов?</a
                             >
                           </h6>
                         </div>
@@ -2465,17 +1821,17 @@
                       <div
                         class="sx-post-date text-center text-uppercase text-white"
                       >
-                        <strong class="p-date">13</strong>
-                        <span class="p-month">Январь</span>
+                        <strong class="p-date">14</strong>
+                        <span class="p-month">Ноябрь</span>
                         <span class="p-year">2025</span>
                       </div>
                       <div class="sx-post-info">
                         <div class="sx-post-header">
                           <h6 class="post-title">
                             <a
-                              href="https://www.instagram.com/p/DEwgV-eonLd"
+                              href="https://www.instagram.com/p/DRCO9NkiAsz/"
                               target="_blank"
-                              >Купили квартиру? 6 следующих шагов</a
+                              >АВАНС ИЛИ ЗАДАТОК? Разбираемся в отличиях</a
                             >
                           </h6>
                         </div>
@@ -2501,6 +1857,9 @@
                     <li><a href="objects.html">Объекты</a></li>
                     <li><a href="blog.html">Блог</a></li>
                     <li><a href="contact.html">Контакты</a></li>
+                    <li>
+                      <a href="Privacy.html">Политика конфиденциальности</a>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -2510,9 +1869,14 @@
                 <div class="widget widget_address_outer">
                   <h5 class="widget-title">Пора поговорить о вашем доме</h5>
                   <ul class="widget_address">
-                    <li>olgaturko1975@gmail.com</li>
-                    <li>(+375) 29 180 95 16</li>
-                    <li>(+375) 44 501 90 90</li>
+                    <li>город Лида, бульвар Князя Гедимина, 12</li>
+                    <li>
+                      <a href="mailto:olgaturko1975@gmail.com"
+                        >olgaturko1975@gmail.com</a
+                      >
+                    </li>
+                    <li><a href="tel:+375291809516">(+375) 29 180 95 16</a></li>
+                    <li><a href="tel:+375445019090">(+375) 44 501 90 90</a></li>
                   </ul>
                 </div>
               </div>
@@ -2558,116 +1922,41 @@
       </button>
     </div>
 
-    <!-- LOADING AREA START ===== -->
-    <div class="loading-area">
-      <div class="loading-box"></div>
-      <div class="loading-pic">
-        <div class="cssload-spinner">
-          <div class="cssload-cube cssload-cube0"></div>
-          <div class="cssload-cube cssload-cube1"></div>
-          <div class="cssload-cube cssload-cube2"></div>
-          <div class="cssload-cube cssload-cube3"></div>
-          <div class="cssload-cube cssload-cube4"></div>
-          <div class="cssload-cube cssload-cube5"></div>
-          <div class="cssload-cube cssload-cube6"></div>
-          <div class="cssload-cube cssload-cube7"></div>
-          <div class="cssload-cube cssload-cube8"></div>
-          <div class="cssload-cube cssload-cube9"></div>
-          <div class="cssload-cube cssload-cube10"></div>
-          <div class="cssload-cube cssload-cube11"></div>
-          <div class="cssload-cube cssload-cube12"></div>
-          <div class="cssload-cube cssload-cube13"></div>
-          <div class="cssload-cube cssload-cube14"></div>
-          <div class="cssload-cube cssload-cube15"></div>
-        </div>
-      </div>
-    </div>
-    <!-- LOADING AREA  END ====== -->
-
     <!-- JAVASCRIPT FILES ========================================= -->
 
     <!-- 1. jQuery (должен быть первым, без defer/async) -->
     <script src="js/jquery-3.7.1.min.js"></script>
 
     <!-- 2. Плагины jQuery -->
-    <script src="js/magnific-popup.min.js" defer></script>
-    <script src="js/waypoints.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <script src="js/isotope.pkgd.min.js" defer></script>
     <script src="js/owl.carousel.min.js" defer></script>
     <script src="js/jquery.owl-filter.js" defer></script>
 
     <!-- 3. Пользовательские скрипты (после плагинов) -->
     <script src="js/customgpt.js" defer></script>
-    <script src="js/rev-script-1.js" defer></script>
 
     <!-- 4. Независимые скрипты -->
-    <script src="js/lazysizes.min.js" async></script>
     <script
       src="https://kit.fontawesome.com/c16c7d78ea.js"
       crossorigin="anonymous"
       defer
     ></script>
 
-    <!-- 5. Revolution Slider -->
-    <script
-      src="plugins/revolution/revolution/js/jquery.themepunch.tools.min.js"
-      defer
-    ></script>
-    <script
-      src="plugins/revolution/revolution/js/jquery.themepunch.revolution.min.js"
-      defer
-    ></script>
-    <script
-      src="plugins/revolution/revolution/js/extensions/revolution-plugin.js"
-      defer
-    ></script>
+    <!-- 5.  Slider -->
+    <script src="/js/swiper-bundle.js"></script>
+    <script src="/js/swiper.js"></script>
 
-    <noscript
-      ><link rel="stylesheet" type="text/css" href="css/bootstrap-min.css"
-    /></noscript>
-    <noscript
-      ><link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
-    /></noscript>
-    <noscript
-      ><link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css"
-    /></noscript>
-    <noscript
-      ><link rel="stylesheet" type="text/css" href="css/magnific-popup.min.css"
-    /></noscript>
-    <noscript
-      ><link rel="stylesheet" type="text/css" href="css/loader.min.css"
-    /></noscript>
-    <noscript
-      ><link rel="stylesheet" type="text/css" href="css/flaticon.min.css"
-    /></noscript>
-    <noscript
-      ><link rel="stylesheet" type="text/css" href="css/style.css"
-    /></noscript>
-    <noscript
-      ><link
-        rel="stylesheet"
-        class="skin"
-        type="text/css"
-        href="css/skin/skin-1.css"
-    /></noscript>
-    <noscript
-      ><link
-        rel="stylesheet"
-        type="text/css"
-        href="plugins/revolution/revolution/css/settings.css"
-    /></noscript>
-    <noscript
-      ><link
-        rel="stylesheet"
-        type="text/css"
-        href="plugins/revolution/revolution/css/navigation.css"
-    /></noscript>
-    <noscript
-      ><link
-        href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&amp;display=swap"
-        rel="stylesheet"
-    /></noscript>
+    <script>
+      // Когда браузер построил дерево (быстрее, чем полная загрузка картинок)
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("loaded");
+      });
+
+      // Страховка для старых браузеров или кэша (если DOMContentLoaded проскочил)
+      window.addEventListener("load", function () {
+        document.body.classList.add("loaded");
+      });
+    </script>
   </body>
 </html>
