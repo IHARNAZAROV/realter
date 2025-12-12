@@ -36,7 +36,7 @@ Realter is a small professional website intended to present Olga Turko's real es
 - Lightweight vanilla JavaScript for interactivity (no heavy frameworks)
 
 ## Built with
-- HTML5
+- HTML5!
 - CSS3 (Flexbox / Grid)
 - JavaScript (ES6+)
 - Optional: Any task runner or bundler if used (e.g., npm scripts)
