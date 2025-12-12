@@ -1,4 +1,5 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/turkoby/public_html/
-    - /bin/rsync -av --delete /home/turkoby/public_git/ $DEPLOYPATH
+    - export SOURCE=/home/turkoby/public_git/
+    - export TARGET=/home/turkoby/public_html/
+    - /bin/rsync -av --delete $SOURCE $TARGET
