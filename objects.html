@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-WVJ6PL6L");
+    </script>
+    <!-- End Google Tag Manager -->
     <!-- META -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -26,7 +40,10 @@
     <!-- OWL CAROUSEL STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
     <!-- MAGNIFIC POPUP STYLE SHEET -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"
+    />
     <!-- FLATICON STYLE SHEET -->
     <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
     <!-- MAIN STYLE SHEET -->
@@ -47,81 +64,122 @@
       rel="stylesheet"
     />
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105770392', 'ym');
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (m, e, t, r, i, k, a) {
+        m[i] =
+          m[i] ||
+          function () {
+            (m[i].a = m[i].a || []).push(arguments);
+          };
+        m[i].l = 1 * new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+          if (document.scripts[j].src === r) {
+            return;
+          }
+        }
+        (k = e.createElement(t)),
+          (a = e.getElementsByTagName(t)[0]),
+          (k.async = 1),
+          (k.src = r),
+          a.parentNode.insertBefore(k, a);
+      })(
+        window,
+        document,
+        "script",
+        "https://mc.yandex.ru/metrika/tag.js?id=105770392",
+        "ym"
+      );
 
-    ym(105770392, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/105770392" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
+      ym(105770392, "init", {
+        ssr: true,
+        webvisor: true,
+        clickmap: true,
+        ecommerce: "dataLayer",
+        accurateTrackBounce: true,
+        trackLinks: true,
+      });
+    </script>
+    <noscript
+      ><div>
+        <img
+          src="https://mc.yandex.ru/watch/105770392"
+          style="position: absolute; left: -9999px"
+          alt=""
+        /></div
+    ></noscript>
+    <!-- /Yandex.Metrika counter -->
   </head>
 
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WVJ6PL6L"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <div class="page-wraper">
       <!-- HEADER START -->
-        <header class="site-header nav-wide nav-transparent mobile-sider-drawer-menu">
-            <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
-                <div class="main-bar">
-                    <div class="container clearfix">
-                        <div class="logo-header">
-                            <div class="logo-header-inner logo-header-one">
-                                <a href="index.html">
-                                    <img src="images/logo-light.webp" alt="logo" />
-                                </a>
-                            </div>
-                        </div>
-                        <!-- NAV Toggle Button -->
-                        <button id="mobile-side-drawer" data-target=".header-nav" data-toggle="collapse" type="button"
-                            class="navbar-toggler collapsed">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar icon-bar-first"></span>
-                            <span class="icon-bar icon-bar-two"></span>
-                            <span class="icon-bar icon-bar-three"></span>
-                        </button>
-
-
-                        <!-- MAIN NAVIGATION -->
-                        <div class="header-nav nav-dark navbar-collapse collapse justify-content-start collapse">
-                            <ul class=" nav navbar-nav">
-                                <li class="active">
-                                    <a href="index.html">Главная</a>
-
-                                </li>
-
-                                <li>
-                                    <a href="about.html">Обо мне</a>
-
-                                </li>
-
-
-                                <li>
-                                    <a href="objects.html">Объекты</a>
-
-                                </li>
-
-                                <li>
-                                    <a href="blog.html">Блог</a>
-
-                                </li>
-
-                                <li><a href="faq.html">Вопросы</a></li>
-                                <li><a href="contact.html">Контакты</a></li>
-
-                            </ul>
-                        </div>
-
-
-                    </div>
+      <header
+        class="site-header nav-wide nav-transparent mobile-sider-drawer-menu"
+      >
+        <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
+          <div class="main-bar">
+            <div class="container clearfix">
+              <div class="logo-header">
+                <div class="logo-header-inner logo-header-one">
+                  <a href="index.html">
+                    <img src="images/logo-light.webp" alt="logo" />
+                  </a>
                 </div>
+              </div>
+              <!-- NAV Toggle Button -->
+              <button
+                id="mobile-side-drawer"
+                data-target=".header-nav"
+                data-toggle="collapse"
+                type="button"
+                class="navbar-toggler collapsed"
+              >
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar icon-bar-first"></span>
+                <span class="icon-bar icon-bar-two"></span>
+                <span class="icon-bar icon-bar-three"></span>
+              </button>
+
+              <!-- MAIN NAVIGATION -->
+              <div
+                class="header-nav nav-dark navbar-collapse collapse justify-content-start collapse"
+              >
+                <ul class="nav navbar-nav">
+                  <li class="active">
+                    <a href="index.html">Главная</a>
+                  </li>
+
+                  <li>
+                    <a href="about.html">Обо мне</a>
+                  </li>
+
+                  <li>
+                    <a href="objects.html">Объекты</a>
+                  </li>
+
+                  <li>
+                    <a href="blog.html">Блог</a>
+                  </li>
+
+                  <li><a href="faq.html">Вопросы</a></li>
+                  <li><a href="contact.html">Контакты</a></li>
+                </ul>
+              </div>
             </div>
-        </header>
+          </div>
+        </div>
+      </header>
       <!-- HEADER END -->
 
       <!-- CONTENT START -->
@@ -129,9 +187,8 @@
         <!-- INNER PAGE BANNER -->
         <div
           class="sx-bnr-inr bg-parallax bg-top-center"
-                style="background-image: url(images/banner/X.webp)"
+          style="background-image: url(images/banner/X.webp)"
         >
-         
           <div class="container">
             <div class="sx-bnr-inr-entry">
               <div class="banner-title-outer">
@@ -211,7 +268,11 @@
               <li class="masonry-item cat-4 col-lg-4 col-md-4 col-sm-6 m-b30">
                 <div class="project-mas hover-shadow">
                   <div class="image-effect-one">
-                    <img  loading="lazy" src="images/projects/pic1.webp" alt="" />
+                    <img
+                      loading="lazy"
+                      src="images/projects/pic1.webp"
+                      alt=""
+                    />
                     <div class="figcaption">
                       <a class="mfp-link" href="images/projects/pic1.webp">
                         <i class="fa fa-arrows-alt"></i>
@@ -239,7 +300,11 @@
               <li class="masonry-item cat-2 col-lg-4 col-md-4 col-sm-6 m-b30">
                 <div class="project-mas hover-shadow">
                   <div class="image-effect-one">
-                    <img  loading="lazy" src="images/projects/pic2.webp" alt="" />
+                    <img
+                      loading="lazy"
+                      src="images/projects/pic2.webp"
+                      alt=""
+                    />
                     <div class="figcaption">
                       <a class="mfp-link" href="images/projects/pic2.webp">
                         <i class="fa fa-arrows-alt"></i>
@@ -268,7 +333,11 @@
               <li class="masonry-item cat-4 col-lg-4 col-md-4 col-sm-6 m-b30">
                 <div class="project-mas hover-shadow">
                   <div class="image-effect-one">
-                    <img  loading="lazy" src="images/projects/pic3.webp" alt="" />
+                    <img
+                      loading="lazy"
+                      src="images/projects/pic3.webp"
+                      alt=""
+                    />
                     <div class="figcaption">
                       <a class="mfp-link" href="images/projects/pic3.webp">
                         <i class="fa fa-arrows-alt"></i>
@@ -296,7 +365,11 @@
               <li class="masonry-item cat-4 col-lg-4 col-md-4 col-sm-6 m-b30">
                 <div class="project-mas hover-shadow">
                   <div class="image-effect-one">
-                    <img  loading="lazy" src="images/projects/pic4.webp" alt="" />
+                    <img
+                      loading="lazy"
+                      src="images/projects/pic4.webp"
+                      alt=""
+                    />
                     <div class="figcaption">
                       <a
                         class="mfp-link lazyload"
@@ -665,7 +738,7 @@
       </div>
       <!-- CONTENT END -->
 
-       <!-- FOOTER START -->
+      <!-- FOOTER START -->
       <footer class="site-footer footer-large footer-dark footer-wide">
         <!-- FOOTER BLOCKES START -->
         <div class="footer-top overlay-wraper">
@@ -889,14 +962,13 @@
       </button>
     </div>
 
-
     <!-- JAVASCRIPT FILES ========================================= -->
 
     <!-- 1. jQuery (должен быть первым, без defer/async) -->
     <script src="js/jquery-3.7.1.min.js"></script>
 
     <!-- 2. Плагины jQuery -->
- <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <script src="js/isotope.pkgd.min.js" defer></script>
     <script src="js/owl.carousel.min.js" defer></script>
     <script src="js/jquery.owl-filter.js" defer></script>
@@ -905,22 +977,22 @@
     <script src="js/customgpt.js" defer></script>
 
     <!-- 4. Независимые скрипты -->
-      <script
+    <script
       src="https://kit.fontawesome.com/c16c7d78ea.js"
       crossorigin="anonymous"
       defer
     ></script>
 
     <script>
-  // Когда браузер построил дерево (быстрее, чем полная загрузка картинок)
-  document.addEventListener("DOMContentLoaded", function() {
-    document.body.classList.add('loaded');
-  });
-  
-  // Страховка для старых браузеров или кэша (если DOMContentLoaded проскочил)
-  window.addEventListener("load", function() {
-      document.body.classList.add('loaded');
-  });
-</script>
+      // Когда браузер построил дерево (быстрее, чем полная загрузка картинок)
+      document.addEventListener("DOMContentLoaded", function () {
+        document.body.classList.add("loaded");
+      });
+
+      // Страховка для старых браузеров или кэша (если DOMContentLoaded проскочил)
+      window.addEventListener("load", function () {
+        document.body.classList.add("loaded");
+      });
+    </script>
   </body>
 </html>
