@@ -1,10 +1,13 @@
 @font-face {
   font-family: "Flaticon";
   font-display: swap;
-  src: url("../fonts/Flaticon.woff") format("woff");
+  src: url("../fonts/Flaticon.woff2") format("woff2"),
+       url("../fonts/Flaticon.woff") format("woff"),
+       url("../fonts/Flaticon.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   @font-face {
     font-family: "Flaticon";
