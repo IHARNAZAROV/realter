@@ -23,6 +23,9 @@ RewriteRule ^(.*)$ https://turko.by/$1 [R=301,L]
 RewriteCond %{HTTP_HOST} ^www\.turko\.by [NC]
 RewriteRule ^(.*)$ https://turko.by/$1 [R=301,L]
 
+RewriteCond %{THE_REQUEST} \s/+index(?:\.html)?\s [NC]
+RewriteRule ^index(?:\.html)?$ https://turko.by/ [R=301,L]
+
 # Убираем слеш в конце (turko.by/catalog/ -> turko.by/catalog)
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/$ /$1 [L,R=301]
