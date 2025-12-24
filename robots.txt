@@ -1,0 +1,26 @@
+User-agent: *
+# Разрешаем индексацию всего контента
+Allow: /
+# Разрешаем доступ к статике (важно для фавиконок и скриптов)
+Allow: /*.js
+Allow: /*.css
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.svg
+Allow: /*.webp
+
+# Закрываем системные папки (если появятся в будущем)
+Disallow: /cgi-bin/
+# Закрываем поиск по сайту, если есть (чтобы не плодить дубли)
+Disallow: /search/
+Disallow: /?s=
+
+# Указываем путь к карте сайта (обязательно замени на реальный путь, если он другой)
+Sitemap: https://turko.by/sitemap.xml
+
+# Специфические правила для Яндекса (необязательно, но полезно для чистоты)
+User-agent: Yandex
+Allow: /
+Allow: /favicon.ico
+Clean-param: utm_source&utm_medium&utm_campaign # Игнорировать метки в URL для чистоты выдачи
