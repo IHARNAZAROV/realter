@@ -6,7 +6,7 @@ async function generateCritical () {
   try {
     const output = await generate({
       base: './', // Базовая директория (корень проекта)
-      src: 'index.html', // Исходный HTML
+      src: '/', // Исходный HTML
       css: [
         'css/bootstrap.min.css',
         'css/owl.carousel.min.css',

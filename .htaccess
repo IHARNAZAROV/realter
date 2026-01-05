@@ -1,114 +1,95 @@
 # ----------------------------------------------------------------------
 # 1. БАЗОВЫЕ НАСТРОЙКИ
 # ----------------------------------------------------------------------
-# Устанавливаем кодировку UTF-8
 AddDefaultCharset UTF-8
-# Запрещаем просмотр списка файлов в папках (безопасность)
 Options -Indexes
-# Включаем механизм ссылок
 Options +FollowSymLinks
 RewriteEngine On
 RewriteBase /
 
 # ----------------------------------------------------------------------
-# 2. ГЛАВНЫЕ ПЕРЕНАПРАВЛЕНИЯ (SEO и БЕЗОПАСНОСТЬ)
+# 2. КАНОНИЧЕСКИЕ РЕДИРЕКТЫ (СТРОГИЙ ПОРЯДОК)
 # ----------------------------------------------------------------------
 
-# Перенаправление с HTTP на HTTPS
+# HTTP -> HTTPS
 RewriteCond %{HTTPS} off [OR]
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^(.*)$ https://turko.by/$1 [R=301,L]
 
-# Перенаправление с WWW на БЕЗ-WWW
+# WWW -> NON-WWW
 RewriteCond %{HTTP_HOST} ^www\.turko\.by [NC]
 RewriteRule ^(.*)$ https://turko.by/$1 [R=301,L]
 
-RewriteCond %{THE_REQUEST} \s/+index(?:\.html)?\s [NC]
+# index и / -> /
+RewriteCond %{THE_REQUEST} \s/+index(?:\.html)?[\s?] [NC]
 RewriteRule ^index(?:\.html)?$ https://turko.by/ [R=301,L]
 
-# Убираем слеш в конце (turko.by/catalog/ -> turko.by/catalog)
+# Убираем слеш в конце URL
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)/$ /$1 [L,R=301]
+RewriteRule ^(.+)/$ https://turko.by/$1 [R=301,L]
 
 # ----------------------------------------------------------------------
-# 3. КРАСИВЫЕ ССЫЛКИ (Убираем .php и .html)
+# 3. УБИРАЕМ .HTML / .PHP ИЗ URL
 # ----------------------------------------------------------------------
 
-# Внешний редирект: если кто-то набрал .php/.html руками — убираем его
-RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /([^.]+)\.(html|php)\ HTTP
+# Внешний редирект (если ввели .html или .php)
+RewriteCond %{THE_REQUEST} \s/+([^.]+)\.(html|php)[\s?] [NC]
 RewriteRule ^([^.]+)\.(html|php)$ https://turko.by/$1 [R=301,L]
 
-# Внутренняя обработка: если файла нет, проверяем, есть ли такой .php
+# Внутренний маппинг .php
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.*)$ $1.php [L]
+RewriteRule ^(.+)$ $1.php [L]
 
-# Внутренняя обработка: если файла нет, проверяем, есть ли такой .html
+# Внутренний маппинг .html
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.*)$ $1.html [L]
+RewriteRule ^(.+)$ $1.html [L]
 
 # ----------------------------------------------------------------------
-# 4. СТРАНИЦА ОШИБКИ 404
+# 4. СТРАНИЦА 404
 # ----------------------------------------------------------------------
 ErrorDocument 404 /error-404.html
 
 # ----------------------------------------------------------------------
-# 5. СЖАТИЕ GZIP (УСКОРЕНИЕ ЗАГРУЗКИ)
+# 5. GZIP
 # ----------------------------------------------------------------------
 <IfModule mod_deflate.c>
-    # Сжимаем HTML, текст, XML, CSS
     AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
-    
-    # Сжимаем JavaScript (разные варианты MIME-типов)
     AddOutputFilterByType DEFLATE application/javascript application/x-javascript text/javascript
-    
-    # Сжимаем JSON, RSS и XML-данные
     AddOutputFilterByType DEFLATE application/json application/xml application/xhtml+xml application/rss+xml
-    
-    # Сжимаем SVG-картинки и иконки (обычные картинки jpg/png сжимать gzip-ом нельзя!)
     AddOutputFilterByType DEFLATE image/svg+xml image/x-icon
-    
-    # Сжимаем шрифты (для быстрой отрисовки текста)
-    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject application/x-font-ttf font/opentype font/otf font/ttf application/font-woff application/font-woff2
+    AddOutputFilterByType DEFLATE application/font-woff application/font-woff2
 </IfModule>
 
 # ----------------------------------------------------------------------
-# 6. НАСТРОЙКА КЭШИРОВАНИЯ (ПОД НЕДВИЖИМОСТЬ)
+# 6. КЭШИРОВАНИЕ
 # ----------------------------------------------------------------------
 <IfModule mod_expires.c>
     ExpiresActive On
 
-    # HTML и PHP (Страницы сайта) — НЕ КЭШИРОВАТЬ
-    # Чтобы клиент всегда видел актуальную цену и статус объекта
     ExpiresByType text/html "access plus 0 seconds"
     ExpiresByType text/php "access plus 0 seconds"
 
-    # Картинки и шрифты — КЭШИРОВАТЬ НАДОЛГО (1 месяц)
-    # Фото домов тяжелые, их нужно сохранять в браузере клиента
     ExpiresByType image/jpeg "access plus 1 month"
     ExpiresByType image/png "access plus 1 month"
     ExpiresByType image/webp "access plus 1 month"
-    ExpiresByType image/gif "access plus 1 month"
     ExpiresByType image/svg+xml "access plus 1 month"
-    ExpiresByType image/x-icon "access plus 1 month"
     ExpiresByType font/woff2 "access plus 1 month"
 
-    # Стили и Скрипты — КЭШИРОВАТЬ СРЕДНЕ (1 неделя)
     ExpiresByType application/javascript "access plus 1 day"
 </IfModule>
 
-# Принудительный запрет кэша для самих страниц (Двойная гарантия свежести цен)
 <FilesMatch "\.(html|php)$">
     FileETag None
     <IfModule mod_headers.c>
-        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+        Header set Cache-Control "no-store, no-cache, must-revalidate"
         Header set Pragma "no-cache"
     </IfModule>
 </FilesMatch>
 
 # ----------------------------------------------------------------------
-# 7. БЛОКИРОВКА СИСТЕМНЫХ ФАЙЛОВ
+# 7. ЗАЩИТА СИСТЕМНЫХ ФАЙЛОВ
 # ----------------------------------------------------------------------
 <FilesMatch "(^\.|^composer\.json|package\.json|\.env)">
     Order allow,deny

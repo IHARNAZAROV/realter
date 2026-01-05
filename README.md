@@ -50,8 +50,8 @@ Clone the repository and open the site locally.
 2. Change directory
    cd realter
 
-If the project uses a simple static structure, open index.html in your browser:
-- Open the file directly: open index.html
+If the project uses a simple static structure, open / in your browser:
+- Open the file directly: open /
 or serve it locally using a simple static server.
 
 Optional: using a Node static server
