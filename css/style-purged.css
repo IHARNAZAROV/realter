@@ -3442,17 +3442,8 @@ button.scroltop span {
   }
 }
 
-/* родитель для абсолютного позиционирования */
-.site-header .main-bar .container {
-  position: relative;
-}
-
-/* контейнер кнопки с формой */
-.header-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
-  z-index: 10;
+.extra-cell {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
