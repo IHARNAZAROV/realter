@@ -3441,3 +3441,20 @@ button.scroltop span {
     line-height: 1.625rem;
   }
 }
+
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.header-nav .navbar-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.header-nav [data-formid] {
+  margin-left: auto;
+}
+.header-nav .navbar-nav {
+  gap: clamp(12px, 2vw, 28px);
+}
