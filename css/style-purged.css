@@ -3468,3 +3468,9 @@ button.scroltop span {
 .extra-cell::after {
   display: none !important;
 }
+
+@media (max-width: 991px) {
+  [data-formid="form_lGTlLgJlSCZuReuk2-doSJeQYQDaOjli"] {
+    display: none !important;
+  }
+}
