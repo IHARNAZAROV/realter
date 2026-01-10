@@ -3442,30 +3442,30 @@ button.scroltop span {
   }
 }
 
-
-.header-nav .navbar-nav {
-  display: flex;
-  gap: 20px;
-}
-
-.header-nav > [data-formid] {
-  margin-left: clamp(20px, 5vw, 80px);
-}
-.header-nav .navbar-nav {
-  gap: clamp(12px, 2vw, 28px);
-}
-
 .header-nav {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
 
-.header-nav > [data-formid] {
-  margin-left: auto;
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
 }
 
-.navbar-nav {
-  display: flex;
-  gap: clamp(14px, 2vw, 26px);
+.header-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  flex: 1;
+  justify-content: flex-end;
 }
