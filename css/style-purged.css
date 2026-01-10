@@ -3442,18 +3442,29 @@ button.scroltop span {
   }
 }
 
+.extra-nav,
 .extra-cell {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  display: flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
 }
-.extra-cell a,
-.extra-cell button {
-  display: inline-flex;
-  align-items: center;
-  height: 44px;
+
+/* обе кнопки */
+.extra-cell > *,
+.contact-slide-show,
+.header-center {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: auto !important;
+  float: none !important;
+  clear: none !important;
+  margin: 0 !important;
 }
-.contact-slide-show {
-  display: flex;
-  align-items: center;
+
+/* расстояние между кнопками */
+.header-center {
+  margin-right: 16px !important;
+}
+.extra-cell::after {
+  display: none !important;
 }
