@@ -3442,21 +3442,17 @@ button.scroltop span {
   }
 }
 
+/* родитель для абсолютного позиционирования */
 .site-header .main-bar .container {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-}
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.header-nav {
   position: relative;
 }
 
+/* контейнер кнопки с формой */
 .header-center {
-  margin-left: 15em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  z-index: 10;
 }
