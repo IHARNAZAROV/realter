@@ -3458,5 +3458,5 @@ button.scroltop span {
 }
 
 .header-center {
-  margin-left: clamp(17em, 18vw, 22em);
+  margin-left: 15em;
 }
