@@ -3452,8 +3452,8 @@ button.scroltop span {
   gap: 20px;
 }
 
-.header-nav [data-formid] {
-  margin-left: auto;
+.header-nav > [data-formid] {
+  margin-left: clamp(20px, 5vw, 80px);
 }
 .header-nav .navbar-nav {
   gap: clamp(12px, 2vw, 28px);
