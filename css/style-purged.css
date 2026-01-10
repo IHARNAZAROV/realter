@@ -3442,3 +3442,18 @@ button.scroltop span {
   }
 }
 
+.extra-cell {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.extra-cell a,
+.extra-cell button {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+}
+.contact-slide-show {
+  display: flex;
+  align-items: center;
+}
