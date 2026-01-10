@@ -3442,30 +3442,16 @@ button.scroltop span {
   }
 }
 
+.site-header .main-bar .container {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
 .header-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  gap: 24px;
 }
-
-.header-left,
-.header-center,
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
 .header-center {
-  flex: 1;
-  justify-content: center;
-}
-
-.header-left {
-  flex: 1;
-}
-
-.header-right {
-  flex: 1;
-  justify-content: flex-end;
+  margin-left: clamp(6em, 10vw, 14em);
 }
