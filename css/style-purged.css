@@ -3442,10 +3442,6 @@ button.scroltop span {
   }
 }
 
-.header-nav {
-  display: flex;
-  align-items: center;
-}
 
 .header-nav .navbar-nav {
   display: flex;
@@ -3457,4 +3453,19 @@ button.scroltop span {
 }
 .header-nav .navbar-nav {
   gap: clamp(12px, 2vw, 28px);
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.header-nav > [data-formid] {
+  margin-left: auto;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: clamp(14px, 2vw, 26px);
 }
