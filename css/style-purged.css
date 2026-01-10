@@ -3452,6 +3452,11 @@ button.scroltop span {
   align-items: center;
   gap: 24px;
 }
+
+.header-nav {
+  position: relative;
+}
+
 .header-center {
-  margin-left: clamp(6em, 10vw, 14em);
+  margin-left: clamp(10em, 18vw, 22em);
 }
