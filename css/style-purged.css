@@ -3442,8 +3442,3 @@ button.scroltop span {
   }
 }
 
-.extra-cell {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
