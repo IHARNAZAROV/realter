@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
   wrapResponsiveIframes();
   initGlobalClickDelegation();
   initStickyHeader();
+  
+initMasonryFilter();
 });
 
 /**
@@ -340,3 +342,74 @@ function initStickyHeader() {
     }
   });
 })();
+
+
+/**
+ * =====================================================
+ * Submenu handler
+ * =====================================================
+ */
+function handleSubmenu(e) {
+  const toggle = e.target.closest(".submenu-toogle");
+  if (!toggle) return;
+
+  const li = toggle.parentElement;
+  if (!li) return;
+
+  const submenu = li.querySelector(":scope > .sub-menu, :scope > .mega-menu");
+  if (!submenu) return;
+
+  const isOpen = li.classList.contains("nav-active");
+
+  // закрываем соседние пункты
+  const siblings = li.parentElement.querySelectorAll(".has-child.nav-active");
+  siblings.forEach(item => {
+    if (item !== li) {
+      item.classList.remove("nav-active");
+      const sm = item.querySelector(":scope > .sub-menu, :scope > .mega-menu");
+      if (sm) sm.style.display = "none";
+      const t = item.querySelector(":scope > .submenu-toogle");
+      if (t) t.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // toggle текущий
+  li.classList.toggle("nav-active", !isOpen);
+  submenu.style.display = isOpen ? "none" : "block";
+  toggle.setAttribute("aria-expanded", String(!isOpen));
+
+  e.preventDefault();
+}
+
+
+
+function initMasonryFilter() {
+  const container = document.querySelector(".masonry-outer");
+  if (!container) return;
+
+  document.addEventListener("click", e => {
+    const link = e.target.closest(".masonry-filter a");
+    if (!link) return;
+
+    e.preventDefault();
+
+    const filter = link.dataset.filter;
+
+    document
+      .querySelectorAll(".masonry-filter li")
+      .forEach(li => li.classList.remove("active"));
+
+    link.parentElement.classList.add("active");
+
+    container.querySelectorAll(".masonry-item").forEach(item => {
+      if (filter === "*" || item.matches(filter)) {
+        item.hidden = false;
+      } else {
+        item.hidden = true;
+      }
+    });
+
+    // пересчитать masonry
+    requestAnimationFrame(initCssMasonry);
+  });
+}

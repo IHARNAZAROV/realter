@@ -2562,15 +2562,7 @@ button.scroltop span {
 .hover-animation-1:hover .scale-in-center {
   animation: bounce-in-fwd 1.1s both;
 }
-#rev_slider_26_1 .tp-bannertimer {
-  height: 80px;
-  background-color: rgb(35 37 45 / 0.1);
-  z-index: 20;
-  bottom: 0;
-  position: absolute;
-  top: auto;
-  left: 0;
-}
+
 .is-stuck {
   position: fixed;
   top: 0;
@@ -3526,4 +3518,38 @@ button.scroltop span {
 .header-nav .navbar-nav li a::after {
   --scale: 0;
   transform: scaleX(var(--scale));
+}
+
+
+
+/* Masonry через CSS Columns */
+.masonry-outer {
+  column-count: 3;
+  column-gap: 30px;
+}
+
+@media (max-width: 1199px) {
+  .masonry-outer {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 767px) {
+  .masonry-outer {
+    column-count: 1;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 30px;
+  width: 100%;
+}
+.masonry-outer {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.masonry-outer {
+  display: block;
 }
