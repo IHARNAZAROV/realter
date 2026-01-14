@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
   wrapResponsiveIframes();
   initGlobalClickDelegation();
   initStickyHeader();
-  
+  initMasonryFilterAnimated();
 initMasonryFilter();
 });
 
@@ -410,6 +410,38 @@ function initMasonryFilter() {
     });
 
     // пересчитать masonry
-    requestAnimationFrame(initCssMasonry);
+   
+  });
+}
+
+function initMasonryFilterAnimated() {
+  const container = document.querySelector(".masonry-outer");
+  if (!container) return;
+
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest("[data-filter]");
+    if (!btn) return;
+
+    e.preventDefault();
+    const filter = btn.dataset.filter;
+
+    document
+      .querySelectorAll("[data-filter]")
+      .forEach(b => b.classList.remove("btn-active"));
+    btn.classList.add("btn-active");
+
+    const items = container.querySelectorAll(".masonry-item");
+
+    items.forEach(item => {
+      const match =
+        filter === "*" ||
+        item.classList.contains(filter.replace(".", ""));
+
+      if (match) {
+        item.classList.remove("is-hiding");
+      } else {
+        item.classList.add("is-hiding");
+      }
+    });
   });
 }

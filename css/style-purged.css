@@ -3522,10 +3522,17 @@ button.scroltop span {
 
 
 
-/* Masonry через CSS Columns */
+/* =====================================================
+   Masonry layout (CSS Columns) + animation
+===================================================== */
+
 .masonry-outer {
   column-count: 3;
   column-gap: 30px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: block;
 }
 
 @media (max-width: 1199px) {
@@ -3541,15 +3548,38 @@ button.scroltop span {
 }
 
 .masonry-item {
+  display: block;
+  width: 100%;
   break-inside: avoid;
   margin-bottom: 30px;
-  width: 100%;
-}
-.masonry-outer {
-  margin-left: 0;
-  margin-right: 0;
+
+  /* animation base */
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    visibility 0s linear 0.35s;
 }
 
-.masonry-outer {
+/* ===== animation state ===== */
+.masonry-item.is-hiding {
+  opacity: 0;
+  transform: translateY(20px);
+  visibility: hidden;
+}
+
+/* images safety */
+.masonry-item img {
+  width: 100%;
+  height: auto;
   display: block;
+}
+
+/* убрать дублирующие отступы внутри карточек */
+.masonry-item .blog-post,
+.masonry-item .project-mas {
+  margin-bottom: 0;
 }
