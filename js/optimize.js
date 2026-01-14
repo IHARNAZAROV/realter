@@ -1,71 +1,71 @@
-"use strict";
+'use strict'
 
 /**
  * =====================================================
  * DOM READY
  * =====================================================
  */
-document.addEventListener("DOMContentLoaded", function () {
-  document.body.classList.add("loaded");
+document.addEventListener('DOMContentLoaded', function () {
+  document.body.classList.add('loaded')
 
-  initMenuActiveAndUnderline();
-  initLightbox();
-  initCarousels();
-  initContactSlide();
-  initCounterUp();
-  wrapResponsiveIframes();
-  initGlobalClickDelegation();
-  initStickyHeader();
-});
+  initMenuActiveAndUnderline()
+  initLightbox()
+  initCarousels()
+  initContactSlide()
+  initCounterUp()
+  wrapResponsiveIframes()
+  initGlobalClickDelegation()
+  initStickyHeader()
+})
 
 /**
  * =====================================================
  * Menu active + underline
  * =====================================================
  */
-function initMenuActiveAndUnderline() {
-  const links = document.querySelectorAll(".header-nav .navbar-nav li a");
-  if (!links.length) return;
+function initMenuActiveAndUnderline () {
+  const links = document.querySelectorAll('.header-nav .navbar-nav li a')
+  if (!links.length) return
 
-  const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
-  let activeLink = null;
+  const currentPath = window.location.pathname.replace(/\/$/, '') || '/'
+  let activeLink = null
 
   links.forEach(link => {
-    const li = link.closest("li");
-    if (!li) return;
+    const li = link.closest('li')
+    if (!li) return
 
-    li.classList.remove("active");
+    li.classList.remove('active')
 
-    let href = link.getAttribute("href");
-    if (!href) return;
-    href = href.replace(/\/$/, "") || "/";
+    let href = link.getAttribute('href')
+    if (!href) return
+    href = href.replace(/\/$/, '') || '/'
 
-    if (href === currentPath || (href !== "/" && currentPath.startsWith(href))) {
-      li.classList.add("active");
-      activeLink = link;
+    if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+      li.classList.add('active')
+      activeLink = link
     }
-  });
+  })
 
-  function setUnderline(link, scale, x) {
-    if (!link) return;
-    link.style.setProperty("--scale", scale);
-    link.style.setProperty("--x", x);
+  function setUnderline (link, scale, x) {
+    if (!link) return
+    link.style.setProperty('--scale', scale)
+    link.style.setProperty('--x', x)
   }
 
-  if (activeLink) setUnderline(activeLink, 1, "50%");
+  if (activeLink) setUnderline(activeLink, 1, '50%')
 
   links.forEach(link => {
-    link.addEventListener("mouseenter", e => {
-      const rect = link.getBoundingClientRect();
-      setUnderline(link, 1, e.clientX - rect.left + "px");
-      if (activeLink && activeLink !== link) setUnderline(activeLink, 0, "50%");
-    });
+    link.addEventListener('mouseenter', e => {
+      const rect = link.getBoundingClientRect()
+      setUnderline(link, 1, e.clientX - rect.left + 'px')
+      if (activeLink && activeLink !== link) setUnderline(activeLink, 0, '50%')
+    })
 
-    link.addEventListener("mouseleave", () => {
-      setUnderline(link, 0, "50%");
-      if (activeLink) setUnderline(activeLink, 1, "50%");
-    });
-  });
+    link.addEventListener('mouseleave', () => {
+      setUnderline(link, 0, '50%')
+      if (activeLink) setUnderline(activeLink, 1, '50%')
+    })
+  })
 }
 
 /**
@@ -73,24 +73,24 @@ function initMenuActiveAndUnderline() {
  * GLightbox (mfp-link + mfp-video)
  * =====================================================
  */
-function initLightbox() {
-  if (typeof GLightbox !== "function") return;
+function initLightbox () {
+  if (typeof GLightbox !== 'function') return
 
-  if (document.querySelector(".mfp-link")) {
+  if (document.querySelector('.mfp-link')) {
     GLightbox({
-      selector: ".mfp-link",
+      selector: '.mfp-link',
       touchNavigation: true,
       loop: true
-    });
+    })
   }
 
-  if (document.querySelector(".mfp-video")) {
+  if (document.querySelector('.mfp-video')) {
     GLightbox({
-      selector: ".mfp-video",
+      selector: '.mfp-video',
       touchNavigation: true,
       loop: true,
       autoplayVideos: true
-    });
+    })
   }
 }
 
@@ -99,12 +99,12 @@ function initLightbox() {
  * OwlCarousel (jQuery plugin)
  * =====================================================
  */
-function initCarousels() {
-  if (!window.jQuery || !jQuery.fn.owlCarousel) return;
+function initCarousels () {
+  if (!window.jQuery || !jQuery.fn.owlCarousel) return
 
   const carousels = [
     {
-      selector: ".testimonial-home",
+      selector: '.testimonial-home',
       loop: true,
       autoplay: true,
       margin: 30,
@@ -113,7 +113,7 @@ function initCarousels() {
       responsive: { 0: { items: 1 }, 991: { items: 1 } }
     },
     {
-      selector: ".testimonial-home-two",
+      selector: '.testimonial-home-two',
       loop: true,
       autoplay: false,
       margin: 30,
@@ -122,7 +122,7 @@ function initCarousels() {
       responsive: { 0: { items: 1 }, 991: { items: 2 } }
     },
     {
-      selector: ".about-home",
+      selector: '.about-home',
       loop: true,
       autoplay: true,
       margin: 30,
@@ -131,7 +131,7 @@ function initCarousels() {
       responsive: { 0: { items: 1 }, 991: { items: 1 } }
     },
     {
-      selector: ".project-carousel4",
+      selector: '.project-carousel4',
       loop: true,
       autoplay: false,
       items: 3,
@@ -146,7 +146,7 @@ function initCarousels() {
       }
     },
     {
-      selector: ".project-carousel1",
+      selector: '.project-carousel1',
       loop: true,
       autoplay: false,
       items: 3,
@@ -155,11 +155,11 @@ function initCarousels() {
       dots: true,
       responsive: { 0: { items: 1 }, 768: { items: 1 }, 991: { items: 1 } }
     }
-  ];
+  ]
 
   carousels.forEach(cfg => {
-    const $el = jQuery(cfg.selector);
-    if (!$el.length) return;
+    const $el = jQuery(cfg.selector)
+    if (!$el.length) return
 
     $el.owlCarousel({
       ...cfg,
@@ -167,8 +167,8 @@ function initCarousels() {
         '<i class="fa fa-angle-left"></i>',
         '<i class="fa fa-angle-right"></i>'
       ]
-    });
-  });
+    })
+  })
 }
 
 /**
@@ -176,17 +176,17 @@ function initCarousels() {
  * Contact slide
  * =====================================================
  */
-function initContactSlide() {
-  const panel = document.querySelector(".contact-slide-hide");
-  if (!panel) return;
+function initContactSlide () {
+  const panel = document.querySelector('.contact-slide-hide')
+  if (!panel) return
 
-  document.querySelector(".contact-slide-show")?.addEventListener("click", () => {
-    panel.style.right = "0px";
-  });
+  document.querySelector('.contact-slide-show')?.addEventListener('click', () => {
+    panel.style.right = '0px'
+  })
 
-  document.querySelector(".contact_close")?.addEventListener("click", () => {
-    panel.style.right = "100%";
-  });
+  document.querySelector('.contact_close')?.addEventListener('click', () => {
+    panel.style.right = '100%'
+  })
 }
 
 /**
@@ -194,32 +194,32 @@ function initContactSlide() {
  * CounterUp
  * =====================================================
  */
-function initCounterUp() {
-  const counters = document.querySelectorAll(".counter");
-  if (!counters.length) return;
+function initCounterUp () {
+  const counters = document.querySelectorAll('.counter')
+  if (!counters.length) return
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
+      if (!entry.isIntersecting) return
 
-      const el = entry.target;
-      const finalValue = parseInt(el.innerText.replace(/\D/g, ""), 10);
-      const start = performance.now();
-      const duration = 5000;
+      const el = entry.target
+      const finalValue = parseInt(el.innerText.replace(/\D/g, ''), 10)
+      const start = performance.now()
+      const duration = 5000
 
-      function animate(time) {
-        const progress = Math.min((time - start) / duration, 1);
-        const eased = progress * (2 - progress);
-        el.innerText = Math.floor(eased * finalValue);
-        if (progress < 1) requestAnimationFrame(animate);
+      function animate (time) {
+        const progress = Math.min((time - start) / duration, 1)
+        const eased = progress * (2 - progress)
+        el.innerText = Math.floor(eased * finalValue)
+        if (progress < 1) requestAnimationFrame(animate)
       }
 
-      requestAnimationFrame(animate);
-      observer.unobserve(el);
-    });
-  }, { threshold: 0.5 });
+      requestAnimationFrame(animate)
+      observer.unobserve(el)
+    })
+  }, { threshold: 0.5 })
 
-  counters.forEach(el => observer.observe(el));
+  counters.forEach(el => observer.observe(el))
 }
 
 /**
@@ -227,16 +227,16 @@ function initCounterUp() {
  * iframe wrap
  * =====================================================
  */
-function wrapResponsiveIframes() {
+function wrapResponsiveIframes () {
   document.querySelectorAll(
     'iframe[src*="youtube.com"], iframe[src*="vimeo.com"]'
   ).forEach(iframe => {
-    if (iframe.parentElement.classList.contains("ratio")) return;
-    const wrapper = document.createElement("div");
-    wrapper.className = "ratio ratio-16x9";
-    iframe.parentNode.insertBefore(wrapper, iframe);
-    wrapper.appendChild(iframe);
-  });
+    if (iframe.parentElement.classList.contains('ratio')) return
+    const wrapper = document.createElement('div')
+    wrapper.className = 'ratio ratio-16x9'
+    iframe.parentNode.insertBefore(wrapper, iframe)
+    wrapper.appendChild(iframe)
+  })
 }
 
 /**
@@ -244,12 +244,12 @@ function wrapResponsiveIframes() {
  * Global click delegation
  * =====================================================
  */
-function initGlobalClickDelegation() {
-  document.addEventListener("click", e => {
-    handleAccordion(e);
-    handleSubmenu(e);
-    handleMobileDrawer(e);
-  });
+function initGlobalClickDelegation () {
+  document.addEventListener('click', e => {
+    handleAccordion(e)
+    handleSubmenu(e)
+    handleMobileDrawer(e)
+  })
 }
 
 /**
@@ -257,17 +257,17 @@ function initGlobalClickDelegation() {
  * Accordion
  * =====================================================
  */
-function handleAccordion(e) {
-  const head = e.target.closest(".acod-head");
-  if (!head) return;
+function handleAccordion (e) {
+  const head = e.target.closest('.acod-head')
+  if (!head) return
 
-  const faq = head.closest(".faq-1");
-  if (!faq) return;
+  const faq = head.closest('.faq-1')
+  if (!faq) return
 
-  faq.querySelectorAll(".acod-head")
-     .forEach(h => h.classList.remove("acc-actives"));
+  faq.querySelectorAll('.acod-head')
+    .forEach(h => h.classList.remove('acc-actives'))
 
-  head.classList.toggle("acc-actives");
+  head.classList.toggle('acc-actives')
 }
 
 /**
@@ -275,15 +275,15 @@ function handleAccordion(e) {
  * Mobile drawer
  * =====================================================
  */
-function handleMobileDrawer(e) {
-  const btn = e.target.closest("#mobile-side-drawer");
-  if (!btn) return;
+function handleMobileDrawer (e) {
+  const btn = e.target.closest('#mobile-side-drawer')
+  if (!btn) return
 
-  const drawer = document.querySelector(".mobile-sider-drawer-menu");
-  if (!drawer) return;
+  const drawer = document.querySelector('.mobile-sider-drawer-menu')
+  if (!drawer) return
 
-  e.preventDefault();
-  drawer.classList.toggle("active");
+  e.preventDefault()
+  drawer.classList.toggle('active')
 }
 
 /**
@@ -291,19 +291,19 @@ function handleMobileDrawer(e) {
  * Sticky header
  * =====================================================
  */
-function initStickyHeader() {
-  const header = document.querySelector(".sticky-header");
-  const fixed = document.querySelectorAll(".is-fixed");
-  if (!header || !fixed.length) return;
+function initStickyHeader () {
+  const header = document.querySelector('.sticky-header')
+  const fixed = document.querySelectorAll('.is-fixed')
+  if (!header || !fixed.length) return
 
-  const sentinel = document.createElement("div");
-  header.before(sentinel);
+  const sentinel = document.createElement('div')
+  header.before(sentinel)
 
   new IntersectionObserver(([entry]) => {
-    const stuck = !entry.isIntersecting;
-    header.classList.toggle("is-stuck", stuck);
-    fixed.forEach(el => el.classList.toggle("color-fill", stuck));
-  }).observe(sentinel);
+    const stuck = !entry.isIntersecting
+    header.classList.toggle('is-stuck', stuck)
+    fixed.forEach(el => el.classList.toggle('color-fill', stuck))
+  }).observe(sentinel)
 }
 /**
  * =====================================================
@@ -311,32 +311,31 @@ function initStickyHeader() {
  * =====================================================
  */
 (function () {
-  "use strict";
+  'use strict'
 
-  function repositionModal(modal) {
-    const dialog = modal.querySelector(".modal-dialog");
-    if (!dialog) return;
+  function repositionModal (modal) {
+    const dialog = modal.querySelector('.modal-dialog')
+    if (!dialog) return
 
-     modal.style.display = "block";
+    modal.style.display = 'block'
 
-    const dialogHeight = dialog.getBoundingClientRect().height;
-    const windowHeight = window.innerHeight;
+    const dialogHeight = dialog.getBoundingClientRect().height
+    const windowHeight = window.innerHeight
 
-    const marginTop = Math.max(0, (windowHeight - dialogHeight) / 2);
-    dialog.style.marginTop = marginTop + "px";
+    const marginTop = Math.max(0, (windowHeight - dialogHeight) / 2)
+    dialog.style.marginTop = marginTop + 'px'
   }
 
- 
-  document.addEventListener("shown.bs.modal", function (e) {
-    const modal = e.target;
-    if (!modal.classList.contains("modal")) return;
-    repositionModal(modal);
-  });
+  document.addEventListener('shown.bs.modal', function (e) {
+    const modal = e.target
+    if (!modal.classList.contains('modal')) return
+    repositionModal(modal)
+  })
 
-  window.addEventListener("resize", function () {
-    const openedModal = document.querySelector(".modal.show");
+  window.addEventListener('resize', function () {
+    const openedModal = document.querySelector('.modal.show')
     if (openedModal) {
-      repositionModal(openedModal);
+      repositionModal(openedModal)
     }
-  });
-})();
+  })
+})()
