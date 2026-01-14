@@ -1101,22 +1101,6 @@
       defer
     ></script>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        document.body.classList.add("loaded");
-
-        // Инициализация Lightbox для галереи
-        // Важно: селектор должен совпадать с классом ссылки на картинку
-        const lightbox = GLightbox({
-          selector: ".glightbox",
-          touchNavigation: true,
-          loop: true,
-        });
-      });
-
-      window.addEventListener("load", function () {
-        document.body.classList.add("loaded");
-      });
-    </script>
+<script src="/js/optimize.js" defer></script>
   </body>
 </html>

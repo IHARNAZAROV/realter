@@ -466,17 +466,7 @@
       defer
     ></script>
 
-    <script>
-  // Когда браузер построил дерево (быстрее, чем полная загрузка картинок)
-  document.addEventListener("DOMContentLoaded", function() {
-    document.body.classList.add('loaded');
-  });
-  
-  // Страховка для старых браузеров или кэша (если DOMContentLoaded проскочил)
-  window.addEventListener("load", function() {
-      document.body.classList.add('loaded');
-  });
-</script>
+<script src="/js/optimize.js" defer></script>
 
   </body>
 </html>

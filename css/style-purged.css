@@ -3474,3 +3474,56 @@ button.scroltop span {
     display: none !important;
   }
 }
+
+
+/* ссылки меню */
+.header-nav .navbar-nav li a {
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0.7;
+  padding-bottom: 8px; /* место под линию */
+  transition: opacity 0.3s cubic-bezier(.51, .92, .24, 1);
+}
+
+/* линия под текстом */
+.header-nav .navbar-nav li a::after {
+  --scale: 0;
+
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0; /* ВАЖНО: линия под текстом, а не под хедером */
+  height: 3px;
+
+ background: linear-gradient(
+  135deg,
+  #155945,
+  #1f7a60
+
+  );
+
+  transform: scaleX(var(--scale));
+  transform-origin: var(--x, 50%) 50%;
+  transition: transform 0.3s cubic-bezier(.51, .92, .24, 1);
+}
+
+/* hover */
+.header-nav .navbar-nav li a:hover {
+  opacity: 1;
+}
+
+.header-nav .navbar-nav li a:hover::after {
+  --scale: 1;
+}
+
+/* активный пункт меню */
+.header-nav .navbar-nav li.active a {
+  opacity: 1;
+}
+.header-nav .navbar-nav li a::after {
+  --scale: 0;
+  transform: scaleX(var(--scale));
+}
