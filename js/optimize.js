@@ -178,18 +178,43 @@ function initCarousels() {
  * Contact slide
  * =====================================================
  */
+
+
 function initContactSlide() {
   const panel = document.querySelector(".contact-slide-hide");
-  if (!panel) return;
+  const openBtn = document.querySelector(".contact-slide-show");
+  const closeBtn = panel?.querySelector(".contact_close");
+  const overlay = panel?.querySelector(".contact-slide-overlay");
 
-  document.querySelector(".contact-slide-show")?.addEventListener("click", () => {
-    panel.style.right = "0px";
-  });
+  if (!panel || !openBtn || !closeBtn || !overlay) return;
 
-  document.querySelector(".contact_close")?.addEventListener("click", () => {
-    panel.style.right = "100%";
+  const open = () => {
+    panel.classList.add("is-open");
+    panel.setAttribute("aria-hidden", "false");
+  };
+
+  const close = () => {
+    panel.classList.remove("is-open");
+    panel.setAttribute("aria-hidden", "true");
+  };
+
+  openBtn.addEventListener("click", open);
+  closeBtn.addEventListener("click", close);
+
+  /* КЛИК ПО ФОНУ */
+  overlay.addEventListener("click", close);
+
+  /* ESC */
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && panel.classList.contains("is-open")) {
+      close();
+    }
   });
 }
+
+document.addEventListener("DOMContentLoaded", initContactSlide);
+
+
 
 /**
  * =====================================================
