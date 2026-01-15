@@ -183,15 +183,17 @@ function initCarousels() {
 function initContactSlide() {
   const panel = document.querySelector(".contact-slide-hide");
   const content = panel?.querySelector(".contact-slide-content");
+  const overlay = panel?.querySelector(".contact-slide-overlay");
   const openBtn = document.querySelector(".contact-slide-show");
   const closeBtn = panel?.querySelector(".contact_close");
-  const overlay = panel?.querySelector(".contact-slide-overlay");
 
-  if (!panel || !content || !openBtn || !closeBtn || !overlay) return;
+  if (!panel || !content || !overlay || !openBtn || !closeBtn) return;
 
+  /* =====================================================
+     BODY SCROLL LOCK
+  ===================================================== */
   let scrollY = 0;
 
-  /* ===== BODY SCROLL LOCK ===== */
   const lockBody = () => {
     scrollY = window.scrollY;
     document.body.classList.add("is-locked");
@@ -204,7 +206,9 @@ function initContactSlide() {
     window.scrollTo(0, scrollY);
   };
 
-  /* ===== OPEN / CLOSE ===== */
+  /* =====================================================
+     OPEN / CLOSE
+  ===================================================== */
   const open = () => {
     panel.classList.add("is-open");
     panel.setAttribute("aria-hidden", "false");
@@ -217,6 +221,7 @@ function initContactSlide() {
     panel.setAttribute("aria-hidden", "true");
     unlockBody();
     releaseFocus();
+    resetSwipe();
   };
 
   openBtn.addEventListener("click", open);
@@ -229,14 +234,16 @@ function initContactSlide() {
     }
   });
 
-  /* ===== FOCUS TRAP ===== */
+  /* =====================================================
+     FOCUS TRAP
+  ===================================================== */
   let focusableElements = [];
-  let firstFocusable;
-  let lastFocusable;
+  let firstFocusable = null;
+  let lastFocusable = null;
 
   const trapFocus = () => {
     focusableElements = content.querySelectorAll(
-      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
     );
 
     if (!focusableElements.length) return;
@@ -268,8 +275,69 @@ function initContactSlide() {
       }
     }
   };
-}
 
+  /* =====================================================
+     SWIPE TO CLOSE (MOBILE)
+  ===================================================== */
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let isSwiping = false;
+
+  const SWIPE_THRESHOLD = 80;
+
+  const resetSwipe = () => {
+    content.style.transform = "";
+    startX = 0;
+    startY = 0;
+    currentX = 0;
+    isSwiping = false;
+  };
+
+  content.addEventListener("touchstart", (e) => {
+    if (!panel.classList.contains("is-open")) return;
+
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+    isSwiping = true;
+  });
+
+  content.addEventListener("touchmove", (e) => {
+    if (!isSwiping) return;
+
+    const touch = e.touches[0];
+    currentX = touch.clientX;
+
+    const diffX = currentX - startX;
+    const diffY = Math.abs(touch.clientY - startY);
+
+    /* если пользователь скроллит вертикально — выходим */
+    if (diffY > 30) {
+      resetSwipe();
+      return;
+    }
+
+    /* двигаем панель только вправо */
+    if (diffX > 0) {
+      content.style.transform = `translateX(${diffX}px)`;
+    }
+  });
+
+  content.addEventListener("touchend", () => {
+    if (!isSwiping) return;
+
+    const diffX = currentX - startX;
+
+    if (diffX > SWIPE_THRESHOLD) {
+      close();
+    } else {
+      content.style.transform = "";
+    }
+
+    resetSwipe();
+  });
+}
 
 
 
