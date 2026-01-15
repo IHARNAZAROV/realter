@@ -3640,3 +3640,7 @@ button.scroltop span {
 .contact-slide-hide.is-open .contact-slide-content {
   transform: translateX(0);
 }
+body.is-locked {
+  position: fixed;
+  width: 100%;
+}

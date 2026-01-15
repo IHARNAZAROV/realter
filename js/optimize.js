@@ -182,37 +182,94 @@ function initCarousels() {
 
 function initContactSlide() {
   const panel = document.querySelector(".contact-slide-hide");
+  const content = panel?.querySelector(".contact-slide-content");
   const openBtn = document.querySelector(".contact-slide-show");
   const closeBtn = panel?.querySelector(".contact_close");
   const overlay = panel?.querySelector(".contact-slide-overlay");
 
-  if (!panel || !openBtn || !closeBtn || !overlay) return;
+  if (!panel || !content || !openBtn || !closeBtn || !overlay) return;
 
+  let scrollY = 0;
+
+  /* ===== BODY SCROLL LOCK ===== */
+  const lockBody = () => {
+    scrollY = window.scrollY;
+    document.body.classList.add("is-locked");
+    document.body.style.top = `-${scrollY}px`;
+  };
+
+  const unlockBody = () => {
+    document.body.classList.remove("is-locked");
+    document.body.style.top = "";
+    window.scrollTo(0, scrollY);
+  };
+
+  /* ===== OPEN / CLOSE ===== */
   const open = () => {
     panel.classList.add("is-open");
     panel.setAttribute("aria-hidden", "false");
+    lockBody();
+    trapFocus();
   };
 
   const close = () => {
     panel.classList.remove("is-open");
     panel.setAttribute("aria-hidden", "true");
+    unlockBody();
+    releaseFocus();
   };
 
   openBtn.addEventListener("click", open);
   closeBtn.addEventListener("click", close);
-
-  /* КЛИК ПО ФОНУ */
   overlay.addEventListener("click", close);
 
-  /* ESC */
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && panel.classList.contains("is-open")) {
       close();
     }
   });
+
+  /* ===== FOCUS TRAP ===== */
+  let focusableElements = [];
+  let firstFocusable;
+  let lastFocusable;
+
+  const trapFocus = () => {
+    focusableElements = content.querySelectorAll(
+      'a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    );
+
+    if (!focusableElements.length) return;
+
+    firstFocusable = focusableElements[0];
+    lastFocusable = focusableElements[focusableElements.length - 1];
+
+    firstFocusable.focus();
+    document.addEventListener("keydown", handleTab);
+  };
+
+  const releaseFocus = () => {
+    document.removeEventListener("keydown", handleTab);
+    openBtn.focus();
+  };
+
+  const handleTab = (e) => {
+    if (e.key !== "Tab") return;
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstFocusable) {
+        e.preventDefault();
+        lastFocusable.focus();
+      }
+    } else {
+      if (document.activeElement === lastFocusable) {
+        e.preventDefault();
+        firstFocusable.focus();
+      }
+    }
+  };
 }
 
-document.addEventListener("DOMContentLoaded", initContactSlide);
 
 
 
