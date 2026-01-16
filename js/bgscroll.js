@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 
 /**
  * BGScroll — плавная прокрутка background-position у элементов
@@ -13,52 +13,52 @@
  */
 
 const BGScroll = (() => {
-  const instances = new WeakMap();
+  const instances = new WeakMap()
 
-  function normalizeDirection(dir) {
-    if (dir === "h" || dir === "v" || dir === "d") return dir;
-    return "h";
+  function normalizeDirection (dir) {
+    if (dir === 'h' || dir === 'v' || dir === 'd') return dir
+    return 'h'
   }
 
-  function normalizeSpeed(ms) {
-    const n = Number(ms);
-    if (!Number.isFinite(n) || n <= 0) return 70;
-    return n;
+  function normalizeSpeed (ms) {
+    const n = Number(ms)
+    if (!Number.isFinite(n) || n <= 0) return 70
+    return n
   }
 
-  function normalizePauseWhenHidden(v) {
-    return v !== false; // по умолчанию true
+  function normalizePauseWhenHidden (v) {
+    return v !== false // по умолчанию true
   }
 
-  function applyPosition(el, direction, current) {
-    let axis = "0 0";
+  function applyPosition (el, direction, current) {
+    let axis = '0 0'
 
-    if (direction === "h") axis = `${current}px 0`;
-    if (direction === "v") axis = `0 ${current}px`;
-    if (direction === "d") axis = `${current}px ${current}px`;
+    if (direction === 'h') axis = `${current}px 0`
+    if (direction === 'v') axis = `0 ${current}px`
+    if (direction === 'd') axis = `${current}px ${current}px`
 
-    el.style.backgroundPosition = axis;
+    el.style.backgroundPosition = axis
   }
 
-  function getElements(target) {
-    if (!target) return [];
+  function getElements (target) {
+    if (!target) return []
 
-    if (typeof target === "string") {
-      return Array.from(document.querySelectorAll(target));
+    if (typeof target === 'string') {
+      return Array.from(document.querySelectorAll(target))
     }
 
     if (target instanceof Element) {
-      return [target];
+      return [target]
     }
 
     if (target instanceof NodeList || Array.isArray(target)) {
-      return Array.from(target).filter(Boolean);
+      return Array.from(target).filter(Boolean)
     }
 
-    return [];
+    return []
   }
 
-  function createInstance(el, options = {}) {
+  function createInstance (el, options = {}) {
     const state = {
       el,
       direction: normalizeDirection(options.direction),
@@ -71,136 +71,136 @@ const BGScroll = (() => {
       lastStepTime: 0,
 
       observer: null,
-      isVisible: true,
-    };
+      isVisible: true
+    }
 
-    function tick(time) {
-      if (!state.running) return;
+    function tick (time) {
+      if (!state.running) return
 
       if (time - state.lastStepTime >= state.scrollSpeed) {
-        state.current -= 1;
-        applyPosition(state.el, state.direction, state.current);
-        state.lastStepTime = time;
+        state.current -= 1
+        applyPosition(state.el, state.direction, state.current)
+        state.lastStepTime = time
       }
 
-      state.rafId = requestAnimationFrame(tick);
+      state.rafId = requestAnimationFrame(tick)
     }
 
     state.start = () => {
-      if (state.running) return;
-      state.running = true;
-      state.lastStepTime = performance.now();
-      state.rafId = requestAnimationFrame(tick);
-    };
+      if (state.running) return
+      state.running = true
+      state.lastStepTime = performance.now()
+      state.rafId = requestAnimationFrame(tick)
+    }
 
     state.stop = () => {
-      state.running = false;
-      if (state.rafId) cancelAnimationFrame(state.rafId);
-      state.rafId = 0;
-    };
+      state.running = false
+      if (state.rafId) cancelAnimationFrame(state.rafId)
+      state.rafId = 0
+    }
 
     state.destroy = () => {
-      state.stop();
+      state.stop()
 
       if (state.observer) {
-        state.observer.disconnect();
-        state.observer = null;
+        state.observer.disconnect()
+        state.observer = null
       }
 
-      instances.delete(state.el);
-    };
+      instances.delete(state.el)
+    }
 
     // Auto pause when hidden (IntersectionObserver)
-    if (state.pauseWhenHidden && "IntersectionObserver" in window) {
+    if (state.pauseWhenHidden && 'IntersectionObserver' in window) {
       state.observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.target !== state.el) return;
+            if (entry.target !== state.el) return
 
-            const visible = entry.isIntersecting && entry.intersectionRatio > 0;
-            state.isVisible = visible;
+            const visible = entry.isIntersecting && entry.intersectionRatio > 0
+            state.isVisible = visible
 
             if (visible) {
-              state.start();
+              state.start()
             } else {
-              state.stop();
+              state.stop()
             }
-          });
+          })
         },
         {
           root: null,
-          threshold: 0.01,
+          threshold: 0.01
         }
-      );
+      )
 
-      state.observer.observe(state.el);
+      state.observer.observe(state.el)
     }
 
-    return state;
+    return state
   }
 
   return {
-    init(target, options = {}) {
-      const els = getElements(target);
-      if (!els.length) return [];
+    init (target, options = {}) {
+      const els = getElements(target)
+      if (!els.length) return []
 
-      const created = [];
+      const created = []
 
       els.forEach((el) => {
         // если уже есть инстанс — обновляем настройки
         if (instances.has(el)) {
-          const inst = instances.get(el);
+          const inst = instances.get(el)
 
-          inst.direction = normalizeDirection(options.direction || inst.direction);
-          inst.scrollSpeed = normalizeSpeed(options.scrollSpeed || inst.scrollSpeed);
+          inst.direction = normalizeDirection(options.direction || inst.direction)
+          inst.scrollSpeed = normalizeSpeed(options.scrollSpeed || inst.scrollSpeed)
           inst.pauseWhenHidden = normalizePauseWhenHidden(
             options.pauseWhenHidden !== undefined ? options.pauseWhenHidden : inst.pauseWhenHidden
-          );
+          )
 
           // если наблюдателя нет, но нужен — создадим заново через destroy/init
           // чтобы не усложнять логику, проще пересоздать
-          inst.destroy();
-          const newInst = createInstance(el, options);
-          instances.set(el, newInst);
+          inst.destroy()
+          const newInst = createInstance(el, options)
+          instances.set(el, newInst)
 
           // если pauseWhenHidden выключен — стартуем сразу
-          if (!newInst.pauseWhenHidden) newInst.start();
+          if (!newInst.pauseWhenHidden) newInst.start()
 
-          created.push(newInst);
-          return;
+          created.push(newInst)
+          return
         }
 
-        const inst = createInstance(el, options);
-        instances.set(el, inst);
+        const inst = createInstance(el, options)
+        instances.set(el, inst)
 
         // если pauseWhenHidden выключен — стартуем сразу
-        if (!inst.pauseWhenHidden) inst.start();
+        if (!inst.pauseWhenHidden) inst.start()
 
-        created.push(inst);
-      });
+        created.push(inst)
+      })
 
-      return created;
+      return created
     },
 
-    start(target) {
+    start (target) {
       getElements(target).forEach((el) => {
-        const inst = instances.get(el);
-        if (inst) inst.start();
-      });
+        const inst = instances.get(el)
+        if (inst) inst.start()
+      })
     },
 
-    stop(target) {
+    stop (target) {
       getElements(target).forEach((el) => {
-        const inst = instances.get(el);
-        if (inst) inst.stop();
-      });
+        const inst = instances.get(el)
+        if (inst) inst.stop()
+      })
     },
 
-    destroy(target) {
+    destroy (target) {
       getElements(target).forEach((el) => {
-        const inst = instances.get(el);
-        if (inst) inst.destroy();
-      });
-    },
-  };
-})();
+        const inst = instances.get(el)
+        if (inst) inst.destroy()
+      })
+    }
+  }
+})()
