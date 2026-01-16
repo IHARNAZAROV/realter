@@ -445,15 +445,19 @@ function handleMobileDrawer(e) {
  */
 function initStickyHeader() {
   const header = document.querySelector(".sticky-header");
+  if (!header) return;
+
   const fixed = document.querySelectorAll(".is-fixed");
-  if (!header || !fixed.length) return;
 
   const sentinel = document.createElement("div");
+  sentinel.style.height = "1px";
   header.before(sentinel);
 
   new IntersectionObserver(([entry]) => {
     const stuck = !entry.isIntersecting;
+
     header.classList.toggle("is-stuck", stuck);
+
     fixed.forEach(el => el.classList.toggle("color-fill", stuck));
   }).observe(sentinel);
 }
