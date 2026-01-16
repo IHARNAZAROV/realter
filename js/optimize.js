@@ -9,14 +9,13 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.classList.add("loaded");
 
   initMenuActiveAndUnderline();
-  initLightbox();
-  initCarousels();
+   initCarousels();
   initContactSlide();
   initCounterUp();
   wrapResponsiveIframes();
   initGlobalClickDelegation();
   initStickyHeader();
-  initMasonryFilterAnimated();
+ bg_moving();
 initMasonryFilter();
 });
 
@@ -70,31 +69,7 @@ function initMenuActiveAndUnderline() {
   });
 }
 
-/**
- * =====================================================
- * GLightbox (mfp-link + mfp-video)
- * =====================================================
- */
-function initLightbox() {
-  if (typeof GLightbox !== "function") return;
 
-  if (document.querySelector(".mfp-link")) {
-    GLightbox({
-      selector: ".mfp-link",
-      touchNavigation: true,
-      loop: true
-    });
-  }
-
-  if (document.querySelector(".mfp-video")) {
-    GLightbox({
-      selector: ".mfp-video",
-      touchNavigation: true,
-      loop: true,
-      autoplayVideos: true
-    });
-  }
-}
 
 /**
  * =====================================================
@@ -568,34 +543,11 @@ function initMasonryFilter() {
   });
 }
 
-function initMasonryFilterAnimated() {
-  const container = document.querySelector(".masonry-outer");
-  if (!container) return;
 
-  document.addEventListener("click", function (e) {
-    const btn = e.target.closest("[data-filter]");
-    if (!btn) return;
-
-    e.preventDefault();
-    const filter = btn.dataset.filter;
-
-    document
-      .querySelectorAll("[data-filter]")
-      .forEach(b => b.classList.remove("btn-active"));
-    btn.classList.add("btn-active");
-
-    const items = container.querySelectorAll(".masonry-item");
-
-    items.forEach(item => {
-      const match =
-        filter === "*" ||
-        item.classList.contains(filter.replace(".", ""));
-
-      if (match) {
-        item.classList.remove("is-hiding");
-      } else {
-        item.classList.add("is-hiding");
-      }
-    });
+function bg_moving() {
+  BGScroll.init(".bg-moving", {
+    scrollSpeed: 20,
+    direction: "h",
+    pauseWhenHidden: true, // важно
   });
 }

@@ -2,7 +2,6 @@
   "use strict";
 
   const $window = $(window);
-  const $document = $(document);
 
   function owlAnimateFilter() {
     $(this).addClass("item-scale");
@@ -13,12 +12,13 @@
 
   /**
    * =====================================================
-   * Isotope + OwlFilter + OwlFade
+   * Isotope + OwlCarousel (filters, fade slider, service slider)
    * =====================================================
    */
   function initOnLoadFunctions() {
-
-    // Isotope
+    // =========================
+    // ISOTOPE
+    // =========================
     if ($.fn.isotope) {
       const $container = $(".masonry-outer");
 
@@ -40,54 +40,61 @@
       }
     }
 
-    // Owl carousel filter
+    // =========================
+    // OWL CAROUSEL
+    // =========================
     if ($.fn.owlCarousel) {
-      const owlFilter = $(".owl-carousel-filter").owlCarousel({
-        loop: false,
-        autoplay: false,
-        margin: 30,
-        nav: true,
-        dots: false,
-        navText: ["<", ">"],
-        responsive: {
-          0: { items: 1 },
-          540: { items: 2 },
-          768: { items: 3 },
-          991: { items: 3 },
-          1136: { items: 4 },
-          1366: { items: 5 },
-        },
-      });
-
-      $(".btn-filter-wrap").on("click", ".btn-filter", function () {
-        const filterData = $(this).data("filter");
-        if ($(this).hasClass("btn-active")) return;
-
-        $(this).addClass("btn-active").siblings().removeClass("btn-active");
-
-        owlFilter.owlFilter(filterData, function (_owl) {
-          $(_owl).find(".item").each(owlAnimateFilter);
+      
+      // Fade slider
+      const $fadeSlider = $(".owl-fade-slider-one");
+      if ($fadeSlider.length) {
+        $fadeSlider.owlCarousel({
+          loop: true,
+          autoplay: true,
+          autoplayTimeout: 2000,
+          margin: 30,
+          nav: true,
+          navText: [
+            '<i class="fa fa-angle-left"></i>',
+            '<i class="fa fa-angle-right"></i>',
+          ],
+          items: 1,
+          dots: false,
+          animateOut: "fadeOut",
         });
-      });
-    }
+      }
 
-    // Fade slider
-    $(".owl-fade-slider-one").owlCarousel({
-      loop: true,
-      autoplay: true,
-      autoplayTimeout: 2000,
-      margin: 30,
-      nav: true,
-      navText: [
-        '<i class="fa fa-angle-left"></i>',
-        '<i class="fa fa-angle-right"></i>',
-      ],
-      items: 1,
-      dots: false,
-      animateOut: "fadeOut",
-    });
+      // Service slider
+      const $serviceSlider = $(".service-slider");
+      if ($serviceSlider.length) {
+        $serviceSlider.owlCarousel({
+          loop: true,
+          autoplay: true,
+          autoplayTimeout: 4000, // каждые 4 секунды
+          autoplayHoverPause: true, // пауза при наведении мышью
+          smartSpeed: 700, // плавность анимации
+          center: false,
+          margin: 15,
+          nav: true,
+          dots: false,
+          navText: [
+            `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+               <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+             </svg>`,
+            `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+               <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+             </svg>`,
+          ],
+          responsive: {
+            0: { items: 1 },
+            768: { items: 2 },
+            991: { items: 3 },
+            1200: { items: 3 },
+          },
+        });
+      }
+    }
   }
 
   $window.on("load", initOnLoadFunctions);
-
 })(jQuery);
