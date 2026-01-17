@@ -391,11 +391,31 @@ function handleAccordion(e) {
   const faq = head.closest(".faq-1");
   if (!faq) return;
 
-  faq.querySelectorAll(".acod-head")
-     .forEach(h => h.classList.remove("acc-actives"));
+  // закрываем все
+  faq.querySelectorAll(".acod-head").forEach(h => {
+    h.classList.remove("acc-actives");
 
-  head.classList.toggle("acc-actives");
+    const icon = h.querySelector(".indicator i");
+    if (icon) {
+      icon.classList.remove("fa-minus");
+      icon.classList.add("fa-plus");
+    }
+  });
+
+  // открываем текущий (если был закрыт)
+  const willOpen = !head.classList.contains("acc-actives");
+  if (willOpen) {
+    head.classList.add("acc-actives");
+
+    const icon = head.querySelector(".indicator i");
+    if (icon) {
+      icon.classList.remove("fa-plus");
+      icon.classList.add("fa-minus");
+    }
+  }
 }
+
+document.addEventListener("click", handleAccordion);
 
 /**
  * =====================================================

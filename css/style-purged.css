@@ -1622,15 +1622,17 @@ ul li {
   display: none;
 }
 
-.breadcrumb-style-2 li:after {
-  content: "\f101";
+.breadcrumb-style-2 li::after {
+ content: "›";
   margin-left: 7px;
-  font-family: var(--font-awesome);
-  color: var(--color-white);
+  color: #fff;
   font-size: 1rem;
-  font-weight: 400;
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
 }
-
+.breadcrumb-style-2 li:last-child::after {
+  content: "";
+}
 .social-icons {
   list-style: none;
   font-size: 0.75rem;
@@ -4658,4 +4660,15 @@ body.is-locked {
   width: 54px;
   height: 40px;
   border-radius: 999px;
+}
+
+.sx-accordion .acod-body {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+
+.sx-accordion .acod-head.acc-actives + .acod-body {
+  opacity: 1;
 }
