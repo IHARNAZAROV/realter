@@ -9,14 +9,14 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.classList.add("loaded");
 
   initMenuActiveAndUnderline();
-   initCarousels();
+  initCarousels();
   initContactSlide();
   initCounterUp();
   wrapResponsiveIframes();
   initGlobalClickDelegation();
   initStickyHeader();
- bg_moving();
-initMasonryFilter();
+  bg_moving();
+  initMasonryFilter();
 });
 
 /**
@@ -31,7 +31,7 @@ function initMenuActiveAndUnderline() {
   const currentPath = window.location.pathname.replace(/\/$/, "") || "/";
   let activeLink = null;
 
-  links.forEach(link => {
+  links.forEach((link) => {
     const li = link.closest("li");
     if (!li) return;
 
@@ -41,7 +41,10 @@ function initMenuActiveAndUnderline() {
     if (!href) return;
     href = href.replace(/\/$/, "") || "/";
 
-    if (href === currentPath || (href !== "/" && currentPath.startsWith(href))) {
+    if (
+      href === currentPath ||
+      (href !== "/" && currentPath.startsWith(href))
+    ) {
       li.classList.add("active");
       activeLink = link;
     }
@@ -55,8 +58,8 @@ function initMenuActiveAndUnderline() {
 
   if (activeLink) setUnderline(activeLink, 1, "50%");
 
-  links.forEach(link => {
-    link.addEventListener("mouseenter", e => {
+  links.forEach((link) => {
+    link.addEventListener("mouseenter", (e) => {
       const rect = link.getBoundingClientRect();
       setUnderline(link, 1, e.clientX - rect.left + "px");
       if (activeLink && activeLink !== link) setUnderline(activeLink, 0, "50%");
@@ -68,8 +71,6 @@ function initMenuActiveAndUnderline() {
     });
   });
 }
-
-
 
 /**
  * =====================================================
@@ -87,7 +88,7 @@ function initCarousels() {
       margin: 30,
       nav: false,
       dots: true,
-      responsive: { 0: { items: 1 }, 991: { items: 1 } }
+      responsive: { 0: { items: 1 }, 991: { items: 1 } },
     },
     {
       selector: ".testimonial-home-two",
@@ -96,7 +97,7 @@ function initCarousels() {
       margin: 30,
       nav: true,
       dots: false,
-      responsive: { 0: { items: 1 }, 991: { items: 2 } }
+      responsive: { 0: { items: 1 }, 991: { items: 2 } },
     },
     {
       selector: ".about-home",
@@ -105,7 +106,7 @@ function initCarousels() {
       margin: 30,
       nav: true,
       dots: true,
-      responsive: { 0: { items: 1 }, 991: { items: 1 } }
+      responsive: { 0: { items: 1 }, 991: { items: 1 } },
     },
     {
       selector: ".project-carousel4",
@@ -119,8 +120,25 @@ function initCarousels() {
         0: { items: 1, margin: 15 },
         640: { items: 2, margin: 15 },
         800: { items: 3, margin: 20 },
-        1200: { items: 4 }
-      }
+        1200: { items: 4 },
+      },
+    },
+    {
+      selector: ".project-carousel3",
+      loop: true,
+      autoplay: true,
+      items: 3,
+      margin: 40,
+      nav: true,
+      autoplayTimeout: 4000, 
+      smartSpeed: 800,
+      dots: false,
+      responsive: {
+        0: { items: 1, margin: 15 },
+        640: { items: 2, margin: 15 },
+        800: { items: 3, margin: 20 },
+        1200: { items: 4 },
+      },
     },
     {
       selector: ".project-carousel1",
@@ -130,11 +148,11 @@ function initCarousels() {
       margin: 40,
       nav: true,
       dots: true,
-      responsive: { 0: { items: 1 }, 768: { items: 1 }, 991: { items: 1 } }
-    }
+      responsive: { 0: { items: 1 }, 768: { items: 1 }, 991: { items: 1 } },
+    },
   ];
 
-  carousels.forEach(cfg => {
+  carousels.forEach((cfg) => {
     const $el = jQuery(cfg.selector);
     if (!$el.length) return;
 
@@ -142,8 +160,8 @@ function initCarousels() {
       ...cfg,
       navText: [
         '<i class="fa fa-angle-left"></i>',
-        '<i class="fa fa-angle-right"></i>'
-      ]
+        '<i class="fa fa-angle-right"></i>',
+      ],
     });
   });
 }
@@ -153,7 +171,6 @@ function initCarousels() {
  * Contact slide
  * =====================================================
  */
-
 
 function initContactSlide() {
   const panel = document.querySelector(".contact-slide-hide");
@@ -218,7 +235,7 @@ function initContactSlide() {
 
   const trapFocus = () => {
     focusableElements = content.querySelectorAll(
-      'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
+      'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])',
     );
 
     if (!focusableElements.length) return;
@@ -314,8 +331,6 @@ function initContactSlide() {
   });
 }
 
-
-
 /**
  * =====================================================
  * CounterUp
@@ -325,28 +340,31 @@ function initCounterUp() {
   const counters = document.querySelectorAll(".counter");
   if (!counters.length) return;
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
 
-      const el = entry.target;
-      const finalValue = parseInt(el.innerText.replace(/\D/g, ""), 10);
-      const start = performance.now();
-      const duration = 5000;
+        const el = entry.target;
+        const finalValue = parseInt(el.innerText.replace(/\D/g, ""), 10);
+        const start = performance.now();
+        const duration = 5000;
 
-      function animate(time) {
-        const progress = Math.min((time - start) / duration, 1);
-        const eased = progress * (2 - progress);
-        el.innerText = Math.floor(eased * finalValue);
-        if (progress < 1) requestAnimationFrame(animate);
-      }
+        function animate(time) {
+          const progress = Math.min((time - start) / duration, 1);
+          const eased = progress * (2 - progress);
+          el.innerText = Math.floor(eased * finalValue);
+          if (progress < 1) requestAnimationFrame(animate);
+        }
 
-      requestAnimationFrame(animate);
-      observer.unobserve(el);
-    });
-  }, { threshold: 0.5 });
+        requestAnimationFrame(animate);
+        observer.unobserve(el);
+      });
+    },
+    { threshold: 0.5 },
+  );
 
-  counters.forEach(el => observer.observe(el));
+  counters.forEach((el) => observer.observe(el));
 }
 
 /**
@@ -355,15 +373,15 @@ function initCounterUp() {
  * =====================================================
  */
 function wrapResponsiveIframes() {
-  document.querySelectorAll(
-    'iframe[src*="youtube.com"], iframe[src*="vimeo.com"]'
-  ).forEach(iframe => {
-    if (iframe.parentElement.classList.contains("ratio")) return;
-    const wrapper = document.createElement("div");
-    wrapper.className = "ratio ratio-16x9";
-    iframe.parentNode.insertBefore(wrapper, iframe);
-    wrapper.appendChild(iframe);
-  });
+  document
+    .querySelectorAll('iframe[src*="youtube.com"], iframe[src*="vimeo.com"]')
+    .forEach((iframe) => {
+      if (iframe.parentElement.classList.contains("ratio")) return;
+      const wrapper = document.createElement("div");
+      wrapper.className = "ratio ratio-16x9";
+      iframe.parentNode.insertBefore(wrapper, iframe);
+      wrapper.appendChild(iframe);
+    });
 }
 
 /**
@@ -372,7 +390,7 @@ function wrapResponsiveIframes() {
  * =====================================================
  */
 function initGlobalClickDelegation() {
-  document.addEventListener("click", e => {
+  document.addEventListener("click", (e) => {
     handleAccordion(e);
     handleSubmenu(e);
     handleMobileDrawer(e);
@@ -392,7 +410,7 @@ function handleAccordion(e) {
   if (!faq) return;
 
   // закрываем все
-  faq.querySelectorAll(".acod-head").forEach(h => {
+  faq.querySelectorAll(".acod-head").forEach((h) => {
     h.classList.remove("acc-actives");
 
     const icon = h.querySelector(".indicator i");
@@ -453,7 +471,7 @@ function initStickyHeader() {
 
     header.classList.toggle("is-stuck", stuck);
 
-    fixed.forEach(el => el.classList.toggle("color-fill", stuck));
+    fixed.forEach((el) => el.classList.toggle("color-fill", stuck));
   }).observe(sentinel);
 }
 /**
@@ -468,7 +486,7 @@ function initStickyHeader() {
     const dialog = modal.querySelector(".modal-dialog");
     if (!dialog) return;
 
-     modal.style.display = "block";
+    modal.style.display = "block";
 
     const dialogHeight = dialog.getBoundingClientRect().height;
     const windowHeight = window.innerHeight;
@@ -477,7 +495,6 @@ function initStickyHeader() {
     dialog.style.marginTop = marginTop + "px";
   }
 
- 
   document.addEventListener("shown.bs.modal", function (e) {
     const modal = e.target;
     if (!modal.classList.contains("modal")) return;
@@ -491,7 +508,6 @@ function initStickyHeader() {
     }
   });
 })();
-
 
 /**
  * =====================================================
@@ -512,7 +528,7 @@ function handleSubmenu(e) {
 
   // закрываем соседние пункты
   const siblings = li.parentElement.querySelectorAll(".has-child.nav-active");
-  siblings.forEach(item => {
+  siblings.forEach((item) => {
     if (item !== li) {
       item.classList.remove("nav-active");
       const sm = item.querySelector(":scope > .sub-menu, :scope > .mega-menu");
@@ -530,13 +546,11 @@ function handleSubmenu(e) {
   e.preventDefault();
 }
 
-
-
 function initMasonryFilter() {
   const container = document.querySelector(".masonry-outer");
   if (!container) return;
 
-  document.addEventListener("click", e => {
+  document.addEventListener("click", (e) => {
     const link = e.target.closest(".masonry-filter a");
     if (!link) return;
 
@@ -546,11 +560,11 @@ function initMasonryFilter() {
 
     document
       .querySelectorAll(".masonry-filter li")
-      .forEach(li => li.classList.remove("active"));
+      .forEach((li) => li.classList.remove("active"));
 
     link.parentElement.classList.add("active");
 
-    container.querySelectorAll(".masonry-item").forEach(item => {
+    container.querySelectorAll(".masonry-item").forEach((item) => {
       if (filter === "*" || item.matches(filter)) {
         item.hidden = false;
       } else {
@@ -559,10 +573,8 @@ function initMasonryFilter() {
     });
 
     // пересчитать masonry
-   
   });
 }
-
 
 function bg_moving() {
   BGScroll.init(".bg-moving", {
