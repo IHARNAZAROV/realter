@@ -23,11 +23,23 @@
     return value.toLocaleString("ru-RU");
   }
 
-  function getSlugFromUrl() {
-    const url = new URL(window.location.href);
-    const slug = url.searchParams.get("slug");
-    return slug ? slug.trim() : "";
+function getSlugFromUrl() {
+  const url = new URL(window.location.href);
+
+  // 1) обычный вариант: ?slug=...
+  const slugFromQuery = url.searchParams.get("slug");
+  if (slugFromQuery && slugFromQuery.trim()) return slugFromQuery.trim();
+
+  // 2) ЧПУ вариант: /object/slug
+  const path = url.pathname.replace(/^\/+|\/+$/g, ""); // убираем / в начале/конце
+  const parts = path.split("/");
+
+  if (parts.length === 2 && parts[0] === "object" && parts[1]) {
+    return parts[1].trim();
   }
+
+  return "";
+}
 
   async function fetchObjects() {
     const res = await fetch(DATA_URL, { cache: "no-store" });

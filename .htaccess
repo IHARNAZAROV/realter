@@ -33,6 +33,18 @@ RewriteRule ^index(?:\.html)?$ https://turko.by/ [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)/$ https://turko.by/$1 [R=301,L]
 
+
+# ----------------------------------------------------------------------
+# 2.5 ЧПУ ДЛЯ ОБЪЕКТОВ: /object/slug
+# ----------------------------------------------------------------------
+
+# 1) Редиректим /object-detail?slug=xxx -> /object/xxx (301)
+RewriteCond %{THE_REQUEST} \s/+object-detail\?slug=([^\s&]+) [NC]
+RewriteRule ^object-detail$ /object/%1? [R=301,L]
+
+# 2) ЧПУ: /object/xxx -> object-detail.html?slug=xxx
+RewriteRule ^object/([a-z0-9-]+)/?$ object-detail.html?slug=$1 [L,QSA]
+
 # ----------------------------------------------------------------------
 # 3. УБИРАЕМ .HTML / .PHP ИЗ URL
 # ----------------------------------------------------------------------
