@@ -106,7 +106,7 @@
   {
     "id": "obj-3",
     "slug": "kvartira-lida-yuzhnyy-gorodok",
-    "title": "3-комнатная квартира в г. Лида Южный городок",
+    "title": "3-комнатная квартира в г. Лида в Южном Городке",
     "type": "Квартира",
     "dealType": "Продажа",
     "city": "Лида",
@@ -414,7 +414,7 @@
   {
   "id": "obj-9",
   "slug": "kvartira-lida-ul-zarechnaya-39",
-  "title": "3-комнатная квартира на улице Заречная",
+  "title": "3-комнатная квартира в г. Лида на улице Заречная",
   "type": "Квартира",
   "dealType": "Продажа",
   "city": "Лида",
@@ -681,10 +681,10 @@
     "Развитая инфраструктура рядом"
   ],
   "images": [
-    "/images/objects/pic45.webp",
-    "/images/objects/pic46.webp",
-    "/images/objects/pic47.webp",
-    "/images/objects/pic48.webp"
+    "/images/objects/pic13-1.webp",
+    "/images/objects/pic13-2.webp",
+    "/images/objects/pic13-3.webp",
+    "/images/objects/pic13-4.webp"
   ],
   "publishedAt": "2025-11-13",
   "contractNumber": "Договор № 27/4 от 13.11.2025"
@@ -743,10 +743,10 @@
     "Возможен торг"
   ],
   "images": [
-    "/images/objects/pic49.webp",
-    "/images/objects/pic50.webp",
-    "/images/objects/pic51.webp",
-    "/images/objects/pic52.webp"
+    "/images/objects/pic14-1.webp",
+    "/images/objects/pic14-2.webp",
+    "/images/objects/pic14-3.webp",
+    "/images/objects/pic14-4.webp"
   ],
   "publishedAt": "2025-08-27",
   "contractNumber": "Договор № 103/1 от 27.08.2025"
@@ -799,10 +799,10 @@
     "Возможна продажа в кредит"
   ],
   "images": [
-    "/images/objects/pic53.webp",
-    "/images/objects/pic54.webp",
-    "/images/objects/pic55.webp",
-    "/images/objects/pic56.webp"
+    "/images/objects/pic15-1.webp",
+    "/images/objects/pic15-2.webp",
+    "/images/objects/pic15-3.webp",
+    "/images/objects/pic15-4.webp"
   ],
   "publishedAt": "2025-10-13",
   "contractNumber": "Договор № 182/1 от 13.10.2025"
