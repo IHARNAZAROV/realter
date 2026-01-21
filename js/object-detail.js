@@ -334,6 +334,152 @@
       </div>
     `;
   }
+// Owl Slider
+
+  function getObjectPrice(obj) {
+  
+  if (typeof obj.priceBYN === "number" && obj.priceBYN > 0) return obj.priceBYN;
+
+  // fallback: если вдруг попадётся объект только с USD
+  if (typeof obj.priceUSD === "number" && obj.priceUSD > 0) {
+    const USD_TO_BYN = 3.3; // фиксированный курс для сортировки
+    return Math.round(obj.priceUSD * USD_TO_BYN);
+  }
+
+  return null;
+}
+
+function normalizeText(v) {
+  return String(v || "").trim().toLowerCase();
+}
+
+function getCardText(obj) {
+  // показываем ТОЛЬКО короткое описание
+  if (isFilled(obj.cardDescription)) return String(obj.cardDescription).trim();
+
+  // fallback, если не заполнено
+  if (isFilled(obj.description)) {
+    const txt = String(obj.description).replace(/\s+/g, " ").trim();
+    return txt.length > 140 ? txt.slice(0, 140) + "…" : txt;
+  }
+
+  return "";
+}
+
+function scoreSimilar(current, candidate) {
+  // Чем меньше score — тем объект более похожий
+  let score = 0;
+
+  // 1) Тип объекта (самое важное)
+  const sameType = normalizeText(current.type) === normalizeText(candidate.type);
+  if (!sameType) score += 100000;
+
+  // 2) Город
+  const sameCity = normalizeText(current.city) === normalizeText(candidate.city);
+  if (!sameCity) score += 10000;
+
+  // 3) Цена (чем ближе — тем лучше)
+  const p1 = getObjectPrice(current);
+  const p2 = getObjectPrice(candidate);
+
+  if (typeof p1 === "number" && typeof p2 === "number") {
+    score += Math.abs(p1 - p2);
+  } else {
+    score += 5000;
+  }
+
+  return score;
+}
+
+function pickSimilarObjects(currentObj, allObjects, limit = 6) {
+  return allObjects
+    .filter((o) => o && o.slug && o.slug !== currentObj.slug)
+    .map((o) => ({ obj: o, score: scoreSimilar(currentObj, o) }))
+    .sort((a, b) => a.score - b.score)
+    .slice(0, limit)
+    .map((x) => x.obj);
+}
+
+function renderSimilarItem(obj) {
+  const img =
+    Array.isArray(obj.images) && isFilled(obj.images[0])
+      ? obj.images[0]
+      : "/images/objects/pic1.webp";
+
+  const title = isFilled(obj.title) ? obj.title : "Объект недвижимости";
+  const text = getCardText(obj);
+  const link = `/object-detail.html?slug=${encodeURIComponent(obj.slug)}`;
+
+  return `
+    <div class="item">
+      <div class="project-mas m-a30">
+        <div class="image-effect-one">
+          <img src="${img}" alt="${title}">
+          <div class="figcaption"></div>
+        </div>
+
+        <div class="project-info p-t20">
+          <h4 class="sx-tilte m-t0">
+            <a href="${link}">${title}</a>
+          </h4>
+          <p>${text}</p>
+          <a href="${link}"><i class="link-plus bg-primary"></i></a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function rebuildOwlCarousel(carouselEl) {
+  if (!window.jQuery || !window.jQuery.fn || !window.jQuery.fn.owlCarousel) {
+    console.warn("OwlCarousel не найден. Проверь подключение jquery + owl.carousel.js");
+    return;
+  }
+
+  const $c = window.jQuery(carouselEl);
+
+  if ($c.hasClass("owl-loaded")) {
+    $c.trigger("destroy.owl.carousel");
+    $c.removeClass("owl-loaded");
+    $c.find(".owl-stage-outer").children().unwrap();
+  }
+
+  $c.owlCarousel({
+    loop: true,
+    margin: 30,
+    nav: true,
+    autoplay: true,
+  autoplayTimeout: 3500,
+  autoplayHoverPause: true,
+  smartSpeed: 700,
+    navText: [
+  '<i class="fa-solid fa-chevron-left"></i>',
+  '<i class="fa-solid fa-chevron-right"></i>'
+  ],
+    dots: false,
+    responsive: {
+      0: { items: 1 },
+      768: { items: 2 },
+      1200: { items: 3 }
+    }
+  });
+}
+
+function renderSimilarSlider(currentObj, allObjects) {
+  const carousel = qs("#similarCarousel");
+  if (!carousel) return;
+
+  const similar = pickSimilarObjects(currentObj, allObjects, 6);
+
+  if (!similar.length) {
+    carousel.innerHTML = "";
+    return;
+  }
+
+  carousel.innerHTML = similar.map(renderSimilarItem).join("");
+  rebuildOwlCarousel(carousel);
+}
+
 
   // =========================
   // INIT
@@ -367,6 +513,7 @@
 
       renderGallery(obj.images);
       renderMeta(obj);
+      renderSimilarSlider(obj, objects);
       renderRightText(obj);
     } catch (e) {
       console.error(e);

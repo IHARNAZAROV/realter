@@ -4,44 +4,141 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
+  <!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
-<url>
-  <loc>https://turko.by/</loc>
-  <lastmod>2025-12-10T09:05:15+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://turko.by/about</loc>
-  <lastmod>2025-12-10T09:05:24+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://turko.by/objects</loc>
-  <lastmod>2025-12-10T09:05:11+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://turko.by/blog</loc>
-  <lastmod>2025-12-10T09:05:29+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://turko.by/faq</loc>
-  <lastmod>2025-12-10T09:05:19+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://turko.by/contact</loc>
-  <lastmod>2025-12-10T09:05:34+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://turko.by/Privacy</loc>
-  <lastmod>2025-12-10T07:42:51+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
+  <url>
+    <loc>https://turko.by/</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>1.00</priority>
+  </url>
 
+  <url>
+    <loc>https://turko.by/about</loc>
+    <lastmod>2025-12-10T09:05:24+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/objects</loc>
+    <lastmod>2025-12-10T09:05:11+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/blog</loc>
+    <lastmod>2025-12-10T09:05:29+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/faq</loc>
+    <lastmod>2025-12-10T09:05:19+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/contact</loc>
+    <lastmod>2025-12-10T09:05:34+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/Privacy</loc>
+    <lastmod>2025-12-10T07:42:51+00:00</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- ====== OBJECT DETAIL PAGES (canonical without .html) ====== -->
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=dom-lidskiy-rayon-krupovo</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=dom-lidskiy-rayon-sheybaki</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-yuzhnyy-gorodok</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=dom-lida-severnyy-gorodok-ul-govorova</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-yuzhnyy-gorodok-d-19</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-ul-tuhachevskogo-65-k1</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=dom-shchuchinskiy-rayon-rozhanka</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=dom-lidskiy-rayon-melyashi</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=dom-lida-ul-nevskogo</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=dom-dokudovo-2</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-ul-masherova-7-k2</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-ul-varshavskaya-44</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-ul-masherova</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-ul-letnaya-8</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
+
+  <url>
+    <loc>https://turko.by/object-detail?slug=kvartira-lida-ul-tuhachevskogo</loc>
+    <lastmod>2025-12-10T09:05:15+00:00</lastmod>
+    <priority>0.70</priority>
+  </url>
 
 </urlset>

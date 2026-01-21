@@ -1,31 +1,42 @@
 body {
-	font-size: 100%;
+  font-size: 100%;
+  font-family: sans-serif;
+  line-height: 1.5;
+  transition: all 0.2s linear;
+}
+
+@media all and (min-width: 961px) {
+  body {
+    line-height: 1.6;
+    transition: none;
+  }
 }
 
 @media all and (max-width: 960px) {
-	body {
-		font: 93.75% sans-serif;
-		line-height: 1.5;
-		transition:all .2s linear;
-		-o-transition:all .2s linear;
-		-moz-transition:all .2s linear;
-		-webkit-transition:all .2s linear;
-	}
+  body {
+    font-size: 93.75%;
+  }
 }
-@media all and (max-width: 768px) {
-	body {
-		font: 87.5% sans-serif;
-		line-height: 1.5;
-		transition:all .2s linear;
-		-o-transition:all .2s linear;
-		-moz-transition:all .2s linear;
-		-webkit-transition:all .2s linear;
-	}
 
+@media all and (max-width: 768px) {
+  body {
+    font-size: 87.5%;
+  }
 }
 
 /* purely for styling the demo */
 .container {
-	width: 90%;
-	padding: 2% 5%;
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+h3,
+h4 {
+  color: #333;
+}
+
+a {
+  color: #007bff;
 }
