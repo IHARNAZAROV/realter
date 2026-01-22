@@ -1,216 +1,308 @@
 <!doctype html>
 <html lang="en">
-
-<head>
-	<!-- ==============================================
+  <head>
+    <!-- ==============================================
          META TAGS & CONFIGURATION
     =============================================== -->
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<!-- SEO Meta -->
-	<title>Риэлтер в Лиде — Ольга Турко | Покупка и продажа недвижимости</title>
-	<meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
-	<meta name="robots" content="index, follow" />
-	<meta name="description" content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия." />
-	<link rel="canonical" href="https://turko.by/" />
-	<!-- Open Graph (Facebook/Instagram) -->
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Ольга Турко, риэлтер в Лиде" />
-	<meta property="og:description" content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия." />
-	<meta property="og:url" content="https://turko.by" />
-	<meta property="og:image" content="https://turko.by/images/main-slider/2.webp" />
-	<meta property="og:image:width" content="1200" />
-	<meta property="og:image:height" content="630" />
-	<!-- Twitter Card -->
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Ольга Турко, риэлтер в Лиде" />
-	<meta name="twitter:description" content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия." />
-	<meta name="twitter:image" content="https://turko.by/images/main-slider/2.webp" />
-	<meta name="twitter:image:width" content="1200" />
-	<meta name="twitter:image:height" content="630" />
-	<!-- Favicons -->
-	<link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
-	<link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
-	<link rel="manifest" href="https://turko.by/site.webmanifest" />
-	<meta name="theme-color" content="#006064" />
-	<link rel="apple-touch-icon" href="https://turko.by/apple-touch-icon.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="https://turko.by/favicon-32x32.png" />
-	<link rel="icon" type="image/png" sizes="192x192" href="https://turko.by/web-app-manifest-192x192.png" />
-	<!-- ==============================================
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- SEO Meta -->
+    <title>Риэлтер в Лиде — Ольга Турко | Покупка и продажа недвижимости</title>
+    <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="description"
+      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
+    />
+    <link rel="canonical" href="https://turko.by/" />
+    <!-- Open Graph (Facebook/Instagram) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ольга Турко, риэлтер в Лиде" />
+    <meta
+      property="og:description"
+      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
+    />
+    <meta property="og:url" content="https://turko.by" />
+    <meta
+      property="og:image"
+      content="https://turko.by/images/main-slider/2.webp"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ольга Турко, риэлтер в Лиде" />
+    <meta
+      name="twitter:description"
+      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
+    />
+    <meta
+      name="twitter:image"
+      content="https://turko.by/images/main-slider/2.webp"
+    />
+    <meta name="twitter:image:width" content="1200" />
+    <meta name="twitter:image:height" content="630" />
+    <!-- Favicons -->
+    <link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
+    <link rel="manifest" href="https://turko.by/site.webmanifest" />
+    <meta name="theme-color" content="#006064" />
+    <link rel="apple-touch-icon" href="https://turko.by/apple-touch-icon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="https://turko.by/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="https://turko.by/web-app-manifest-192x192.png"
+    />
+    <!-- ==============================================
          RESOURCE HINTS (Performance)
     =============================================== -->
-	<!-- Fonts Preconnect -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<!-- ==============================================
+    <!-- Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- ==============================================
          CSS STYLES
     =============================================== -->
-	<!-- Google Fonts -->
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet" />
-	<!-- Libraries -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-	<link rel="stylesheet" href="/css/swiper-bundle.css" />
-	<link rel="stylesheet" href="/css/swiper.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
-	<!-- Main Styles -->
-	<link rel="stylesheet" type="text/css" href="css/style-purged.css" />
-	<link rel="stylesheet" class="skin" type="text/css" href="css/skin/skin-1.css" /> </head>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Libraries -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
+    <link rel="stylesheet" href="/css/swiper-bundle.css" />
+    <link rel="stylesheet" href="/css/swiper.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
+    <!-- Main Styles -->
+    <link rel="stylesheet" type="text/css" href="css/style-purged.css" />
+    <link
+      rel="stylesheet"
+      class="skin"
+      type="text/css"
+      href="css/skin/skin-1.css"
+    />
+  </head>
 
-<body id="bg">
-	<div class="page-wraper">
-		<!-- =========================================
+  <body id="bg">
+    <div class="page-wraper">
+      <!-- =========================================
          HEADER START
          ========================================= -->
-		<header class="site-header nav-wide nav-transparent mobile-sider-drawer-menu">
-			<div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
-				<div class="main-bar">
-					<div class="container clearfix">
-						<!-- Logo -->
-						<div class="logo-header">
-							<div class="logo-header-inner logo-header-one">
-								<a href="/"> <img src="images/logo-light.webp" alt="logo" /> </a>
-							</div>
-						</div>
-						<!-- Mobile Toggle -->
-						<button id="mobile-side-drawer" data-target=".header-nav" data-toggle="collapse" type="button" class="navbar-toggler collapsed"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar icon-bar-first"></span> <span class="icon-bar icon-bar-two"></span> <span class="icon-bar icon-bar-three"></span> </button>
-						<!-- Navigation -->
-						<div class="header-nav nav-dark navbar-collapse collapse justify-content-start collapse">
-							<ul class="nav navbar-nav">
-								<li class="active"><a href="/">Главная</a></li>
-								<li><a href="/about">Обо мне</a></li>
-								<li><a href="/objects">Объекты</a></li>
-								<li><a href="/blog">Блог</a></li>
-								<li><a href="/faq">Вопросы</a></li>
-								<li><a href="/contact">Контакты</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</header>
-		<!-- HEADER END -->
-		<!-- CONTENT START -->
-		<div class="page-content">
-			<!-- INNER PAGE BANNER -->
-			<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" data-stellar-background-ratio="0.5" style="background-image: url(images/banner/X.webp)">
-				<div class="overlay-main bg-black opacity-07"></div>
-				<div class="container">
-					<div class="sx-bnr-inr-entry">
-						<div class="banner-title-outer">
-							<div class="banner-title-name">
-								<h2 class="m-tb0" data-page-title></h2>
-								<p> Этот раздел помогает оценить объект ещё до просмотра: насколько он удобен, как вписывается в ваш образ жизни и что в нём действительно ценно. Только то, что помогает принять решение быстро и уверенно. </p>
-							</div>
-						</div>
-						<!-- BREADCRUMB ROW -->
-						<div>
-							<ul class="sx-breadcrumb breadcrumb-style-2">
-								<li><a href="javascript:void(0);">Home</a></li>
-								<li>Project-Detail</li>
-							</ul>
-						</div>
-						<!-- BREADCRUMB ROW END -->
-					</div>
-				</div>
-			</div>
-			<!-- INNER PAGE BANNER END -->
-			<!-- SECTION CONTENT START -->
-			<div class="section-full p-tb80 inner-page-padding stick_in_parent">
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-md-12">
-							<div class="project-detail-outer row " data-gallery> </div>
-						</div>
-						<div class="col-lg-4 col-md-12 sticky_column">
-							<div class="project-detail-containt-2">
-								<div class="bg-white text-black p-a20 shadow">
-									<!-- META (параметры объекта) -->
-									<div class="product-block bg-gray  m-b30">
-										<h4 data-object-title></h4>
-										<ul data-meta-list></ul>
-									</div>
-									<!-- Заголовок объекта -->
-									<!-- Короткая строка (метраж/этаж/цена) -->
-									<p data-object-subtitle></p>
-									<!-- Основное описание + преимущества + подпись + договор -->
-									<div data-object-description></div>
-									<div class="m-b0">
-										<div class="sx-divider divider-1px bg-black"> <i class="icon-dot c-square"></i> </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- SECTION CONTENT END  -->
-			<!-- Similar projects START -->
-			<div class="section-full p-tb80 bg-gray inner-page-padding">
-				<div class="container">
-					<div class="section-content">
-						<!-- TITLE START -->
-						<div class="section-head">
-							<div class="sx-separator-outer separator-left">
-								<div class="sx-separator bg-white bg-moving bg-repeat-x" style="
+      <header
+        class="site-header nav-wide nav-transparent mobile-sider-drawer-menu"
+      >
+        <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
+          <div class="main-bar">
+            <div class="container clearfix">
+              <!-- Logo -->
+              <div class="logo-header">
+                <div class="logo-header-inner logo-header-one">
+                  <a href="/">
+                    <img src="images/logo-light.webp" alt="logo" />
+                  </a>
+                </div>
+              </div>
+              <!-- Mobile Toggle -->
+              <button
+                id="mobile-side-drawer"
+                data-target=".header-nav"
+                data-toggle="collapse"
+                type="button"
+                class="navbar-toggler collapsed"
+              >
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar icon-bar-first"></span>
+                <span class="icon-bar icon-bar-two"></span>
+                <span class="icon-bar icon-bar-three"></span>
+              </button>
+              <!-- Navigation -->
+              <div
+                class="header-nav nav-dark navbar-collapse collapse justify-content-start collapse"
+              >
+                <ul class="nav navbar-nav">
+                  <li class="active"><a href="/">Главная</a></li>
+                  <li><a href="/about">Обо мне</a></li>
+                  <li><a href="/objects">Объекты</a></li>
+                  <li><a href="/blog">Блог</a></li>
+                  <li><a href="/faq">Вопросы</a></li>
+                  <li><a href="/contact">Контакты</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- HEADER END -->
+      <!-- CONTENT START -->
+      <div class="page-content">
+        <!-- INNER PAGE BANNER -->
+        <div
+          class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center"
+          data-stellar-background-ratio="0.5"
+          style="background-image: url(images/banner/X.webp)"
+        >
+          <div class="overlay-main bg-black opacity-07"></div>
+          <div class="container">
+            <div class="sx-bnr-inr-entry">
+              <div class="banner-title-outer">
+                <div class="banner-title-name">
+                  <h2 class="m-tb0" data-page-title></h2>
+                  <p>
+                    Этот раздел помогает оценить объект ещё до просмотра:
+                    насколько он удобен, как вписывается в ваш образ жизни и что
+                    в нём действительно ценно. Только то, что помогает принять
+                    решение быстро и уверенно.
+                  </p>
+                </div>
+              </div>
+              <!-- BREADCRUMB ROW -->
+              <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                  <li><a href="/">Главная</a></li>
+                  <li>Детали объекта</li>
+                </ul>
+              </div>
+              <!-- BREADCRUMB ROW END -->
+            </div>
+          </div>
+        </div>
+        <!-- INNER PAGE BANNER END -->
+        <!-- SECTION CONTENT START -->
+        <div class="section-full p-tb80 inner-page-padding stick_in_parent">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-12">
+                <div class="project-detail-outer row" data-gallery></div>
+              </div>
+              <div class="col-lg-4 col-md-12 sticky_column">
+                <div class="project-detail-containt-2">
+                  <div class="bg-white text-black p-a20 shadow">
+                    <div class="product-block bg-gray m-b30">
+                      <h4 data-object-title></h4>
+                      <ul data-meta-list></ul>
+                    </div>
+                    <p data-object-subtitle></p>
+                    <div data-object-description></div>
+                    <div class="m-b0">
+                      <div class="sx-divider divider-1px bg-black">
+                        <i class="icon-dot c-square"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- SECTION CONTENT END  -->
+        <!-- Similar projects START -->
+        <div class="section-full p-tb80 bg-gray inner-page-padding">
+          <div class="container">
+            <div class="section-content">
+              <!-- TITLE START -->
+              <div class="section-head">
+                <div class="sx-separator-outer separator-left">
+                  <div
+                    class="sx-separator bg-white bg-moving bg-repeat-x"
+                    style="
                       background-image: url(images/background/cross-line2.png);
-                    ">
-									<h3 class="sep-line-one">Similar Project</h3> </div>
-							</div>
-						</div>
-						<!-- TITLE END -->
-						<div class="work-carousel-outer">
-							<div id="similarCarousel" class="owl-carousel mfp-gallery project-carousel project-carousel3 owl-btn-vertical-center p-lr80">
-								<!-- COLUMNS 1 -->
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Similar projects END -->
-		</div>
-		<!-- CONTENT END -->
-		<footer class="site-footer footer-large footer-dark footer-wide">
-			<div class="footer-top overlay-wraper">
-				<div class="overlay-main"></div>
-				<div class="container">
-					<div class="row">
-						<!-- About -->
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="widget widget_about">
-								<div class="logo-footer clearfix p-b15">
-									<a href="/"><img src="images/logo-light.webp" alt="logo" /></a>
-								</div>
-								<p> <b>Найти квартиру — легко. Найти свою — искусство.</b>
-									<br />Я подбираю не абстрактные “варианты”, а то самое жильё, где совпадают цена, планировка и ощущение “моё”. </p>
-								<ul class="social-icons sx-social-links">
-									<li>
-										<a href="viber://chat?number=%2B375291809516" target="_blank" rel="noopener noreferrer" class="fa-brands fa-viber"></a>
-									</li>
-									<li>
-										<a href="https://www.tiktok.com/@rieltor_olga_lida" target="_blank" rel="noopener noreferrer" class="fab fa-tiktok"></a>
-									</li>
-									<li>
-										<a href="https://t.me/TurkoOlga" target="_blank" rel="noopener noreferrer" class="fa-brands fa-telegram"></a>
-									</li>
-									<li>
-										<a href="https://www.instagram.com/rielter_olga_lida" target="_blank" rel="noopener noreferrer" class="fa-brands fa-square-instagram"></a>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<!-- Recent Posts -->
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="widget recent-posts-entry-date">
-								<h5 class="widget-title">Посты в блоге</h5>
-								<div class="widget-post-bx">
-									<div class="widget-post clearfix">
-										<div class="sx-post-date text-center text-uppercase text-white"> <strong class="p-date">20</strong
+                    "
+                  >
+                    <h3 class="sep-line-one">Похожие варианты рядом</h3>
+                  </div>
+                </div>
+              </div>
+              <!-- TITLE END -->
+              <div class="work-carousel-outer">
+                <div
+                  id="similarCarousel"
+                  class="owl-carousel mfp-gallery project-carousel project-carousel3 owl-btn-vertical-center p-lr80"
+                >
+                  <!-- COLUMNS 1 -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Similar projects END -->
+      </div>
+      <!-- CONTENT END -->
+      <footer class="site-footer footer-large footer-dark footer-wide">
+        <div class="footer-top overlay-wraper">
+          <div class="overlay-main"></div>
+          <div class="container">
+            <div class="row">
+              <!-- About -->
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="widget widget_about">
+                  <div class="logo-footer clearfix p-b15">
+                    <a href="/"
+                      ><img src="images/logo-light.webp" alt="logo"
+                    /></a>
+                  </div>
+                  <p>
+                    <b>Найти квартиру — легко. Найти свою — искусство.</b>
+                    <br />Я подбираю не абстрактные “варианты”, а то самое
+                    жильё, где совпадают цена, планировка и ощущение “моё”.
+                  </p>
+                  <ul class="social-icons sx-social-links">
+                    <li>
+                      <a
+                        href="viber://chat?number=%2B375291809516"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fa-brands fa-viber"
+                      ></a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.tiktok.com/@rieltor_olga_lida"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fab fa-tiktok"
+                      ></a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://t.me/TurkoOlga"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fa-brands fa-telegram"
+                      ></a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.instagram.com/rielter_olga_lida"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fa-brands fa-square-instagram"
+                      ></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- Recent Posts -->
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="widget recent-posts-entry-date">
+                  <h5 class="widget-title">Посты в блоге</h5>
+                  <div class="widget-post-bx">
+                    <div class="widget-post clearfix">
+                      <div
+                        class="sx-post-date text-center text-uppercase text-white"
+                      >
+                        <strong class="p-date">20</strong
                         ><span class="p-month">Окт</span
                         ><span class="p-year">2025</span>
                       </div>
@@ -369,7 +461,6 @@
       </footer>
       <!-- FOOTER END -->
     </div>
-
 
     <!-- JAVASCRIPT  FILES ========================================= -->
 
