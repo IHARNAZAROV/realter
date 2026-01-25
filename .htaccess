@@ -4,14 +4,17 @@
 AddDefaultCharset UTF-8
 Options -Indexes
 Options +FollowSymLinks
+
 RewriteEngine On
 RewriteBase /
+
 AddType font/woff2 .woff2
 AddType font/woff .woff
 AddType application/vnd.ms-fontobject .eot
 AddType font/ttf .ttf
 AddType font/otf .otf
 AddType image/svg+xml .svg
+
 # ----------------------------------------------------------------------
 # 2. КАНОНИЧЕСКИЕ РЕДИРЕКТЫ (СТРОГИЙ ПОРЯДОК)
 # ----------------------------------------------------------------------
@@ -33,32 +36,20 @@ RewriteRule ^index(?:\.html)?$ https://turko.by/ [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+)/$ https://turko.by/$1 [R=301,L]
 
-
 # ----------------------------------------------------------------------
-# 2.5 ЧПУ ДЛЯ ОБЪЕКТОВ: /object/slug
-# ----------------------------------------------------------------------
-
-# 1) Редиректим /object-detail?slug=xxx -> /object/xxx (301)
-RewriteCond %{THE_REQUEST} \s/+object-detail\?slug=([^\s&]+) [NC]
-RewriteRule ^object-detail$ /object/%1? [R=301,L]
-
-# 2) ЧПУ: /object/xxx -> object-detail?slug=xxx
-RewriteRule ^object/([a-z0-9-]+)/?$ object-detail?slug=$1 [L,QSA]
-
-# ----------------------------------------------------------------------
-# 3. УБИРАЕМ .HTML / .PHP ИЗ URL
+# 3. УБИРАЕМ .HTML / .PHP ИЗ URL ВЕЗДЕ
 # ----------------------------------------------------------------------
 
-# Внешний редирект (если ввели .html или .php)
+# Внешний редирект: /page.html -> /page
 RewriteCond %{THE_REQUEST} \s/+([^.]+)\.(html|php)[\s?] [NC]
-RewriteRule ^([^.]+)\.(html|php)$ https://turko.by/$1 [R=301,L]
+RewriteRule ^([^.]+)\.(html|php)$ https://turko.by/%1 [R=301,L]
 
-# Внутренний маппинг .php
+# Внутренний маппинг: /page -> /page.php
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L]
 
-# Внутренний маппинг .html
+# Внутренний маппинг: /page -> /page.html
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+)$ $1.html [L]
