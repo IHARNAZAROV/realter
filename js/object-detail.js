@@ -408,7 +408,7 @@ function renderSimilarItem(obj) {
 
   const title = isFilled(obj.title) ? obj.title : "Объект недвижимости";
   const text = getCardText(obj);
-  const link = `/object-detail.html?slug=${encodeURIComponent(obj.slug)}`;
+  const link = `/object-detail?slug=${encodeURIComponent(obj.slug)}`;
 
   return `
     <div class="item">
