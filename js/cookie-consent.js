@@ -1,81 +1,81 @@
 (function () {
-  "use strict";
+  'use strict'
 
-  const CONSENT_COOKIE_NAME = "cookieConsent";
-  const CONSENT_MAX_AGE_DAYS = 180;
+  const CONSENT_COOKIE_NAME = 'cookieConsent'
+  const CONSENT_MAX_AGE_DAYS = 180
 
   // -----------------------------
   // Helpers
   // -----------------------------
-  function setCookie(name, value, maxAgeDays) {
-    const maxAge = maxAgeDays * 24 * 60 * 60;
+  function setCookie (name, value, maxAgeDays) {
+    const maxAge = maxAgeDays * 24 * 60 * 60
     document.cookie =
       name +
-      "=" +
+      '=' +
       encodeURIComponent(value) +
-      "; max-age=" +
+      '; max-age=' +
       maxAge +
-      "; path=/; SameSite=Lax";
+      '; path=/; SameSite=Lax'
   }
 
-  function getCookie(name) {
-    const cookies = document.cookie ? document.cookie.split("; ") : [];
+  function getCookie (name) {
+    const cookies = document.cookie ? document.cookie.split('; ') : []
     for (let i = 0; i < cookies.length; i++) {
-      const parts = cookies[i].split("=");
-      const key = parts.shift();
-      const val = parts.join("=");
-      if (key === name) return decodeURIComponent(val);
+      const parts = cookies[i].split('=')
+      const key = parts.shift()
+      const val = parts.join('=')
+      if (key === name) return decodeURIComponent(val)
     }
-    return null;
+    return null
   }
 
-  function safeJSONParse(str) {
+  function safeJSONParse (str) {
     try {
-      return JSON.parse(str);
+      return JSON.parse(str)
     } catch (e) {
-      return null;
+      return null
     }
   }
 
-  function getConsent() {
-    const raw = getCookie(CONSENT_COOKIE_NAME);
-    if (!raw) return null;
+  function getConsent () {
+    const raw = getCookie(CONSENT_COOKIE_NAME)
+    if (!raw) return null
 
-    const parsed = safeJSONParse(raw);
-    if (!parsed || typeof parsed !== "object") return null;
+    const parsed = safeJSONParse(raw)
+    if (!parsed || typeof parsed !== 'object') return null
 
     // normalize
     return {
       necessary: true,
       analytics: !!parsed.analytics,
-      marketing: !!parsed.marketing,
-    };
+      marketing: !!parsed.marketing
+    }
   }
 
-  function saveConsent(consent) {
+  function saveConsent (consent) {
     const payload = JSON.stringify({
       necessary: true,
       analytics: !!consent.analytics,
       marketing: !!consent.marketing,
-      updatedAt: new Date().toISOString(),
-    });
+      updatedAt: new Date().toISOString()
+    })
 
-    setCookie(CONSENT_COOKIE_NAME, payload, CONSENT_MAX_AGE_DAYS);
+    setCookie(CONSENT_COOKIE_NAME, payload, CONSENT_MAX_AGE_DAYS)
   }
 
-  function lockBodyScroll(lock) {
-    document.documentElement.style.overflow = lock ? "hidden" : "";
-    document.body.style.overflow = lock ? "hidden" : "";
+  function lockBodyScroll (lock) {
+    document.documentElement.style.overflow = lock ? 'hidden' : ''
+    document.body.style.overflow = lock ? 'hidden' : ''
   }
 
   // -----------------------------
   // Inject HTML + CSS
   // -----------------------------
-  function injectStyles() {
-    if (document.getElementById("cookieConsentStyles")) return;
+  function injectStyles () {
+    if (document.getElementById('cookieConsentStyles')) return
 
-    const style = document.createElement("style");
-    style.id = "cookieConsentStyles";
+    const style = document.createElement('style')
+    style.id = 'cookieConsentStyles'
     style.textContent = `
       :root{
         --cc-bg: #ffffff;
@@ -352,24 +352,24 @@
           transform: translate(-50%, 0);
         }
       }
-    `;
-    document.head.appendChild(style);
+    `
+    document.head.appendChild(style)
   }
 
-  function injectHTML() {
-    if (document.getElementById("cookieModal")) return;
+  function injectHTML () {
+    if (document.getElementById('cookieModal')) return
 
-    const overlay = document.createElement("div");
-    overlay.className = "cookie-overlay";
-    overlay.id = "cookieOverlay";
-    overlay.setAttribute("aria-hidden", "true");
+    const overlay = document.createElement('div')
+    overlay.className = 'cookie-overlay'
+    overlay.id = 'cookieOverlay'
+    overlay.setAttribute('aria-hidden', 'true')
 
-    const modal = document.createElement("div");
-    modal.className = "cookie-modal";
-    modal.id = "cookieModal";
-    modal.setAttribute("role", "dialog");
-    modal.setAttribute("aria-modal", "true");
-    modal.setAttribute("aria-label", "Настройки cookies");
+    const modal = document.createElement('div')
+    modal.className = 'cookie-modal'
+    modal.id = 'cookieModal'
+    modal.setAttribute('role', 'dialog')
+    modal.setAttribute('aria-modal', 'true')
+    modal.setAttribute('aria-label', 'Настройки cookies')
 
     modal.innerHTML = `
       <div class="cookie-top">
@@ -444,149 +444,149 @@
           </div>
         </div>
       </div>
-    `;
+    `
 
-    document.body.appendChild(overlay);
-    document.body.appendChild(modal);
+    document.body.appendChild(overlay)
+    document.body.appendChild(modal)
   }
 
   // -----------------------------
   // UI control
   // -----------------------------
-  function getEls() {
+  function getEls () {
     return {
-      overlay: document.getElementById("cookieOverlay"),
-      modal: document.getElementById("cookieModal"),
-      closeBtn: document.getElementById("cookieCloseBtn"),
-      acceptAll: document.getElementById("cookieAcceptAll"),
-      declineAll: document.getElementById("cookieDeclineAll"),
-      settingsBtn: document.getElementById("cookieSettingsBtn"),
-      settingsPanel: document.getElementById("cookieSettings"),
-      saveBtn: document.getElementById("cookieSaveSettings"),
-      backBtn: document.getElementById("cookieBackBtn"),
-      analytics: document.getElementById("cookieAnalytics"),
-      marketing: document.getElementById("cookieMarketing"),
-    };
+      overlay: document.getElementById('cookieOverlay'),
+      modal: document.getElementById('cookieModal'),
+      closeBtn: document.getElementById('cookieCloseBtn'),
+      acceptAll: document.getElementById('cookieAcceptAll'),
+      declineAll: document.getElementById('cookieDeclineAll'),
+      settingsBtn: document.getElementById('cookieSettingsBtn'),
+      settingsPanel: document.getElementById('cookieSettings'),
+      saveBtn: document.getElementById('cookieSaveSettings'),
+      backBtn: document.getElementById('cookieBackBtn'),
+      analytics: document.getElementById('cookieAnalytics'),
+      marketing: document.getElementById('cookieMarketing')
+    }
   }
 
-  function showConsent() {
-    const { overlay, modal } = getEls();
-    if (!overlay || !modal) return;
+  function showConsent () {
+    const { overlay, modal } = getEls()
+    if (!overlay || !modal) return
 
-    overlay.classList.add("show");
-    modal.classList.add("show");
-    lockBodyScroll(true);
+    overlay.classList.add('show')
+    modal.classList.add('show')
+    lockBodyScroll(true)
   }
 
-  function hideConsent() {
-    const { overlay, modal, settingsPanel } = getEls();
-    if (!overlay || !modal) return;
+  function hideConsent () {
+    const { overlay, modal, settingsPanel } = getEls()
+    if (!overlay || !modal) return
 
-    overlay.classList.remove("show");
-    modal.classList.remove("show");
-    if (settingsPanel) settingsPanel.classList.remove("open");
-    lockBodyScroll(false);
+    overlay.classList.remove('show')
+    modal.classList.remove('show')
+    if (settingsPanel) settingsPanel.classList.remove('open')
+    lockBodyScroll(false)
   }
 
-  function openSettings() {
-    const { settingsPanel } = getEls();
-    if (!settingsPanel) return;
-    settingsPanel.classList.add("open");
+  function openSettings () {
+    const { settingsPanel } = getEls()
+    if (!settingsPanel) return
+    settingsPanel.classList.add('open')
   }
 
-  function closeSettings() {
-    const { settingsPanel } = getEls();
-    if (!settingsPanel) return;
-    settingsPanel.classList.remove("open");
+  function closeSettings () {
+    const { settingsPanel } = getEls()
+    if (!settingsPanel) return
+    settingsPanel.classList.remove('open')
   }
 
   // -----------------------------
   // Apply consent immediately
   // -----------------------------
-  function applyConsentNow() {
-    if (typeof window.__applyCookieConsent === "function") {
-      window.__applyCookieConsent();
+  function applyConsentNow () {
+    if (typeof window.__applyCookieConsent === 'function') {
+      window.__applyCookieConsent()
     }
   }
 
   // -----------------------------
   // Init
   // -----------------------------
-  function init() {
-    injectStyles();
-    injectHTML();
+  function init () {
+    injectStyles()
+    injectHTML()
 
-    const els = getEls();
-    if (!els.overlay || !els.modal) return;
+    const els = getEls()
+    if (!els.overlay || !els.modal) return
 
     // restore state
-    const saved = getConsent();
+    const saved = getConsent()
     if (saved) {
-      if (els.analytics) els.analytics.checked = !!saved.analytics;
-      if (els.marketing) els.marketing.checked = !!saved.marketing;
-      return; // already chosen ранее — баннер не показываем
+      if (els.analytics) els.analytics.checked = !!saved.analytics
+      if (els.marketing) els.marketing.checked = !!saved.marketing
+      return // already chosen ранее — баннер не показываем
     }
 
     // show first time
-    showConsent();
+    showConsent()
 
     // events
-    els.settingsBtn.addEventListener("click", () => openSettings());
+    els.settingsBtn.addEventListener('click', () => openSettings())
 
-    els.backBtn.addEventListener("click", () => closeSettings());
+    els.backBtn.addEventListener('click', () => closeSettings())
 
-    els.acceptAll.addEventListener("click", () => {
-      const consent = { necessary: true, analytics: true, marketing: true };
-      if (els.analytics) els.analytics.checked = true;
-      if (els.marketing) els.marketing.checked = true;
+    els.acceptAll.addEventListener('click', () => {
+      const consent = { necessary: true, analytics: true, marketing: true }
+      if (els.analytics) els.analytics.checked = true
+      if (els.marketing) els.marketing.checked = true
 
-      saveConsent(consent);
-      applyConsentNow();
-      hideConsent();
-    });
+      saveConsent(consent)
+      applyConsentNow()
+      hideConsent()
+    })
 
-    els.declineAll.addEventListener("click", () => {
-      const consent = { necessary: true, analytics: false, marketing: false };
-      if (els.analytics) els.analytics.checked = false;
-      if (els.marketing) els.marketing.checked = false;
+    els.declineAll.addEventListener('click', () => {
+      const consent = { necessary: true, analytics: false, marketing: false }
+      if (els.analytics) els.analytics.checked = false
+      if (els.marketing) els.marketing.checked = false
 
-      saveConsent(consent);
-      hideConsent();
-    });
+      saveConsent(consent)
+      hideConsent()
+    })
 
-    els.saveBtn.addEventListener("click", () => {
+    els.saveBtn.addEventListener('click', () => {
       const consent = {
         necessary: true,
         analytics: !!(els.analytics && els.analytics.checked),
-        marketing: !!(els.marketing && els.marketing.checked),
-      };
+        marketing: !!(els.marketing && els.marketing.checked)
+      }
 
-      saveConsent(consent);
+      saveConsent(consent)
 
       // если включили аналитику — грузим сразу
-      if (consent.analytics) applyConsentNow();
+      if (consent.analytics) applyConsentNow()
 
-      hideConsent();
-    });
+      hideConsent()
+    })
 
-    els.closeBtn.addEventListener("click", () => {
-      const consent = { necessary: true, analytics: false, marketing: false };
-      saveConsent(consent);
-      hideConsent();
-    });
+    els.closeBtn.addEventListener('click', () => {
+      const consent = { necessary: true, analytics: false, marketing: false }
+      saveConsent(consent)
+      hideConsent()
+    })
 
-    els.overlay.addEventListener("click", () => {
-      const consent = { necessary: true, analytics: false, marketing: false };
-      saveConsent(consent);
-      hideConsent();
-    });
+    els.overlay.addEventListener('click', () => {
+      const consent = { necessary: true, analytics: false, marketing: false }
+      saveConsent(consent)
+      hideConsent()
+    })
 
     // global open settings
     window.openCookieSettings = function () {
-      showConsent();
-      openSettings();
-    };
+      showConsent()
+      openSettings()
+    }
   }
 
-  window.addEventListener("DOMContentLoaded", init);
-})();
+  window.addEventListener('DOMContentLoaded', init)
+})()
