@@ -18,62 +18,7 @@
        2. SCHEMA.ORG (Микроразметка для SEO)
        ========================================= -->
 	<script type="application/ld+json"> { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{ "@type": "Question", "name": "С чего начать, если хочу продать квартиру?", "acceptedAnswer": { "@type": "Answer", "text": "Начните с консультации. Позвоните или напишите — мы договоримся о встрече. Я приеду, посмотрю вашу квартиру, объясню, как правильно оценить её стоимость." } }, { "@type": "Question", "name": "А вы берёте деньги с покупателя?", "acceptedAnswer": { "@type": "Answer", "text": "Если вы покупатель — платить мне ничего не нужно. Я получаю оплату от продавца, а вам помогаю бесплатно." } }, { "@type": "Question", "name": "Сколько времени занимает продажа?", "acceptedAnswer": { "@type": "Answer", "text": "По опыту — от пары недель до нескольких месяцев. Быстрее всего продаются «готовые» объекты с чистыми документами." } }] } </script>
-	<!-- =========================================
-       3. ANALYTICS & TAGS
-       ========================================= -->
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-DGB1RN0TBJ"></script>
-	<script>
-	window.dataLayer = window.dataLayer || [];
 
-	function gtag() {
-		dataLayer.push(arguments);
-	}
-	gtag('js', new Date());
-	gtag('config', 'G-DGB1RN0TBJ');
-	</script>
-	<!-- Google Tag Manager -->
-	<script>
-	(function(w, d, s, l, i) {
-		w[l] = w[l] || [];
-		w[l].push({
-			"gtm.start": new Date().getTime(),
-			event: "gtm.js"
-		});
-		var f = d.getElementsByTagName(s)[0],
-			j = d.createElement(s),
-			dl = l != "dataLayer" ? "&l=" + l : "";
-		j.async = true;
-		j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-		f.parentNode.insertBefore(j, f);
-	})(window, document, "script", "dataLayer", "GTM-WVJ6PL6L");
-	</script>
-	<!-- Yandex.Metrika counter -->
-	<script type="text/javascript">
-	(function(m, e, t, r, i, k, a) {
-		m[i] = m[i] || function() {
-			(m[i].a = m[i].a || []).push(arguments);
-		};
-		m[i].l = 1 * new Date();
-		for(var j = 0; j < document.scripts.length; j++) {
-			if(document.scripts[j].src === r) {
-				return;
-			}
-		}
-		(k = e.createElement(t)), (a = e.getElementsByTagName(t)[0]), (k.async = 1), (k.src = r), a.parentNode.insertBefore(k, a);
-	})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=105770392", "ym");
-	ym(105770392, "init", {
-		ssr: true,
-		webvisor: true,
-		clickmap: true,
-		ecommerce: "dataLayer",
-		accurateTrackBounce: true,
-		trackLinks: true,
-	});
-	</script>
-	<noscript>
-		<div><img src="https://mc.yandex.ru/watch/105770392" style="position: absolute; left: -9999px" alt="" /></div>
-	</noscript>
 	<!-- =========================================
        4. ICONS & FONTS
        ========================================= -->
@@ -100,10 +45,6 @@
 	<link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" /> </head>
 
 <body id="bg">
-	<!-- Google Tag Manager (noscript) -->
-	<noscript>
-		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVJ6PL6L" height="0" width="0" style="display: none; visibility: hidden"></iframe>
-	</noscript>
 	<div class="page-wraper">
 		<!-- =========================================
          HEADER START
@@ -349,6 +290,7 @@
 									<li><a href="/blog">Блог</a></li>
 									<li><a href="/contact">Контакты</a></li>
 									<li><a href="/Privacy">Политика конфиденциальности</a></li>
+									<li><a href="/cookies-policy">Политика использования cookies</a></li>
 								</ul>
 							</div>
 						</div>
@@ -400,6 +342,8 @@
 	<script src="js/customgpt.js" defer></script>
 	<script src="js/bgscroll.js" defer></script>
 	<script src="/js/optimize.js" defer></script>
+	<script src="/js/analytics-consent-loader.js" defer></script>
+<script src="/js/cookie-consent.js" defer></script>
 </body>
 
 </html>

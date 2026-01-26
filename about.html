@@ -1,474 +1,703 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-
-<head>
-	<!-- =========================================
+  <head>
+    <!-- =========================================
        1. META DATA & SEO
        ========================================= -->
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>О риэлтере Ольге Турко — опыт и услуги</title>
-	<meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
-	<meta name="description" content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия." />
-	<meta name="robots" content="index, follow" />
-	<!-- Canonical Link -->
-	<link rel="canonical" href="https://turko.by/about" />
-	<!-- =========================================
-       2. ANALYTICS & TAGS
-       ========================================= -->
-	<!-- Google tag (gtag.js) -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-DGB1RN0TBJ"></script>
-	<script>
-	window.dataLayer = window.dataLayer || [];
-
-	function gtag() {
-		dataLayer.push(arguments);
-	}
-	gtag("js", new Date());
-	gtag("config", "G-DGB1RN0TBJ");
-	</script>
-	<!-- Google Tag Manager -->
-	<script>
-	(function(w, d, s, l, i) {
-		w[l] = w[l] || [];
-		w[l].push({
-			"gtm.start": new Date().getTime(),
-			event: "gtm.js"
-		});
-		var f = d.getElementsByTagName(s)[0],
-			j = d.createElement(s),
-			dl = l != "dataLayer" ? "&l=" + l : "";
-		j.async = true;
-		j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-		f.parentNode.insertBefore(j, f);
-	})(window, document, "script", "dataLayer", "GTM-WVJ6PL6L");
-	</script>
-	<!-- Yandex.Metrika counter -->
-	<script type="text/javascript">
-	(function(m, e, t, r, i, k, a) {
-		m[i] = m[i] || function() {
-			(m[i].a = m[i].a || []).push(arguments);
-		};
-		m[i].l = 1 * new Date();
-		for(var j = 0; j < document.scripts.length; j++) {
-			if(document.scripts[j].src === r) {
-				return;
-			}
-		}
-		(k = e.createElement(t)), (a = e.getElementsByTagName(t)[0]), (k.async = 1), (k.src = r),
-		a.parentNode.insertBefore(k, a);
-	})(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=105770392", "ym");
-	ym(105770392, "init", {
-		ssr: true,
-		webvisor: true,
-		clickmap: true,
-		ecommerce: "dataLayer",
-		accurateTrackBounce: true,
-		trackLinks: true,
-	});
-	</script>
-	<noscript>
-		<div> <img src="https://mc.yandex.ru/watch/105770392" style="position: absolute; left: -9999px" alt="" /> </div>
-	</noscript>
-	<!-- =========================================
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>О риэлтере Ольге Турко — опыт и услуги</title>
+    <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
+    <meta
+      name="description"
+      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
+    />
+    <meta name="robots" content="index, follow" />
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://turko.by/about" />
+  
+    <!-- =========================================
        3. ICONS & FONTS
        ========================================= -->
-	<link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
-	<link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
-	<link rel="manifest" href="https://turko.by/site.webmanifest" />
-	<meta name="theme-color" content="#006064" />
-	<link rel="apple-touch-icon" href="https://turko.by/apple-touch-icon.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="https://turko.by/favicon-32x32.png" />
-	<link rel="icon" type="image/png" sizes="192x192" href="https://turko.by/web-app-manifest-192x192.png" />
-	<!-- Google Fonts -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet" />
-	<!-- =========================================
+    <link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
+    <link rel="manifest" href="https://turko.by/site.webmanifest" />
+    <meta name="theme-color" content="#006064" />
+    <link rel="apple-touch-icon" href="https://turko.by/apple-touch-icon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="https://turko.by/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="https://turko.by/web-app-manifest-192x192.png"
+    />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- =========================================
        4. STYLESHEETS (CSS)
        ========================================= -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/style-purged.css" />
-	<link rel="stylesheet" class="skin" type="text/css" href="css/skin/skin-1.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
-	<link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" /> </head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/style-purged.css" />
+    <link
+      rel="stylesheet"
+      class="skin"
+      type="text/css"
+      href="css/skin/skin-1.css"
+    />
+    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
+  </head>
 
-<body>
-	<!-- Google Tag Manager (noscript) -->
-	<noscript>
-		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVJ6PL6L" height="0" width="0" style="display: none; visibility: hidden"></iframe>
-	</noscript>
-	<div class="page-wraper">
-		<!-- =========================================
+  <body>
+    <div class="page-wraper">
+      <!-- =========================================
          HEADER START
          ========================================= -->
-		<header class="site-header nav-wide nav-transparent mobile-sider-drawer-menu">
-			<div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
-				<div class="main-bar">
-					<div class="container clearfix">
-						<!-- Logo -->
-						<div class="logo-header">
-							<div class="logo-header-inner logo-header-one">
-								<a href="/"> <img src="images/logo-light.webp" alt="logo" /> </a>
-							</div>
-						</div>
-						<!-- Mobile Toggle -->
-						<button id="mobile-side-drawer" data-target=".header-nav" data-toggle="collapse" type="button" class="navbar-toggler collapsed"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar icon-bar-first"></span> <span class="icon-bar icon-bar-two"></span> <span class="icon-bar icon-bar-three"></span> </button>
-						<!-- Navigation -->
-						<div class="header-nav nav-dark navbar-collapse collapse justify-content-start collapse">
-							<ul class="nav navbar-nav">
-								<li class="active"><a href="/">Главная</a></li>
-								<li><a href="/about">Обо мне</a></li>
-								<li><a href="/objects">Объекты</a></li>
-								<li><a href="/blog">Блог</a></li>
-								<li><a href="/faq">Вопросы</a></li>
-								<li><a href="/contact">Контакты</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</header>
-		<!-- =========================================
+      <header
+        class="site-header nav-wide nav-transparent mobile-sider-drawer-menu"
+      >
+        <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
+          <div class="main-bar">
+            <div class="container clearfix">
+              <!-- Logo -->
+              <div class="logo-header">
+                <div class="logo-header-inner logo-header-one">
+                  <a href="/">
+                    <img src="images/logo-light.webp" alt="logo" />
+                  </a>
+                </div>
+              </div>
+              <!-- Mobile Toggle -->
+              <button
+                id="mobile-side-drawer"
+                data-target=".header-nav"
+                data-toggle="collapse"
+                type="button"
+                class="navbar-toggler collapsed"
+              >
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar icon-bar-first"></span>
+                <span class="icon-bar icon-bar-two"></span>
+                <span class="icon-bar icon-bar-three"></span>
+              </button>
+              <!-- Navigation -->
+              <div
+                class="header-nav nav-dark navbar-collapse collapse justify-content-start collapse"
+              >
+                <ul class="nav navbar-nav">
+                  <li class="active"><a href="/">Главная</a></li>
+                  <li><a href="/about">Обо мне</a></li>
+                  <li><a href="/objects">Объекты</a></li>
+                  <li><a href="/blog">Блог</a></li>
+                  <li><a href="/faq">Вопросы</a></li>
+                  <li><a href="/contact">Контакты</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- =========================================
          CONTENT START
          ========================================= -->
-		<div class="page-content">
-			<!-- Inner Page Banner -->
-			<div class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center" style="background-image: url(images/banner/X.webp)">
-				<div class="container">
-					<div class="sx-bnr-inr-entry">
-						<div class="banner-title-outer">
-							<div class="banner-title-name">
-								<h2 class="m-tb0">Я помогаю переезжать красиво</h2>
-								<p> Моя история и философия работы. Я верю, что за каждой сделкой стоят не только документы, но и мечты, надежды, эмоции. Именно поэтому я всегда на вашей стороне, чтобы помочь сделать правильный выбор. </p>
-							</div>
-						</div>
-						<!-- Breadcrumb -->
-						<div>
-							<ul class="sx-breadcrumb breadcrumb-style-2">
-								<li><a href="/">Главная</a></li>
-								<li>Обо мне</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- About Company Section -->
-			<div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
-				<div class="container">
-					<div class="section-content">
-						<div class="row">
-							<div class="col-xl-6 col-lg-6 col-md-12">
-								<div class="about-home-3 m-b30 bg-white">
-									<h3 class="m-t0 m-b20 sx-tilte">
+      <div class="page-content">
+        <!-- Inner Page Banner -->
+        <div
+          class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center"
+          style="background-image: url(images/banner/X.webp)"
+        >
+          <div class="container">
+            <div class="sx-bnr-inr-entry">
+              <div class="banner-title-outer">
+                <div class="banner-title-name">
+                  <h2 class="m-tb0">Я помогаю переезжать красиво</h2>
+                  <p>
+                    Моя история и философия работы. Я верю, что за каждой
+                    сделкой стоят не только документы, но и мечты, надежды,
+                    эмоции. Именно поэтому я всегда на вашей стороне, чтобы
+                    помочь сделать правильный выбор.
+                  </p>
+                </div>
+              </div>
+              <!-- Breadcrumb -->
+              <div>
+                <ul class="sx-breadcrumb breadcrumb-style-2">
+                  <li><a href="/">Главная</a></li>
+                  <li>Обо мне</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- About Company Section -->
+        <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
+          <div class="container">
+            <div class="section-content">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                  <div class="about-home-3 m-b30 bg-white">
+                    <h3 class="m-t0 m-b20 sx-tilte">
                       Сопровождаю от первого звонка до счастливого новоселья
                     </h3>
-									<p> Здравствуйте, друзья. Меня зовут <b>Ольга Турко</b> и я - риэлтер <b><span class="hermes">ГермесГрупп</span></b> в Лиде. Для меня недвижимость — это не просто сделки и бумаги, а важный этап в жизни каждого человека. Я искренне люблю помогать своим клиентам находить не просто квартиры или дома, а уют, безопасность и комфорт для их семей. Моей главной задачей считаю сделать процесс покупки или продажи максимально простым и прозрачным, чтобы вы не чувствовали лишнего стресса и сомнений на каждом шаге. Я всегда рядом — чтобы поддержать, объяснить и найти лучшее решение именно для вас. В каждом клиенте я вижу не просто заказчика, а человека с уникальной историей и мечтой, которую мы вместе реализуем. </p>
-								</div>
-							</div>
-							<!-- Video Section -->
-							<div class="col-xl-6 col-lg-6 col-md-12">
-								<div class="video-section-full-v2">
-									<div class="video-section-full bg-no-repeat bg-cover bg-center overlay-wraper m-b30" style="background-image: url(images/video-bg.webp)">
-										<div class="overlay-main bg-black opacity-04"></div>
-										<div class="video-section-inner">
-											<div class="video-section-content">
-												<!-- Class changed to glightbox to match library -->
-												<a href="/media/video/video1.webm" class="glightbox play-now"> <i class="icon fa fa-play"></i> <span class="ripple"></span> </a>
-												<div class="video-section-bottom">
-													<h3 class="sx-title text-white">
+                    <p>
+                      Здравствуйте, друзья. Меня зовут <b>Ольга Турко</b> и я -
+                      риэлтер <b><span class="hermes">ГермесГрупп</span></b> в
+                      Лиде. Для меня недвижимость — это не просто сделки и
+                      бумаги, а важный этап в жизни каждого человека. Я искренне
+                      люблю помогать своим клиентам находить не просто квартиры
+                      или дома, а уют, безопасность и комфорт для их семей. Моей
+                      главной задачей считаю сделать процесс покупки или продажи
+                      максимально простым и прозрачным, чтобы вы не чувствовали
+                      лишнего стресса и сомнений на каждом шаге. Я всегда рядом
+                      — чтобы поддержать, объяснить и найти лучшее решение
+                      именно для вас. В каждом клиенте я вижу не просто
+                      заказчика, а человека с уникальной историей и мечтой,
+                      которую мы вместе реализуем.
+                    </p>
+                  </div>
+                </div>
+                <!-- Video Section -->
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                  <div class="video-section-full-v2">
+                    <div
+                      class="video-section-full bg-no-repeat bg-cover bg-center overlay-wraper m-b30"
+                      style="background-image: url(images/video-bg.webp)"
+                    >
+                      <div class="overlay-main bg-black opacity-04"></div>
+                      <div class="video-section-inner">
+                        <div class="video-section-content">
+                          <!-- Class changed to glightbox to match library -->
+                          <a
+                            href="/media/video/video1.webm"
+                            class="glightbox play-now"
+                          >
+                            <i class="icon fa fa-play"></i>
+                            <span class="ripple"></span>
+                          </a>
+                          <div class="video-section-bottom">
+                            <h3 class="sx-title text-white">
                               87<br />
                               успешных сделок
-                            </h3> </div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Services / What We Do -->
-			<div class="section-full mobile-page-padding bg-white p-t80 p-b50 bg-repeat overflow-hide" style="background-image: url(images/background/cross-line2.png)">
-				<div class="container">
-					<!-- Title -->
-					<div class="section-head">
-						<div class="sx-separator-outer separator-center">
-							<div class="sx-separator bg-white bg-moving bg-repeat-x" style="
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Services / What We Do -->
+        <div
+          class="section-full mobile-page-padding bg-white p-t80 p-b50 bg-repeat overflow-hide"
+          style="background-image: url(images/background/cross-line2.png)"
+        >
+          <div class="container">
+            <!-- Title -->
+            <div class="section-head">
+              <div class="sx-separator-outer separator-center">
+                <div
+                  class="sx-separator bg-white bg-moving bg-repeat-x"
+                  style="
                     background-image: url(images/background/cross-line2.png);
-                  ">
-								<h3 class="sep-line-one">Помощь на каждом шаге</h3> </div>
-						</div>
-					</div>
-					<!-- Services Grid -->
-					<div class="section-content">
-						<div class="row number-block-three-outer justify-content-center">
-							<!-- Service 1 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/1.webp" alt="Бесплатная оценка стоимости квартиры" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                  "
+                >
+                  <h3 class="sep-line-one">Помощь на каждом шаге</h3>
+                </div>
+              </div>
+            </div>
+            <!-- Services Grid -->
+            <div class="section-content">
+              <div class="row number-block-three-outer justify-content-center">
+                <!-- Service 1 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/1.webp"
+                        alt="Бесплатная оценка стоимости квартиры"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Бесплатная оценка недвижимости</a
                         >
                       </h4>
-										<div class="figcaption-number animate-top-content"> <span>01</span> </div>
-									</div>
-								</div>
-							</div>
-							<!-- Service 2 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/2.webp" alt="Сбор и оформление документов на квартиру" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                      <div class="figcaption-number animate-top-content">
+                        <span>01</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Service 2 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/2.webp"
+                        alt="Сбор и оформление документов на квартиру"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Подготовка и оформление документов</a
                         >
                       </h4>
-										<div class="figcaption-number text-black animate-top-content"> <span>02</span> </div>
-									</div>
-								</div>
-							</div>
-							<!-- Service 3 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/3.webp" alt="Подбор вариантов жилья под запрос" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                      <div
+                        class="figcaption-number text-black animate-top-content"
+                      >
+                        <span>02</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Service 3 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/3.webp"
+                        alt="Подбор вариантов жилья под запрос"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Подбор жилья с учётом ваших запросов</a
                         >
                       </h4>
-										<div class="figcaption-number text-black animate-top-content"> <span>03</span> </div>
-									</div>
-								</div>
-							</div>
-							<!-- Service 4 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/4.webp" alt="Юридическая проверка чистоты сделки" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                      <div
+                        class="figcaption-number text-black animate-top-content"
+                      >
+                        <span>03</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Service 4 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/4.webp"
+                        alt="Юридическая проверка чистоты сделки"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Юридическая проверка недвижимости</a
                         >
                       </h4>
-										<div class="figcaption-number text-black animate-top-content"> <span>04</span> </div>
-									</div>
-								</div>
-							</div>
-							<!-- Service 5 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/5.webp" alt="Ведение переговоров о цене недвижимости" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                      <div
+                        class="figcaption-number text-black animate-top-content"
+                      >
+                        <span>04</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Service 5 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/5.webp"
+                        alt="Ведение переговоров о цене недвижимости"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Ведение переговоров для выгодных условий</a
                         >
                       </h4>
-										<div class="figcaption-number text-black animate-top-content"> <span>05</span> </div>
-									</div>
-								</div>
-							</div>
-							<!-- Service 6 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/6.webp" alt="Помощь с ипотекой и кредитами на жилье" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                      <div
+                        class="figcaption-number text-black animate-top-content"
+                      >
+                        <span>05</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Service 6 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/6.webp"
+                        alt="Помощь с ипотекой и кредитами на жилье"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Консультации по кредитам и помощь с банками</a
                         >
                       </h4>
-										<div class="figcaption-number text-black animate-top-content"> <span>06</span> </div>
-									</div>
-								</div>
-							</div>
-							<!-- Service 7 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/7.webp" alt="Сопровождение сделки в БТИ" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                      <div
+                        class="figcaption-number text-black animate-top-content"
+                      >
+                        <span>06</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Service 7 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/7.webp"
+                        alt="Сопровождение сделки в БТИ"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Полное сопровождение сделки до регистрации</a
                         >
                       </h4>
-										<div class="figcaption-number animate-top-content"> <span>07</span> </div>
-									</div>
-								</div>
-							</div>
-							<!-- Service 8 -->
-							<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
-								<div class="number-block-three slide-ani-top">
-									<div class="sx-media"> <img loading="lazy" src="images/services/service-projects/8.webp" alt="Консультации риэлтера" /> </div>
-									<div class="figcaption bg-gray p-a30">
-										<h4 class="m-tb0">
+                      <div class="figcaption-number animate-top-content">
+                        <span>07</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Service 8 -->
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 m-b30">
+                  <div class="number-block-three slide-ani-top">
+                    <div class="sx-media">
+                      <img
+                        loading="lazy"
+                        src="images/services/service-projects/8.webp"
+                        alt="Консультации риэлтера"
+                      />
+                    </div>
+                    <div class="figcaption bg-gray p-a30">
+                      <h4 class="m-tb0">
                         <a href="#" onclick="return false;"
                           >Поддержка и консультации на всех этапах сделки</a
                         >
                       </h4>
-										<div class="figcaption-number text-black animate-top-content"> <span>08</span> </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Counter Section -->
-			<div class="section-full overlay-wraper sx-bg-secondry mobile-page-padding p-t80 p-b50 bg-parallax ml-auto" data-stellar-background-ratio="0.5" style="background-image: url(images/background/bg-1.webp)">
-				<div class="overlay-main bg-black opacity-05"></div>
-				<div class="container">
-					<div class="section-content">
-						<div class="counter-blocks">
-							<div class="row">
-								<div class="col-xl-3 col-md-6 m-b30">
-									<div class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30" style="background-image: url(images/background/bg-5.png)">
-										<h2 class="m-t0 sx-text-primary text-right">
+                      <div
+                        class="figcaption-number text-black animate-top-content"
+                      >
+                        <span>08</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Counter Section -->
+        <div
+          class="section-full overlay-wraper sx-bg-secondry mobile-page-padding p-t80 p-b50 bg-parallax ml-auto"
+          data-stellar-background-ratio="0.5"
+          style="background-image: url(images/background/bg-1.webp)"
+        >
+          <div class="overlay-main bg-black opacity-05"></div>
+          <div class="container">
+            <div class="section-content">
+              <div class="counter-blocks">
+                <div class="row">
+                  <div class="col-xl-3 col-md-6 m-b30">
+                    <div
+                      class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30"
+                      style="background-image: url(images/background/bg-5.png)"
+                    >
+                      <h2 class="m-t0 sx-text-primary text-right">
                         <span class="counter">2</span>
                       </h2>
-										<h4 class="m-b0">Опыт работы риэлтером</h4> </div>
-								</div>
-								<div class="col-xl-3 col-md-6 m-b30">
-									<div class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30" style="background-image: url(images/background/bg-5.png)">
-										<h2 class="m-t0 sx-text-primary text-right">
+                      <h4 class="m-b0">Опыт работы риэлтером</h4>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-md-6 m-b30">
+                    <div
+                      class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30"
+                      style="background-image: url(images/background/bg-5.png)"
+                    >
+                      <h2 class="m-t0 sx-text-primary text-right">
                         <span class="counter">87</span>
                       </h2>
-										<h4 class="m-b0">Завершенных сделок</h4> </div>
-								</div>
-								<div class="col-xl-3 col-md-6 m-b30">
-									<div class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30" style="background-image: url(images/background/bg-5.png)">
-										<h2 class="m-t0 sx-text-primary text-right">
+                      <h4 class="m-b0">Завершенных сделок</h4>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-md-6 m-b30">
+                    <div
+                      class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30"
+                      style="background-image: url(images/background/bg-5.png)"
+                    >
+                      <h2 class="m-t0 sx-text-primary text-right">
                         <span class="counter">86</span>%
                       </h2>
-										<h4 class="m-b0">Клиентов меня рекомендуют</h4> </div>
-								</div>
-								<div class="col-xl-3 col-md-6 m-b30">
-									<div class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30" style="background-image: url(images/background/bg-5.png)">
-										<h2 class="m-t0 sx-text-primary text-right">
+                      <h4 class="m-b0">Клиентов меня рекомендуют</h4>
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-md-6 m-b30">
+                    <div
+                      class="sx-count text-white sx-icon-box-wraper bg-repeat p-a30"
+                      style="background-image: url(images/background/bg-5.png)"
+                    >
+                      <h2 class="m-t0 sx-text-primary text-right">
                         <span class="counter">20</span>
                       </h2>
-										<h4 class="m-b0">Средний срок продажи объекта</h4> </div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- Our Clients / Partners -->
-			<div class="section-full mobile-page-padding bg-gray p-t80 p-b50 bg-repeat" style="background-image: url(images/background/bg-12.webp)">
-				<div class="container">
-					<!-- Title -->
-					<div class="section-head">
-						<div class="sx-separator-outer separator-left">
-							<div class="sx-separator bg-white bg-moving bg-repeat-x" style="
+                      <h4 class="m-b0">Средний срок продажи объекта</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Our Clients / Partners -->
+        <div
+          class="section-full mobile-page-padding bg-gray p-t80 p-b50 bg-repeat"
+          style="background-image: url(images/background/bg-12.webp)"
+        >
+          <div class="container">
+            <!-- Title -->
+            <div class="section-head">
+              <div class="sx-separator-outer separator-left">
+                <div
+                  class="sx-separator bg-white bg-moving bg-repeat-x"
+                  style="
                     background-image: url(images/background/cross-line2.png);
-                  ">
-								<h3 class="sep-line-one">Клиенты — сердце моей работы</h3> </div>
-						</div>
-					</div>
-					<div class="section-content">
-						<div class="client-grid">
-							<div class="row justify-content-center">
-								<!-- Logos with fixed security attributes and alt tags -->
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://bgs.by" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img loading="lazy" src="images/client-logo/logo1.webp" alt="Белагропромбанк" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://domovita.by" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img loading="lazy" src="images/client-logo/logo2.webp" alt="Портал Domovita.by" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://realt.by" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img loading="lazy" src="images/client-logo/logo3.webp" alt="Портал Realt.by" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://lidapark.by" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img loading="lazy" src="images/client-logo/logo4.webp" alt="Лида Парк" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://www.hata.by" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img loading="lazy" src="images/client-logo/logo5.webp" alt="Портал Hata.by" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://www.youtube.com/channel/UCx0KnzgvJPPeAJCES53ct9g" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img loading="lazy" src="images/client-logo/logo6.webp" alt="YouTube канал Лида ТВ" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://www.kufar.by" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img src="images/client-logo/logo7.webp" alt="Kufar Недвижимость" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-								<div class="col-lg-3 col-md-4 col-sm-6 m-b30">
-									<a href="https://www.onliner.by" target="_blank" rel="noopener noreferrer" class="client-logo-pic"> <img src="images/client-logo/logo9.webp" alt="Onliner Недвижимость" />
-										<div><span>Перейти на сайт</span></div>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="hilite-title text-left p-l50 text-uppercase"> <strong>Клиенты</strong> </div>
-			</div>
-			<!-- Our Clients End -->
-		</div>
-		<!-- CONTENT END -->
-		<!-- =========================================
+                  "
+                >
+                  <h3 class="sep-line-one">Клиенты — сердце моей работы</h3>
+                </div>
+              </div>
+            </div>
+            <div class="section-content">
+              <div class="client-grid">
+                <div class="row justify-content-center">
+                  <!-- Logos with fixed security attributes and alt tags -->
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://bgs.by"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        loading="lazy"
+                        src="images/client-logo/logo1.webp"
+                        alt="Белагропромбанк"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://domovita.by"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        loading="lazy"
+                        src="images/client-logo/logo2.webp"
+                        alt="Портал Domovita.by"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://realt.by"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        loading="lazy"
+                        src="images/client-logo/logo3.webp"
+                        alt="Портал Realt.by"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://lidapark.by"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        loading="lazy"
+                        src="images/client-logo/logo4.webp"
+                        alt="Лида Парк"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://www.hata.by"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        loading="lazy"
+                        src="images/client-logo/logo5.webp"
+                        alt="Портал Hata.by"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://www.youtube.com/channel/UCx0KnzgvJPPeAJCES53ct9g"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        loading="lazy"
+                        src="images/client-logo/logo6.webp"
+                        alt="YouTube канал Лида ТВ"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://www.kufar.by"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        src="images/client-logo/logo7.webp"
+                        alt="Kufar Недвижимость"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 m-b30">
+                    <a
+                      href="https://www.onliner.by"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="client-logo-pic"
+                    >
+                      <img
+                        src="images/client-logo/logo9.webp"
+                        alt="Onliner Недвижимость"
+                      />
+                      <div><span>Перейти на сайт</span></div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hilite-title text-left p-l50 text-uppercase">
+            <strong>Клиенты</strong>
+          </div>
+        </div>
+        <!-- Our Clients End -->
+      </div>
+      <!-- CONTENT END -->
+      <!-- =========================================
          FOOTER START
          ========================================= -->
-		<footer class="site-footer footer-large footer-dark footer-wide">
-			<div class="footer-top overlay-wraper">
-				<div class="overlay-main"></div>
-				<div class="container">
-					<div class="row">
-						<!-- About Widget -->
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="widget widget_about">
-								<div class="logo-footer clearfix p-b15">
-									<a href="/"><img src="images/logo-light.webp" alt="logo" /></a>
-								</div>
-								<p> <b>Найти квартиру — легко. Найти свою — искусство.</b>
-									<br />Я подбираю не абстрактные “варианты”, а то самое жильё, где совпадают цена, планировка, настроение и ощущение “вот тут — моё”. </p>
-								<ul class="social-icons sx-social-links">
-									<li>
-										<a href="viber://chat?number=%2B375291809516" target="_blank" rel="noopener noreferrer" class="fa-brands fa-viber"></a>
-									</li>
-									<li>
-										<a href="https://www.tiktok.com/@rieltor_olga_lida" target="_blank" rel="noopener noreferrer" class="fab fa-tiktok"></a>
-									</li>
-									<li>
-										<a href="https://t.me/TurkoOlga" target="_blank" rel="noopener noreferrer" class="fa-brands fa-telegram"></a>
-									</li>
-									<li>
-										<a href="https://www.instagram.com/rielter_olga_lida" target="_blank" rel="noopener noreferrer" class="fa-brands fa-square-instagram"></a>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<!-- Recent Posts Widget -->
-						<div class="col-lg-3 col-md-6 col-sm-6">
-							<div class="widget recent-posts-entry-date">
-								<h5 class="widget-title">Посты в блоге</h5>
-								<div class="widget-post-bx">
-									<div class="widget-post clearfix">
-										<div class="sx-post-date text-center text-uppercase text-white"> <strong class="p-date">20</strong
+      <footer class="site-footer footer-large footer-dark footer-wide">
+        <div class="footer-top overlay-wraper">
+          <div class="overlay-main"></div>
+          <div class="container">
+            <div class="row">
+              <!-- About Widget -->
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="widget widget_about">
+                  <div class="logo-footer clearfix p-b15">
+                    <a href="/"
+                      ><img src="images/logo-light.webp" alt="logo"
+                    /></a>
+                  </div>
+                  <p>
+                    <b>Найти квартиру — легко. Найти свою — искусство.</b>
+                    <br />Я подбираю не абстрактные “варианты”, а то самое
+                    жильё, где совпадают цена, планировка, настроение и ощущение
+                    “вот тут — моё”.
+                  </p>
+                  <ul class="social-icons sx-social-links">
+                    <li>
+                      <a
+                        href="viber://chat?number=%2B375291809516"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fa-brands fa-viber"
+                      ></a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.tiktok.com/@rieltor_olga_lida"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fab fa-tiktok"
+                      ></a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://t.me/TurkoOlga"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fa-brands fa-telegram"
+                      ></a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.instagram.com/rielter_olga_lida"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="fa-brands fa-square-instagram"
+                      ></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- Recent Posts Widget -->
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="widget recent-posts-entry-date">
+                  <h5 class="widget-title">Посты в блоге</h5>
+                  <div class="widget-post-bx">
+                    <div class="widget-post clearfix">
+                      <div
+                        class="sx-post-date text-center text-uppercase text-white"
+                      >
+                        <strong class="p-date">20</strong
                         ><span class="p-month">Окт</span
                         ><span class="p-year">2025</span>
                       </div>
@@ -564,6 +793,7 @@
                     <li><a href="/blog">Блог</a></li>
                     <li><a href="/contact">Контакты</a></li>
                     <li><a href="/Privacy">Политика конфиденциальности</a></li>
+					<li><a href="/cookies-policy">Политика использования cookies</a></li>
                   </ul>
                 </div>
               </div>
@@ -632,10 +862,12 @@
        JAVASCRIPT FILES
        ========================================= -->
     <script src="js/jquery-3.7.1.min.js"></script>
-      <script src="js/owl.carousel.min.js" defer></script>
+    <script src="js/owl.carousel.min.js" defer></script>
     <script src="js/jquery.owl-filter.js" defer></script>
     <script src="js/customgpt.js" defer></script>
-    <script src="js/bgscroll.js"  defer></script>
-<script src="/js/optimize.js" defer></script>
+    <script src="js/bgscroll.js" defer></script>
+    <script src="/js/optimize.js" defer></script>
+    <script src="/js/analytics-consent-loader.js" defer></script>
+    <script src="/js/cookie-consent.js" defer></script>
   </body>
 </html>
