@@ -105,29 +105,29 @@
     <!-- ==============================================
          QFORM (forms)
   =============================================== -->
-<script>
-(function () {
-  function init() {
-    if (window.__qform_loaded) return;
-    window.__qform_loaded = true;
+    <script>
+      (function () {
+        function init() {
+          if (window.__qform_loaded) return;
+          window.__qform_loaded = true;
 
-    var scr = document.createElement("script");
-    scr.type = "text/javascript";
-    scr.async = true;
-    scr.src = "https://cdn.qform.io/forms.js?v=" + Date.now();
-    scr.charset = "UTF-8";
+          var scr = document.createElement("script");
+          scr.type = "text/javascript";
+          scr.async = true;
+          scr.src = "https://cdn.qform.io/forms.js?v=" + Date.now();
+          scr.charset = "UTF-8";
 
-    var scrInsert = document.getElementsByTagName("script")[0];
-    scrInsert.parentNode.insertBefore(scr, scrInsert);
-  }
+          var scrInsert = document.getElementsByTagName("script")[0];
+          scrInsert.parentNode.insertBefore(scr, scrInsert);
+        }
 
-  if (document.readyState === "complete") {
-    init();
-  } else {
-    window.addEventListener("load", init);
-  }
-})();
-</script>
+        if (document.readyState === "complete") {
+          init();
+        } else {
+          window.addEventListener("load", init);
+        }
+      })();
+    </script>
 
     <!-- ==============================================
          Messenger Widget
@@ -1825,7 +1825,11 @@
                     <li><a href="/blog">Блог</a></li>
                     <li><a href="/contact">Контакты</a></li>
                     <li><a href="/Privacy">Политика конфиденциальности</a></li>
-					 <li><a href="/cookies-policy">Политика использования cookies</a></li>
+                    <li>
+                      <a href="/cookies-policy"
+                        >Политика использования cookies</a
+                      >
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -1924,10 +1928,7 @@
           <p class="cookie-desc">
             Мы используем cookies для корректной работы сайта и аналитики. Вы
             можете принять все cookies или настроить категории.
-            <a
-              href="/cookies-policy"
-              target="_blank"
-              rel="noopener noreferrer"
+            <a href="/cookies-policy" target="_blank" rel="noopener noreferrer"
               >Подробнее</a
             >
           </p>
