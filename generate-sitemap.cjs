@@ -1,13 +1,13 @@
 // generate-sitemap.js
 // Генерация sitemap.xml из objects.json
-// Запуск: node generate-sitemap.js
+// Запуск: node generate-sitemap.cjs
 
 const fs = require("fs");
 const path = require("path");
 
 const SITE_URL = "https://turko.by";
 
-// путь к твоему JSON (поменяй если у тебя другой)
+
 const OBJECTS_JSON_PATH = path.join(__dirname, "data", "objects.json");
 
 // куда сохранить sitemap
@@ -15,7 +15,6 @@ const OUTPUT_SITEMAP_PATH = path.join(__dirname, "sitemap.xml");
 
 // какой URL у страницы объекта (канонический)
 function buildObjectUrl(slug) {
-  // если у тебя редирект на /object-detail без .html — оставляем так
   return `${SITE_URL}/object-detail?slug=${encodeURIComponent(slug)}`;
 }
 
