@@ -1,105 +1,94 @@
-# ----------------------------------------------------------------------
-# 1. БАЗОВЫЕ НАСТРОЙКИ
-# ----------------------------------------------------------------------
+# =================================================
+# .htaccess — turko.by
+# Canonical: https://turko.by
+# Google + Yandex friendly
+# =================================================
+
+# -------------------------------------------------
+# BASIC
+# -------------------------------------------------
 AddDefaultCharset UTF-8
 Options -Indexes
-Options +FollowSymLinks
 
+# -------------------------------------------------
+# MIME TYPES
+# -------------------------------------------------
+<IfModule mod_mime.c>
+  AddType image/x-icon .ico
+  AddType image/png .png
+  AddType image/svg+xml .svg
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+# -------------------------------------------------
+# ENABLE REWRITE
+# -------------------------------------------------
 RewriteEngine On
-RewriteBase /
 
-AddType font/woff2 .woff2
-AddType font/woff .woff
-AddType application/vnd.ms-fontobject .eot
-AddType font/ttf .ttf
-AddType font/otf .otf
-AddType image/svg+xml .svg
+# -------------------------------------------------
+# CANONICAL DOMAIN (ONE RULE, NO CHAINS)
+# -------------------------------------------------
+RewriteCond %{HTTP_HOST} !^turko\.by$ [NC,OR]
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://turko.by/$1 [L,R=301]
 
-# ----------------------------------------------------------------------
-# 2. КАНОНИЧЕСКИЕ РЕДИРЕКТЫ (СТРОГИЙ ПОРЯДОК)
-# ----------------------------------------------------------------------
+# -------------------------------------------------
+# REMOVE index.html
+# -------------------------------------------------
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+RewriteRule ^(.*/)?index\.html$ https://turko.by/$1 [R=301,L]
 
-# HTTP -> HTTPS
-RewriteCond %{HTTPS} off [OR]
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
-RewriteRule ^(.*)$ https://turko.by/$1 [R=301,L]
+# -------------------------------------------------
+# TRAILING SLASH FOR DIRECTORIES ONLY
+# -------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule ^(.+)$ https://turko.by/$1/ [R=301,L]
 
-# WWW -> NON-WWW
-RewriteCond %{HTTP_HOST} ^www\.turko\.by [NC]
-RewriteRule ^(.*)$ https://turko.by/$1 [R=301,L]
-
-# index и / -> /
-RewriteCond %{THE_REQUEST} \s/+index(?:\.html)?[\s?] [NC]
-RewriteRule ^index(?:\.html)?$ https://turko.by/ [R=301,L]
-
-# Убираем слеш в конце URL
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)/$ https://turko.by/$1 [R=301,L]
-
-# ----------------------------------------------------------------------
-# 3. УБИРАЕМ .HTML / .PHP ИЗ URL ВЕЗДЕ
-# ----------------------------------------------------------------------
-
-# Внешний редирект: /page.html -> /page
-RewriteCond %{THE_REQUEST} \s/+([^.]+)\.(html|php)[\s?] [NC]
-RewriteRule ^([^.]+)\.(html|php)$ https://turko.by/%1 [R=301,L]
-
-# Внутренний маппинг: /page -> /page.php
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.+)$ $1.php [L]
-
-# Внутренний маппинг: /page -> /page.html
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.+)$ $1.html [L]
-
-# ----------------------------------------------------------------------
-# 4. СТРАНИЦА 404
-# ----------------------------------------------------------------------
-ErrorDocument 404 /error-404.html
-
-# ----------------------------------------------------------------------
-# 5. GZIP
-# ----------------------------------------------------------------------
+# -------------------------------------------------
+# GZIP COMPRESSION (SAFE VERSION)
+# -------------------------------------------------
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
-    AddOutputFilterByType DEFLATE application/javascript application/x-javascript text/javascript
-    AddOutputFilterByType DEFLATE application/json application/xml application/xhtml+xml application/rss+xml
-    AddOutputFilterByType DEFLATE image/svg+xml image/x-icon
-    AddOutputFilterByType DEFLATE application/font-woff application/font-woff2
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/woff
+  AddOutputFilterByType DEFLATE font/woff2
+
+  # Avoid double compression
+  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico|webp|avif|mp4|pdf)$ no-gzip
 </IfModule>
 
-# ----------------------------------------------------------------------
-# 6. КЭШИРОВАНИЕ
-# ----------------------------------------------------------------------
+# -------------------------------------------------
+# SECURITY HEADERS
+# -------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# -------------------------------------------------
+# CACHE CONTROL
+# -------------------------------------------------
 <IfModule mod_expires.c>
-    ExpiresActive On
-
-    ExpiresByType text/html "access plus 0 seconds"
-    ExpiresByType text/php "access plus 0 seconds"
-
-    ExpiresByType image/jpeg "access plus 1 day"
-    ExpiresByType image/png "access plus 1 day"
-    ExpiresByType image/webp "access plus 1 day"
-    ExpiresByType image/svg+xml "access plus 1 day"
-    ExpiresByType font/woff2 "access plus 1 day"
-
-    ExpiresByType application/javascript "access plus 1 day"
+  ExpiresActive On
+  ExpiresByType image/x-icon "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
 </IfModule>
 
-<FilesMatch "\.(html|php)$">
-    FileETag None
-    <IfModule mod_headers.c>
-        Header set Cache-Control "no-store, no-cache, must-revalidate"
-        Header set Pragma "no-cache"
-    </IfModule>
-</FilesMatch>
-
-# ----------------------------------------------------------------------
-# 7. ЗАЩИТА СИСТЕМНЫХ ФАЙЛОВ
-# ----------------------------------------------------------------------
-<FilesMatch "(^\.|^composer\.json|package\.json|\.env)">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
+# -------------------------------------------------
+# CUSTOM ERRORS
+# -------------------------------------------------
+ErrorDocument 404 /404.html
+ErrorDocument 403 /403.html
