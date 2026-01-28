@@ -1,36 +1,23 @@
 # =================================================
-# .htaccess — turko.by
-# Canonical: https://turko.by
-# Google + Yandex friendly
+# .htaccess — turko.by (SAFE & SEO)
 # =================================================
 
-# -------------------------------------------------
-# BASIC
-# -------------------------------------------------
 AddDefaultCharset UTF-8
 Options -Indexes
 
-# -------------------------------------------------
-# MIME TYPES
-# -------------------------------------------------
-<IfModule mod_mime.c>
-  AddType image/x-icon .ico
-  AddType image/png .png
-  AddType image/svg+xml .svg
-  AddType application/manifest+json .webmanifest
-</IfModule>
-
-# -------------------------------------------------
-# ENABLE REWRITE
-# -------------------------------------------------
 RewriteEngine On
 
 # -------------------------------------------------
-# CANONICAL DOMAIN (ONE RULE, NO CHAINS)
+# FORCE HTTPS
 # -------------------------------------------------
-RewriteCond %{HTTP_HOST} !^turko\.by$ [NC,OR]
 RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://turko.by/$1 [L,R=301]
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# -------------------------------------------------
+# CANONICAL DOMAIN
+# -------------------------------------------------
+RewriteCond %{HTTP_HOST} !^turko\.by$ [NC]
+RewriteRule ^ https://turko.by%{REQUEST_URI} [R=301,L]
 
 # -------------------------------------------------
 # REMOVE index.html
@@ -39,15 +26,7 @@ RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
 RewriteRule ^(.*/)?index\.html$ https://turko.by/$1 [R=301,L]
 
 # -------------------------------------------------
-# TRAILING SLASH FOR DIRECTORIES ONLY
-# -------------------------------------------------
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteCond %{REQUEST_URI} !/$
-RewriteRule ^(.+)$ https://turko.by/$1/ [R=301,L]
-
-
-# -------------------------------------------------
-# PRETTY URLS (.html without extension)
+# PRETTY URLS (.html)
 # -------------------------------------------------
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -55,49 +34,14 @@ RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+)$ $1.html [L]
 
 # -------------------------------------------------
-# GZIP COMPRESSION (SAFE VERSION)
+# GZIP
 # -------------------------------------------------
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html
-  AddOutputFilterByType DEFLATE text/css
-  AddOutputFilterByType DEFLATE application/javascript
-  AddOutputFilterByType DEFLATE application/json
-  AddOutputFilterByType DEFLATE image/svg+xml
-  AddOutputFilterByType DEFLATE application/xml
-  AddOutputFilterByType DEFLATE text/xml
-  AddOutputFilterByType DEFLATE font/ttf
-  AddOutputFilterByType DEFLATE font/otf
-  AddOutputFilterByType DEFLATE font/woff
-  AddOutputFilterByType DEFLATE font/woff2
-
-  # Avoid double compression
-  SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico|webp|avif|mp4|pdf)$ no-gzip
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
 </IfModule>
 
 # -------------------------------------------------
-# SECURITY HEADERS
-# -------------------------------------------------
-<IfModule mod_headers.c>
-  Header always set X-Content-Type-Options "nosniff"
-  Header always set X-Frame-Options "SAMEORIGIN"
-  Header always set X-XSS-Protection "1; mode=block"
-  Header always set Referrer-Policy "strict-origin-when-cross-origin"
-</IfModule>
-
-# -------------------------------------------------
-# CACHE CONTROL
-# -------------------------------------------------
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType image/x-icon "access plus 30 days"
-  ExpiresByType image/png "access plus 30 days"
-  ExpiresByType image/svg+xml "access plus 30 days"
-  ExpiresByType text/css "access plus 7 days"
-  ExpiresByType application/javascript "access plus 7 days"
-</IfModule>
-
-# -------------------------------------------------
-# CUSTOM ERRORS
+# ERRORS
 # -------------------------------------------------
 ErrorDocument 404 /404.html
 ErrorDocument 403 /403.html
