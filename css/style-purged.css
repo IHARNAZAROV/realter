@@ -4357,11 +4357,8 @@ button.scroltop span {
   touch-action: pan-y;
   will-change: transform;
   z-index: 2;
-
-  background-image: url("i");
   background-size: cover;
   background-position: center;
-
   transform: translateX(100%);
   transition: transform 0.45s ease-in-out;
 }
