@@ -4978,3 +4978,386 @@ body {
     opacity: 1;
   }
 }
+
+/* ===============================
+   BLOG DETAIL – TYPOGRAPHY
+   =============================== */
+
+.blog-detail .sx-post-title h3 {
+  font-size: 32px;
+  line-height: 1.3;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.blog-detail .sx-post-text {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #23252d;
+}
+
+/* Абзацы */
+.blog-detail .sx-post-text p {
+  margin-bottom: 20px;
+  font-size: 17px;
+  line-height: 1.85;
+  color: #23252d;
+}
+
+/* Акцентные фразы (через :first-child) */
+.blog-detail .sx-post-text p:first-child {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* ===============================
+   LISTS
+   =============================== */
+
+.blog-detail .sx-post-text h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 35px 0 15px;
+}
+
+.blog-detail .sx-post-text ul {
+  padding-left: 0;
+  margin-bottom: 30px;
+}
+
+.blog-detail .sx-post-text ul li {
+  list-style: none;
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Кастомный маркер списка */
+.blog-detail .sx-post-text ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #c29b5c; /* премиальный акцент */
+  font-weight: 600;
+}
+
+/* ===============================
+   PREMIUM BLOCKQUOTE – MAIN ACCENT #155945
+   =============================== */
+
+blockquote.author-quote {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(21, 89, 69, 0.06) 0%,
+    #ffffff 100%
+  );
+  border-left: 4px solid #155945;
+  padding: 36px 46px 36px 88px;
+  margin: 55px 0;
+  box-shadow: 0 18px 40px rgba(21, 89, 69, 0.08);
+}
+
+/* Декоративный световой акцент */
+blockquote.author-quote::after {
+  content: "";
+  position: absolute;
+  bottom: 22px;
+  right: 22px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(
+    circle,
+    rgba(21, 89, 69, 0.18) 0%,
+    rgba(21, 89, 69, 0) 70%
+  );
+  pointer-events: none;
+}
+
+/* Текст цитаты */
+blockquote.author-quote p {
+  font-size: 24px;
+  line-height: 1.65;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #1f2f2a;
+  letter-spacing: 0.2px;
+}
+
+/* Блок автора */
+blockquote.author-quote .p-t15 {
+  padding-top: 0;
+}
+
+/* Имя */
+blockquote.author-quote strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #155945;
+}
+
+/* Роль */
+blockquote.author-quote span {
+  display: block;
+  font-size: 13px;
+  color: #5f7f75;
+  letter-spacing: 0.3px;
+}
+
+/* Кавычки */
+blockquote.author-quote .fa-quote-left {
+  position: absolute;
+  top: 26px;
+  left: 26px;
+  font-size: 40px;
+  color: #155945;
+  opacity: 0.25;
+}
+
+/* ===============================
+   HOVER (DESKTOP)
+   =============================== */
+
+@media (hover: hover) {
+  blockquote.author-quote {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  blockquote.author-quote:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 24px 55px rgba(21, 89, 69, 0.12);
+  }
+}
+
+/* ===============================
+   MOBILE REFINEMENT
+   =============================== */
+
+@media only screen and (max-width: 640px) {
+  blockquote.author-quote {
+    padding: 30px 26px 30px 56px;
+    margin: 42px 0;
+  }
+
+  blockquote.author-quote p {
+    font-size: 19px;
+    line-height: 1.6;
+  }
+
+  blockquote.author-quote .fa-quote-left {
+    font-size: 22px;
+    top: 20px;
+    left: 18px;
+  }
+}
+
+
+
+/* ===============================
+   INSTAGRAM BLOCK — HARD FIX
+   =============================== */
+
+.blog-post .instagram-related-post {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: 28px;
+}
+
+/* Левая колонка — картинка */
+.blog-post .instagram-media {
+  flex: 0 0 auto;
+}
+
+.blog-post .instagram-media img {
+  width: 140px !important;
+  max-width: 140px !important;
+  height: auto;
+  display: block;
+}
+
+/* Правая колонка — текст */
+.blog-post .instagram-related-content {
+  flex: 1 1 auto;
+  width: auto !important;
+}
+
+/* Текст поста */
+.blog-post .instagram-related-content p {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+/* ===============================
+   MOBILE — STACK
+   =============================== */
+
+@media (max-width: 640px) {
+  .blog-post .instagram-related-post {
+    flex-direction: column !important;
+  }
+
+  .blog-post .instagram-media img {
+    width: 100% !important;
+    max-width: 260px !important;
+  }
+}
+/* ===============================
+   INSTAGRAM CARD — HOVER EFFECT
+   =============================== */
+
+.blog-post .instagram-related-post {
+  position: relative;
+  background: #f7f9f8;
+  border-left: 4px solid #155945;
+  padding: 28px;
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s ease,
+    background 0.35s ease;
+}
+
+/* Hover — эффект карточки */
+@media (hover: hover) {
+  .blog-post .instagram-related-post:hover {
+    background: #ffffff;
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(21, 89, 69, 0.15);
+  }
+
+  /* Картинка — лёгкое приближение */
+  .blog-post .instagram-related-post:hover img {
+    transform: scale(1.03);
+  }
+}
+
+/* Плавность картинки */
+.blog-post .instagram-media img {
+  transition: transform 0.35s ease;
+}
+
+/* ===============================
+   INSTAGRAM CARD — FULL CLICK
+   =============================== */
+
+.blog-post .instagram-related-post {
+  position: relative;
+  display: flex !important;
+  gap: 28px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+/* Оверлей-ссылка */
+.instagram-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  text-indent: -9999px;
+}
+
+/* Контент выше фона, но ниже ссылки */
+.instagram-related-post > *:not(.instagram-card-link) {
+  position: relative;
+  z-index: 2;
+}
+
+/* ===============================
+   INSTAGRAM CARD — TEXT HOVER
+   =============================== */
+
+.blog-post .instagram-related-post p {
+  transition: color 0.3s ease;
+}
+
+@media (hover: hover) {
+  .blog-post .instagram-related-post:hover p {
+    color: #155945;
+  }
+}
+
+/* ===============================
+   INSTAGRAM ICON CORNER
+   =============================== */
+
+.blog-post .instagram-related-post::before {
+ 
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 18px;
+  color: #155945;
+  opacity: 0.35;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (hover: hover) {
+  .blog-post .instagram-related-post:hover::before {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+/* ===============================
+   ACCESSIBILITY — FOCUS
+   =============================== */
+
+.blog-post .instagram-related-post:focus-visible {
+  outline: 3px solid rgba(21, 89, 69, 0.6);
+  outline-offset: 4px;
+}
+
+/* ===============================
+   RIPPLE EFFECT
+   =============================== */
+
+.blog-post .instagram-related-post {
+  overflow: hidden;
+}
+
+.blog-post .instagram-ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: instagram-ripple 600ms linear;
+  background-color: rgba(21, 89, 69, 0.2);
+  pointer-events: none;
+}
+
+@keyframes instagram-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ===============================
+   INSTAGRAM ICON (FA 7 SAFE)
+   =============================== */
+
+.instagram-related-post {
+  position: relative;
+}
+
+.instagram-related-post .instagram-icon {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 18px;
+  color: #155945;
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+@media (hover: hover) {
+  .instagram-related-post:hover .instagram-icon {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
