@@ -5,8 +5,7 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- generated автоматически из objects.json -->
-
+ 
   <url>
     <loc>https://turko.by/</loc>
     <lastmod>2026-01-27T06:01:37+00:00</lastmod>
@@ -139,5 +138,49 @@
     <lastmod>2026-01-27T06:01:37+00:00</lastmod>
     <priority>0.70</priority>
   </url>
+
+<!-- BLOG POSTS -->
+
+<url>
+  <loc>https://turko.by/blog/besplatnaya-konsultaciya-rieltora</loc>
+  <lastmod>2026-01-28</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://turko.by/blog/mozhno-li-otmenit-dogovor-dareniya-kvartiry</loc>
+  <lastmod>2026-01-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://turko.by/blog/rebenok-sobstvennik-kak-kupit-kvartiru</loc>
+  <lastmod>2026-01-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://turko.by/blog/avans-ili-zadatok-v-chem-raznica</loc>
+  <lastmod>2026-01-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://turko.by/blog/prodavec-peredumal-posle-zadatka</loc>
+  <lastmod>2026-01-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://turko.by/blog/investicii-v-nedvizhimost-belarusi</loc>
+  <lastmod>2026-01-29</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+</url>
 
 </urlset>
