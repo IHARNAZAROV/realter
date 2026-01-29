@@ -583,3 +583,4 @@ function bg_moving() {
     pauseWhenHidden: true, // важно
   });
 }
+

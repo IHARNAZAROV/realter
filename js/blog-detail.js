@@ -34,7 +34,11 @@ function loadArticleData() {
         return;
       }
 
-      renderArticle(article);
+      const params = new URLSearchParams(window.location.search);
+const currentSlug = params.get("slug") || article.slug;
+
+renderArticle(article);
+renderRandomPosts(articles, currentSlug);
     })
     .catch((error) => {
       console.error("Ошибка загрузки статьи:", error);
@@ -67,6 +71,7 @@ function renderArticle(article) {
   renderConclusion(article);
   renderInstagram(article);
   renderSchema(article);
+  
 }
 
 /* =========================================================
@@ -114,6 +119,10 @@ function renderHeader(article) {
   }
 }
 
+
+
+
+
 /* =========================================================
    BREADCRUMB
    ========================================================= */
@@ -140,9 +149,7 @@ function renderBreadcrumb(article) {
 /* =========================================================
    SCHEMA.ORG (JSON-LD)
    ========================================================= */
-/* =========================================================
-   SCHEMA.ORG (JSON-LD) — AUTHOR WITH sameAs
-   ========================================================= */
+
 function renderSchema(article) {
   if (!article) return;
 
@@ -188,6 +195,80 @@ function renderSchema(article) {
   script.textContent = JSON.stringify(schema);
 
   document.head.appendChild(script);
+}
+
+
+/* =========================================================
+   RANDOM RECENT POSTS (3 articles, exclude current)
+   ========================================================= */
+
+function renderRandomPosts(articles, currentSlug) {
+  const container = document.getElementById("recent-posts");
+  if (!container || !Array.isArray(articles)) return;
+
+  // 1. Убираем текущую статью
+  const filtered = articles.filter(
+    (article) => article.slug !== currentSlug
+  );
+
+  // 2. Перемешиваем массив (Fisher–Yates)
+  for (let i = filtered.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+  }
+
+  // 3. Берём первые 3
+  const selected = filtered.slice(0, 3);
+
+  // 4. Генерируем HTML
+  container.innerHTML = selected
+    .map((article) => {
+      return `
+        <div class="widget-post clearfix">
+          <div class="sx-post-media">
+            <a href="/blog-detail.html?slug=${article.slug}">
+              <img
+                src="${article.image}"
+                alt="${article.imageAlt || article.title}"
+                loading="lazy"
+              />
+            </a>
+          </div>
+          <div class="sx-post-info">
+            <div class="sx-post-header">
+              <h6 class="post-title">
+                <a href="/blog-detail.html?slug=${article.slug}">
+                  ${article.title}
+                </a>
+              </h6>
+            </div>
+            <div class="sx-post-meta">
+              <ul>
+                <li class="post-author">
+                  ${formatDate(article.date)}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+/* =========================================================
+   DATE FORMATTER (2026-01-29 → 29 Янв 2026)
+   ========================================================= */
+
+function formatDate(dateString) {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+  return date.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 
