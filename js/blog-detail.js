@@ -35,10 +35,10 @@ function loadArticleData() {
       }
 
       const params = new URLSearchParams(window.location.search);
-const currentSlug = params.get("slug") || article.slug;
+      const currentSlug = params.get("slug") || article.slug;
 
-renderArticle(article);
-renderRandomPosts(articles, currentSlug);
+      renderArticle(article);
+      renderRandomPosts(articles, currentSlug);
     })
     .catch((error) => {
       console.error("Ошибка загрузки статьи:", error);
@@ -71,7 +71,6 @@ function renderArticle(article) {
   renderConclusion(article);
   renderInstagram(article);
   renderSchema(article);
-  
 }
 
 /* =========================================================
@@ -80,9 +79,7 @@ function renderArticle(article) {
 function renderMeta(article) {
   document.title = article.title || document.title;
 
-  const description = document.querySelector(
-    'meta[name="description"]'
-  );
+  const description = document.querySelector('meta[name="description"]');
   if (description && article.metaDescription) {
     description.setAttribute("content", article.metaDescription);
   }
@@ -119,10 +116,6 @@ function renderHeader(article) {
   }
 }
 
-
-
-
-
 /* =========================================================
    BREADCRUMB
    ========================================================= */
@@ -156,38 +149,36 @@ function renderSchema(article) {
   const schema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": article.title,
-    "description": article.metaDescription || article.conclusion || "",
-    "author": {
+    headline: article.title,
+    description: article.metaDescription || article.conclusion || "",
+    author: {
       "@type": "Person",
-      "name": article.author || "Ольга Турко",
-      "sameAs": [
+      name: article.author || "Ольга Турко",
+      sameAs: [
         "https://www.instagram.com/rielter_olga_lida/",
-        "https://t.me/TurkoOlga"
-      ]
+        "https://t.me/TurkoOlga",
+      ],
     },
-    "datePublished": article.date,
-    "dateModified": article.date,
-    "image": article.image
-      ? `https://turko.by${article.image}`
-      : undefined,
-    "mainEntityOfPage": {
+    datePublished: article.date,
+    dateModified: article.date,
+    image: article.image ? `https://turko.by${article.image}` : undefined,
+    mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://turko.by/blog/${article.slug}`
+      "@id": `https://turko.by/blog/${article.slug}`,
     },
-    "publisher": {
+    publisher: {
       "@type": "Organization",
-      "name": "Ольга Турко — недвижимость в Лиде",
-      "logo": {
+      name: "Ольга Турко — недвижимость в Лиде",
+      logo: {
         "@type": "ImageObject",
-        "url": "https://turko.by/images/logo-light.webp"
-      }
-    }
+        url: "https://turko.by/images/logo-light.webp",
+      },
+    },
   };
 
   // Удаляем undefined поля (чистота schema)
   Object.keys(schema).forEach(
-    (key) => schema[key] === undefined && delete schema[key]
+    (key) => schema[key] === undefined && delete schema[key],
   );
 
   const script = document.createElement("script");
@@ -196,7 +187,6 @@ function renderSchema(article) {
 
   document.head.appendChild(script);
 }
-
 
 /* =========================================================
    RANDOM RECENT POSTS (3 articles, exclude current)
@@ -207,9 +197,7 @@ function renderRandomPosts(articles, currentSlug) {
   if (!container || !Array.isArray(articles)) return;
 
   // 1. Убираем текущую статью
-  const filtered = articles.filter(
-    (article) => article.slug !== currentSlug
-  );
+  const filtered = articles.filter((article) => article.slug !== currentSlug);
 
   // 2. Перемешиваем массив (Fisher–Yates)
   for (let i = filtered.length - 1; i > 0; i--) {
@@ -263,15 +251,27 @@ function renderRandomPosts(articles, currentSlug) {
 function formatDate(dateString) {
   if (!dateString) return "";
 
+  // DD.MM.YYYY
+  if (dateString.includes(".")) {
+    const [day, month, year] = dateString.split(".");
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  // ISO fallback
   const date = new Date(dateString);
+  if (isNaN(date)) return "";
+
   return date.toLocaleDateString("ru-RU", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
 }
-
-
 
 /* =========================================================
    7. IMAGE
@@ -407,8 +407,7 @@ function renderInstagram(article) {
   if (image && article.instagram.image) {
     image.src = article.instagram.image;
     image.alt =
-      article.instagram.alt ||
-      "Instagram пост — " + (article.title || "");
+      article.instagram.alt || "Instagram пост — " + (article.title || "");
   }
 
   if (text) text.textContent = article.instagram.text || "";

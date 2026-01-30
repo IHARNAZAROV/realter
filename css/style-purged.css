@@ -14,6 +14,7 @@
   --line-height-base: 1.7;
   --trans-default: all 0.2s linear;
   --trans-slow: all 0.5s linear;
+  --corporate-color: #155945;
 }
 
 body {
@@ -5675,4 +5676,741 @@ blockquote.author-quote .fa-quote-left {
 	.widget_gallery li {
 		width: 25%;
 	}
+}
+
+/* /* ======================================
+   SERVICE DETAIL – BASE LAYOUT
+   ====================================== */
+
+.service-detail-content {
+  background: #ffffff;
+  padding: 40px 45px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Заголовки */
+.service-detail-content h3,
+.service-detail-content h4 {
+  font-weight: 600;
+  color: #1c1c1c;
+  margin-top: 36px;
+}
+
+/* Текст */
+.service-detail-content p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #3f3f3f;
+  margin-top: 12px;
+}
+
+/* Списки */
+.service-detail-content ul {
+  margin-top: 14px;
+  margin-bottom: 32px;
+  padding-left: 20px;
+}
+
+.service-detail-content ul li {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: #2f2f2f;
+  margin-bottom: 8px;
+}
+ */
+/* ======================================
+   UNIVERSAL HIGHLIGHT BLOCK
+   (for all services)
+   ====================================== */
+
+.service-highlight-block {
+  margin: 42px 0 48px;
+  padding: 20px 24px;
+  background-color: #f6f7f8;
+  border-left: 3px solid var(--corporate-color, #1c1c1c);
+  border-radius: 6px;
+}
+
+.service-highlight-block h3 {
+  margin-top: 0;
+}
+
+.service-highlight-block p {
+  margin-bottom: 0;
+}
+
+/* Заголовок сразу после highlight */
+.service-highlight-block + h3,
+.service-highlight-block + h4 {
+  margin-top: 0;
+}
+
+/* ======================================
+   CORPORATE CTA BLOCK (FINAL)
+   ====================================== */
+
+.sx-call-action {
+  margin-top: 48px;
+  padding: 32px 36px;
+
+  border-radius: 10px;
+}
+
+/* CTA заголовок */
+.sx-call-action h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+/* CTA текст */
+.sx-call-action p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 22px;
+}
+
+
+@media (max-width: 768px) {
+  .service-detail-content {
+    padding: 25px 20px;
+  }
+
+  .sx-call-action {
+    padding: 26px 22px;
+  }
+
+  .sx-call-action h4 {
+    font-size: 18px;
+  }
+}
+
+.sx-call-action h4 {
+  color: #155945;
+}
+
+.sx-call-action p {
+  color: #000000;
+}
+
+/* ======================================
+   ACTIVE SERVICE IN SIDEBAR
+   ====================================== */
+
+.widget_services ul li.active a {
+  background-color: rgba(21, 89, 69, 0.08); /* мягкий акцент */
+  color: #155945;
+  font-weight: 600;
+  border-left: 3px solid #155945;
+  padding-left: 15px;
+}
+
+/* hover для остальных — нейтральный */
+.widget_services ul li a {
+  display: block;
+  padding: 8px 12px;
+  color: #2f2f2f;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.widget_services ul li a:hover {
+  background-color: #f4f5f6;
+}
+
+/* ======================================
+   SERVICE LISTS – BLOG STYLE
+   ====================================== */
+
+.service-detail-content ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 18px 0 36px;
+}
+
+.service-detail-content ul li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 14px;
+
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: #1c1c1c;
+}
+
+/* Аккуратный маркер */
+.service-detail-content ul li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #155945;
+  font-weight: 500;
+}
+
+
+/* ======================================
+   SERVICE STEPS LIST (NUMBERED)
+   ====================================== */
+
+.service-steps {
+  list-style: none;
+  padding-left: 0;
+  margin: 20px 0 40px;
+  counter-reset: step;
+}
+
+.service-steps li {
+  position: relative;
+  padding-left: 44px;
+  margin-bottom: 18px;
+
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: #1c1c1c;
+}
+
+/* Кружок с цифрой */
+.service-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+
+  position: absolute;
+  left: 0;
+  top: 2px;
+
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+
+  background-color: #155945; /* корпоративный */
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 28px;
+  text-align: center;
+}
+.site-footer .widget_services ul li a:focus-visible {
+  color: #d7b39a !important;
+}
+.site-footer .widget_services ul li a {
+  background: transparent;
+  outline: none;
+}
+
+/* Focus / keyboard navigation */
+.site-footer .widget_services ul li a {
+  color: #ffffff;
+}
+
+/* Focus / keyboard */
+.site-footer .widget_services ul li a:focus,
+.site-footer .widget_services ul li a:focus-visible {
+  color: #d7b39a;
+}
+
+/* Hover (если нужен) */
+.site-footer .widget_services ul li a:hover {
+  color: #d7b39a;
+}
+.site-footer .widget_services ul li {
+  padding: 0;
+  margin: 0;
+}
+
+.site-footer .widget_services ul li a {
+  display: block;
+  padding: 6px 0;       /* ← вот тут ключ */
+  line-height: 1.4;
+}
+
+/* базовый цвет пунктов */
+.about4-section .widget_services ul li a {
+  color: #6f6f6f;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+/* hover ТОЛЬКО для неактивных */
+.about4-section .widget_services ul li:not(.active) a:hover {
+  color: #155945;
+}
+
+/* активный пункт */
+.about4-section .widget_services ul li.active a {
+  color: #155945;
+  font-weight: 600;
+}
+
+.service-detail-content {
+  background: red;
+  padding: 44px 48px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.service-detail-content h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #155945;
+  margin: 48px 0 18px;
+}
+
+.service-detail-content h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1c1c1c;
+  margin: 36px 0 16px;
+}
+
+.service-detail-content p {
+  font-size: 16.5px;
+  line-height: 1.75;
+  color: #1c1c1c;
+  margin-bottom: 18px;
+}
+
+/* ======================================
+   SERVICE HIGHLIGHT BLOCK
+   ====================================== */
+
+.service-highlight-block {
+  margin: 42px 0;
+  padding: 28px 32px;
+  background: linear-gradient(
+    180deg,
+    rgba(21, 89, 69, 0.04),
+    rgba(21, 89, 69, 0.02)
+  );
+  border-left: 4px solid #155945;
+  border-radius: 10px;
+}
+
+.service-highlight-block h3 {
+  margin-top: 0;
+}
+
+/* ======================================
+   SERVICE STEPS
+   ====================================== */
+
+.service-steps {
+  list-style: none;
+  padding-left: 0;
+  margin: 28px 0 44px;
+  counter-reset: step;
+}
+
+.service-steps li {
+  position: relative;
+  padding-left: 48px;
+  margin-bottom: 20px;
+
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.service-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+
+  position: absolute;
+  left: 0;
+  top: 2px;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+
+  background-color: #155945;
+  color: #ffffff;
+
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+}
+
+/* ======================================
+   SERVICE FINAL CTA
+   ====================================== */
+
+.sx-call-action {
+  margin-top: 56px;
+  padding: 34px 38px;
+  background-color: #155945;
+  border-radius: 14px;
+ 
+}
+
+.sx-call-action h4 {
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.sx-call-action p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 24px;
+}
+/* ======================================
+   CTA BUTTON – VISIBLE & BUSINESS
+   ====================================== */
+
+.sx-call-action .site-button-secondry {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+
+  padding: 12px 28px;
+  border-radius: 6px;
+
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+
+  display: inline-block;
+
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+}
+
+/* Hover — усиление, не появление */
+.sx-call-action .site-button-secondry:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Active — тактильность */
+.sx-call-action .site-button-secondry:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ======================================
+   FINAL FIX – SERVICE LISTS (NO OVERFLOW)
+   ====================================== */
+
+.service-detail-content ul {
+  list-style: none;        /* ❌ убираем браузерные точки */
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.service-detail-content ul li {
+  position: relative;
+  padding-left: 22px;      /* ✅ место под маркер */
+  margin-bottom: 10px;
+
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1c1c1c;
+
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.service-detail-content ul li::before {
+  content: "•";
+  position: absolute;
+  left: 6px;               /* ✅ ВНУТРИ блока */
+  top: 0.15em;
+
+  color: #155945;
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 576px) {
+  .service-detail-content ul li {
+    padding-left: 20px;
+  }
+
+  .service-detail-content ul li::before {
+    left: 4px;
+  }
+}
+
+.section-content {
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+/* Mobile — чуть компактнее */
+@media (max-width: 576px) {
+  .section-content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ======================================
+   SERVICE FAQ – CLEAN FINAL VERSION
+   ====================================== */
+
+/* Общий контейнер FAQ */
+.service-faq {
+  margin-top: 56px;
+  margin-bottom: 64px;
+}
+
+/* Заголовок FAQ */
+.service-faq-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #155945;
+  margin-bottom: 24px;
+}
+
+/* ======================================
+   FAQ ITEM (CARD)
+   ====================================== */
+
+.service-faq-item {
+  background-color: #f7f8f9;
+  border-radius: 8px;
+
+  margin-bottom: 12px;
+  padding: 0 14px;
+
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Hover — мягкий */
+.service-faq-item:hover {
+  background-color: #f1f3f4;
+}
+
+/* Активный вопрос */
+.service-faq-item.is-open {
+  background-color: rgba(21, 89, 69, 0.06);
+  box-shadow: inset 3px 0 0 rgba(21, 89, 69, 0.6);
+}
+
+/* ======================================
+   FAQ QUESTION
+   ====================================== */
+
+.service-faq-question {
+  width: 100%;
+  padding: 18px 4px;
+
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 16.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #1c1c1c;
+
+  cursor: pointer;
+  text-align: left;
+
+  transition:
+    color 0.25s ease,
+    transform 0.15s ease;
+}
+
+/* Hover */
+.service-faq-question:hover {
+  color: #155945;
+}
+
+/* Active (click feedback) */
+.service-faq-question:active {
+  transform: translateY(1px);
+}
+
+/* Active item text */
+.service-faq-item.is-open .service-faq-question {
+  color: #155945;
+}
+
+/* ======================================
+   FAQ ICON
+   ====================================== */
+
+.faq-icon {
+  font-size: 20px;
+  color: #155945;
+
+  transition:
+    transform 0.35s ease,
+    opacity 0.25s ease;
+}
+
+.service-faq-item.is-open .faq-icon {
+  transform: rotate(45deg);
+  opacity: 0.85;
+}
+
+/* ======================================
+   FAQ ANSWER (ANIMATION)
+   ====================================== */
+
+.service-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(-4px);
+
+  transition:
+    max-height 0.45s ease,
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.service-faq-answer p {
+  margin: 0;
+  padding: 0 4px 18px 16px;
+
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: #2f2f2f;
+
+  border-left: 2px solid rgba(21, 89, 69, 0.25);
+}
+
+/* Open state */
+.service-faq-item.is-open .service-faq-answer {
+  max-height: 500px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ======================================
+   MOBILE
+   ====================================== */
+
+@media (max-width: 576px) {
+  .service-faq-question {
+    padding: 16px 2px;
+    font-size: 15.5px;
+  }
+
+  .service-faq-answer p {
+    font-size: 15px;
+  }
+}
+/* ======================================
+   FAQ – FORCE REMOVE FOCUS OUTLINE
+   ====================================== */
+
+.service-faq-question,
+.service-faq-question:focus,
+.service-faq-question:focus-visible,
+.service-faq-question:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Chrome / Edge focus ring */
+.service-faq-question::-moz-focus-inner {
+  border: 0;
+}
+
+.figcaption .blog-read-more {
+  display: inline-block;
+  margin-top: 14px;
+}
+/* ======================================
+   SERVICE CARD – SMALL BUTTON
+   ====================================== */
+
+.service-card-btn {
+  padding: 6px 14px;      
+  font-size: 10px;        
+  font-weight: 500;
+
+  line-height: 1.2;
+  min-width: auto;        
+}
+
+.service-card-btn i {
+  font-size: 12px;
+}
+/* ======================================
+   SERVICE CARD BUTTON – ICON
+   ====================================== */
+
+.service-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Иконка */
+.service-card-icon {
+  font-size: 11px;
+  opacity: 0.45;               
+  transform: translateY(1px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+.service-card-btn:hover .service-card-icon {
+  opacity: 0.85;
+  transform: translate(3px, 1px);
+}
+/* ======================================
+   SERVICE CARD BUTTON – HARD OVERRIDE
+   ====================================== */
+
+
+.service-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 18px;
+
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+
+  color: #155945;
+  border: 1px solid #155945;
+  border-radius: 6px;
+  background-color: transparent;
+
+}
+
+/* Hover кнопки */
+.service-card-btn:hover {
+  background-color: #155945;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(21, 89, 69, 0.25);
+}
+
+/* Иконка */
+.service-card-btn i {
+  transition: transform 0.2s ease;
+}
+
+.service-card-btn:hover i {
+  transform: translateX(4px);
+}
+
+/* Focus (доступность) */
+.service-card-btn:focus-visible {
+  outline: 3px solid rgba(21, 89, 69, 0.4);
+  outline-offset: 3px;
 }

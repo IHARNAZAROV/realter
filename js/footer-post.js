@@ -42,12 +42,26 @@ function renderFooterRandomPosts(articles) {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
+// Парсим дату
+function parseDate(dateString) {
+  if (!dateString) return null;
+
+  // Формат: DD.MM.YYYY
+  const parts = dateString.split(".");
+  if (parts.length !== 3) return null;
+
+  const [day, month, year] = parts.map(Number);
+
+  return new Date(year, month - 1, day);
+}
+
   // Берем первые 3 статьи
   const selected = shuffled.slice(0, 3);
 
   container.innerHTML = selected
     .map((article) => {
-      const date = new Date(article.date);
+      const date = parseDate(article.date);
+if (!date) return "";
 
       return `
         <div class="widget-post clearfix">
