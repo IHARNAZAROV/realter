@@ -76,7 +76,7 @@ if (!date) return "";
           <div class="sx-post-info">
             <div class="sx-post-header">
               <h6 class="post-title">
-                <a href="/blog-detail.html?slug=${article.slug}">
+                <a href="/blog-detail?slug=${article.slug}">
                   ${article.title}
                 </a>
               </h6>

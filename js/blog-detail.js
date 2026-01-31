@@ -214,7 +214,7 @@ function renderRandomPosts(articles, currentSlug) {
       return `
         <div class="widget-post clearfix">
           <div class="sx-post-media">
-            <a href="/blog-detail.html?slug=${article.slug}">
+            <a href="/blog-detail?slug=${article.slug}">
               <img
                 src="${article.image}"
                 alt="${article.imageAlt || article.title}"
@@ -225,7 +225,7 @@ function renderRandomPosts(articles, currentSlug) {
           <div class="sx-post-info">
             <div class="sx-post-header">
               <h6 class="post-title">
-                <a href="/blog-detail.html?slug=${article.slug}">
+                <a href="/blog-detail?slug=${article.slug}">
                   ${article.title}
                 </a>
               </h6>
