@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       data.services.forEach(item => {
         listEl.innerHTML += `
           <li class="${item.slug === slug ? "active" : ""}">
-            <a href="/services-detail.html?slug=${item.slug}">
+            <a href="/services-detail?slug=${item.slug}">
               ${item.title}
             </a>
           </li>
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://turko.by/" },
           { "@type": "ListItem", "position": 2, "name": "Услуги", "item": "https://turko.by/about.html" },
-          { "@type": "ListItem", "position": 3, "name": service.title, "item": `https://turko.by/services-detail.html?slug=${service.slug}` }
+          { "@type": "ListItem", "position": 3, "name": service.title, "item": `https://turko.by/services-detail?slug=${service.slug}` }
         ]
       });
     }
