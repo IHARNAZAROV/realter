@@ -6335,10 +6335,12 @@ blockquote.author-quote .fa-quote-left {
 
 .service-card-btn {
   padding: 6px 14px;      
-  font-size: 10px;        
-  font-weight: 500;
-
-  line-height: 1.2;
+ letter-spacing: 0.4px;   /* ⬅ ближе друг к другу */
+  font-weight: 600;        /* ⬅ чётче, увереннее */
+  font-size: 13px;   
+ -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+ 
   min-width: auto;        
 }
 
@@ -6413,4 +6415,116 @@ blockquote.author-quote .fa-quote-left {
 .service-card-btn:focus-visible {
   outline: 3px solid rgba(21, 89, 69, 0.4);
   outline-offset: 3px;
+}
+
+/* ======================================
+   SIDEBAR CARD (BLOG + SERVICES)
+   ====================================== */
+
+/* Общая карточка сайдбара */
+.service-sidebar .side-bar,
+.service-sidebar .widget_services {
+  background-color: #fffaf5;
+  border-radius: 12px;
+  padding: 26px 24px;
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.06),
+    0 4px 10px rgba(0, 0, 0, 0.04);
+
+  transition: box-shadow 0.3s ease;
+}
+
+/* Hover — очень мягко */
+.service-sidebar .side-bar:hover,
+.service-sidebar .widget_services:hover {
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.08),
+    0 6px 14px rgba(0, 0, 0, 0.05);
+}
+
+/* ======================================
+   WIDGET TITLES
+   ====================================== */
+
+.service-sidebar .widget-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #155945;
+  margin-bottom: 16px;
+}
+
+/* ======================================
+   WIDGET SPACING
+   ====================================== */
+
+.service-sidebar .widget {
+  margin-bottom: 28px;
+}
+
+.service-sidebar .widget:last-child {
+  margin-bottom: 0;
+}
+
+/* Убираем вложенные белые блоки */
+.service-sidebar .widget .bg-white {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* ======================================
+   SERVICES LIST (ONLY FOR widget_services)
+   ====================================== */
+
+.service-sidebar .widget_services ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-sidebar .widget_services ul li {
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.service-sidebar .widget_services ul li:last-child {
+  border-bottom: none;
+}
+
+.service-sidebar .widget_services ul li a {
+  display: block;
+  padding: 10px 0;
+
+  font-size: 15px;
+  font-weight: 500;
+  color: #1c1c1c;
+
+  transition: color 0.25s ease, padding-left 0.25s ease;
+}
+
+/* Hover */
+.service-sidebar .widget_services ul li a:hover {
+  color: #155945;
+  padding-left: 6px;
+}
+
+/* Active item */
+.service-sidebar .widget_services ul li.active a {
+  padding-left: 14px;
+}
+
+/* ======================================
+   GALLERY WIDGET
+   ====================================== */
+
+.service-sidebar .widget_gallery ul {
+  padding: 0;
+}
+
+.service-sidebar .widget_gallery li {
+  width: 48%;
+  margin: 1%;
+}
+
+.service-sidebar .sx-post-thum img {
+  border-radius: 6px;
 }

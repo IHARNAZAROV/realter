@@ -2,7 +2,7 @@
   {
     "id": "free-realtor-consultation",
     "slug": "besplatnaya-konsultaciya-rieltora",
-    "date": "28.01.2026",
+    "date": "16.09.2025",
     "author": "Ольга Турко",
     "category": "Недвижимость",
     "image": "/images/blog/pic1.webp",
@@ -61,9 +61,9 @@
     "quoteRole": "Риэлтер, консультант по недвижимости",
 
     "instagram": {
-      "url": "https://www.instagram.com/p/DQBsgg1iLM1/",
+      "url": "https://www.instagram.com/p/DOqKmM3CCOS",
       "text": "Часто ко мне приходят с вопросом: а не поздно ли продавать квартиру? В этом посте — честный ответ.",
-      "date": "2025-10-20",
+      "date": "16.09.2025",
       "image": "/images/blog/pic1.webp"
     }
   },
@@ -71,10 +71,10 @@
   {
     "id": "cancel-gift-contract",
     "slug": "mozhno-li-otmenit-dogovor-dareniya-kvartiry",
-    "date": "29.01.2026",
+    "date": "17.09.2025",
     "author": "Ольга Турко",
     "category": "Юридические вопросы",
-    "image": "/images/blog/pic2.webp",
+    "image": "/images/blog/pic3.webp",
     "imageAlt": "Можно ли отменить договор дарения квартиры — юридический разбор",
     "metaDescription": "Можно ли отменить договор дарения квартиры в Беларуси: реальные основания по ГК РБ и что делать, если отмена невозможна.",
     "title": "Можно ли отменить договор дарения квартиры?",
@@ -138,19 +138,19 @@
     "quoteRole": "Риэлтер, специалист по сопровождению сделок с недвижимостью",
 
     "instagram": {
-      "url": "https://www.instagram.com/p/EXAMPLE/",
+      "url": "https://www.instagram.com/p/DOtMkhLCEdj/",
       "text": "Можно ли отменить договор дарения, если жизнь сложилась иначе? Разбираем реальный случай и честно говорим о возможностях закона.",
-      "date": "Январь 2026",
-      "image": "/images/blog/pic2.webp"
+      "date": "17.09.2025",
+      "image": "/images/blog/pic3.webp"
     }
   },
   {
   "id": "investing-in-belarus-real-estate",
   "slug": "investicii-v-belarus-nedvizhimost",
-  "date": "13.01.2026",
+  "date": "23.10.2025",
   "author": "Ольга Турко",
   "category": "Инвестиции и рынок недвижимости",
-  "image": "/images/blog/invest-belarus-real-estate.webp",
+  "image": "/images/blog/pic5.webp",
   "imageAlt": "Инвестиции в недвижимость Беларуси — жилые и коммерческие объекты",
   "metaDescription": "Почему недвижимость Беларуси стала привлекательной для инвестиций: рост цен, доходность аренды, коммерческие объекты и практические примеры.",
   "title": "Почему инвестиции в недвижимость Беларуси становятся выгодной стратегией?",
@@ -214,20 +214,20 @@
   "quoteAuthor": "Ольга Турко",
   "quoteRole": "эксперт по недвижимости и инвестициям",
   "instagram": {
-    "url": "https://www.instagram.com/p/EXAMPLE_REAL_ESTATE/",
-    "image": "/images/blog/pic3.webp",
+    "url": "https://www.instagram.com/p/DQJjVgCCEeN",
+    "image": "/images/blog/pic5.webp",
     "alt": "Инвестиции в недвижимость Беларуси — тренды и цифры",
     "text": "Почему недвижимость Беларуси интересна инвесторам? Разбор доходности, спроса и практических примеров.",
-    "date": "Январь 2026"
+    "date": "23.10.2025"
   }
 },
 {
   "id": "child-owner-real-estate",
   "slug": "rebenok-sobstvennik-kak-kupit-kvartiru",
-  "date": "11.01.2026",
+  "date": "20.10.2025",
   "author": "Ольга Турко",
   "category": "Юридические вопросы недвижимости",
-  "image": "/images/blog/child-owner.webp",
+  "image": "/images/blog/pic4.webp",
   "imageAlt": "Ребенок — собственник квартиры в Беларуси: юридические особенности",
   "metaDescription": "Можно ли купить квартиру на несовершеннолетнего в Беларуси? Разбираем закон, возрастные нюансы и реальные ограничения для родителей.",
   "title": "Ребёнок — собственник: как купить квартиру на несовершеннолетнего",
@@ -289,19 +289,19 @@
   "quoteRole": "эксперт по недвижимости",
   "instagram": {
     "url": "https://www.instagram.com/p/DQBsgg1iLM1/",
-    "image": "/images/instagram/child-owner.webp",
+    "image": "/images/blog/pic4.webp",
     "alt": "Ребенок — собственник квартиры в Беларуси",
     "text": "Может ли ребёнок быть собственником квартиры? Разбираем закон и реальные ограничения для родителей.",
-    "date": "Октябрь 2025"
+    "date": "20.10.2025"
   }
 },
 {
   "id": "advance-or-deposit-real-estate",
   "slug": "avans-ili-zadatok-v-chem-raznica",
-  "date": "14.01.2026",
+  "date": "14.11.2025",
   "author": "Ольга Турко",
   "category": "Юридические вопросы недвижимости",
-  "image": "/images/blog/advance-or-deposit.webp",
+  "image": "/images/blog/pic6.webp",
   "imageAlt": "Аванс или задаток при покупке недвижимости — отличия и последствия",
   "metaDescription": "Аванс или задаток при покупке недвижимости в Беларуси: в чем разница, какие последствия при срыве сделки и как правильно оформить платеж.",
   "title": "Аванс или задаток? В чём разница при сделках с недвижимостью",
@@ -358,20 +358,20 @@
   "quoteAuthor": "Ольга Турко",
   "quoteRole": "эксперт по недвижимости",
   "instagram": {
-    "url": "https://www.instagram.com/p/DRCO9NkiAsz/",
-    "image": "/images/instagram/advance-or-deposit.webp",
+    "url": "hhttps://www.instagram.com/p/DRCO9NkiAsz/",
+    "image": "/images/blog/pic6.webp",
     "alt": "Аванс или задаток при сделках с недвижимостью",
     "text": "Аванс и задаток — в чем разница и какие последствия при срыве сделки?",
-    "date": "Ноябрь 2025"
+    "date": "14.11.2025"
   }
 },
 {
   "id": "seller-refused-after-deposit",
   "slug": "prodavec-peredumal-posle-zadatka-chto-delat",
-  "date": "29.01.2026",
+  "date": "02.10.2025",
   "author": "Ольга Турко",
   "category": "Юридические вопросы недвижимости",
-  "image": "/images/blog/seller-refused.webp",
+  "image": "/images/blog/pic2.webp",
   "imageAlt": "Продавец отказался от сделки после задатка — что делать покупателю",
   "metaDescription": "Продавец передумал продавать квартиру после получения задатка. Что делать покупателю и какие права защищает закон в Беларуси.",
   "title": "Продавец передумал после задатка: что делать покупателю?",
@@ -429,11 +429,11 @@
   "quoteAuthor": "Ольга Турко",
   "quoteRole": "эксперт по недвижимости",
   "instagram": {
-    "url": "https://www.instagram.com/p/EXAMPLE_DEPOSIT/",
-    "image": "/images/instagram/seller-refused.webp",
+    "url": "https://www.instagram.com/p/DPTY537CAO6",
+    "image": "/images/blog/pic2.webp",
     "alt": "Продавец передумал после задатка",
     "text": "Продавец отказался от сделки после задатка. Что делать покупателю и как защищает закон?",
-    "date": "Январь 2026"
+    "date": "02.10.2025"
   }
 }, 
 {
@@ -535,7 +535,7 @@
   "image": "/images/blog/pic7.webp",
   "alt": "Риски покупки наследственной квартиры",
   "text": "Наследственная квартира — не всегда безопасная сделка. Обязательная доля и пропущенные наследники могут создать серьёзные проблемы покупателю.",
-  "date": "Январь 2026"
+  "date": "05.01.2026"
 }
 },
 {
@@ -612,7 +612,7 @@
   "image": "/images/blog/pic8.webp",
   "alt": "Вступление в наследство: права и обязанности наследника",
   "text": "Вступление в наследство — это не только права, но и обязанности. Долги, налоги и ответственность могут стать неожиданностью, если не разобраться заранее.",
-  "date": "Январь 2026"
+  "date": "23.12.2025"
 }
 },
 {
@@ -664,7 +664,7 @@
     "image": "/images/blog/pic9.webp",
     "alt": "Что нельзя узаконить при перепланировке квартиры",
     "text": "Перепланировка может стать проблемой при продаже квартиры. Не все изменения в Беларуси можно узаконить — есть жёсткие запреты.",
-    "date": "Январь 2026"
+    "date": "12.12.2025"
   }
 }
 
