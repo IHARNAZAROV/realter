@@ -8,7 +8,7 @@
   --color-border: #ebebeb;
   --color-border-dark: #2e313b;
   --color-gray-bg: #f2f2f2;
-  --font-main: "Poppins", sans-serif;
+  --font-main: "Inter", sans-serif;
   --font-awesome: FontAwesome;
   --text-base: 0.875rem;
   --line-height-base: 1.7;
@@ -16,6 +16,128 @@
   --trans-slow: all 0.5s linear;
   --corporate-color: #155945;
 }
+
+
+/* =====================================================
+   LOCAL FONTS
+===================================================== */
+
+/* ---------- INTER ---------- */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter/Inter-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- MONTSERRAT ---------- */
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* =====================================================
+   TYPOGRAPHY
+===================================================== */
+
+/* Основной текст */
+body {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1c1c1c;
+}
+
+/* Заголовки */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.sx-tilte,
+.widget-title {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #155945;
+}
+
+/* Подзаголовки */
+.subtitle {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+/* Кнопки */
+button,
+.site-button,
+.site-button-secondry {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+}
+
+/* Цифры, счётчики */
+.counter,
+.st-count-number {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
+}
+
 
 body {
   background-color: var(--color-bg-light);
@@ -6968,4 +7090,12 @@ blockquote.author-quote .fa-quote-left {
   transform: translateY(0);
   box-shadow:
     0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.sx-count h4 {
+  transition: color 0.25s ease;
+}
+
+.sx-count:hover h4 {
+  color: #ffffff;
 }

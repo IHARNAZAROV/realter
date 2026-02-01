@@ -648,3 +648,32 @@ function initServiceCardsAnimation() {
   cards.forEach(card => observer.observe(card));
 }
 
+function getFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem("favoriteObjects")) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveFavorites(list) {
+  localStorage.setItem("favoriteObjects", JSON.stringify(list));
+}
+
+function isFavorite(slug) {
+  return getFavorites().includes(slug);
+}
+
+function toggleFavorite(slug) {
+  const favs = getFavorites();
+  const idx = favs.indexOf(slug);
+
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+  } else {
+    favs.push(slug);
+  }
+
+  saveFavorites(favs);
+  return favs.includes(slug);
+}

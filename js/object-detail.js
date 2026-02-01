@@ -359,6 +359,7 @@
     return `
     <div class="item">
       <div class="project-mas m-a30">
+      
         <div class="image-effect-one">
           <img loading="lazy" decoding="async" src="${img}" alt="${title}">
         </div>
@@ -429,6 +430,44 @@
     rebuildOwlCarousel(carousel);
   }
 
+
+/* =====================================================
+   FAVORITES (localStorage)
+===================================================== */
+
+const FAVORITES_KEY = "favoriteObjects";
+
+function getFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveFavorites(list) {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(list));
+}
+
+function isFavorite(slug) {
+  return getFavorites().includes(slug);
+}
+
+function toggleFavorite(slug) {
+  const favs = getFavorites();
+  const idx = favs.indexOf(slug);
+
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+  } else {
+    favs.push(slug);
+  }
+
+  saveFavorites(favs);
+  return favs.includes(slug);
+}
+
+
   /* =====================================================
      INIT
   ===================================================== */
@@ -452,16 +491,15 @@
         return;
       }
 
-      // 🔹 Основной контент
+    
       renderTopTitle(obj);
       renderGallery(obj.images);
       renderMeta(obj);
       renderRightText(obj);
 
-      // 🔹 Похожие объекты (ВОЗВРАЩАЕМ)
       renderSimilarSlider(obj, objects);
 
-      // 🔹 Schema.org
+   
       generateObjectSchema(obj);
     } catch (e) {
       console.error(e);
