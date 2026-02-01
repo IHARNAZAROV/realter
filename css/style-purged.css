@@ -18,14 +18,60 @@
 }
 
 
-/* =====================================================
+/* ======================================================
+   TYPOGRAPHY SYSTEM
+   Inter (text) + Montserrat (headings)
    LOCAL FONTS
-===================================================== */
+====================================================== */
 
-/* ---------- INTER ---------- */
+/* ======================
+   MONTSERRAT (HEADINGS)
+====================== */
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-Regular.woff2") format("woff2"),
+       url("/fonts/montserrat/Montserrat-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-Medium.woff2") format("woff2"),
+       url("/fonts/montserrat/Montserrat-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-SemiBold.woff2") format("woff2"),
+       url("/fonts/montserrat/Montserrat-SemiBold.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat/Montserrat-Bold.woff2") format("woff2"),
+       url("/fonts/montserrat/Montserrat-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ======================
+   INTER (TEXT)
+====================== */
+
 @font-face {
   font-family: "Inter";
-  src: url("/fonts/inter/Inter-Regular.woff2") format("woff2");
+  src: url("/fonts/inter/Inter-Regular.woff2") format("woff2"),
+       url("/fonts/inter/Inter-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -33,7 +79,8 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("/fonts/inter/Inter-Medium.woff2") format("woff2");
+  src: url("/fonts/inter/Inter-Medium.woff2") format("woff2"),
+       url("/fonts/inter/Inter-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -41,101 +88,206 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("/fonts/inter/Inter-SemiBold.woff2") format("woff2");
+  src: url("/fonts/inter/Inter-SemiBold.woff2") format("woff2"),
+       url("/fonts/inter/Inter-SemiBold.woff") format("woff");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Inter";
-  src: url("/fonts/inter/Inter-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+/* ======================
+   ROOT VARIABLES
+====================== */
 
-/* ---------- MONTSERRAT ---------- */
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-ExtraBold.woff2") format("woff2");
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-
-/* =====================================================
-   TYPOGRAPHY
-===================================================== */
-
-/* Основной текст */
-body {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+:root {
+  --font-text: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #1c1c1c;
+
+  --font-heading: "Montserrat", system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial, sans-serif;
+
+  --color-text: #1c1c1c;
+  --color-muted: #6b7280;
+  --color-primary: #155945;
+
+  --fs-base: 16px;
+  --lh-base: 1.6;
 }
 
-/* Заголовки */
+/* ======================
+   BASE
+====================== */
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-text);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ======================
+   HEADINGS
+====================== */
+
 h1,
 h2,
 h3,
 h4,
 h5,
-h6,
-.sx-tilte,
-.widget-title {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
+h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
   line-height: 1.25;
-  color: #155945;
+  margin: 0 0 0.6em;
+  letter-spacing: -0.01em;
 }
 
-/* Подзаголовки */
-.subtitle {
-  font-family: "Montserrat", sans-serif;
+h1 {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 26px;
   font-weight: 600;
 }
 
-/* Кнопки */
+h4 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+h6 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* ======================
+   TEXT SIZES
+====================== */
+
+.text-xs {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.text-sm {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.text-lg {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* ======================
+   LINKS
+====================== */
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ======================
+   BUTTONS
+====================== */
+
 button,
 .site-button,
 .site-button-secondry {
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ======================
+   CARDS (OBJECTS / SERVICES)
+====================== */
+
+.object-title,
+.service-card-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
   font-weight: 600;
 }
 
-/* Цифры, счётчики */
+.object-meta,
+.service-card-meta {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+/* ======================
+   COUNTERS / STATS
+====================== */
+
 .counter,
 .st-count-number {
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--font-heading);
+  font-size: 36px;
   font-weight: 800;
+  line-height: 1;
+}
+
+/* ======================
+   FORMS
+====================== */
+
+input,
+select,
+textarea {
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ======================
+   MOBILE TYPOGRAPHY
+====================== */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  h4 {
+    font-size: 20px;
+  }
+
+  body {
+    font-size: 15px;
+  }
 }
 
 
