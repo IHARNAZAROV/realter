@@ -428,6 +428,8 @@
     "areaKitchen": 9.3,
     "areaSNB": null,
     "floor": 6,
+    "recommended": 1,
+    "cardDescription": "Квартира расположена на 6 этаже 12-этажного панельного дома 1994 года постройки. Общая площадь 78,6 м², жилая 45 м², кухня 9,3 м²",
     "floorsTotal": 12,
     "yearBuilt": 1994,
     "houseType": "Панельный",

@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
   initGlobalClickDelegation();
   initStickyHeader();
   bg_moving();
-  initMasonryFilter();
+  initBlogMasonryFilter();
+  initServiceCardsAnimation();
 });
 
 /**
@@ -546,35 +547,76 @@ function handleSubmenu(e) {
   e.preventDefault();
 }
 
-function initMasonryFilter() {
-  const container = document.querySelector(".masonry-outer");
-  if (!container) return;
+function initBlogMasonryFilter() {
+  const container = document.querySelector(".news-masonry");
+  if (!container || !window.Masonry) return;
 
-  document.addEventListener("click", (e) => {
-    const link = e.target.closest(".masonry-filter a");
-    if (!link) return;
+  const items = Array.from(container.querySelectorAll(".masonry-item"));
 
-    e.preventDefault();
+  // Сначала гарантируем, что все карточки видимы
+  items.forEach(item => {
+    item.style.display = "";
+  });
 
-    const filter = link.dataset.filter;
+  // Ждём загрузки всех изображений
+  const images = container.querySelectorAll("img");
+  let loaded = 0;
 
-    document
-      .querySelectorAll(".masonry-filter li")
-      .forEach((li) => li.classList.remove("active"));
+  if (!images.length) {
+    initMasonry();
+    return;
+  }
 
-    link.parentElement.classList.add("active");
+  images.forEach(img => {
+    if (img.complete) {
+      loaded++;
+      if (loaded === images.length) initMasonry();
+    } else {
+      img.addEventListener("load", () => {
+        loaded++;
+        if (loaded === images.length) initMasonry();
+      });
+      img.addEventListener("error", () => {
+        loaded++;
+        if (loaded === images.length) initMasonry();
+      });
+    }
+  });
 
-    container.querySelectorAll(".masonry-item").forEach((item) => {
-      if (filter === "*" || item.matches(filter)) {
-        item.hidden = false;
-      } else {
-        item.hidden = true;
-      }
+  function initMasonry() {
+    const masonry = new Masonry(container, {
+      itemSelector: ".masonry-item",
+      percentPosition: true,
     });
 
-    // пересчитать masonry
-  });
+    // фильтрация
+    document.addEventListener("click", (e) => {
+      const link = e.target.closest(".masonry-filter a");
+      if (!link) return;
+
+      e.preventDefault();
+
+      const filter = link.dataset.filter;
+
+      document
+        .querySelectorAll(".masonry-filter li")
+        .forEach(li => li.classList.remove("active"));
+
+      link.parentElement.classList.add("active");
+
+      items.forEach(item => {
+        item.style.display =
+          filter === "*" || item.matches(filter)
+            ? ""
+            : "none";
+      });
+
+      masonry.reloadItems();
+      masonry.layout();
+    });
+  }
 }
+
 
 function bg_moving() {
   BGScroll.init(".bg-moving", {
@@ -582,5 +624,27 @@ function bg_moving() {
     direction: "h",
     pauseWhenHidden: true, // важно
   });
+}
+
+
+function initServiceCardsAnimation() {
+  const cards = document.querySelectorAll(".number-block-three");
+  if (!cards.length) return;
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15
+    }
+  );
+
+  cards.forEach(card => observer.observe(card));
 }
 

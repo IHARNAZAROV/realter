@@ -6514,6 +6514,7 @@ blockquote.author-quote .fa-quote-left {
 
 /* ======================================
    GALLERY WIDGET
+   
    ====================================== */
 
 .service-sidebar .widget_gallery ul {
@@ -6527,4 +6528,444 @@ blockquote.author-quote .fa-quote-left {
 
 .service-sidebar .sx-post-thum img {
   border-radius: 6px;
+}
+
+/* ======================================
+   Select
+   "dom-lidskiy-rayon-melyashi": "images/objects/pic11.webp"
+   ====================================== */
+
+.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.filter-rooms {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-rooms .tooltip {
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: #fff;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+/* стрелочка */
+.filter-rooms .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f2937;
+}
+
+/* показываем tooltip ТОЛЬКО если select disabled */
+.filter-rooms:hover select:disabled + .tooltip {
+  opacity: 1;
+}
+
+/* визуально неактивный select */
+#roomsSelect:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.objects-filters {
+  background: #fffaf5;
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-bottom: 30px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.06),
+    0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.filters-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px 18px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-item label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* INPUT + SELECT */
+.objects-filters input,
+.objects-filters select {
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1c1c1c;
+}
+
+.objects-filters input:focus,
+.objects-filters select:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #155945;
+}
+
+/* SELECT arrow */
+.objects-filters select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23155945' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 38px;
+}
+
+/* PRICE */
+.filter-price .price-fields {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-price input {
+  width: 90px;
+  text-align: right;
+}
+
+.filter-price span {
+  color: #9ca3af;
+}
+
+/* DISABLED ROOMS */
+#roomsSelect:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   АНИМАЦИЯ ТОЛЬКО ДЛЯ КАТАЛОГА ОБЪЕКТОВ
+   ===================================================== */
+
+#objectsList .masonry-item {
+  opacity: 0;
+  transform: translateY(12px) scale(0.98);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+#objectsList .masonry-item.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* =====================================================
+   БЛОГ — ВСЕГДА ВИДИМ
+   ===================================================== */
+
+.news-masonry .masonry-item {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  display: block !important;
+  position: relative !important;
+}
+
+/* обычная сетка */
+.objects-list.grid-mode {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* mobile */
+@media (max-width: 992px) {
+  .objects-list.grid-mode {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .objects-list.grid-mode {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ul#objectsList */
+#objectsList.grid-mode {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* tablet */
+@media (max-width: 992px) {
+  #objectsList.grid-mode {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* mobile */
+@media (max-width: 576px) {
+  #objectsList.grid-mode {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* КРИТИЧНО: сбрасываем masonry */
+#objectsList.grid-mode .masonry-item {
+  position: static !important;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
+}
+/* =====================================================
+   RESET FILTERS BUTTON
+   ===================================================== */
+
+.filters-reset-row {
+  grid-column: 1 / -1; 
+  margin-top: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reset-filters-btn {
+  height: 44px;
+  min-width: 220px;
+  padding: 0 28px;
+
+  background: #fffaf5;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #155945;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.05),
+    0 2px 6px rgba(0, 0, 0, 0.04);
+
+  transition:
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.15s ease;
+}
+
+.reset-filters-btn:hover {
+  background: #ffffff;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.07),
+    0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.reset-filters-btn:active {
+  transform: translateY(1px);
+}
+
+.reset-filters-btn:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 2px rgba(21, 89, 69, 0.15),
+    0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 576px) {
+  .reset-filters-btn {
+    height: 48px;
+    font-size: 15px;
+  }
+}
+
+/* =====================================================
+   OBJECTS COUNTER
+   ===================================================== */
+
+/* =====================================================
+   OBJECTS COUNTER (RIGHT)
+   ===================================================== */
+
+.objects-counter {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.objects-counter strong {
+  font-weight: 600;
+  color: #155945;
+}
+
+@media (max-width: 576px) {
+  .filters-reset-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .objects-counter {
+    text-align: center;
+  }
+}
+
+/* =====================================================
+   EMPTY STATE (IN FILTERS ROW)
+   ===================================================== */
+
+.objects-counter.is-empty {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* мягкий акцент на кнопку сброса */
+.filters-reset-row.is-empty .reset-filters-btn {
+  border-color: #155945;
+  background: #ffffff;
+  box-shadow:
+    0 10px 25px rgba(21, 89, 69, 0.12),
+    0 4px 10px rgba(21, 89, 69, 0.08);
+}
+
+/* =====================================================
+   PRICE HINT (EMPTY STATE)
+   ===================================================== */
+
+.objects-counter .price-hint {
+  display: block;
+  margin-top: 4px;
+
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* =====================================================
+   ACTIVE FILTERS HIGHLIGHT
+   ===================================================== */
+
+.objects-filters select.is-active,
+.objects-filters input.is-active {
+  border-color: #155945;
+  background-color: #ffffff;
+}
+
+/* =====================================================
+   SERVICES CARDS — MOBILE TITLE CENTER
+   ===================================================== */
+
+@media (max-width: 576px) {
+  .number-block-three .figcaption h4 {
+    text-align: center;
+  }
+
+  .number-block-three .figcaption h4 a {
+    display: inline-block; /* чтобы центрирование было корректным */
+  }
+}
+
+@media (max-width: 576px) {
+  .number-block-three .figcaption h4 {
+    margin-bottom: 14px;
+  }
+}
+
+/* =====================================================
+   SERVICES CARDS — MOBILE BUTTON CENTER (FIX)
+   ===================================================== */
+
+@media (max-width: 576px) {
+  .number-block-three .figcaption {
+    text-align: center;
+  }
+
+  .number-block-three .service-card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+
+/* =====================================================
+   SERVICES CARDS — SCROLL ANIMATION
+   ===================================================== */
+
+.number-block-three {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.number-block-three.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================================
+   SERVICE CARD BUTTON — MICRO INTERACTION
+   ===================================================== */
+
+.service-card-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+
+/* стрелка */
+.service-card-icon {
+  transition: transform 0.25s ease;
+}
+
+/* HOVER (десктоп) */
+@media (hover: hover) {
+  .service-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 24px rgba(21, 89, 69, 0.18),
+      0 4px 10px rgba(21, 89, 69, 0.12);
+  }
+
+  .service-card-btn:hover .service-card-icon {
+    transform: translateX(4px);
+  }
+}
+
+/* TAP (мобильный + клики) */
+.service-card-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.12);
 }
