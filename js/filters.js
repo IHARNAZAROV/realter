@@ -38,6 +38,8 @@ const previewImages = {
   "kvartira-lida-ul-masherova": "images/objects/pic14.webp",
   "kvartira-lida-ul-tuhachevskogo": "images/objects/pic15.webp",
   "dom-lidskiy-rayon-minoyty": "images/objects/pic16.webp",
+  "kvartira-lida-ul-kosmonavtov": "images/objects/pic17.webp",
+"kvartira-lida-ul-zarechnaya-7":"images/objects/pic18.webp"
 };
 
 /* =========================================================
