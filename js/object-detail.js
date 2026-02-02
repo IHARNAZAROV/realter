@@ -171,29 +171,257 @@
     if (h) h.textContent = title;
   }
 
-  function renderGallery(images) {
-    const wrap = qs("[data-gallery]");
-    if (!wrap) return;
+function renderHeroBlock(obj) {
+  const imagesWrap = document.querySelector("[data-hero-images]");
+  if (!imagesWrap) return;
 
-    const imgs =
-      Array.isArray(images) && images.length
-        ? images.filter(isFilled)
-        : ["/images/objects/pic1.webp"];
+  const imgs = Array.isArray(obj.images) ? obj.images.slice(0, 2) : [];
 
-    wrap.innerHTML = imgs
-      .slice(0, 12)
-      .map(
-        (src) => `
-        <div class="col-md-6">
-          <div class="project-detail-pic m-b30">
-            <div class="sx-media">
-              <img loading="lazy" decoding="async" src="${src}" alt="">
-            </div>
-          </div>
-        </div>`,
-      )
-      .join("");
+const desc = document.querySelector("[data-hero-description]");
+
+if (desc && obj.description) {
+  const text = obj.description.trim();
+
+
+  const paragraphs = text
+    .split(/\n\s*\n|\.\s*\n/)
+    .map(p => p.trim())
+    .filter(Boolean);
+
+ 
+  const highlightNumbers = (str) =>
+    str.replace(
+      /(\d+[.,]?\d*\s?(м²|м2|кв\.м|кв\. м)?|\d+-этажного|\d+\s?этаж|\d+\s?комнат)/gi,
+      "<strong>$1</strong>"
+    );
+
+  desc.innerHTML = paragraphs
+    .map(p => `<p>${highlightNumbers(p)}</p>`)
+    .join("");
+}
+  imagesWrap.innerHTML = imgs
+    .map(
+      (src) => `
+      <div class="col-6">
+        <div class="object-hero-image">
+          <img loading="lazy" decoding="async" src="${src}" alt="">
+        </div>
+      </div>
+    `,
+    )
+    .join("");
+
+
+
+    
+  // META
+  const title = document.querySelector("[data-hero-title]");
+  const location = document.querySelector("[data-hero-location]");
+  const published = document.querySelector("[data-published]");
+  const dealType = document.querySelector("[data-deal-type]");
+  const featured = document.querySelector("[data-featured]");
+
+  if (title) title.textContent = obj.title || "";
+
+  if (location)
+    location.textContent = [obj.city, obj.address].filter(Boolean).join(", ");
+
+  if (published) {
+    published.textContent = obj.publishedAt
+      ? new Date(obj.publishedAt).toLocaleDateString("ru-RU")
+      : "";
   }
+
+  if (dealType) dealType.textContent = obj.dealType || "Продажа";
+
+  if (featured && obj.recommended) {
+    featured.hidden = false;
+  }
+}
+
+
+function getAreaTotal(obj) {
+  return obj.areaTotal ?? obj.totalArea ?? null;
+}
+
+function getAreaLiving(obj) {
+  return obj.areaLiving ?? obj.livingArea ?? null;
+}
+
+function getAreaKitchen(obj) {
+  return obj.areaKitchen ?? obj.kitchenArea ?? null;
+}
+
+function renderObjectDetails(obj) {
+  const wrap = document.querySelector("[data-object-details]");
+  const priceWrap = document.querySelector("[data-object-price]");
+  if (!wrap || !priceWrap) return;
+
+  const isFlat = String(obj.type || "").toLowerCase().includes("квартир");
+
+  /* ======================
+     PRICE
+  ====================== */
+  if (typeof obj.priceBYN === "number") {
+    priceWrap.innerHTML = `
+      <div class="object-price-label">Цена</div>
+      <div class="object-price-value">
+        ${obj.priceBYN.toLocaleString("ru-RU")} BYN
+      </div>
+    `;
+  }
+
+  /* ======================
+     HELPERS
+  ====================== */
+  const has = (v) =>
+    v !== null && v !== undefined && String(v).trim() !== "";
+
+  const make = (icon, label, value, group) =>
+    has(value) ? { icon, label, value, group } : null;
+
+  let items = [];
+
+  /* ======================
+     PRIMARY — КЛЮЧЕВЫЕ
+  ====================== */
+
+  if (isFlat) {
+    items.push(
+      make("fa-house", "Тип объекта", obj.type, "Основное"),
+      make("fa-door-open", "Комнат", obj.rooms, "Основное"),
+      make(
+        "fa-layer-group",
+        "Этаж",
+        obj.floor && obj.floorsTotal
+          ? `${obj.floor} из ${obj.floorsTotal}`
+          : obj.floor,
+        "Основное",
+      ),
+      make(
+  "fa-expand",
+  "Общая площадь",
+  getAreaTotal(obj) && `${getAreaTotal(obj)} м²`,
+  "Площади",
+),
+make(
+  "fa-couch",
+  "Жилая площадь",
+  getAreaLiving(obj) && `${getAreaLiving(obj)} м²`,
+  "Площади",
+),
+make(
+  "fa-ruler-combined",
+  "Площадь кухни",
+  getAreaKitchen(obj) && `${getAreaKitchen(obj)} м²`,
+  "Площади",
+),
+      make("fa-bath", "Санузел", obj.bathroom, "Площади"),
+      make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное"),
+    );
+  } else {
+  // ДОМ
+  items.push(
+    make("fa-house", "Тип объекта", obj.type, "Основное"),
+
+    // ⬇️ ПЛОЩАДИ (КЛЮЧЕВО!)
+    make(
+      "fa-expand",
+      "Площадь дома",
+      getAreaTotal(obj) && `${getAreaTotal(obj)} м²`,
+      "Площади",
+    ),
+    make(
+      "fa-couch",
+      "Жилая площадь",
+      getAreaLiving(obj) && `${getAreaLiving(obj)} м²`,
+      "Площади",
+    ),
+    make(
+      "fa-tree",
+      "Площадь участка",
+      obj.areaPlot && `${obj.areaPlot} соток`,
+      "Площади",
+    ),
+
+    // ⬇️ КОММУНИКАЦИИ
+    make("fa-fire", "Отопление", obj.heating, "Коммуникации"),
+    make("fa-faucet", "Вода", obj.water, "Коммуникации"),
+    make("fa-toilet", "Канализация", obj.sewerage, "Коммуникации"),
+    make("fa-bolt", "Электричество", obj.electricity, "Коммуникации"),
+
+    // ⬇️ ОСНОВНОЕ
+    make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное"),
+  );
+}
+  
+
+  /* ======================
+     SECONDARY — ДОБИВАЮЩИЕ
+  ====================== */
+  const fallback = [
+    make("fa-bolt", "Электричество", obj.electricity, "Коммуникации"),
+    make("fa-gas-pump", "Газ", obj.gas, "Коммуникации"),
+    make("fa-city", "Тип дома", obj.houseType, "Основное"),
+    make("fa-door-closed", "Балкон / лоджия", obj.balcony, "Площади"),
+    make("fa-couch", "Мебель", obj.furniture, "Основное"),
+    make("fa-wrench", "Состояние", obj.condition, "Основное"),
+  ];
+
+  items = items.filter(Boolean);
+
+  for (const f of fallback) {
+    if (items.length >= 10) break;
+    if (f) items.push(f);
+  }
+
+  // Гарантируем минимум 8
+  items = items.slice(0, 10);
+  if (items.length < 8) {
+    // это почти невозможно, но защита
+    console.warn("Мало параметров для объекта:", obj.slug);
+  }
+
+  /* ======================
+     GROUP BY SECTION
+  ====================== */
+  const groups = {};
+  items.forEach((i) => {
+    if (!groups[i.group]) groups[i.group] = [];
+    groups[i.group].push(i);
+  });
+
+  /* ======================
+     RENDER
+  ====================== */
+  wrap.innerHTML = Object.entries(groups)
+    .map(
+      ([group, rows]) => `
+      <div class="object-details-group">
+        <h5 class="object-details-group-title">${group}</h5>
+        <div class="object-details-list">
+${rows
+  .map(
+    (r, idx) => `
+  <div class="object-detail-row" style="animation-delay:${idx * 60}ms">
+    <div class="object-detail-label">
+      <i class="fa-solid ${r.icon}"></i>
+      ${r.label}
+    </div>
+    <div class="object-detail-value">${r.value}</div>
+  </div>
+`,
+  )
+  .join("")}
+        </div>
+      </div>
+    `,
+    )
+    .join("");
+}
+
+
+
 
   function renderMeta(obj) {
     const meta = qs("[data-meta-list]");
@@ -289,6 +517,29 @@
       <p>slug: <b>${slug || "—"}</b></p>
     `;
   }
+
+
+function renderSidebarFooter(obj) {
+  const box = document.querySelector("[data-sidebar-footer]");
+  if (!box) return;
+
+  const contract = obj.contractNumber
+    ? `<div class="sidebar-contract">${obj.contractNumber}</div>`
+    : "";
+
+  box.innerHTML = `
+    <div class="sidebar-agency">
+      <div class="sidebar-agency-title">
+        📍 Агентство недвижимости «ГермесГрупп»
+      </div>
+      <div class="sidebar-agency-address">
+        г. Лида, б-р Князя Гедимина, дом 12, помещение 9.
+      </div>
+      ${contract}
+    </div>
+  `;
+}
+
 
   /* =====================================================
    SIMILAR OBJECTS (Похожие варианты)
@@ -468,6 +719,163 @@ function toggleFavorite(slug) {
 }
 
 
+
+function renderHeroMeta(obj) {
+  const title = document.querySelector("[data-hero-title]");
+  const location = document.querySelector("[data-hero-location]");
+  const published = document.querySelector("[data-published]");
+  const dealType = document.querySelector("[data-deal-type]");
+  const featured = document.querySelector("[data-featured]");
+
+  if (title) title.textContent = obj.title || "";
+  if (location)
+    location.textContent = [obj.city, obj.address].filter(Boolean).join(", ");
+
+  if (published) {
+    const d = obj.publishedAt
+      ? new Date(obj.publishedAt).toLocaleDateString("ru-RU")
+      : "";
+    published.textContent = d;
+  }
+
+  if (dealType) dealType.textContent = obj.dealType || "Продажа";
+
+  if (featured && obj.recommended) {
+    featured.hidden = false;
+  }
+}
+
+
+function renderSidebarTitle(obj) {
+  const title = document.querySelector("[data-sidebar-title]");
+  if (title) title.textContent = obj.title || "";
+}
+
+
+function initSidebarSlider(currentObj, allObjects) {
+  const container = document.querySelector("[data-sidebar-slider]");
+  if (!container) return;
+
+  const items = pickSimilarObjects(currentObj, allObjects, 6);
+  if (!items.length) return;
+
+  let index = 0;
+  let interval = null;
+  let isPaused = false;
+
+  function renderSlide(obj) {
+    const img =
+      Array.isArray(obj.images) && obj.images[0]
+        ? obj.images[0]
+        : "/images/objects/pic1.webp";
+
+    const price =
+      typeof obj.priceBYN === "number"
+        ? `${obj.priceBYN.toLocaleString("ru-RU")} BYN`
+        : "";
+
+    container.innerHTML = `
+      <a href="/object-detail?slug=${obj.slug}" class="sidebar-slide">
+        <div class="sidebar-slide-image">
+          <img src="${img}" alt="${obj.title}">
+        </div>
+
+        <div class="sidebar-slide-content">
+          <h6>${obj.title}</h6>
+          <div class="sidebar-slide-location">
+            <i class="fa-solid fa-location-dot"></i>
+            ${[obj.city, obj.address].filter(Boolean).join(", ")}
+          </div>
+          <div class="sidebar-slide-price">${price}</div>
+        </div>
+      </a>
+    `;
+  }
+
+  function next() {
+    index = (index + 1) % items.length;
+    animateChange();
+  }
+
+  function prev() {
+    index = (index - 1 + items.length) % items.length;
+    animateChange();
+  }
+
+  function animateChange() {
+    container.classList.add("fade-out");
+    setTimeout(() => {
+      renderSlide(items[index]);
+      container.classList.remove("fade-out");
+    }, 250);
+  }
+
+  function startAuto() {
+    if (interval) clearInterval(interval);
+    interval = setInterval(() => {
+      if (!isPaused) next();
+    }, 5000);
+  }
+
+  // INIT
+  renderSlide(items[index]);
+  startAuto();
+
+  /* ======================
+     PAUSE ON HOVER
+  ====================== */
+  container.addEventListener("mouseenter", () => {
+    isPaused = true;
+  });
+
+  container.addEventListener("mouseleave", () => {
+    isPaused = false;
+  });
+
+  /* ======================
+     SWIPE (MOBILE)
+  ====================== */
+  let startX = 0;
+  let diffX = 0;
+
+  container.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  container.addEventListener("touchmove", (e) => {
+    diffX = e.touches[0].clientX - startX;
+  });
+
+  container.addEventListener("touchend", () => {
+    if (Math.abs(diffX) > 50) {
+      diffX < 0 ? next() : prev();
+    }
+    startX = 0;
+    diffX = 0;
+  });
+}
+
+
+
+function animateAgentCardOnce() {
+  const card = document.querySelector(".agent-card");
+  if (!card) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        card.classList.add("is-visible");
+        observer.disconnect(); // ⬅️ только один раз
+      }
+    },
+    {
+      threshold: 0.3,
+    },
+  );
+
+  observer.observe(card);
+}
+
   /* =====================================================
      INIT
   ===================================================== */
@@ -493,12 +901,16 @@ function toggleFavorite(slug) {
 
     
       renderTopTitle(obj);
-      renderGallery(obj.images);
+      renderHeroBlock(obj);
       renderMeta(obj);
       renderRightText(obj);
-
+renderHeroMeta(obj);
+initSidebarSlider(obj, objects);
+renderSidebarTitle(obj);
+animateAgentCardOnce();
       renderSimilarSlider(obj, objects);
-
+renderObjectDetails(obj);
+renderSidebarFooter(obj);
    
       generateObjectSchema(obj);
     } catch (e) {

@@ -127,7 +127,8 @@
               <!-- BREADCRUMB ROW -->
               <div>
                 <ul class="sx-breadcrumb breadcrumb-style-2">
-                  <li><a href="/">Главная</a>
+                  <li><i class="fa-solid fa-house fa-fw"></i>
+                    <a href="/">Главная</a>
                   </li>
                   <li>Детали объекта</li>
                 </ul>
@@ -142,22 +143,144 @@
           <div class="container">
             <div class="row">
               <div class="col-lg-8 col-md-12">
-                <div class="project-detail-outer row" data-gallery></div>
+              <div class="object-hero-wrapper" data-hero-wrapper>
+  <div class="row g-3 object-hero-images" data-hero-images></div>
+
+  <div class="object-hero-meta">
+    <ul class="object-hero-tags">
+      <li class="tag-featured" data-featured hidden>Рекомендуемый</li>
+      <li>
+        <i class="fa-regular fa-calendar"></i>
+        <span data-published></span>
+      </li>
+      <li>
+        <i class="fa-solid fa-handshake"></i>
+        <span data-deal-type></span>
+      </li>
+    </ul>
+
+<h3 class="object-hero-title" data-hero-title></h3>
+
+<div class="object-hero-location">
+  <i class="fa-solid fa-location-dot"></i>
+  <span data-hero-location></span>
+</div>
+
+<p class="object-hero-description" data-hero-description></p>
+  </div>
+</div>
+               
+
+
+  <h3 class="object-hero-title" data-hero-title></h3>
+
+<!-- OBJECT DETAILS -->
+<div class="object-details">
+
+  <!-- PRICE -->
+  <div class="object-price" data-object-price></div>
+
+  <!-- GROUPS -->
+  <div class="object-details-groups" data-object-details></div>
+
+</div>
+
+
+
+
+
+
+
               </div>
               <div class="col-lg-4 col-md-12 sticky_column">
                 <div class="project-detail-containt-2">
                   <div class="bg-white text-black p-a20 shadow">
-                    <div class="product-block bg-gray m-b30">
-                      <h4 data-object-title></h4>
-                      <ul data-meta-list></ul>
-                    </div>
-                    <p data-object-subtitle></p>
-                    <div data-object-description></div>
-                    <div class="m-b0">
-                      <div class="sx-divider divider-1px bg-black">
-                        <i class="icon-dot c-square"></i>
-                      </div>
-                    </div>
+<div class="project-detail-containt-2">
+  <div class="bg-white p-a20 shadow object-sidebar">
+
+    <!-- TITLE -->
+    <h4 class="object-sidebar-title" data-sidebar-title></h4>
+
+    <!-- AGENT CARD -->
+    <div class="agent-card">
+      <div class="agent-avatar">
+        <img src="/images/main-slider/2.webp" alt="Ольга Турко">
+      </div>
+
+      <h5 class="agent-name">Ольга Турко</h5>
+      <div class="agent-role">Аттестованный риэлтер</div>
+
+      <p class="agent-desc">
+        Помогаю безопасно купить и продать недвижимость в Лиде и районе.
+        Подбираю объекты под задачу, а не «по списку».
+      </p>
+
+<div class="agent-actions">
+  <a
+    href="tel:+375291234567"
+    class="site-button-secondry btn-half agent-action-btn"
+  >
+    <span>Позвонить</span>
+  </a>
+
+  <a
+    href="/contact"
+    class="site-button-secondry btn-half agent-action-btn agent-action-btn--outline"
+  >
+    <span>Написать</span>
+  </a>
+</div>
+      <div class="agent-socials">
+  <a
+    href="https://t.me/USERNAME"
+    target="_blank"
+    rel="noopener"
+    aria-label="Telegram"
+  >
+    <i class="fa-brands fa-telegram"></i>
+  </a>
+
+  <a
+    href="https://instagram.com/USERNAME"
+    target="_blank"
+    rel="noopener"
+    aria-label="Instagram"
+  >
+    <i class="fa-brands fa-instagram"></i>
+  </a>
+
+  <a
+    href="https://www.tiktok.com/@USERNAME"
+    target="_blank"
+    rel="noopener"
+    aria-label="TikTok"
+  >
+    <i class="fa-brands fa-tiktok"></i>
+  </a>
+</div>
+
+    </div>
+
+    <!-- SIDEBAR SLIDER -->
+<div class="sidebar-slider">
+  <h5 class="sidebar-slider-title">Похожий объект</h5>
+
+  <div class="sidebar-slider-frame" data-sidebar-slider>
+    <!-- slide injected by JS -->
+  </div>
+</div>
+
+    <!-- FOOTER -->
+   <div class="sidebar-footer" data-sidebar-footer>
+      <p>
+        📍 Агентство недвижимости «ГермесГрупп»<br>
+        г. Лида, б-р Князя Гедимина, 12, пом. 9.
+      </p>
+    </div>
+
+  </div>
+</div>
+
                   </div>
                 </div>
               </div>
@@ -165,6 +288,12 @@
           </div>
         </div>
         <!-- SECTION CONTENT END  -->
+
+
+
+
+
+
         <!-- Similar projects START -->
         <div class="section-full p-tb80 bg-gray inner-page-padding">
           <div class="container">
@@ -299,6 +428,7 @@
       </footer>
       <!-- FOOTER END -->
     </div>
+
 
     <!-- JAVASCRIPT  FILES ========================================= -->
 

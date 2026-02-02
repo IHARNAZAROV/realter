@@ -7825,3 +7825,415 @@ blockquote.author-quote .fa-quote-left {
   font-size: 12px;
   color: #d7b39a;
 }
+
+
+
+/* =====================================================
+   OBJECT HERO WRAPPER
+===================================================== */
+.object-hero-wrapper {
+  background: #f4f9f8;
+  border: 1.5px solid rgba(21, 89, 69, 0.35);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow:
+    0 18px 40px rgba(21, 89, 69, 0.18),
+    0 4px 10px rgba(21, 89, 69, 0.08);
+}
+
+/* Images */
+.object-hero-image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+/* Meta */
+.object-hero-meta {
+  margin-top: 18px;
+}
+
+/* Tags */
+.object-hero-tags {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: #3e5f56;
+}
+
+.object-hero-tags li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Featured tag */
+.tag-featured {
+  background: #155945;
+  color: #ffffff;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Title & location */
+.object-hero-title {
+  margin: 0 0 8px;
+  font-weight: 800;
+  color: #0f3f32;
+}
+
+.object-hero-location {
+  margin: 6px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  color: #155945;
+}
+
+/* =====================================================
+   OBJECT HERO DESCRIPTION
+===================================================== */
+.object-hero-description {
+  margin: 12px 0 16px;
+  padding: 14px 16px;
+  background: rgba(21, 89, 69, 0.04);
+  border-left: 3px solid #155945;
+  border-radius: 6px;
+
+  font-size: 15px;
+  line-height: 1.7;
+  color: #2f4f46;
+}
+
+.object-hero-description p {
+  margin: 0 0 10px;
+}
+
+.object-hero-description p:last-child {
+  margin-bottom: 0;
+}
+
+.object-hero-description strong {
+  font-weight: 700;
+  color: #0f3f32;
+}
+
+@media (max-width: 768px) {
+  .object-hero-description {
+    font-size: 14px;
+  }
+}
+
+/* =====================================================
+   PRICE BLOCK
+===================================================== */
+.object-price {
+  background: #155945;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  text-align: center;
+  box-shadow: 0 16px 36px rgba(21, 89, 69, 0.3);
+}
+
+.object-price-label {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+
+.object-price-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .object-price-value {
+    font-size: 22px;
+  }
+}
+
+/* =====================================================
+   OBJECT DETAILS
+===================================================== */
+.object-details {
+  margin-top: 40px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 16px 36px rgba(21, 89, 69, 0.12);
+}
+
+/* Groups */
+.object-details-group {
+  margin-bottom: 28px;
+}
+
+.object-details-group-title {
+  font-weight: 800;
+  margin-bottom: 14px;
+  color: #0f3f32;
+}
+
+/* Rows */
+.object-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(21, 89, 69, 0.15);
+
+  opacity: 0;
+  transform: translateY(12px);
+  animation: detailRowFade 0.45s ease forwards;
+}
+
+.object-detail-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #6b8f86;
+}
+
+.object-detail-label i {
+  width: 16px;
+  text-align: center;
+  color: #155945;
+}
+
+.object-detail-value {
+  font-weight: 700;
+  color: #0f3f32;
+  text-align: right;
+}
+
+/* Animation */
+@keyframes detailRowFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================================
+   AGENT CARD
+===================================================== */
+.agent-card {
+  text-align: center;
+  border: 1.5px solid rgba(21, 89, 69, 0.25);
+  border-radius: 18px;
+  padding: 24px 18px;
+  margin-bottom: 28px;
+  box-shadow: 0 12px 30px rgba(21, 89, 69, 0.12);
+
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.object-sidebar-title {
+  font-weight: 800;
+  font-size: 18px;
+  color: #0f3f32;
+
+  text-align: center;
+  margin: 12px 0 28px;
+}
+
+.agent-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Avatar */
+.agent-avatar img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 14px;
+}
+
+/* Text */
+.agent-name {
+  font-weight: 700;
+}
+
+.agent-role {
+  font-size: 14px;
+  color: #155945;
+  margin-bottom: 14px;
+}
+
+.agent-desc {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+/* =====================================================
+   AGENT ACTIONS & SOCIALS
+===================================================== */
+.agent-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.agent-action-btn.site-button-secondry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 18px;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  border-radius: 999px;
+}
+
+.agent-action-btn.site-button-secondry span {
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Hover fix */
+.agent-action-btn.site-button-secondry:hover span {
+  color: #ffffff;
+}
+
+/* Socials */
+.agent-socials {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+.agent-socials a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(21, 89, 69, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #155945;
+  font-size: 16px;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.agent-socials a:hover {
+  background: #155945;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(21, 89, 69, 0.25);
+}
+
+/* =====================================================
+   SIDEBAR SLIDER
+===================================================== */
+.sidebar-slider-frame {
+  position: relative;
+  min-height: 340px;
+  transition: opacity 0.25s ease;
+}
+
+.sidebar-slider-frame.fade-out {
+  opacity: 0;
+}
+
+.sidebar-slide {
+  display: block;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1.5px solid rgba(21, 89, 69, 0.25);
+  box-shadow: 0 18px 40px rgba(21, 89, 69, 0.18);
+  text-decoration: none;
+}
+
+.sidebar-slide-image img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+}
+
+.sidebar-slide-content {
+  padding: 16px;
+}
+
+.sidebar-slide-content h6 {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #0f3f32;
+}
+
+.sidebar-slide-location {
+  font-size: 13px;
+  color: #155945;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.sidebar-slide-price {
+  font-weight: 800;
+  color: #155945;
+}
+
+/* Footer */
+.sidebar-agency {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 14px;
+  color: #155945;
+}
+
+.sidebar-contract {
+  margin-top: 10px;
+  font-weight: 700;
+  color: #0f3f32;
+}
+
+.object-hero-title {
+  margin: 12px 0 8px;
+  font-weight: 800;
+  font-size: 28px;
+  color: #0f3f32;
+
+  text-align: center;
+}
+/* =====================================================
+   MOBILE FIXES
+===================================================== */
+@media (max-width: 991px) {
+  .sticky_column,
+  .project-detail-containt-2 {
+    position: static !important;
+  }
+
+  .project-detail-containt-2 {
+    margin-top: 32px;
+  }
+
+  .object-details {
+    margin-bottom: 32px;
+  }
+}
