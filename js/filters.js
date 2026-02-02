@@ -16,6 +16,7 @@ const priceToInput = document.getElementById("priceTo");
 const locationSelect = document.getElementById("locationSelect");
 const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
+const VIEW_STORAGE_KEY = "objectsViewMode";
 
 /* =========================================================
    PREVIEW IMAGES (static mapping)
@@ -90,9 +91,11 @@ document.addEventListener("DOMContentLoaded", () => {
       updateRoomsState();
       loadFiltersFromStorage();
       applyFiltersAndSort();
+   
     });
 
   bindEvents();
+     initViewSwitcher();
 });
 /* =========================================================
    EVENTS
@@ -218,7 +221,6 @@ function applyFiltersAndSort() {
   saveFiltersToStorage();
 }
 
-
 /* =========================================================
    RENDER
 ========================================================= */
@@ -232,44 +234,61 @@ function renderObjects(list) {
   }
 
   const isFirstRender = !objectsList.hasChildNodes();
+
   list.forEach((obj, index) => {
     const li = document.createElement("li");
     li.className = "object-item";
 
-    const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
+    const imgSrc =
+      previewImages[obj.slug] || "images/objects/placeholder.webp";
+
     const area = getObjectArea(obj);
     const pricePerMeter = area ? Math.round(obj.priceBYN / area) : null;
     const contractNumber = obj.contractNumber || null;
-const delay = isFirstRender ? index * 50 : index * 20;
 
-requestAnimationFrame(() => {
-  setTimeout(() => {
-    li.classList.add("is-visible");
-  }, delay);
-});
+    const delay = isFirstRender ? index * 50 : index * 20;
+
     li.innerHTML = `
       <div class="project-mas hover-shadow">
+
+        <!-- OVERLAY LINK: кликабельна вся карточка в compact -->
+        <a
+          href="/object-detail?slug=${obj.slug}"
+          class="card-link-overlay"
+          aria-label="Открыть объект ${obj.title}"
+        ></a>
+
         <div class="image-effect-one">
           <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
         </div>
+
         <div class="project-info p-a20 bg-gray">
           <h4 class="sx-tilte m-t0">
-            <a href="/object-detail?slug=${obj.slug}" target="_blank" rel="noopener noreferrer">
+            <a href="/object-detail?slug=${obj.slug}">
               ${obj.title}
             </a>
           </h4>
+
           <p>${obj.cardDescription || ""}</p>
-<div class="object-meta">
-  <span class="object-price">${formatPrice(obj.priceBYN)} BYN</span>
 
-  ${pricePerMeter
-    ? `<span>${formatPrice(pricePerMeter)} BYN / м²</span>`
-    : ""}
+          <div class="object-meta">
+            <span class="object-price">
+              ${formatPrice(obj.priceBYN)} BYN
+            </span>
 
-  ${contractNumber
-    ? `<span class="object-contract">${contractNumber}</span>`
-    : ""}
-</div>
+            ${
+              pricePerMeter
+                ? `<span>${formatPrice(pricePerMeter)} BYN / м²</span>`
+                : ""
+            }
+
+            ${
+              contractNumber
+                ? `<span class="object-contract">${contractNumber}</span>`
+                : ""
+            }
+          </div>
+
           <a href="/object-detail?slug=${obj.slug}">
             <i class="link-plus bg-primary"></i>
           </a>
@@ -279,13 +298,14 @@ requestAnimationFrame(() => {
 
     objectsList.appendChild(li);
 
-requestAnimationFrame(() => {
-  setTimeout(() => {
-    li.classList.add("is-visible");
-  }, index * 50);
-});
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        li.classList.add("is-visible");
+      }, delay);
+    });
   });
 }
+
 
 
 /* =========================================================
@@ -390,4 +410,34 @@ function loadFiltersFromStorage() {
   } catch (e) {
     localStorage.removeItem(FILTERS_STORAGE_KEY);
   }
+}
+
+function initViewSwitcher() {
+  const buttons = document.querySelectorAll(".view-btn");
+  if (!buttons.length) return;
+
+  const savedView =
+    localStorage.getItem(VIEW_STORAGE_KEY) || "grid";
+
+  setViewMode(savedView);
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const view = btn.dataset.view;
+      setViewMode(view);
+      localStorage.setItem(VIEW_STORAGE_KEY, view);
+    });
+  });
+}
+
+function setViewMode(mode) {
+  objectsList.classList.remove("view-grid", "view-compact");
+  objectsList.classList.add(`view-${mode}`);
+
+  document.querySelectorAll(".view-btn").forEach((btn) => {
+    btn.classList.toggle(
+      "is-active",
+      btn.dataset.view === mode
+    );
+  });
 }
