@@ -4,7 +4,6 @@
    GLOBAL STATE
 ========================================================= */
 let allObjects = [];
-let masonryInstance = null;
 
 /* =========================================================
    DOM ELEMENTS
@@ -228,20 +227,26 @@ function renderObjects(list) {
 
   if (!list.length) {
     objectsList.innerHTML =
-      "<li class='masonry-item is-visible'><p>Объекты не найдены</p></li>";
-    updateLayoutMode();
+      "<li class='object-item'><p>Объекты не найдены</p></li>";
     return;
   }
 
+  const isFirstRender = !objectsList.hasChildNodes();
   list.forEach((obj, index) => {
     const li = document.createElement("li");
-    li.className = "masonry-item";
+    li.className = "object-item";
 
     const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
-
     const area = getObjectArea(obj);
     const pricePerMeter = area ? Math.round(obj.priceBYN / area) : null;
+    const contractNumber = obj.contractNumber || null;
+const delay = isFirstRender ? index * 50 : index * 20;
 
+requestAnimationFrame(() => {
+  setTimeout(() => {
+    li.classList.add("is-visible");
+  }, delay);
+});
     li.innerHTML = `
       <div class="project-mas hover-shadow">
         <div class="image-effect-one">
@@ -254,10 +259,17 @@ function renderObjects(list) {
             </a>
           </h4>
           <p>${obj.cardDescription || ""}</p>
-          <div class="object-meta">
-            <span class="object-price">${formatPrice(obj.priceBYN)} BYN</span>
-            ${pricePerMeter ? `<span>${formatPrice(pricePerMeter)} BYN / м²</span>` : ""}
-          </div>
+<div class="object-meta">
+  <span class="object-price">${formatPrice(obj.priceBYN)} BYN</span>
+
+  ${pricePerMeter
+    ? `<span>${formatPrice(pricePerMeter)} BYN / м²</span>`
+    : ""}
+
+  ${contractNumber
+    ? `<span class="object-contract">${contractNumber}</span>`
+    : ""}
+</div>
           <a href="/object-detail?slug=${obj.slug}">
             <i class="link-plus bg-primary"></i>
           </a>
@@ -267,45 +279,14 @@ function renderObjects(list) {
 
     objectsList.appendChild(li);
 
-    setTimeout(() => li.classList.add("is-visible"), index * 40);
+requestAnimationFrame(() => {
+  setTimeout(() => {
+    li.classList.add("is-visible");
+  }, index * 50);
+});
   });
-
-  updateLayoutMode();
 }
 
-/* =========================================================
-   LAYOUT MODE (GRID / MASONRY)
-========================================================= */
-function updateLayoutMode() {
-  if (typeSelect.value === "all") {
-    objectsList.classList.remove("grid-mode");
-    initOrReflowMasonry();
-  } else {
-    destroyMasonry();
-    objectsList.classList.add("grid-mode");
-  }
-}
-
-function initOrReflowMasonry() {
-  if (!window.Masonry) return;
-
-  if (!masonryInstance) {
-    masonryInstance = new Masonry(objectsList, {
-      itemSelector: ".masonry-item",
-      percentPosition: true,
-    });
-  } else {
-    masonryInstance.reloadItems();
-    masonryInstance.layout();
-  }
-}
-
-function destroyMasonry() {
-  if (masonryInstance) {
-    masonryInstance.destroy();
-    masonryInstance = null;
-  }
-}
 
 /* =========================================================
    Счетчик
