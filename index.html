@@ -1177,6 +1177,90 @@
                       <a href="https://www.instagram.com/rielter_olga_lida" target="_blank" class="fa-brands fa-square-instagram"></a>
                     </li>
                   </ul>
+
+
+
+<form
+  class="newsletter-form"
+  action="https://formspree.io/f/xlglwkob"
+  method="POST"
+  id="newsletterForm"
+>
+  <div class="newsletter-field">
+    <input
+      type="email"
+      name="email"
+      placeholder="Введите ваш email"
+      required
+    >
+    <button type="submit" aria-label="Отправить">
+<i class="fa fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
+
+<div class="newsletter-success">
+  <i class="fa-solid fa-circle-check success-icon"></i>
+  <span class="success-text">Спасибо! Заявка отправлена</span>
+
+  <div class="newsletter-progress">
+    <span class="progress-bar"></span>
+    <i class="fa-solid fa-paper-plane progress-plane"></i>
+  </div>
+
+  <div class="newsletter-timer">
+    Возврат через <strong id="newsletterTimer">5</strong> сек
+  </div>
+</div>
+
+
+  <p class="newsletter-hint">
+    Только важные новости. Без спама.
+  </p>
+</form>
+
+<script>
+document.getElementById("newsletterForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const form = this;
+  const data = new FormData(form);
+  const timerEl = document.getElementById("newsletterTimer");
+
+  try {
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: data,
+      headers: { "Accept": "application/json" }
+    });
+
+    if (response.ok) {
+      form.classList.add("success");
+      form.reset();
+
+      let timeLeft = 5;
+      timerEl.textContent = timeLeft;
+
+      const interval = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          form.classList.remove("success");
+        }
+      }, 1000);
+
+    } else {
+      alert("Ошибка отправки. Попробуйте позже.");
+    }
+
+  } catch (error) {
+    alert("Нет соединения с сервером.");
+  }
+});
+</script>
+
+
                 </div>
               </div>
               <!-- Recent Posts -->
@@ -1215,8 +1299,13 @@
                     <li><a href="tel:+375291809516">(+375) 29 180 95 16</a></li>
                     <li><a href="tel:+375445019090">(+375) 44 501 90 90</a></li>
                   </ul>
+
+
+
                 </div>
               </div>
+
+
             </div>
           </div>
           <div class="container">
@@ -1233,7 +1322,12 @@
                 </div>
               </div>
             </div>
+
+
           </div>
+
+                       
+
         </div>
         <!-- Footer Bottom -->
         <div class="footer-bottom overlay-wraper">

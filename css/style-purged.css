@@ -7510,3 +7510,318 @@ blockquote.author-quote .fa-quote-left {
   position: relative;
   z-index: 3;
 }
+
+/* ===============================
+   BRAND VARIABLES
+================================ */
+:root {
+  --brand-main: #d7b39a;
+  --brand-dark: #155945;
+  --brand-success: #1f9d55;
+  --border-light: #e4e6eb;
+}
+
+/* ===============================
+   FORM
+================================ */
+.newsletter-form {
+  max-width: 420px;
+  position: relative;
+}
+
+.newsletter-field {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.newsletter-field:focus-within {
+  border-color: var(--brand-main);
+  box-shadow: 0 0 0 4px rgba(31, 60, 136, 0.12);
+}
+
+.newsletter-field input {
+  flex: 1;
+  border: none;
+  padding: 14px 16px;
+  font-size: 15px;
+  outline: none;
+}
+
+.newsletter-field button {
+  background: var(--brand-main);
+  border: none;
+  padding: 0 18px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.newsletter-field button:hover {
+  background: var(--brand-dark);
+}
+
+.newsletter-field i {
+  color: #fff;
+  font-size: 16px;
+}
+
+/* ===============================
+   SUCCESS STATE
+================================ */
+.newsletter-success {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.96);
+  transition: all 0.35s ease;
+}
+
+.newsletter-success i {
+  color: var(--brand-success);
+  font-size: 22px;
+}
+
+.newsletter-success span {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.newsletter-form.success .newsletter-field {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.newsletter-form.success .newsletter-success {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ===============================
+   HINT
+================================ */
+.newsletter-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.newsletter-field {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.newsletter-field input {
+  flex: 1 1 auto;
+  width: auto !important;
+  min-width: 0;
+}
+
+.newsletter-field button {
+  flex: 0 0 48px !important;
+  width: 48px !important;
+  min-width: 48px !important;
+  height: 48px;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  background: #d7b39a;
+  border: none;
+}
+
+.newsletter-field button i {
+  color: #fff;
+  font-size: 16px;
+
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.newsletter-form {
+  margin-top: 28px;
+}
+
+.newsletter-form.success .newsletter-field {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.newsletter-form.success .newsletter-success {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===============================
+   SUCCESS STATE
+================================ */
+.newsletter-success {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.newsletter-form.success .newsletter-success {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.newsletter-form.success .newsletter-field {
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* ===============================
+   ICON & TEXT
+================================ */
+.newsletter-success i {
+  font-size: 24px;
+  color: #1f9d55;
+}
+
+.newsletter-success span {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* ===============================
+   SUCCESS WRAPPER
+================================ */
+.newsletter-success {
+  position: absolute;
+  inset: 0;
+
+  background: #ffffff;
+  border-radius: 12px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px 20px 20px;
+  gap: 10px;
+
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+
+.newsletter-form.success .newsletter-success {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.newsletter-form.success .newsletter-field {
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* ===============================
+   ICON & TEXT
+================================ */
+.success-icon {
+  font-size: 26px;
+  color: #1f9d55;
+}
+
+.success-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* ===============================
+   PROGRESS BAR + PLANE
+================================ */
+.newsletter-progress {
+  position: relative;
+  width: 70%;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.progress-bar {
+  position: absolute;
+  inset: 0;
+  background: #d7b39a;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* самолётик */
+.progress-plane {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #1f3c88;
+}
+
+/* запуск анимаций */
+.newsletter-form.success .progress-bar {
+  animation: progressFill 5s linear forwards;
+}
+
+.newsletter-form.success .progress-plane {
+  animation: planeFly 5s linear forwards;
+}
+
+@keyframes progressFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes planeFly {
+  from { left: 0%; }
+  to   { left: 100%; }
+}
+
+/* ===============================
+   TIMER
+================================ */
+.newsletter-timer {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #d7b39a;
+}
