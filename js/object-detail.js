@@ -259,9 +259,7 @@ function renderObjectDetails(obj) {
 
   const isFlat = String(obj.type || "").toLowerCase().includes("квартир");
 
-  /* ======================
-     PRICE
-  ====================== */
+  /* PRICE */
   if (typeof obj.priceBYN === "number") {
     priceWrap.innerHTML = `
       <div class="object-price-label">Цена</div>
@@ -271,9 +269,6 @@ function renderObjectDetails(obj) {
     `;
   }
 
-  /* ======================
-     HELPERS
-  ====================== */
   const has = (v) =>
     v !== null && v !== undefined && String(v).trim() !== "";
 
@@ -281,10 +276,6 @@ function renderObjectDetails(obj) {
     has(value) ? { icon, label, value, group } : null;
 
   let items = [];
-
-  /* ======================
-     PRIMARY — КЛЮЧЕВЫЕ
-  ====================== */
 
   if (isFlat) {
     items.push(
@@ -296,130 +287,60 @@ function renderObjectDetails(obj) {
         obj.floor && obj.floorsTotal
           ? `${obj.floor} из ${obj.floorsTotal}`
           : obj.floor,
-        "Основное",
+        "Основное"
       ),
-      make(
-  "fa-expand",
-  "Общая площадь",
-  getAreaTotal(obj) && `${getAreaTotal(obj)} м²`,
-  "Площади",
-),
-make(
-  "fa-couch",
-  "Жилая площадь",
-  getAreaLiving(obj) && `${getAreaLiving(obj)} м²`,
-  "Площади",
-),
-make(
-  "fa-ruler-combined",
-  "Площадь кухни",
-  getAreaKitchen(obj) && `${getAreaKitchen(obj)} м²`,
-  "Площади",
-),
+      make("fa-expand", "Общая площадь", obj.areaTotal && `${obj.areaTotal} м²`, "Площади"),
+      make("fa-couch", "Жилая площадь", obj.areaLiving && `${obj.areaLiving} м²`, "Площади"),
+      make("fa-ruler-combined", "Кухня", obj.areaKitchen && `${obj.areaKitchen} м²`, "Площади"),
       make("fa-bath", "Санузел", obj.bathroom, "Площади"),
-      make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное"),
+      make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное")
     );
   } else {
-  // ДОМ
-  items.push(
-    make("fa-house", "Тип объекта", obj.type, "Основное"),
-
-    // ⬇️ ПЛОЩАДИ (КЛЮЧЕВО!)
-    make(
-      "fa-expand",
-      "Площадь дома",
-      getAreaTotal(obj) && `${getAreaTotal(obj)} м²`,
-      "Площади",
-    ),
-    make(
-      "fa-couch",
-      "Жилая площадь",
-      getAreaLiving(obj) && `${getAreaLiving(obj)} м²`,
-      "Площади",
-    ),
-    make(
-      "fa-tree",
-      "Площадь участка",
-      obj.areaPlot && `${obj.areaPlot} соток`,
-      "Площади",
-    ),
-
-    // ⬇️ КОММУНИКАЦИИ
-    make("fa-fire", "Отопление", obj.heating, "Коммуникации"),
-    make("fa-faucet", "Вода", obj.water, "Коммуникации"),
-    make("fa-toilet", "Канализация", obj.sewerage, "Коммуникации"),
-    make("fa-bolt", "Электричество", obj.electricity, "Коммуникации"),
-
-    // ⬇️ ОСНОВНОЕ
-    make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное"),
-  );
-}
-  
-
-  /* ======================
-     SECONDARY — ДОБИВАЮЩИЕ
-  ====================== */
-  const fallback = [
-    make("fa-bolt", "Электричество", obj.electricity, "Коммуникации"),
-    make("fa-gas-pump", "Газ", obj.gas, "Коммуникации"),
-    make("fa-city", "Тип дома", obj.houseType, "Основное"),
-    make("fa-door-closed", "Балкон / лоджия", obj.balcony, "Площади"),
-    make("fa-couch", "Мебель", obj.furniture, "Основное"),
-    make("fa-wrench", "Состояние", obj.condition, "Основное"),
-  ];
+    items.push(
+      make("fa-house", "Тип объекта", obj.type, "Основное"),
+      make("fa-expand", "Площадь дома", obj.areaTotal && `${obj.areaTotal} м²`, "Площади"),
+      make("fa-couch", "Жилая площадь", obj.areaLiving && `${obj.areaLiving} м²`, "Площади"),
+      make("fa-tree", "Участок", obj.areaPlot && `${obj.areaPlot} соток`, "Площади"),
+      make("fa-fire", "Отопление", obj.heating, "Коммуникации"),
+      make("fa-faucet", "Вода", obj.water, "Коммуникации"),
+      make("fa-toilet", "Канализация", obj.sewerage, "Коммуникации"),
+      make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное")
+    );
+  }
 
   items = items.filter(Boolean);
 
-  for (const f of fallback) {
-    if (items.length >= 10) break;
-    if (f) items.push(f);
-  }
-
-  // Гарантируем минимум 8
-  items = items.slice(0, 10);
-  if (items.length < 8) {
-    // это почти невозможно, но защита
-    console.warn("Мало параметров для объекта:", obj.slug);
-  }
-
-  /* ======================
-     GROUP BY SECTION
-  ====================== */
   const groups = {};
   items.forEach((i) => {
     if (!groups[i.group]) groups[i.group] = [];
     groups[i.group].push(i);
   });
 
-  /* ======================
-     RENDER
-  ====================== */
   wrap.innerHTML = Object.entries(groups)
     .map(
       ([group, rows]) => `
-      <div class="object-details-group">
-        <h5 class="object-details-group-title">${group}</h5>
-        <div class="object-details-list">
-${rows
-  .map(
-    (r, idx) => `
-  <div class="object-detail-row" style="animation-delay:${idx * 60}ms">
-    <div class="object-detail-label">
-      <i class="fa-solid ${r.icon}"></i>
-      ${r.label}
-    </div>
-    <div class="object-detail-value">${r.value}</div>
-  </div>
-`,
-  )
-  .join("")}
+        <div class="object-details-group">
+          <h5 class="object-details-group-title">${group}</h5>
+          <div class="object-details-list">
+            ${rows
+              .map(
+                (r) => `
+                <div class="object-detail-row">
+                  <div class="object-detail-label">
+                    <i class="fa-solid ${r.icon}"></i>
+                    ${r.label}
+                  </div>
+                  <div class="object-detail-value">${r.value}</div>
+                </div>
+              `
+              )
+              .join("")}
+          </div>
         </div>
-      </div>
-    `,
+      `
     )
     .join("");
 }
-
 
 
 
@@ -753,105 +674,96 @@ function renderSidebarTitle(obj) {
 
 
 function initSidebarSlider(currentObj, allObjects) {
-  const container = document.querySelector("[data-sidebar-slider]");
-  if (!container) return;
+  const track = document.querySelector("[data-sidebar-track]");
+  if (!track) return;
 
   const items = pickSimilarObjects(currentObj, allObjects, 6);
   if (!items.length) return;
 
   let index = 0;
-  let interval = null;
-  let isPaused = false;
+  let autoTimer = null;
 
-  function renderSlide(obj) {
-    const img =
-      Array.isArray(obj.images) && obj.images[0]
-        ? obj.images[0]
-        : "/images/objects/pic1.webp";
+  function renderSlides() {
+    track.innerHTML = items
+      .map((obj) => {
+        const img =
+          Array.isArray(obj.images) && obj.images[0]
+            ? obj.images[0]
+            : "/images/objects/pic1.webp";
 
-    const price =
-      typeof obj.priceBYN === "number"
-        ? `${obj.priceBYN.toLocaleString("ru-RU")} BYN`
-        : "";
+        const price =
+          typeof obj.priceBYN === "number"
+            ? `${obj.priceBYN.toLocaleString("ru-RU")} BYN`
+            : "";
 
-    container.innerHTML = `
-      <a href="/object-detail?slug=${obj.slug}" class="sidebar-slide">
-        <div class="sidebar-slide-image">
-          <img src="${img}" alt="${obj.title}">
-        </div>
+        return `
+          <a href="/object-detail?slug=${obj.slug}" class="sidebar-slide">
+            <div class="sidebar-slide-image">
+              <img src="${img}" alt="${obj.title}">
+            </div>
 
-        <div class="sidebar-slide-content">
-          <h6>${obj.title}</h6>
-          <div class="sidebar-slide-location">
-            <i class="fa-solid fa-location-dot"></i>
-            ${[obj.city, obj.address].filter(Boolean).join(", ")}
-          </div>
-          <div class="sidebar-slide-price">${price}</div>
-        </div>
-      </a>
-    `;
+            <div class="sidebar-slide-content">
+              <h6>${obj.title}</h6>
+
+              <div class="sidebar-slide-location">
+                <i class="fa-solid fa-location-dot"></i>
+                ${[obj.city, obj.address].filter(Boolean).join(", ")}
+              </div>
+
+              <div class="sidebar-slide-price">${price}</div>
+            </div>
+          </a>
+        `;
+      })
+      .join("");
+  }
+
+  function updatePosition() {
+    track.style.transform = `translateX(-${index * 100}%)`;
   }
 
   function next() {
     index = (index + 1) % items.length;
-    animateChange();
+    updatePosition();
   }
 
   function prev() {
     index = (index - 1 + items.length) % items.length;
-    animateChange();
-  }
-
-  function animateChange() {
-    container.classList.add("fade-out");
-    setTimeout(() => {
-      renderSlide(items[index]);
-      container.classList.remove("fade-out");
-    }, 250);
+    updatePosition();
   }
 
   function startAuto() {
-    if (interval) clearInterval(interval);
-    interval = setInterval(() => {
-      if (!isPaused) next();
-    }, 5000);
+    stopAuto();
+    autoTimer = setInterval(next, 5000);
   }
 
-  // INIT
-  renderSlide(items[index]);
+  function stopAuto() {
+    if (autoTimer) clearInterval(autoTimer);
+  }
+
+  /* INIT */
+  renderSlides();
+  updatePosition();
   startAuto();
 
-  /* ======================
-     PAUSE ON HOVER
-  ====================== */
-  container.addEventListener("mouseenter", () => {
-    isPaused = true;
-  });
+  /* HOVER PAUSE */
+  track.addEventListener("mouseenter", stopAuto);
+  track.addEventListener("mouseleave", startAuto);
 
-  container.addEventListener("mouseleave", () => {
-    isPaused = false;
-  });
-
-  /* ======================
-     SWIPE (MOBILE)
-  ====================== */
+  /* SWIPE */
   let startX = 0;
-  let diffX = 0;
 
-  container.addEventListener("touchstart", (e) => {
+  track.addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
+    stopAuto();
   });
 
-  container.addEventListener("touchmove", (e) => {
-    diffX = e.touches[0].clientX - startX;
-  });
-
-  container.addEventListener("touchend", () => {
-    if (Math.abs(diffX) > 50) {
-      diffX < 0 ? next() : prev();
+  track.addEventListener("touchend", (e) => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (Math.abs(diff) > 50) {
+      diff < 0 ? next() : prev();
     }
-    startX = 0;
-    diffX = 0;
+    startAuto();
   });
 }
 
@@ -876,48 +788,92 @@ function animateAgentCardOnce() {
   observer.observe(card);
 }
 
+
+function renderAmenities(obj) {
+  const wrap = document.querySelector("[data-object-amenities]");
+  const list = document.querySelector("[data-amenities-list]");
+
+  if (!wrap || !list) return;
+
+  if (!Array.isArray(obj.features) || !obj.features.length) {
+    wrap.hidden = true;
+    return;
+  }
+
+  wrap.hidden = false;
+
+  list.innerHTML = obj.features
+    .map(
+      (item) => `
+      <div class="amenity-item">
+        <span class="amenity-icon">
+          <i class="fa-solid fa-check"></i>
+        </span>
+        <span class="amenity-text">${item}</span>
+      </div>
+    `,
+    )
+    .join("");
+}
+
+
+
   /* =====================================================
      INIT
   ===================================================== */
-  async function init() {
-    try {
-      const slug = getSlugFromUrl();
-      if (!isFilled(slug)) {
-        renderNotFound("");
-        return;
-      }
+async function init() {
+  try {
+    let slug = getSlugFromUrl();
 
-      const objects = await fetchObjects();
-      if (!Array.isArray(objects)) {
-        renderNotFound(slug);
-        return;
-      }
-
-      const obj = objects.find((o) => o && o.slug === slug);
-      if (!obj) {
-        renderNotFound(slug);
-        return;
-      }
-
-    
-      renderTopTitle(obj);
-      renderHeroBlock(obj);
-      renderMeta(obj);
-      renderRightText(obj);
-renderHeroMeta(obj);
-initSidebarSlider(obj, objects);
-renderSidebarTitle(obj);
-animateAgentCardOnce();
-      renderSimilarSlider(obj, objects);
-renderObjectDetails(obj);
-renderSidebarFooter(obj);
-   
-      generateObjectSchema(obj);
-    } catch (e) {
-      console.error(e);
-      renderNotFound(getSlugFromUrl());
+    const objects = await fetchObjects();
+    if (!Array.isArray(objects) || !objects.length) {
+      renderNotFound(slug);
+      return;
     }
+
+    /* =========================
+       DEBUG MODE (Live Server)
+    ========================= */
+    if (!isFilled(slug)) {
+      const isLocal =
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1";
+
+      if (isLocal) {
+        console.warn("DEBUG MODE: slug не найден, берём первый объект");
+        slug = objects[0].slug;
+      }
+    }
+
+    const obj = objects.find((o) => o && o.slug === slug);
+    if (!obj) {
+      renderNotFound(slug);
+      return;
+    }
+
+    /* =========================
+       RENDER
+    ========================= */
+    renderTopTitle(obj);
+    renderHeroBlock(obj);
+    renderMeta(obj);
+    renderRightText(obj);
+    renderHeroMeta(obj);
+    renderSidebarTitle(obj);
+    renderObjectDetails(obj);
+    renderSidebarFooter(obj);
+    initSidebarSlider(obj, objects);
+    renderSimilarSlider(obj, objects);
+    animateAgentCardOnce();
+    renderAmenities(obj);
+    generateObjectSchema(obj);
+
+  } catch (e) {
+    console.error("INIT ERROR:", e);
+    renderNotFound(getSlugFromUrl());
   }
+}
+
 
   function rebuildOwlCarousel(carouselEl) {
     if (

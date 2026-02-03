@@ -8147,19 +8147,26 @@ blockquote.author-quote .fa-quote-left {
 /* =====================================================
    SIDEBAR SLIDER
 ===================================================== */
+
+/* =====================================================
+   SIDEBAR SLIDER — FINAL FIX
+===================================================== */
+
+/* FRAME */
 .sidebar-slider-frame {
   position: relative;
-  min-height: 340px;
-  transition: opacity 0.25s ease;
+  overflow: hidden;                 
+  border-radius: 18px;
+  width: 100%;
+  max-width: 100%;
 }
 
-.sidebar-slider-frame.fade-out {
-  opacity: 0;
-}
-
+/* SLIDE CARD */
 .sidebar-slide {
   display: block;
-  height: 100%;
+  width: 100%;                      
+  max-width: 100%;
+  box-sizing: border-box;          
   background: #ffffff;
   border-radius: 18px;
   overflow: hidden;
@@ -8168,22 +8175,42 @@ blockquote.author-quote .fa-quote-left {
   text-decoration: none;
 }
 
+/* IMAGE */
+.sidebar-slide-image {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
 .sidebar-slide-image img {
   width: 100%;
-  height: 420px;
+  height: 100%;
   object-fit: cover;
+  display: block;
 }
 
+/* CONTENT */
 .sidebar-slide-content {
   padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;               
 }
 
+/* TITLE */
 .sidebar-slide-content h6 {
   font-weight: 700;
   margin-bottom: 8px;
   color: #0f3f32;
+  line-height: 1.35;
+
+  width: 100%;                    
+  max-width: 100%;
+  white-space: normal;             
+  word-break: break-word;         
+  overflow-wrap: anywhere;        
 }
 
+/* LOCATION */
 .sidebar-slide-location {
   font-size: 13px;
   color: #155945;
@@ -8191,18 +8218,54 @@ blockquote.author-quote .fa-quote-left {
   display: flex;
   gap: 6px;
   align-items: center;
+
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* PRICE */
 .sidebar-slide-price {
   font-weight: 800;
   color: #155945;
+  font-size: 16px;
+  width: 100%;
 }
 
-/* Footer */
+/* =====================================================
+   MOBILE
+===================================================== */
+@media (max-width: 768px) {
+
+  .sidebar-slider-frame {
+    border-radius: 14px;
+  }
+
+  .sidebar-slide {
+    border-radius: 14px;
+  }
+
+  .sidebar-slide-image {
+    aspect-ratio: 3 / 2;
+  }
+
+  .sidebar-slide-content {
+    padding: 14px;
+  }
+
+  .sidebar-slide-content h6 {
+    font-size: 15px;
+  }
+}
+
+
+/* =====================================================
+   SIDEBAR FOOTER
+===================================================== */
 .sidebar-agency {
   margin-top: 24px;
   text-align: center;
   font-size: 14px;
+  line-height: 1.5;
   color: #155945;
 }
 
@@ -8212,17 +8275,57 @@ blockquote.author-quote .fa-quote-left {
   color: #0f3f32;
 }
 
+/* =====================================================
+   MOBILE ADAPTATION
+===================================================== */
+@media (max-width: 768px) {
+
+  .sidebar-slider-frame {
+    border-radius: 14px;
+  }
+
+  .sidebar-slide {
+    border-radius: 14px;
+  }
+
+  .sidebar-slide-image {
+    aspect-ratio: 3 / 2;         
+  }
+
+  .sidebar-slide-content {
+    padding: 14px;
+  }
+
+  .sidebar-slide-content h6 {
+    font-size: 15px;
+  }
+
+  .sidebar-slide-price {
+    font-size: 15px;
+  }
+
+  .sidebar-agency {
+    font-size: 13px;
+  }
+}
+
+/* =====================================================
+   HERO TITLE (CENTERED)
+===================================================== */
 .object-hero-title {
   margin: 12px 0 8px;
   font-weight: 800;
   font-size: 28px;
   color: #0f3f32;
-
   text-align: center;
 }
-/* =====================================================
-   MOBILE FIXES
-===================================================== */
+
+@media (max-width: 768px) {
+  .object-hero-title {
+    font-size: 22px;
+  }
+}
+
 @media (max-width: 991px) {
   .sticky_column,
   .project-detail-containt-2 {
@@ -8238,9 +8341,6 @@ blockquote.author-quote .fa-quote-left {
   }
 }
 
-/* =====================================
-   FORCE FIX: BLACK CORNERS IN GALLERY
-===================================== */
 
 /* режем li */
 .widget_gallery ul li {
@@ -8276,5 +8376,168 @@ blockquote.author-quote .fa-quote-left {
   background: rgba(0,0,0,.4);
 }
 .widget_gallery .sx-post-thum:before {
-  background: rgba(21, 89, 69, 0.25); /* фирменный тинт */
+  background: rgba(21, 89, 69, 0.25); 
+}
+
+#objectsList .object-price,
+#objectsList .price,
+#objectsList .price-badge {
+  background: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #155945;
+}
+
+/* =====================================
+   OBJECT DETAIL — PRICE (ACCENT)
+===================================== */
+.object-detail-page .object-price {
+  background: #155945;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 16px 36px rgba(21, 89, 69, 0.3);
+}
+
+/* ======================
+   OBJECT AMENITIES
+====================== */
+.object-amenities {
+  margin-top: 36px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 14px 32px rgba(21, 89, 69, 0.12);
+}
+
+.object-amenities-title {
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #0f3f32;
+  text-align: center;
+}
+
+/* GRID */
+.object-amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 20px;
+}
+
+/* ITEM */
+.amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #2f4f46;
+}
+
+/* ICON */
+.amenity-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(21, 89, 69, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #155945;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .object-amenities-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .object-amenities-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ======================
+   SIDEBAR SLIDER (SWIPE)
+====================== */
+.sidebar-slider-frame {
+  overflow: hidden;
+  position: relative;
+}
+
+.sidebar-slider-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+}
+
+
+/* === CARD TITLE (2 LINES CLAMP) === */
+.sidebar-slide-content h6 {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #0f3f32;
+  line-height: 1.35;
+
+  display: -webkit-box;
+  line-clamp:2;
+  -webkit-line-clamp: 2;    
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  min-height: calc(1.35em * 2); 
+}
+/* === IMAGE HEIGHT CONTROL === */
+.sidebar-slide-image {
+  aspect-ratio: 4 / 3;
+  min-height: 340px; 
+}
+@media (max-width: 768px) {
+  .sidebar-slide-image {
+    aspect-ratio: 3 / 2;
+    min-height: 260px;
+  }
+}
+
+/* === SLIDER TRACK === */
+.sidebar-slider-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.45s ease;
+}
+
+.sidebar-slide {
+  flex: 0 0 100%; 
+}
+
+@media (max-width: 768px) {
+
+  .sidebar-slider-frame {
+    margin-top: 24px;
+  }
+
+  .sidebar-slide-content {
+    padding: 14px 16px;
+  }
+
+  .sidebar-slide-price {
+    font-size: 15px;
+  }
+
+  .sidebar-slide-location {
+    font-size: 12.5px;
+  }
 }
