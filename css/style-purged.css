@@ -8237,3 +8237,44 @@ blockquote.author-quote .fa-quote-left {
     margin-bottom: 32px;
   }
 }
+
+/* =====================================
+   FORCE FIX: BLACK CORNERS IN GALLERY
+===================================== */
+
+/* режем li */
+.widget_gallery ul li {
+  overflow: hidden;
+  border-radius: 14px;
+  background: transparent !important;
+}
+
+/* режем контейнер */
+.widget_gallery .sx-post-thum {
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+/* убиваем оверлеи */
+.widget_gallery .sx-post-thum::before,
+.widget_gallery .sx-post-thum::after,
+.widget_gallery ul li::before,
+.widget_gallery ul li::after {
+  border-radius: 14px;
+}
+
+/* картинка всегда заполняет */
+.widget_gallery img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: transparent;
+}
+
+.sx-post-thum:before {
+  background: rgba(0,0,0,.4);
+}
+.widget_gallery .sx-post-thum:before {
+  background: rgba(21, 89, 69, 0.25); /* фирменный тинт */
+}
