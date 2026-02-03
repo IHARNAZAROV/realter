@@ -627,6 +627,32 @@ function bg_moving() {
 }
 
 
+document.querySelectorAll(".service-hover-card").forEach(card => {
+  const img = card.querySelector(".service-bg img");
+  let active = false;
+
+  card.addEventListener("mouseenter", () => {
+    active = false;
+    setTimeout(() => active = true, 400); // ждём рост
+  });
+
+  card.addEventListener("mousemove", e => {
+    if (!active) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
+
+    img.style.transform = `translate(${x}px, ${y}px)`;
+  });
+
+  card.addEventListener("mouseleave", () => {
+    active = false;
+    img.style.transform = "translate(0,0)";
+  });
+});
+
+
 function initServiceCardsAnimation() {
   const cards = document.querySelectorAll(".number-block-three");
   if (!cards.length) return;
