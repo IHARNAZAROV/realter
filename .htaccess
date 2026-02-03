@@ -60,3 +60,16 @@ ErrorDocument 403 /403.html
   </FilesMatch>
 </IfModule>
 
+# -------------------------------------------------
+# CACHE-CONTROL (SAFE)
+# -------------------------------------------------
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|jpg|jpeg|png|webp|svg|woff2?|ico)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+</IfModule>
+
+# -------------------------------------------------
+# DISABLE ETAG (VERY IMPORTANT)
+# -------------------------------------------------
+FileETag None
