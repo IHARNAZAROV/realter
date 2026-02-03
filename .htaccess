@@ -78,3 +78,12 @@ ErrorDocument 403 /403.html
 # DISABLE ETAG (VERY IMPORTANT)
 # -------------------------------------------------
 FileETag None
+
+# JSON — always correct
+AddType application/json .json
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.json$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
