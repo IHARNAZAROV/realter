@@ -9282,3 +9282,50 @@ blockquote.author-quote .fa-quote-left {
     background-color: transparent;
   }
 }
+/* ===============================
+   GRAIN / NOISE OVERLAY
+=============================== */
+
+.service-bg::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  z-index: 2;
+
+  background-image:
+    repeating-radial-gradient(
+      circle at 0 0,
+      rgba(255,255,255,0.05) 0,
+      rgba(255,255,255,0.05) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+
+  animation: grainMove 8s steps(10) infinite;
+}
+
+/* Grain motion */
+@keyframes grainMove {
+  0%   { transform: translate(0, 0); }
+  10%  { transform: translate(-5%, -10%); }
+  20%  { transform: translate(-15%, 5%); }
+  30%  { transform: translate(7%, -25%); }
+  40%  { transform: translate(-5%, 25%); }
+  50%  { transform: translate(-15%, 10%); }
+  60%  { transform: translate(15%, 0); }
+  70%  { transform: translate(0, 15%); }
+  80%  { transform: translate(3%, -10%); }
+  90%  { transform: translate(-10%, 5%); }
+  100% { transform: translate(0, 0); }
+}
+
+@media (max-width: 768px) {
+  .service-bg::before {
+    opacity: 0.06;
+    animation: none;
+  }
+}
