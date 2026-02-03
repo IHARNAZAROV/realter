@@ -248,10 +248,13 @@ function renderObjects(list) {
 
     const delay = isFirstRender ? index * 50 : index * 20;
 
+    // ⬇️ ВАЖНО: бейджи формируются ТУТ
+    const badgesHTML = renderBadges(obj);
+
     li.innerHTML = `
       <div class="project-mas hover-shadow">
 
-        <!-- OVERLAY LINK: кликабельна вся карточка в compact -->
+        <!-- Кликабельная карточка -->
         <a
           href="/object-detail?slug=${obj.slug}"
           class="card-link-overlay"
@@ -259,6 +262,7 @@ function renderObjects(list) {
         ></a>
 
         <div class="image-effect-one">
+          ${badgesHTML}
           <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
         </div>
 
@@ -269,7 +273,7 @@ function renderObjects(list) {
             </a>
           </h4>
 
-          <p>${obj.cardDescription || ""}</p>
+          ${obj.cardDescription ? `<p>${obj.cardDescription}</p>` : ""}
 
           <div class="object-meta">
             <span class="object-price">
@@ -284,7 +288,7 @@ function renderObjects(list) {
 
             ${
               contractNumber
-                ? `<span class="object-contract">${contractNumber}</span>`
+                ? `<span class="object-contract">Договор № ${contractNumber}</span>`
                 : ""
             }
           </div>
@@ -307,6 +311,31 @@ function renderObjects(list) {
 }
 
 
+function renderBadges(obj) {
+  let html = "";
+
+  if (obj.recommended === true) {
+    html += `<span class="badge badge-featured">Рекомендуемый</span>`;
+  }
+
+ if (isNewObject(obj)) {
+  html += `<span class="badge badge-new">Новинка</span>`;
+}
+
+  if (!html) return "";
+
+  return `<div class="object-badges">${html}</div>`;
+}
+
+
+function isNewObject(obj, days = 7) {
+  if (!obj.publishedAt) return false;
+
+  const now = new Date();
+  const published = new Date(obj.publishedAt);
+
+  return (now - published) / 86400000 <= days;
+}
 
 /* =========================================================
    Счетчик
