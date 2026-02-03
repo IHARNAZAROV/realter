@@ -175,7 +175,7 @@ function renderHeroBlock(obj) {
   const imagesWrap = document.querySelector("[data-hero-images]");
   if (!imagesWrap) return;
 
-  const imgs = Array.isArray(obj.images) ? obj.images.slice(0, 2) : [];
+  const imgs = Array.isArray(obj.images) ? obj.images.slice(0, 4) : [];
 
 const desc = document.querySelector("[data-hero-description]");
 
@@ -202,11 +202,11 @@ if (desc && obj.description) {
   imagesWrap.innerHTML = imgs
     .map(
       (src) => `
-      <div class="col-6">
+      
         <div class="object-hero-image">
           <img loading="lazy" decoding="async" src="${src}" alt="">
         </div>
-      </div>
+   
     `,
     )
     .join("");
@@ -816,6 +816,29 @@ function renderAmenities(obj) {
     .join("");
 }
 
+function initRevealBlocks() {
+  const blocks = document.querySelectorAll(".reveal");
+
+  if (!blocks.length) return;
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target); // один раз
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+    }
+  );
+
+  blocks.forEach(block => observer.observe(block));
+}
+
+document.addEventListener("DOMContentLoaded", initRevealBlocks);
 
 
   /* =====================================================
