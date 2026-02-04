@@ -17,6 +17,7 @@ const locationSelect = document.getElementById("locationSelect");
 const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
 const VIEW_STORAGE_KEY = "objectsViewMode";
+const FAVORITES_VIEW_KEY = "favoritesViewMode";
 
 /* =========================================================
    PREVIEW IMAGES (static mapping)
@@ -63,6 +64,44 @@ function debounce(fn, delay = 400) {
   };
 }
 
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+const FAVORITES_KEY = "favoriteObjects";
+
+function getFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function isFavorite(slug) {
+  return getFavorites().includes(slug);
+}
+
+function toggleFavorite(slug) {
+  let favs = getFavorites();
+
+  if (favs.includes(slug)) {
+    favs = favs.filter((s) => s !== slug);
+  } else {
+    favs.push(slug);
+  }
+
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+}
+
+
+function isFavoritesMode() {
+  return localStorage.getItem(FAVORITES_VIEW_KEY) === "on";
+}
+
+function setFavoritesMode(state) {
+  localStorage.setItem(FAVORITES_VIEW_KEY, state ? "on" : "off");
+}
 /* =========================================================
    SAFE AREA PARSER
 ========================================================= */
@@ -97,6 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   bindEvents();
   initViewSwitcher();
+
+if (isFavoritesMode()) {
+  document
+    .getElementById("favoritesFilterCounter")
+    ?.classList.add("is-active");
+}
+
 });
 /* =========================================================
    EVENTS
@@ -165,7 +211,12 @@ function handlePriceInput() {
 ========================================================= */
 function applyFiltersAndSort() {
   let result = [...allObjects];
-
+  
+// ONLY FAVORITES MODE
+if (isFavoritesMode()) {
+  const favs = getFavorites();
+  result = result.filter((o) => favs.includes(o.slug));
+}
   if (typeSelect.value !== "all") {
     result = result.filter((o) => o.type === typeSelect.value);
   }
@@ -261,10 +312,21 @@ function renderObjects(list) {
           aria-label="Открыть объект ${obj.title}"
         ></a>
 
-        <div class="image-effect-one">
-          ${badgesHTML}
-          <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
-        </div>
+<div class="image-effect-one">
+
+<div
+  class="favorite-btn ${isFavorite(obj.slug) ? "is-active" : ""}"
+  data-slug="${obj.slug}"
+  aria-label="${isFavorite(obj.slug)
+    ? "Убрать из избранного"
+    : "Добавить в избранное"}"
+>
+  <i class="fa-${isFavorite(obj.slug) ? "solid" : "regular"} fa-heart"></i>
+</div>
+
+  ${badgesHTML}
+  <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
+</div>
 
         <div class="project-info p-a20 bg-gray">
           <h4 class="sx-tilte m-t0">
@@ -334,6 +396,71 @@ function isNewObject(obj, days = 7) {
 
   return (now - published) / 86400000 <= days;
 }
+
+/* =========================================================
+   Избранное
+========================================================= */
+objectsList.addEventListener("click", (e) => {
+  const btn = e.target.closest(".favorite-btn");
+  if (!btn) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  const slug = btn.dataset.slug;
+  toggleFavorite(slug);
+
+  btn.classList.toggle("is-active");
+btn.setAttribute(
+  "aria-label",
+  btn.classList.contains("is-active")
+    ? "Убрать из избранного"
+    : "Добавить в избранное"
+);
+  const icon = btn.querySelector("i");
+  icon.classList.toggle("fa-solid");
+  icon.classList.toggle("fa-regular");
+  btn.classList.remove("is-pulse");
+void btn.offsetWidth; 
+btn.classList.add("is-pulse");
+updateFavoritesFilterCounter(true);
+});
+
+
+
+const favoritesCounter = document.getElementById("favoritesFilterCounter");
+
+if (favoritesCounter) {
+  favoritesCounter.addEventListener("click", () => {
+    const isActive = isFavoritesMode();
+
+    setFavoritesMode(!isActive);
+    applyFiltersAndSort();
+    updateFavoritesFilterCounter();
+
+    favoritesCounter.classList.toggle("is-active", !isActive);
+  });
+}
+
+function updateFavoritesFilterCounter(pulse = false) {
+  const el = document.getElementById("favoritesFilterCounter");
+  if (!el) return;
+
+  const countEl = el.querySelector(".count");
+  const favs = getFavorites();
+
+  countEl.textContent = favs.length;
+  el.classList.toggle("is-empty", favs.length === 0);
+
+  if (pulse) {
+    el.classList.remove("is-pulse");
+    void el.offsetWidth; // reflow
+    el.classList.add("is-pulse");
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  updateFavoritesFilterCounter();
+});
 
 /* =========================================================
    Счетчик
@@ -464,3 +591,4 @@ function setViewMode(mode) {
     btn.classList.toggle("is-active", btn.dataset.view === mode);
   });
 }
+
