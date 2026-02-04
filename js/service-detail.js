@@ -137,6 +137,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
+// CANONICAL
+let canonical = document.querySelector('link[rel="canonical"]');
+if (!canonical) {
+  canonical = document.createElement("link");
+  canonical.setAttribute("rel", "canonical");
+  document.head.appendChild(canonical);
+}
+
+canonical.setAttribute(
+  "href",
+  service.meta?.canonical || `https://turko.by/services/${service.slug}`
+);
+
     /* ================= HERO ================= */
 
     safeText("service-title", service.hero?.heading || service.title);
@@ -210,17 +223,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     /* ================= SCHEMA ================= */
 
     const breadcrumbScript = $("schema-breadcrumbs");
-    if (breadcrumbScript) {
-      breadcrumbScript.textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://turko.by/" },
-          { "@type": "ListItem", "position": 2, "name": "Услуги", "item": "https://turko.by/about.html" },
-          { "@type": "ListItem", "position": 3, "name": service.title, "item": `https://turko.by/services-detail?slug=${service.slug}` }
-        ]
-      });
+breadcrumbScript.textContent = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Главная",
+      "item": "https://turko.by/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Услуги риэлтера",
+      "item": "https://turko.by/about"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": service.title,
+      "item": `https://turko.by/services/${service.slug}`
     }
+  ]
+});
 
     log("Render complete");
 
