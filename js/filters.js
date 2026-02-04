@@ -39,7 +39,8 @@ const previewImages = {
   "kvartira-lida-ul-tuhachevskogo": "images/objects/pic15.webp",
   "dom-lidskiy-rayon-minoyty": "images/objects/pic16.webp",
   "kvartira-lida-ul-kosmonavtov": "images/objects/pic17.webp",
-"kvartira-lida-ul-zarechnaya-7":"images/objects/pic18.webp"
+  "kvartira-lida-ul-zarechnaya-7": "images/objects/pic18.webp",
+  "dom-lidskiy-rayon-ostrovlya-novoselov": "images/objects/pic19.webp",
 };
 
 /* =========================================================
@@ -91,11 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
       updateRoomsState();
       loadFiltersFromStorage();
       applyFiltersAndSort();
-   
     });
 
   bindEvents();
-     initViewSwitcher();
+  initViewSwitcher();
 });
 /* =========================================================
    EVENTS
@@ -173,7 +173,7 @@ function applyFiltersAndSort() {
     result = result.filter((o) =>
       roomsSelect.value === "4"
         ? o.rooms >= 4
-        : o.rooms === Number(roomsSelect.value)
+        : o.rooms === Number(roomsSelect.value),
     );
   }
 
@@ -239,8 +239,7 @@ function renderObjects(list) {
     const li = document.createElement("li");
     li.className = "object-item";
 
-    const imgSrc =
-      previewImages[obj.slug] || "images/objects/placeholder.webp";
+    const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
 
     const area = getObjectArea(obj);
     const pricePerMeter = area ? Math.round(obj.priceBYN / area) : null;
@@ -288,7 +287,7 @@ function renderObjects(list) {
 
             ${
               contractNumber
-                ? `<span class="object-contract">Договор № ${contractNumber}</span>`
+                ? `<span class="object-contract">${contractNumber}</span>`
                 : ""
             }
           </div>
@@ -310,7 +309,6 @@ function renderObjects(list) {
   });
 }
 
-
 function renderBadges(obj) {
   let html = "";
 
@@ -318,15 +316,14 @@ function renderBadges(obj) {
     html += `<span class="badge badge-featured">Рекомендуемый</span>`;
   }
 
- if (isNewObject(obj)) {
-  html += `<span class="badge badge-new">Новинка</span>`;
-}
+  if (isNewObject(obj)) {
+    html += `<span class="badge badge-new">Новинка</span>`;
+  }
 
   if (!html) return "";
 
   return `<div class="object-badges">${html}</div>`;
 }
-
 
 function isNewObject(obj, days = 7) {
   if (!obj.publishedAt) return false;
@@ -445,8 +442,7 @@ function initViewSwitcher() {
   const buttons = document.querySelectorAll(".view-btn");
   if (!buttons.length) return;
 
-  const savedView =
-    localStorage.getItem(VIEW_STORAGE_KEY) || "grid";
+  const savedView = localStorage.getItem(VIEW_STORAGE_KEY) || "grid";
 
   setViewMode(savedView);
 
@@ -464,9 +460,6 @@ function setViewMode(mode) {
   objectsList.classList.add(`view-${mode}`);
 
   document.querySelectorAll(".view-btn").forEach((btn) => {
-    btn.classList.toggle(
-      "is-active",
-      btn.dataset.view === mode
-    );
+    btn.classList.toggle("is-active", btn.dataset.view === mode);
   });
 }
