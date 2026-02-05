@@ -291,17 +291,15 @@ function renderObjects(list) {
     const li = document.createElement("li");
     li.className = "object-item";
 
-    const imgSrc =
-      previewImages[obj.slug] || "images/objects/placeholder.webp";
+    const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
 
     const area = getObjectArea(obj);
-    const pricePerMeter = area
-      ? Math.round(obj.priceBYN / area)
-      : null;
-
+    const pricePerMeter = area ? Math.round(obj.priceBYN / area) : null;
     const contractNumber = obj.contractNumber || null;
+
     const delay = isFirstRender ? index * 50 : index * 20;
 
+    // ⬇️ ВАЖНО: бейджи формируются ТУТ
     const badgesHTML = renderBadges(obj);
 
     li.innerHTML = `
@@ -314,61 +312,30 @@ function renderObjects(list) {
           aria-label="Открыть объект ${obj.title}"
         ></a>
 
-        <!-- IMAGE -->
-        <div class="image-effect-one">
+<div class="image-effect-one">
 
-          ${badgesHTML}
+<div
+  class="favorite-btn ${isFavorite(obj.slug) ? "is-active" : ""}"
+  data-slug="${obj.slug}"
+  aria-label="${isFavorite(obj.slug)
+    ? "Убрать из избранного"
+    : "Добавить в избранное"}"
+>
+  <i class="fa-${isFavorite(obj.slug) ? "solid" : "regular"} fa-heart"></i>
+</div>
 
-          <div
-            class="favorite-btn ${isFavorite(obj.slug) ? "is-active" : ""}"
-            data-slug="${obj.slug}"
-            aria-label="${
-              isFavorite(obj.slug)
-                ? "Убрать из избранного"
-                : "Добавить в избранное"
-            }"
-          >
-            <i class="fa-${
-              isFavorite(obj.slug) ? "solid" : "regular"
-            } fa-heart"></i>
-          </div>
+  ${badgesHTML}
+  <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
+</div>
 
-          <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
-        </div>
-
-        <!-- INFO -->
         <div class="project-info p-a20 bg-gray">
-
-          <!-- HEADER: badges + favorite (для compact) -->
-          <div class="project-info-header">
-            ${badgesHTML}
-
-            <div
-              class="favorite-btn ${isFavorite(obj.slug) ? "is-active" : ""}"
-              data-slug="${obj.slug}"
-              aria-label="${
-                isFavorite(obj.slug)
-                  ? "Убрать из избранного"
-                  : "Добавить в избранное"
-              }"
-            >
-              <i class="fa-${
-                isFavorite(obj.slug) ? "solid" : "regular"
-              } fa-heart"></i>
-            </div>
-          </div>
-
           <h4 class="sx-tilte m-t0">
             <a href="/object-detail?slug=${obj.slug}">
               ${obj.title}
             </a>
           </h4>
 
-          ${
-            obj.cardDescription
-              ? `<p>${obj.cardDescription}</p>`
-              : ""
-          }
+          ${obj.cardDescription ? `<p>${obj.cardDescription}</p>` : ""}
 
           <div class="object-meta">
             <span class="object-price">
@@ -420,7 +387,6 @@ function renderBadges(obj) {
 
   return `<div class="object-badges">${html}</div>`;
 }
-
 
 function isNewObject(obj, days = 7) {
   if (!obj.publishedAt) return false;
