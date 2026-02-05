@@ -9531,3 +9531,394 @@ blockquote.author-quote .fa-quote-left {
     background: rgba(229, 57, 53, 0.18);
   }
 }
+
+/* Контейнер */
+.section-full.mobile-page-padding
+.about-home-left {
+  position: relative;
+  padding-left: 32px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.96),
+    rgba(255,255,255,0.98)
+  );
+  border-color: rgba(21, 89, 69, 0.18);
+}
+
+/* Вертикальный акцент */
+.section-full.mobile-page-padding
+.about-home-left::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 2px;
+  height: calc(100% - 6px);
+  background: linear-gradient(
+    180deg,
+    #d7b39a 0%,
+    rgba(215,179,154,0.35) 100%
+  );
+}
+
+/* Заголовок */
+.section-full.mobile-page-padding
+.about-home-left h3 {
+  font-size: 1.1rem;
+  line-height: 1.45;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  color: #1c1c1c;
+}
+
+.section-full.mobile-page-padding
+.about-home-left h3 .hermes {
+  color: var(--color-primary);
+  position: relative;
+}
+
+.section-full.mobile-page-padding
+.about-home-left h3 .hermes::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background-color: #d7b39a;
+  opacity: 0.6;
+}
+
+/* Текст */
+.section-full.mobile-page-padding
+.about-home-left p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #4f4f4f;
+  max-width: 520px;
+  margin-top: 18px;
+}
+
+/* DROP CAP */
+.section-full.mobile-page-padding
+.about-home-left .dropcap {
+  float: left;
+  font-family: var(--font-heading);
+  font-size: 4.8rem;
+  line-height: 0.85;
+  font-weight: 700;
+  padding-right: 14px;
+  padding-top: 6px;
+  color: var(--color-primary);
+  shape-outside: inset(0);
+}
+
+/* Финальная точка */
+.section-full.mobile-page-padding
+.about-home-left p:last-of-type::after {
+  content: "•";
+  margin-left: 10px;
+  color: #d7b39a;
+  font-size: 1.2rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .section-full.mobile-page-padding
+  .about-home-left {
+    padding-left: 0;
+  }
+
+  .section-full.mobile-page-padding
+  .about-home-left::before {
+    display: none;
+  }
+
+  .section-full.mobile-page-padding
+  .about-home-left .dropcap {
+    float: none;
+    font-size: inherit;
+    padding: 0;
+  }
+}
+
+/* =========================================================
+   ABOUT SLIDER — FINAL PREMIUM
+   ========================================================= */
+
+/* Карточка */
+.section-full.mobile-page-padding
+.about-home.owl-carousel .item {
+  height: 520px;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+/* Контейнер изображения */
+.section-full.mobile-page-padding
+.about-home.owl-carousel .sx-img-effect {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+}
+
+/* Картинка */
+.section-full.mobile-page-padding
+.about-home.owl-carousel .sx-img-effect img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #ffffff;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+/* Очень мягкий zoom */
+.section-full.mobile-page-padding
+.sx-img-effect.zoom-slow:hover img {
+  transform: scale(1.05);
+}
+
+/* Фоновое статичное фото */
+.section-full.mobile-page-padding
+.about-home-before {
+  opacity: 0.22;
+  filter: grayscale(100%) contrast(0.9);
+}
+
+/* ---------- PROGRESS LINE ---------- */
+.section-full.mobile-page-padding
+.about-home.owl-carousel .owl-dots {
+  position: relative;
+  height: 2px;
+  margin-top: 28px;
+  background: rgba(21, 89, 69, 0.18);
+  overflow: hidden;
+}
+
+/* убираем точки */
+.section-full.mobile-page-padding
+.about-home.owl-carousel .owl-dot {
+  display: none;
+}
+
+/* линия прогресса */
+.section-full.mobile-page-padding
+.about-home.owl-carousel .owl-dots::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: var(--progress-width, 0%);
+  background-color: var(--color-primary);
+  transition: width linear;
+  transition-duration: var(--progress-transition, 0ms);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .section-full.mobile-page-padding
+  .about-home.owl-carousel .item {
+    height: 420px;
+  }
+}
+
+/* =========================================================
+   ABOUT TEXT — MOBILE CENTER ALIGN
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  /* Контейнер */
+  .section-full.mobile-page-padding
+  .about-home-left {
+    text-align: center;
+    padding-left: 0;
+  }
+
+  /* Убираем вертикальный акцент */
+  .section-full.mobile-page-padding
+  .about-home-left::before {
+    display: none;
+  }
+
+  /* Заголовок */
+  .section-full.mobile-page-padding
+  .about-home-left h3 {
+    text-align: center;
+  }
+
+  /* Абзацы */
+  .section-full.mobile-page-padding
+  .about-home-left p {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Drop cap отключаем */
+  .section-full.mobile-page-padding
+  .about-home-left .dropcap {
+    float: none;
+    font-size: inherit;
+    padding: 0;
+    display: inline;
+  }
+
+  /* Кнопка по центру */
+  .section-full.mobile-page-padding
+  .about-home-left .text-left {
+    text-align: center;
+  }
+
+  .section-full.mobile-page-padding
+  .about-home-left .site-button-secondry {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+  .section-full.mobile-page-padding
+  .about-home-left .text-left {
+    text-align: center;
+  }
+
+
+  .section-full.mobile-page-padding
+  .about-home-left .site-button-secondry {
+    display: inline-flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+   /* ломаем text-left */
+  .section-full.mobile-page-padding
+  .about-home-left .text-left {
+    display: flex !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* сбрасываем возможные float / inline */
+  .section-full.mobile-page-padding
+  .about-home-left .site-button-secondry {
+    float: none !important;
+    margin: 0 auto !important;
+  }
+
+  /* =========================================================
+   LARGE TITLE BLOCK — PREMIUM MANIFEST
+   ========================================================= */
+
+.large-title-block {
+  background: linear-gradient(
+    180deg,
+    rgba(245, 245, 245, 0.85),
+    rgba(255, 255, 255, 0.95)
+  );
+  padding: 80px 0;
+}
+
+/* Левая часть — тезис */
+.large-title h3 {
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  line-height: 1.25;
+  font-weight: 500;
+  color: #1c1c1c;
+  max-width: 520px;
+  margin: 0;
+  position: relative;
+  padding-left: 28px;
+}
+
+/* Вертикальный акцент */
+.large-title h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 3px;
+  height: calc(100% - 6px);
+  background: linear-gradient(
+    180deg,
+    #d7b39a 0%,
+    rgba(215,179,154,0.35) 100%
+  );
+}
+
+/* Правая часть — объяснение */
+.large-title-info {
+  max-width: 520px;
+  padding-top: 10px;
+}
+
+.large-title-info p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #4f4f4f;
+  margin-bottom: 26px;
+}
+
+/* Ссылка «Подробнее» — издательский стиль */
+.large-title-info .site-button-link {
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  position: relative;
+  padding-bottom: 4px;
+}
+
+/* Подчёркивание-смысл */
+.large-title-info .site-button-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #d7b39a;
+  transition: transform 0.3s ease;
+  transform-origin: left;
+}
+
+.large-title-info .site-button-link:hover::after {
+  transform: scaleX(0.6);
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+  .large-title-block {
+    padding: 60px 0;
+  }
+
+  .large-title h3 {
+    padding-left: 0;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .large-title h3::before {
+    display: none;
+  }
+
+  .large-title-info {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .large-title-info .text-left {
+    text-align: center;
+  }
+}
