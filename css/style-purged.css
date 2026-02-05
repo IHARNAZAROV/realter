@@ -9752,6 +9752,8 @@ blockquote.author-quote .fa-quote-left {
   .section-full.mobile-page-padding
   .about-home-left h3 {
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   /* Абзацы */
@@ -9920,5 +9922,18 @@ blockquote.author-quote .fa-quote-left {
 
   .large-title-info .text-left {
     text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+
+  .filter-item.filter-price .price-fields {
+    display: flex;
+    gap: 8px;
+  }
+
+  .filter-item.filter-price .price-fields input {
+    flex: 1;
+    width: 100%;
   }
 }
