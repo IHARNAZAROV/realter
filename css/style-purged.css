@@ -10087,9 +10087,9 @@ blockquote.author-quote .fa-quote-left {
 }
 
 @media (min-width: 1200px) {
-  .page-intro-description {
-    white-space: nowrap;
+  .page-intro-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
   }
 }
-
-

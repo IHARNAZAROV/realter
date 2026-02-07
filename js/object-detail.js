@@ -162,14 +162,20 @@
   /* =====================================================
      RENDER BLOCKS
   ===================================================== */
-  function renderTopTitle(obj) {
-    const title = obj?.title || "Детали объекта";
-    document.title = `${title} — Ольга Турко`;
+function renderTopTitle(obj) {
+  const title = obj?.title || "Детали объекта";
 
-    const h = qs("[data-page-title]") || qs(".banner-title-name h2.m-tb0");
+  // <title> в head
+  document.title = `${title} — Ольга Турко`;
 
-    if (h) h.textContent = title;
+  // PAGE INTRO TITLE
+  const h = document.querySelector("[data-page-title]");
+
+  if (h) {
+    h.textContent = title;
   }
+}
+
 
 function renderHeroBlock(obj) {
   const imagesWrap = document.querySelector("[data-hero-images]");

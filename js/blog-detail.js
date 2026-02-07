@@ -94,11 +94,25 @@ function renderMeta(article) {
    6. HEADER / TITLE / BREADCRUMB
    ========================================================= */
 function renderHeader(article) {
-  const titleEl = document.getElementById("post-title");
-  if (titleEl) titleEl.textContent = article.title || "";
+  // PAGE INTRO TITLE
+  const pageTitle = document.getElementById("page-title");
+  if (pageTitle) {
+    pageTitle.textContent = article.title || "";
+  }
 
-  const bannerTitle = document.querySelector(".sx-bnr-inr h2");
-  if (bannerTitle) bannerTitle.textContent = article.title || "";
+  // PAGE INTRO LEAD (опционально)
+  const pageLead = document.getElementById("page-lead");
+  if (pageLead && article.lead) {
+    pageLead.textContent = article.lead;
+  }
+
+  // EYEBROW (если захочешь из JSON)
+  const eyebrow = document.getElementById("page-eyebrow");
+  if (eyebrow && article.category) {
+    eyebrow.textContent = article.category;
+  }
+
+  // ↓ ОСТАЛЬНОЕ ОСТАВЛЯЕМ КАК ЕСТЬ ↓
 
   const dateEl = document.getElementById("post-date");
   if (dateEl && article.date) {
@@ -115,6 +129,7 @@ function renderHeader(article) {
     categoryEl.textContent = article.category;
   }
 }
+
 
 /* =========================================================
    BREADCRUMB

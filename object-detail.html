@@ -150,39 +150,54 @@
       <!-- CONTENT START -->
       <div class="page-content">
         <!-- INNER PAGE BANNER -->
-        <div
-          class="sx-bnr-inr overlay-wraper bg-parallax bg-top-center"
-          data-stellar-background-ratio="0.5"
-          style="background-image: url(images/banner/X.webp)"
-        >
-          <div class="overlay-main bg-black opacity-07"></div>
-          <div class="container">
-            <div class="sx-bnr-inr-entry">
-              <div class="banner-title-outer">
-                <div class="banner-title-name">
-                  <h2 class="m-tb0" data-page-title></h2>
-                  <p>
-                    Этот раздел помогает оценить объект ещё до просмотра:
-                    насколько он удобен, как вписывается в ваш образ жизни и что
-                    в нём действительно ценно. Только то, что помогает принять
-                    решение быстро и уверенно.
-                  </p>
-                </div>
-              </div>
-              <!-- BREADCRUMB ROW -->
-              <div>
-                <ul class="sx-breadcrumb breadcrumb-style-2">
-                  <li>
-                    <i class="fa-solid fa-house fa-fw"></i>
-                    <a href="/">Главная</a>
-                  </li>
-                  <li>Детали объекта</li>
-                </ul>
-              </div>
-              <!-- BREADCRUMB ROW END -->
-            </div>
-          </div>
-        </div>
+
+<section class="page-intro">
+  <div class="container">
+
+    <div class="page-intro-inner">
+
+      <!-- EYEBROW -->
+      <span class="page-intro-eyebrow">
+        Детали объекта
+      </span>
+
+      <!-- TITLE (из JSON) -->
+      <h1
+        class="page-intro-title"
+        data-page-title
+      ></h1>
+
+      <!-- DESCRIPTION (статичный текст, как было) -->
+      <p class="page-intro-description">
+        Этот раздел помогает оценить объект ещё до просмотра:
+        насколько он удобен, как вписывается в ваш образ жизни и что
+        в нём действительно ценно.<br> Только то, что помогает принять
+        решение быстро и уверенно.
+      </p>
+
+      <div class="page-intro-divider"></div>
+
+      <!-- BREADCRUMB -->
+      <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
+        <ul>
+          <li>
+            <a href="/">
+                         Главная
+            </a>
+          </li>
+          <li>Детали объекта</li>
+        </ul>
+      </nav>
+
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
         <!-- INNER PAGE BANNER END -->
         <!-- SECTION CONTENT START -->
         <div class="section-full p-tb80 inner-page-padding stick_in_parent">
