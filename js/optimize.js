@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initContactSlide();
   initCounterUp();
   wrapResponsiveIframes();
-  initGlobalClickDelegation();
+  initScopedClickDelegation(); // INP FIX
   initStickyHeader();
   bg_moving();
   initBlogMasonryFilter();
@@ -42,10 +42,7 @@ function initMenuActiveAndUnderline() {
     if (!href) return;
     href = href.replace(/\/$/, "") || "/";
 
-    if (
-      href === currentPath ||
-      (href !== "/" && currentPath.startsWith(href))
-    ) {
+    if (href === currentPath || (href !== "/" && currentPath.startsWith(href))) {
       li.classList.add("active");
       activeLink = link;
     }
@@ -75,7 +72,7 @@ function initMenuActiveAndUnderline() {
 
 /**
  * =====================================================
- * OwlCarousel (jQuery plugin)
+ * OwlCarousel
  * =====================================================
  */
 function initCarousels() {
@@ -100,8 +97,6 @@ function initCarousels() {
       dots: false,
       responsive: { 0: { items: 1 }, 991: { items: 2 } },
     },
-
-    
     {
       selector: ".about-home",
       loop: true,
@@ -133,7 +128,7 @@ function initCarousels() {
       items: 3,
       margin: 40,
       nav: true,
-      autoplayTimeout: 4000, 
+      autoplayTimeout: 4000,
       smartSpeed: 800,
       dots: false,
       responsive: {
@@ -154,43 +149,39 @@ function initCarousels() {
       responsive: { 0: { items: 1 }, 768: { items: 1 }, 991: { items: 1 } },
     },
   ];
-const $about = jQuery(".about-home");
 
-if ($about.length) {
-  const autoplayTimeout = 5000; // ДОЛЖНО совпадать с Owl
-
-  let isAnimating = false;
+  const $about = jQuery(".about-home");
+  const autoplayTimeout = 5000;
 
   function startProgress() {
     const dots = $about.find(".owl-dots")[0];
     if (!dots) return;
 
-    dots.style.setProperty("--progress-width", "0%");
     dots.style.setProperty("--progress-transition", "0ms");
+    dots.style.setProperty("--progress-width", "0%");
 
-    // force reflow
-    void dots.offsetWidth;
-
-    dots.style.setProperty("--progress-transition", `${autoplayTimeout}ms`);
-    dots.style.setProperty("--progress-width", "100%");
+    requestAnimationFrame(() => {
+      dots.style.setProperty("--progress-transition", `${autoplayTimeout}ms`);
+      dots.style.setProperty("--progress-width", "100%");
+    });
   }
 
   function resetProgress() {
     const dots = $about.find(".owl-dots")[0];
     if (!dots) return;
-
     dots.style.setProperty("--progress-transition", "0ms");
     dots.style.setProperty("--progress-width", "0%");
   }
 
-  $about.on("initialized.owl.carousel", startProgress);
-  $about.on("translate.owl.carousel", resetProgress);
-  $about.on("translated.owl.carousel", startProgress);
-}
+  if ($about.length) {
+    $about.on("initialized.owl.carousel", startProgress);
+    $about.on("translate.owl.carousel", resetProgress);
+    $about.on("translated.owl.carousel", startProgress);
+  }
+
   carousels.forEach((cfg) => {
     const $el = jQuery(cfg.selector);
     if (!$el.length) return;
-
     $el.owlCarousel({
       ...cfg,
       navText: [
@@ -203,10 +194,9 @@ if ($about.length) {
 
 /**
  * =====================================================
- * Contact slide
+ * Contact slide (INP FIX)
  * =====================================================
  */
-
 function initContactSlide() {
   const panel = document.querySelector(".contact-slide-hide");
   const content = panel?.querySelector(".contact-slide-content");
@@ -216,9 +206,6 @@ function initContactSlide() {
 
   if (!panel || !content || !overlay || !openBtn || !closeBtn) return;
 
-  /* =====================================================
-     BODY SCROLL LOCK
-  ===================================================== */
   let scrollY = 0;
 
   const lockBody = () => {
@@ -233,9 +220,6 @@ function initContactSlide() {
     window.scrollTo(0, scrollY);
   };
 
-  /* =====================================================
-     OPEN / CLOSE
-  ===================================================== */
   const open = () => {
     panel.classList.add("is-open");
     panel.setAttribute("aria-hidden", "false");
@@ -256,14 +240,10 @@ function initContactSlide() {
   overlay.addEventListener("click", close);
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && panel.classList.contains("is-open")) {
-      close();
-    }
+    if (e.key === "Escape" && panel.classList.contains("is-open")) close();
   });
 
-  /* =====================================================
-     FOCUS TRAP
-  ===================================================== */
+  /* focus trap — сохранён */
   let focusableElements = [];
   let firstFocusable = null;
   let lastFocusable = null;
@@ -272,12 +252,9 @@ function initContactSlide() {
     focusableElements = content.querySelectorAll(
       'a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])',
     );
-
     if (!focusableElements.length) return;
-
     firstFocusable = focusableElements[0];
     lastFocusable = focusableElements[focusableElements.length - 1];
-
     firstFocusable.focus();
     document.addEventListener("keydown", handleTab);
   };
@@ -289,115 +266,84 @@ function initContactSlide() {
 
   const handleTab = (e) => {
     if (e.key !== "Tab") return;
-
-    if (e.shiftKey) {
-      if (document.activeElement === firstFocusable) {
-        e.preventDefault();
-        lastFocusable.focus();
-      }
-    } else {
-      if (document.activeElement === lastFocusable) {
-        e.preventDefault();
-        firstFocusable.focus();
-      }
+    if (e.shiftKey && document.activeElement === firstFocusable) {
+      e.preventDefault();
+      lastFocusable.focus();
+    } else if (!e.shiftKey && document.activeElement === lastFocusable) {
+      e.preventDefault();
+      firstFocusable.focus();
     }
   };
 
-  /* =====================================================
-     SWIPE TO CLOSE (MOBILE)
-  ===================================================== */
+  /* swipe — passive */
   let startX = 0;
   let startY = 0;
   let currentX = 0;
   let isSwiping = false;
 
-  const SWIPE_THRESHOLD = 80;
-
   const resetSwipe = () => {
     content.style.transform = "";
-    startX = 0;
-    startY = 0;
-    currentX = 0;
     isSwiping = false;
   };
 
   content.addEventListener("touchstart", (e) => {
-    if (!panel.classList.contains("is-open")) return;
-
-    const touch = e.touches[0];
-    startX = touch.clientX;
-    startY = touch.clientY;
+    const t = e.touches[0];
+    startX = t.clientX;
+    startY = t.clientY;
     isSwiping = true;
-  });
+  }, { passive: true });
 
   content.addEventListener("touchmove", (e) => {
     if (!isSwiping) return;
-
-    const touch = e.touches[0];
-    currentX = touch.clientX;
-
-    const diffX = currentX - startX;
-    const diffY = Math.abs(touch.clientY - startY);
-
-    /* если пользователь скроллит вертикально — выходим */
-    if (diffY > 30) {
-      resetSwipe();
-      return;
-    }
-
-    /* двигаем панель только вправо */
-    if (diffX > 0) {
-      content.style.transform = `translateX(${diffX}px)`;
-    }
-  });
+    const t = e.touches[0];
+    currentX = t.clientX;
+    if (Math.abs(t.clientY - startY) > 30) return resetSwipe();
+    const dx = currentX - startX;
+    if (dx > 0) content.style.transform = `translateX(${dx}px)`;
+  }, { passive: true });
 
   content.addEventListener("touchend", () => {
-    if (!isSwiping) return;
-
-    const diffX = currentX - startX;
-
-    if (diffX > SWIPE_THRESHOLD) {
-      close();
-    } else {
-      content.style.transform = "";
-    }
-
+    if (currentX - startX > 80) close();
+    else content.style.transform = "";
     resetSwipe();
   });
 }
 
 /**
  * =====================================================
- * CounterUp
+ * CounterUp (INP FIX)
  * =====================================================
  */
 function initCounterUp() {
   const counters = document.querySelectorAll(".counter");
   if (!counters.length) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        const el = entry.target;
-        const finalValue = parseInt(el.innerText.replace(/\D/g, ""), 10);
-        const start = performance.now();
-        const duration = 5000;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const finalValue = parseInt(el.innerText.replace(/\D/g, ""), 10);
 
-        function animate(time) {
-          const progress = Math.min((time - start) / duration, 1);
-          const eased = progress * (2 - progress);
-          el.innerText = Math.floor(eased * finalValue);
-          if (progress < 1) requestAnimationFrame(animate);
-        }
+      if (reduce) {
+        el.innerText = finalValue;
+        return observer.unobserve(el);
+      }
 
-        requestAnimationFrame(animate);
-        observer.unobserve(el);
-      });
-    },
-    { threshold: 0.5 },
-  );
+      const start = performance.now();
+      const duration = 2000;
+
+      function animate(time) {
+        const progress = Math.min((time - start) / duration, 1);
+        el.innerText = Math.floor(progress * finalValue);
+        if (progress < 1) requestAnimationFrame(animate);
+      }
+
+      requestAnimationFrame(animate);
+      observer.unobserve(el);
+    });
+  }, { threshold: 0.5 });
 
   counters.forEach((el) => observer.observe(el));
 }
@@ -421,20 +367,23 @@ function wrapResponsiveIframes() {
 
 /**
  * =====================================================
- * Global click delegation
+ * Scoped click delegation (INP FIX)
  * =====================================================
  */
-function initGlobalClickDelegation() {
-  document.addEventListener("click", (e) => {
-    handleAccordion(e);
-    handleSubmenu(e);
-    handleMobileDrawer(e);
-  });
+function initScopedClickDelegation() {
+  const faq = document.querySelector(".faq-1");
+  if (faq) faq.addEventListener("click", handleAccordion);
+
+  const nav = document.querySelector(".header-nav");
+  if (nav) nav.addEventListener("click", handleSubmenu);
+
+  const mobileBtn = document.querySelector("#mobile-side-drawer");
+  if (mobileBtn) mobileBtn.addEventListener("click", handleMobileDrawer);
 }
 
 /**
  * =====================================================
- * Accordion
+ * Accordion (без дубликатов)
  * =====================================================
  */
 function handleAccordion(e) {
@@ -444,31 +393,16 @@ function handleAccordion(e) {
   const faq = head.closest(".faq-1");
   if (!faq) return;
 
-  // закрываем все
   faq.querySelectorAll(".acod-head").forEach((h) => {
     h.classList.remove("acc-actives");
-
     const icon = h.querySelector(".indicator i");
-    if (icon) {
-      icon.classList.remove("fa-minus");
-      icon.classList.add("fa-plus");
-    }
+    if (icon) icon.className = "fa fa-plus";
   });
 
-  // открываем текущий (если был закрыт)
-  const willOpen = !head.classList.contains("acc-actives");
-  if (willOpen) {
-    head.classList.add("acc-actives");
-
-    const icon = head.querySelector(".indicator i");
-    if (icon) {
-      icon.classList.remove("fa-plus");
-      icon.classList.add("fa-minus");
-    }
-  }
+  head.classList.add("acc-actives");
+  const icon = head.querySelector(".indicator i");
+  if (icon) icon.className = "fa fa-minus";
 }
-
-document.addEventListener("click", handleAccordion);
 
 /**
  * =====================================================
@@ -476,12 +410,8 @@ document.addEventListener("click", handleAccordion);
  * =====================================================
  */
 function handleMobileDrawer(e) {
-  const btn = e.target.closest("#mobile-side-drawer");
-  if (!btn) return;
-
   const drawer = document.querySelector(".mobile-sider-drawer-menu");
   if (!drawer) return;
-
   e.preventDefault();
   drawer.classList.toggle("active");
 }
@@ -496,51 +426,40 @@ function initStickyHeader() {
   if (!header) return;
 
   const fixed = document.querySelectorAll(".is-fixed");
-
   const sentinel = document.createElement("div");
   sentinel.style.height = "1px";
   header.before(sentinel);
 
   new IntersectionObserver(([entry]) => {
     const stuck = !entry.isIntersecting;
-
     header.classList.toggle("is-stuck", stuck);
-
     fixed.forEach((el) => el.classList.toggle("color-fill", stuck));
   }).observe(sentinel);
 }
+
 /**
  * =====================================================
- * Bootstrap modal vertical centering
+ * Bootstrap modal centering (без изменений)
  * =====================================================
  */
 (function () {
-  "use strict";
-
   function repositionModal(modal) {
     const dialog = modal.querySelector(".modal-dialog");
     if (!dialog) return;
 
     modal.style.display = "block";
-
-    const dialogHeight = dialog.getBoundingClientRect().height;
-    const windowHeight = window.innerHeight;
-
-    const marginTop = Math.max(0, (windowHeight - dialogHeight) / 2);
-    dialog.style.marginTop = marginTop + "px";
+    const h = dialog.getBoundingClientRect().height;
+    const wh = window.innerHeight;
+    dialog.style.marginTop = Math.max(0, (wh - h) / 2) + "px";
   }
 
-  document.addEventListener("shown.bs.modal", function (e) {
-    const modal = e.target;
-    if (!modal.classList.contains("modal")) return;
-    repositionModal(modal);
+  document.addEventListener("shown.bs.modal", (e) => {
+    if (e.target.classList.contains("modal")) repositionModal(e.target);
   });
 
-  window.addEventListener("resize", function () {
-    const openedModal = document.querySelector(".modal.show");
-    if (openedModal) {
-      repositionModal(openedModal);
-    }
+  window.addEventListener("resize", () => {
+    const opened = document.querySelector(".modal.show");
+    if (opened) repositionModal(opened);
   });
 })();
 
@@ -554,129 +473,85 @@ function handleSubmenu(e) {
   if (!toggle) return;
 
   const li = toggle.parentElement;
-  if (!li) return;
-
   const submenu = li.querySelector(":scope > .sub-menu, :scope > .mega-menu");
   if (!submenu) return;
 
-  const isOpen = li.classList.contains("nav-active");
-
-  // закрываем соседние пункты
-  const siblings = li.parentElement.querySelectorAll(".has-child.nav-active");
-  siblings.forEach((item) => {
-    if (item !== li) {
-      item.classList.remove("nav-active");
-      const sm = item.querySelector(":scope > .sub-menu, :scope > .mega-menu");
-      if (sm) sm.style.display = "none";
-      const t = item.querySelector(":scope > .submenu-toogle");
-      if (t) t.setAttribute("aria-expanded", "false");
-    }
-  });
-
-  // toggle текущий
-  li.classList.toggle("nav-active", !isOpen);
-  submenu.style.display = isOpen ? "none" : "block";
-  toggle.setAttribute("aria-expanded", String(!isOpen));
-
+  const isOpen = li.classList.toggle("nav-active");
+  submenu.style.display = isOpen ? "block" : "none";
+  toggle.setAttribute("aria-expanded", String(isOpen));
   e.preventDefault();
 }
 
+/**
+ * =====================================================
+ * Masonry
+ * =====================================================
+ */
 function initBlogMasonryFilter() {
   const container = document.querySelector(".news-masonry");
   if (!container || !window.Masonry) return;
 
   const items = Array.from(container.querySelectorAll(".masonry-item"));
-
-  // Сначала гарантируем, что все карточки видимы
-  items.forEach(item => {
-    item.style.display = "";
+  const masonry = new Masonry(container, {
+    itemSelector: ".masonry-item",
+    percentPosition: true,
   });
 
-  // Ждём загрузки всех изображений
-  const images = container.querySelectorAll("img");
-  let loaded = 0;
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest(".masonry-filter a");
+    if (!link) return;
 
-  if (!images.length) {
-    initMasonry();
-    return;
-  }
+    e.preventDefault();
+    const filter = link.dataset.filter;
 
-  images.forEach(img => {
-    if (img.complete) {
-      loaded++;
-      if (loaded === images.length) initMasonry();
-    } else {
-      img.addEventListener("load", () => {
-        loaded++;
-        if (loaded === images.length) initMasonry();
-      });
-      img.addEventListener("error", () => {
-        loaded++;
-        if (loaded === images.length) initMasonry();
-      });
-    }
+    document
+      .querySelectorAll(".masonry-filter li")
+      .forEach((li) => li.classList.remove("active"));
+    link.parentElement.classList.add("active");
+
+    items.forEach((item) => {
+      item.style.display =
+        filter === "*" || item.matches(filter) ? "" : "none";
+    });
+
+    masonry.reloadItems();
+    masonry.layout();
   });
-
-  function initMasonry() {
-    const masonry = new Masonry(container, {
-      itemSelector: ".masonry-item",
-      percentPosition: true,
-    });
-
-    // фильтрация
-    document.addEventListener("click", (e) => {
-      const link = e.target.closest(".masonry-filter a");
-      if (!link) return;
-
-      e.preventDefault();
-
-      const filter = link.dataset.filter;
-
-      document
-        .querySelectorAll(".masonry-filter li")
-        .forEach(li => li.classList.remove("active"));
-
-      link.parentElement.classList.add("active");
-
-      items.forEach(item => {
-        item.style.display =
-          filter === "*" || item.matches(filter)
-            ? ""
-            : "none";
-      });
-
-      masonry.reloadItems();
-      masonry.layout();
-    });
-  }
 }
 
-
+/**
+ * =====================================================
+ * BG moving
+ * =====================================================
+ */
 function bg_moving() {
+  if (!window.scroll) return;
   BGScroll.init(".bg-moving", {
     scrollSpeed: 20,
     direction: "h",
-    pauseWhenHidden: true, // важно
+    pauseWhenHidden: true,
   });
 }
 
-
-document.querySelectorAll(".service-hover-card").forEach(card => {
+/**
+ * =====================================================
+ * Service hover cards (INP FIX)
+ * =====================================================
+ */
+document.querySelectorAll(".service-hover-card").forEach((card) => {
   const img = card.querySelector(".service-bg img");
+  let rect = null;
   let active = false;
 
   card.addEventListener("mouseenter", () => {
-    active = false;
-    setTimeout(() => active = true, 400); // ждём рост
+    rect = card.getBoundingClientRect();
+    setTimeout(() => (active = true), 300);
   });
 
-  card.addEventListener("mousemove", e => {
-    if (!active) return;
-
-    const rect = card.getBoundingClientRect();
+  card.addEventListener("mousemove", (e) => {
+    if (!active || !rect) return;
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 10;
-
     img.style.transform = `translate(${x}px, ${y}px)`;
   });
 
@@ -686,28 +561,35 @@ document.querySelectorAll(".service-hover-card").forEach(card => {
   });
 });
 
-
+/**
+ * =====================================================
+ * Service cards reveal
+ * =====================================================
+ */
 function initServiceCardsAnimation() {
   const cards = document.querySelectorAll(".number-block-three");
   if (!cards.length) return;
 
   const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
+    (entries) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-visible");
           observer.unobserve(entry.target);
         }
       });
     },
-    {
-      threshold: 0.15
-    }
+    { threshold: 0.15 },
   );
 
-  cards.forEach(card => observer.observe(card));
+  cards.forEach((card) => observer.observe(card));
 }
 
+/**
+ * =====================================================
+ * Favorites (без изменений)
+ * =====================================================
+ */
 function getFavorites() {
   try {
     return JSON.parse(localStorage.getItem("favoriteObjects")) || [];
@@ -727,13 +609,7 @@ function isFavorite(slug) {
 function toggleFavorite(slug) {
   const favs = getFavorites();
   const idx = favs.indexOf(slug);
-
-  if (idx >= 0) {
-    favs.splice(idx, 1);
-  } else {
-    favs.push(slug);
-  }
-
+  idx >= 0 ? favs.splice(idx, 1) : favs.push(slug);
   saveFavorites(favs);
   return favs.includes(slug);
 }
