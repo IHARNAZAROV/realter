@@ -613,3 +613,21 @@ function toggleFavorite(slug) {
   saveFavorites(favs);
   return favs.includes(slug);
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const textBlock = document.querySelector(".about-home-3");
+  if (!textBlock) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        textBlock.classList.add("is-visible");
+        observer.disconnect();
+      }
+    },
+    { threshold: 0.3 }
+  );
+
+  observer.observe(textBlock);
+});
