@@ -1,7 +1,7 @@
 // Ждем, пока HTML полностью загрузится
 document.addEventListener('DOMContentLoaded', function () {
   // Инициализируем Swiper
-  const swiper = new Swiper('.swiper', {
+  const swiper = new swiper('.swiper', {
 
     // Ваши основные настройки
     direction: 'horizontal',
