@@ -17,7 +17,6 @@
   --corporate-color: #155945;
 }
 
-
 /* ======================================================
    TYPOGRAPHY SYSTEM
    Inter (text) + Montserrat (headings)
@@ -30,8 +29,9 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-Regular.woff2") format("woff2"),
-       url("/fonts/montserrat/Montserrat-Regular.woff") format("woff");
+  src:
+    url("/fonts/montserrat/Montserrat-Regular.woff2") format("woff2"),
+    url("/fonts/montserrat/Montserrat-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -39,8 +39,9 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-Medium.woff2") format("woff2"),
-       url("/fonts/montserrat/Montserrat-Medium.woff") format("woff");
+  src:
+    url("/fonts/montserrat/Montserrat-Medium.woff2") format("woff2"),
+    url("/fonts/montserrat/Montserrat-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -48,8 +49,9 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-SemiBold.woff2") format("woff2"),
-       url("/fonts/montserrat/Montserrat-SemiBold.woff") format("woff");
+  src:
+    url("/fonts/montserrat/Montserrat-SemiBold.woff2") format("woff2"),
+    url("/fonts/montserrat/Montserrat-SemiBold.woff") format("woff");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -57,8 +59,9 @@
 
 @font-face {
   font-family: "Montserrat";
-  src: url("/fonts/montserrat/Montserrat-Bold.woff2") format("woff2"),
-       url("/fonts/montserrat/Montserrat-Bold.woff") format("woff");
+  src:
+    url("/fonts/montserrat/Montserrat-Bold.woff2") format("woff2"),
+    url("/fonts/montserrat/Montserrat-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -70,8 +73,9 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("/fonts/inter/Inter-Regular.woff2") format("woff2"),
-       url("/fonts/inter/Inter-Regular.woff") format("woff");
+  src:
+    url("/fonts/inter/Inter-Regular.woff2") format("woff2"),
+    url("/fonts/inter/Inter-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -79,8 +83,9 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("/fonts/inter/Inter-Medium.woff2") format("woff2"),
-       url("/fonts/inter/Inter-Medium.woff") format("woff");
+  src:
+    url("/fonts/inter/Inter-Medium.woff2") format("woff2"),
+    url("/fonts/inter/Inter-Medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -88,8 +93,9 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("/fonts/inter/Inter-SemiBold.woff2") format("woff2"),
-       url("/fonts/inter/Inter-SemiBold.woff") format("woff");
+  src:
+    url("/fonts/inter/Inter-SemiBold.woff2") format("woff2"),
+    url("/fonts/inter/Inter-SemiBold.woff") format("woff");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -100,11 +106,13 @@
 ====================== */
 
 :root {
-  --font-text: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, Arial, sans-serif;
+  --font-text:
+    "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Arial, sans-serif;
 
-  --font-heading: "Montserrat", system-ui, -apple-system,
-    "Segoe UI", Roboto, Arial, sans-serif;
+  --font-heading:
+    "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
 
   --color-text: #1c1c1c;
   --color-muted: #6b7280;
@@ -289,7 +297,6 @@ textarea {
     font-size: 15px;
   }
 }
-
 
 body {
   background-color: var(--color-bg-light);
@@ -5325,11 +5332,7 @@ body {
 
 blockquote.author-quote {
   position: relative;
-  background: linear-gradient(
-    135deg,
-    rgba(21, 89, 69, 0.06) 0%,
-    #ffffff 100%
-  );
+  background: linear-gradient(135deg, rgba(21, 89, 69, 0.06) 0%, #ffffff 100%);
   border-left: 4px solid #155945;
   padding: 36px 46px 36px 88px;
   margin: 55px 0;
@@ -5399,7 +5402,9 @@ blockquote.author-quote .fa-quote-left {
 
 @media (hover: hover) {
   blockquote.author-quote {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
   }
 
   blockquote.author-quote:hover {
@@ -5429,8 +5434,6 @@ blockquote.author-quote .fa-quote-left {
     left: 18px;
   }
 }
-
-
 
 /* ===============================
    INSTAGRAM BLOCK — HARD FIX
@@ -5562,14 +5565,15 @@ blockquote.author-quote .fa-quote-left {
    =============================== */
 
 .blog-post .instagram-related-post::before {
- 
   position: absolute;
   top: 18px;
   right: 18px;
   font-size: 18px;
   color: #155945;
   opacity: 0.35;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 @media (hover: hover) {
@@ -5627,7 +5631,9 @@ blockquote.author-quote .fa-quote-left {
   color: #155945;
   opacity: 0.35;
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
 
 @media (hover: hover) {
@@ -5638,7 +5644,7 @@ blockquote.author-quote .fa-quote-left {
 }
 
 .blog-post h1.post-title {
-  font-size: 28px;       
+  font-size: 28px;
   line-height: 1.35;
   font-weight: 600;
   margin-bottom: 20px;
@@ -5720,7 +5726,6 @@ blockquote.author-quote .fa-quote-left {
   border-left: 4px solid #155945;
 }
 
-
 /* =========================================
    BLOG CARD CTA BUTTON
    ========================================= */
@@ -5785,131 +5790,133 @@ blockquote.author-quote .fa-quote-left {
 -------------------------------------*/
 
 .side-bar .widget {
-	margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
-.side-bar .widget:last-child{
-	margin-bottom: 0px;
+.side-bar .widget:last-child {
+  margin-bottom: 0px;
 }
 .widget .widget-post img {
-	width: 100%;
+  width: 100%;
 }
-.side-bar{padding:20px;}
+.side-bar {
+  padding: 20px;
+}
 /*____date style outline End========*/
-.recent-posts-entry-date .widget-post:last-child{
-	border: none;
-	margin: 0px;
-	padding: 0px;
+.recent-posts-entry-date .widget-post:last-child {
+  border: none;
+  margin: 0px;
+  padding: 0px;
 }
-.recent-posts-entry-date .widget-post{
-	border-bottom:1px solid #2e313b;
-	margin-bottom: 15px;
-	padding-bottom: 5px;	
+.recent-posts-entry-date .widget-post {
+  border-bottom: 1px solid #2e313b;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
 }
 .recent-posts-entry-date .widget-post .sx-post-meta {
-    margin-bottom: 13px;
+  margin-bottom: 13px;
 }
 
-.recent-posts-entry-date .sx-post-date{
-	width:50px;
-	float:left;
+.recent-posts-entry-date .sx-post-date {
+  width: 50px;
+  float: left;
 }
-.recent-posts-entry-date .sx-post-date strong{
-	display: block;
-	font-size: 24px;
-	line-height: 24px;
+.recent-posts-entry-date .sx-post-date strong {
+  display: block;
+  font-size: 24px;
+  line-height: 24px;
 }
-.recent-posts-entry-date .sx-post-date span{
-	display: inline-block;
-	font-size:10px;
-	text-transform:uppercase;
-	font-weight: 600;
+.recent-posts-entry-date .sx-post-date span {
+  display: inline-block;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 600;
 }
-.recent-posts-entry-date .sx-post-info{
-	margin-left:70px;
+.recent-posts-entry-date .sx-post-info {
+  margin-left: 70px;
 }
-.recent-posts-entry-date .sx-post-info .post-title{
-	margin-bottom:8px;
-	font-weight: 500;
+.recent-posts-entry-date .sx-post-info .post-title {
+  margin-bottom: 8px;
+  font-weight: 500;
 }
-.footer-light .recent-posts-entry-date .sx-post-info .post-title a{
-	color:#000;
-}
-
-.recent-posts-entry-date .sx-post-info .sx-post-meta ul{
-	margin-bottom:0px;
-}
-.recent-posts-entry-date .sx-post-info .sx-post-meta ul li{
-	font-weight:500;
-	font-size:12px;
-	padding: 0px;
-	display: inline-block;
+.footer-light .recent-posts-entry-date .sx-post-info .post-title a {
+  color: #000;
 }
 
-.recent-posts-entry-date .sx-post-info .sx-post-meta ul li i{
-	color: #7b7b7b;
-	margin:0px 5px 0px 0px;
-}recent-posts-entry-date	 .sx-post-info .post-title{
-	font-weight:bold;
-	margin-top: 0px;
+.recent-posts-entry-date .sx-post-info .sx-post-meta ul {
+  margin-bottom: 0px;
+}
+.recent-posts-entry-date .sx-post-info .sx-post-meta ul li {
+  font-weight: 500;
+  font-size: 12px;
+  padding: 0px;
+  display: inline-block;
+}
+
+.recent-posts-entry-date .sx-post-info .sx-post-meta ul li i {
+  color: #7b7b7b;
+  margin: 0px 5px 0px 0px;
+}
+recent-posts-entry-date .sx-post-info .post-title {
+  font-weight: bold;
+  margin-top: 0px;
 }
 
 /* widget listing*/
 
 .widget_services ul {
-	list-style: none;
-	margin-bottom: 0;
+  list-style: none;
+  margin-bottom: 0;
 }
 
 .widget_services ul li {
-	margin-bottom: 13px;
-	border-bottom: 1px solid #e7e7e7;
-	position: relative;
-	padding: 15px 10px 15px 15px;
-	margin-bottom: 0;
-	line-height: 20px;
+  margin-bottom: 13px;
+  border-bottom: 1px solid #e7e7e7;
+  position: relative;
+  padding: 15px 10px 15px 15px;
+  margin-bottom: 0;
+  line-height: 20px;
 }
 
 .widget_services ul li:last-child {
-	border-bottom: 0px;
+  border-bottom: 0px;
 }
 
 .widget_services ul li {
-	-webkit-transition: all 0.1s linear;
-	-moz-transition: all 0.1s linear;
-	-ms-transition: all 0.1s linear;
-	-o-transition: all 0.1s linear;
-	transition: all 0.1s linear;
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  -ms-transition: all 0.1s linear;
+  -o-transition: all 0.1s linear;
+  transition: all 0.1s linear;
 }
-
 
 .widget_services ul li a {
-	color: #000;
-	display: block;
+  color: #000;
+  display: block;
 }
-.widget_services ul li a span{
-	text-align:right;
-	display:block;
-	float:right;	
+.widget_services ul li a span {
+  text-align: right;
+  display: block;
+  float: right;
 }
 
 .widget_services ul li a:hover {
-	color: #d7b39a;
+  color: #d7b39a;
 }
 
 .widget_services li {
-	border-bottom: none;
-	line-height: 28px;
+  border-bottom: none;
+  line-height: 28px;
 }
 
 .widget_services li:before {
-	top: 0;
-	left: 1px;
+  top: 0;
+  left: 1px;
 }
 
 .widget_services.inline-links li {
-	display: block;
-	border-bottom: none;
+  display: block;
+  border-bottom: none;
 }
 .sticky_column {
   position: sticky;
@@ -5919,37 +5926,37 @@ blockquote.author-quote .fa-quote-left {
 /* widget gallery */
 
 .widget_gallery ul {
-	margin-bottom:0px;
+  margin-bottom: 0px;
 }
 
 .widget_gallery li {
-	display:block;
-	width: 50%;
-	float:left;
-	background-color: #000;
+  display: block;
+  width: 50%;
+  float: left;
+  background-color: #000;
 }
 
 .widget_gallery li a {
-	position: relative;
+  position: relative;
 }
 
 .widget_gallery li:hover img {
-	margin-bottom: 0;
-	opacity: 0.3;
+  margin-bottom: 0;
+  opacity: 0.3;
 }
 
 .widget_gallery li:hover a:after {
-	opacity: 1;
+  opacity: 1;
 }
 
 .widget_gallery a {
-	display: block;
+  display: block;
 }
 
-@media only screen and (max-width:991px) {
-	.widget_gallery li {
-		width: 25%;
-	}
+@media only screen and (max-width: 991px) {
+  .widget_gallery li {
+    width: 25%;
+  }
 }
 
 /* /* ======================================
@@ -5992,7 +5999,7 @@ blockquote.author-quote .fa-quote-left {
   color: #2f2f2f;
   margin-bottom: 8px;
 }
- */
+*/
 /* ======================================
    UNIVERSAL HIGHLIGHT BLOCK
    (for all services)
@@ -6047,7 +6054,6 @@ blockquote.author-quote .fa-quote-left {
   margin-bottom: 22px;
 }
 
-
 @media (max-width: 768px) {
   .service-detail-content {
     padding: 25px 20px;
@@ -6087,7 +6093,9 @@ blockquote.author-quote .fa-quote-left {
   display: block;
   padding: 8px 12px;
   color: #2f2f2f;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .widget_services ul li a:hover {
@@ -6123,7 +6131,6 @@ blockquote.author-quote .fa-quote-left {
   color: #155945;
   font-weight: 500;
 }
-
 
 /* ======================================
    SERVICE STEPS LIST (NUMBERED)
@@ -6197,14 +6204,16 @@ blockquote.author-quote .fa-quote-left {
 
 .site-footer .widget_services ul li a {
   display: block;
-  padding: 6px 0;       /* ← вот тут ключ */
+  padding: 6px 0; /* ← вот тут ключ */
   line-height: 1.4;
 }
 
 /* базовый цвет пунктов */
 .about4-section .widget_services ul li a {
   color: #6f6f6f;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 /* hover ТОЛЬКО для неактивных */
@@ -6316,7 +6325,6 @@ blockquote.author-quote .fa-quote-left {
   padding: 34px 38px;
   background-color: #155945;
   border-radius: 14px;
- 
 }
 
 .sx-call-action h4 {
@@ -6371,14 +6379,14 @@ blockquote.author-quote .fa-quote-left {
    ====================================== */
 
 .service-detail-content ul {
-  list-style: none;        /* ❌ убираем браузерные точки */
+  list-style: none; /* ❌ убираем браузерные точки */
   padding-left: 0;
   margin-left: 0;
 }
 
 .service-detail-content ul li {
   position: relative;
-  padding-left: 22px;      /* ✅ место под маркер */
+  padding-left: 22px; /* ✅ место под маркер */
   margin-bottom: 10px;
 
   font-size: 16px;
@@ -6392,7 +6400,7 @@ blockquote.author-quote .fa-quote-left {
 .service-detail-content ul li::before {
   content: "•";
   position: absolute;
-  left: 6px;               /* ✅ ВНУТРИ блока */
+  left: 6px; /* ✅ ВНУТРИ блока */
   top: 0.15em;
 
   color: #155945;
@@ -6608,14 +6616,14 @@ blockquote.author-quote .fa-quote-left {
    ====================================== */
 
 .service-card-btn {
-  padding: 6px 14px;      
- letter-spacing: 0.4px;   /* ⬅ ближе друг к другу */
-  font-weight: 600;        /* ⬅ чётче, увереннее */
-  font-size: 13px;   
- -webkit-font-smoothing: antialiased;
+  padding: 6px 14px;
+  letter-spacing: 0.4px; /* ⬅ ближе друг к другу */
+  font-weight: 600; /* ⬅ чётче, увереннее */
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
- 
-  min-width: auto;        
+
+  min-width: auto;
 }
 
 .service-card-btn i {
@@ -6634,13 +6642,12 @@ blockquote.author-quote .fa-quote-left {
 /* Иконка */
 .service-card-icon {
   font-size: 11px;
-  opacity: 0.45;               
+  opacity: 0.45;
   transform: translateY(1px);
   transition:
     opacity 0.25s ease,
     transform 0.25s ease;
 }
-
 
 .service-card-btn:hover .service-card-icon {
   opacity: 0.85;
@@ -6649,7 +6656,6 @@ blockquote.author-quote .fa-quote-left {
 /* ======================================
    SERVICE CARD BUTTON – HARD OVERRIDE
    ====================================== */
-
 
 .service-card-btn {
   display: inline-flex;
@@ -6666,7 +6672,6 @@ blockquote.author-quote .fa-quote-left {
   border: 1px solid #155945;
   border-radius: 6px;
   background-color: transparent;
-
 }
 
 /* Hover кнопки */
@@ -6772,7 +6777,9 @@ blockquote.author-quote .fa-quote-left {
   font-weight: 500;
   color: #1c1c1c;
 
-  transition: color 0.25s ease, padding-left 0.25s ease;
+  transition:
+    color 0.25s ease,
+    padding-left 0.25s ease;
 }
 
 /* Hover */
@@ -7019,7 +7026,7 @@ blockquote.author-quote .fa-quote-left {
    ===================================================== */
 
 .filters-reset-row {
-  grid-column: 1 / -1; 
+  grid-column: 1 / -1;
   margin-top: 18px;
 
   display: flex;
@@ -7184,7 +7191,6 @@ blockquote.author-quote .fa-quote-left {
   }
 }
 
-
 /* =====================================================
    SERVICES CARDS — SCROLL ANIMATION
    ===================================================== */
@@ -7240,8 +7246,7 @@ blockquote.author-quote .fa-quote-left {
 /* TAP (мобильный + клики) */
 .service-card-btn:active {
   transform: translateY(0);
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .sx-count h4 {
@@ -7312,7 +7317,10 @@ blockquote.author-quote .fa-quote-left {
   background: #fff;
   cursor: pointer;
   font-size: 16px;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .view-btn:hover {
@@ -7450,7 +7458,7 @@ blockquote.author-quote .fa-quote-left {
 }
 .view-btn,
 .reset-filters-btn {
-  border-color: #e5e7eb; 
+  border-color: #e5e7eb;
   outline: none;
 }
 
@@ -7467,14 +7475,16 @@ blockquote.author-quote .fa-quote-left {
 }
 #objectsList.view-compact .image-effect-one {
   border-radius: 12px;
-  overflow: hidden;    
-  background: #fff;     
+  overflow: hidden;
+  background: #fff;
 }
 #objectsList.view-compact .project-mas {
   background: transparent;
 }
 #objectsList.view-compact .project-mas {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 @media (hover: hover) {
@@ -7684,7 +7694,9 @@ blockquote.author-quote .fa-quote-left {
   transform: scale(0.96);
   pointer-events: none;
 
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 
 .newsletter-form.success .newsletter-success {
@@ -7697,7 +7709,9 @@ blockquote.author-quote .fa-quote-left {
   opacity: 0;
   transform: scale(0.96);
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 
 /* ===============================
@@ -7736,9 +7750,10 @@ blockquote.author-quote .fa-quote-left {
   transform: scale(0.96);
   pointer-events: none;
 
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
-
 
 .newsletter-form.success .newsletter-success {
   opacity: 1;
@@ -7750,7 +7765,9 @@ blockquote.author-quote .fa-quote-left {
   opacity: 0;
   transform: scale(0.96);
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
 }
 
 /* ===============================
@@ -7808,13 +7825,21 @@ blockquote.author-quote .fa-quote-left {
 }
 
 @keyframes progressFill {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 @keyframes planeFly {
-  from { left: 0%; }
-  to   { left: 100%; }
+  from {
+    left: 0%;
+  }
+  to {
+    left: 100%;
+  }
 }
 
 /* ===============================
@@ -7825,8 +7850,6 @@ blockquote.author-quote .fa-quote-left {
   font-size: 12px;
   color: #d7b39a;
 }
-
-
 
 /* =====================================================
    OBJECT HERO WRAPPER
@@ -7841,7 +7864,6 @@ blockquote.author-quote .fa-quote-left {
     0 18px 40px rgba(21, 89, 69, 0.18),
     0 4px 10px rgba(21, 89, 69, 0.08);
 }
-
 
 /* Meta */
 .object-hero-meta {
@@ -8034,7 +8056,9 @@ blockquote.author-quote .fa-quote-left {
 
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .object-sidebar-title {
@@ -8148,7 +8172,7 @@ blockquote.author-quote .fa-quote-left {
 /* FRAME */
 .sidebar-slider-frame {
   position: relative;
-  overflow: hidden;                 
+  overflow: hidden;
   border-radius: 18px;
   width: 100%;
   max-width: 100%;
@@ -8157,9 +8181,9 @@ blockquote.author-quote .fa-quote-left {
 /* SLIDE CARD */
 .sidebar-slide {
   display: block;
-  width: 100%;                      
+  width: 100%;
   max-width: 100%;
-  box-sizing: border-box;          
+  box-sizing: border-box;
   background: #ffffff;
   border-radius: 18px;
   overflow: hidden;
@@ -8186,7 +8210,7 @@ blockquote.author-quote .fa-quote-left {
   padding: 16px;
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;               
+  overflow: hidden;
 }
 
 /* TITLE */
@@ -8196,11 +8220,11 @@ blockquote.author-quote .fa-quote-left {
   color: #0f3f32;
   line-height: 1.35;
 
-  width: 100%;                    
+  width: 100%;
   max-width: 100%;
-  white-space: normal;             
-  word-break: break-word;         
-  overflow-wrap: anywhere;        
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 /* LOCATION */
@@ -8228,7 +8252,6 @@ blockquote.author-quote .fa-quote-left {
    MOBILE
 ===================================================== */
 @media (max-width: 768px) {
-
   .sidebar-slider-frame {
     border-radius: 14px;
   }
@@ -8249,7 +8272,6 @@ blockquote.author-quote .fa-quote-left {
     font-size: 15px;
   }
 }
-
 
 /* =====================================================
    SIDEBAR FOOTER
@@ -8272,7 +8294,6 @@ blockquote.author-quote .fa-quote-left {
    MOBILE ADAPTATION
 ===================================================== */
 @media (max-width: 768px) {
-
   .sidebar-slider-frame {
     border-radius: 14px;
   }
@@ -8282,7 +8303,7 @@ blockquote.author-quote .fa-quote-left {
   }
 
   .sidebar-slide-image {
-    aspect-ratio: 3 / 2;         
+    aspect-ratio: 3 / 2;
   }
 
   .sidebar-slide-content {
@@ -8334,7 +8355,6 @@ blockquote.author-quote .fa-quote-left {
   }
 }
 
-
 /* режем li */
 .widget_gallery ul li {
   overflow: hidden;
@@ -8366,10 +8386,10 @@ blockquote.author-quote .fa-quote-left {
 }
 
 .sx-post-thum:before {
-  background: rgba(0,0,0,.4);
+  background: rgba(0, 0, 0, 0.4);
 }
 .widget_gallery .sx-post-thum:before {
-  background: rgba(21, 89, 69, 0.25); 
+  background: rgba(21, 89, 69, 0.25);
 }
 
 #objectsList .object-price,
@@ -8477,7 +8497,6 @@ blockquote.author-quote .fa-quote-left {
   flex-shrink: 0;
 }
 
-
 /* === CARD TITLE (2 LINES CLAMP) === */
 .sidebar-slide-content h6 {
   font-weight: 700;
@@ -8486,17 +8505,17 @@ blockquote.author-quote .fa-quote-left {
   line-height: 1.35;
 
   display: -webkit-box;
-  line-clamp:2;
-  -webkit-line-clamp: 2;    
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  min-height: calc(1.35em * 2); 
+  min-height: calc(1.35em * 2);
 }
 /* === IMAGE HEIGHT CONTROL === */
 .sidebar-slide-image {
   aspect-ratio: 4 / 3;
-  min-height: 340px; 
+  min-height: 340px;
 }
 @media (max-width: 768px) {
   .sidebar-slide-image {
@@ -8513,11 +8532,10 @@ blockquote.author-quote .fa-quote-left {
 }
 
 .sidebar-slide {
-  flex: 0 0 100%; 
+  flex: 0 0 100%;
 }
 
 @media (max-width: 768px) {
-
   .sidebar-slider-frame {
     margin-top: 24px;
   }
@@ -8553,10 +8571,18 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* немного задержки для «лесенки» */
-.reveal[data-delay="1"] { transition-delay: 0.05s; }
-.reveal[data-delay="2"] { transition-delay: 0.1s; }
-.reveal[data-delay="3"] { transition-delay: 0.15s; }
-.reveal[data-delay="4"] { transition-delay: 0.2s; }
+.reveal[data-delay="1"] {
+  transition-delay: 0.05s;
+}
+.reveal[data-delay="2"] {
+  transition-delay: 0.1s;
+}
+.reveal[data-delay="3"] {
+  transition-delay: 0.15s;
+}
+.reveal[data-delay="4"] {
+  transition-delay: 0.2s;
+}
 
 @media (max-width: 768px) {
   .selling-points-list li {
@@ -8629,8 +8655,6 @@ blockquote.author-quote .fa-quote-left {
   }
 }
 
-
-
 #objectsList {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -8663,7 +8687,9 @@ blockquote.author-quote .fa-quote-left {
   overflow: hidden;
   border: 1.5px solid rgba(21, 89, 69, 0.25);
   box-shadow: 0 14px 34px rgba(21, 89, 69, 0.12);
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
 .project-mas:hover {
@@ -8707,7 +8733,7 @@ blockquote.author-quote .fa-quote-left {
   line-height: 1.25;
 
   display: -webkit-box;
-  line-clamp:2;
+  line-clamp: 2;
   -webkit-line-clamp: 2; /* ⬅️ одинаковая высота */
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -8720,7 +8746,7 @@ blockquote.author-quote .fa-quote-left {
   margin-bottom: 14px;
 
   display: -webkit-box;
-  line-clamp:3;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -8749,7 +8775,6 @@ blockquote.author-quote .fa-quote-left {
   opacity: 0.7;
 }
 
-
 .project-mas {
   display: flex;
   flex-direction: column;
@@ -8761,11 +8786,11 @@ blockquote.author-quote .fa-quote-left {
 .project-info {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;              
+  flex-grow: 1;
   background: #f6fbf9;
 }
 .object-meta {
-  margin-top: auto;          
+  margin-top: auto;
   padding-top: 12px;
 }
 
@@ -8856,8 +8881,6 @@ blockquote.author-quote .fa-quote-left {
   animation-delay: 0.12s;
 }
 
-
-
 /* =========================================================
    BLOG CARD — CORPORATE STYLE (CLEAN FINAL)
    ========================================================= */
@@ -8942,8 +8965,8 @@ blockquote.author-quote .fa-quote-left {
   align-items: center;
 
   text-align: center;
-  padding-bottom: 22px;          
-  min-height: 190px;             
+  padding-bottom: 22px;
+  min-height: 190px;
 }
 
 /* =========================================================
@@ -8975,7 +8998,7 @@ blockquote.author-quote .fa-quote-left {
   align-items: center;
   gap: 8px;
 
-  margin-top: auto;            
+  margin-top: auto;
   padding: 10px 18px;
 
   font-size: 14px;
@@ -9235,7 +9258,9 @@ blockquote.author-quote .fa-quote-left {
 .service-hover-card .icon-cell i,
 .service-hover-card .icon-cell i::before {
   color: #1f4f3d;
-  transition: color 0.35s ease, filter 0.35s ease;
+  transition:
+    color 0.35s ease,
+    filter 0.35s ease;
 }
 
 .service-hover-card:hover .icon-cell i,
@@ -9294,14 +9319,13 @@ blockquote.author-quote .fa-quote-left {
   inset: -50%;
   z-index: 2;
 
-  background-image:
-    repeating-radial-gradient(
-      circle at 0 0,
-      rgba(255,255,255,0.05) 0,
-      rgba(255,255,255,0.05) 1px,
-      transparent 1px,
-      transparent 2px
-    );
+  background-image: repeating-radial-gradient(
+    circle at 0 0,
+    rgba(255, 255, 255, 0.05) 0,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px,
+    transparent 2px
+  );
 
   opacity: 0.12;
   mix-blend-mode: overlay;
@@ -9312,17 +9336,39 @@ blockquote.author-quote .fa-quote-left {
 
 /* Grain motion */
 @keyframes grainMove {
-  0%   { transform: translate(0, 0); }
-  10%  { transform: translate(-5%, -10%); }
-  20%  { transform: translate(-15%, 5%); }
-  30%  { transform: translate(7%, -25%); }
-  40%  { transform: translate(-5%, 25%); }
-  50%  { transform: translate(-15%, 10%); }
-  60%  { transform: translate(15%, 0); }
-  70%  { transform: translate(0, 15%); }
-  80%  { transform: translate(3%, -10%); }
-  90%  { transform: translate(-10%, 5%); }
-  100% { transform: translate(0, 0); }
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-5%, -10%);
+  }
+  20% {
+    transform: translate(-15%, 5%);
+  }
+  30% {
+    transform: translate(7%, -25%);
+  }
+  40% {
+    transform: translate(-5%, 25%);
+  }
+  50% {
+    transform: translate(-15%, 10%);
+  }
+  60% {
+    transform: translate(15%, 0);
+  }
+  70% {
+    transform: translate(0, 15%);
+  }
+  80% {
+    transform: translate(3%, -10%);
+  }
+  90% {
+    transform: translate(-10%, 5%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 @media (max-width: 768px) {
@@ -9348,13 +9394,17 @@ blockquote.author-quote .fa-quote-left {
   justify-content: center;
   cursor: pointer;
   z-index: 5;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .favorite-btn i {
   font-size: 18px;
   color: #777;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .favorite-btn:hover {
@@ -9378,10 +9428,18 @@ blockquote.author-quote .fa-quote-left {
    FAVORITE BUTTON – PULSE
 ========================================================= */
 @keyframes fav-pulse {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.25); }
-  70%  { transform: scale(0.95); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.25);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .favorite-btn.is-pulse {
@@ -9405,7 +9463,9 @@ blockquote.author-quote .fa-quote-left {
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
   z-index: 6;
 }
 
@@ -9419,7 +9479,9 @@ blockquote.author-quote .fa-quote-left {
   border-style: solid;
   border-color: transparent transparent transparent rgba(0, 0, 0, 0.85);
   opacity: 0;
-  transition: opacity 0.18s ease, transform 0.18s ease;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
   z-index: 6;
 }
 
@@ -9442,7 +9504,10 @@ blockquote.author-quote .fa-quote-left {
   cursor: pointer;
   user-select: none;
   border-radius: 999px;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
 
 .favorites-filter-counter i {
@@ -9476,10 +9541,18 @@ blockquote.author-quote .fa-quote-left {
    FAVORITES FILTER COUNTER – PULSE
 ========================================================= */
 @keyframes fav-counter-pulse {
-  0%   { transform: scale(1); }
-  35%  { transform: scale(1.25); }
-  65%  { transform: scale(0.95); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.25);
+  }
+  65% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .favorites-filter-counter.is-pulse {
@@ -9533,21 +9606,19 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* Контейнер */
-.section-full.mobile-page-padding
-.about-home-left {
+.section-full.mobile-page-padding .about-home-left {
   position: relative;
   padding-left: 32px;
   background: linear-gradient(
     180deg,
-    rgba(255,255,255,0.96),
-    rgba(255,255,255,0.98)
+    rgba(255, 255, 255, 0.96),
+    rgba(255, 255, 255, 0.98)
   );
   border-color: rgba(21, 89, 69, 0.18);
 }
 
 /* Вертикальный акцент */
-.section-full.mobile-page-padding
-.about-home-left::before {
+.section-full.mobile-page-padding .about-home-left::before {
   content: "";
   position: absolute;
   left: 0;
@@ -9557,13 +9628,12 @@ blockquote.author-quote .fa-quote-left {
   background: linear-gradient(
     180deg,
     #d7b39a 0%,
-    rgba(215,179,154,0.35) 100%
+    rgba(215, 179, 154, 0.35) 100%
   );
 }
 
 /* Заголовок */
-.section-full.mobile-page-padding
-.about-home-left h3 {
+.section-full.mobile-page-padding .about-home-left h3 {
   font-size: 1.1rem;
   line-height: 1.45;
   font-weight: 500;
@@ -9573,14 +9643,12 @@ blockquote.author-quote .fa-quote-left {
   color: #1c1c1c;
 }
 
-.section-full.mobile-page-padding
-.about-home-left h3 .hermes {
+.section-full.mobile-page-padding .about-home-left h3 .hermes {
   color: var(--color-primary);
   position: relative;
 }
 
-.section-full.mobile-page-padding
-.about-home-left h3 .hermes::after {
+.section-full.mobile-page-padding .about-home-left h3 .hermes::after {
   content: "";
   position: absolute;
   left: 0;
@@ -9592,8 +9660,7 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* Текст */
-.section-full.mobile-page-padding
-.about-home-left p {
+.section-full.mobile-page-padding .about-home-left p {
   font-size: 15px;
   line-height: 1.7;
   color: #4f4f4f;
@@ -9602,8 +9669,7 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* DROP CAP */
-.section-full.mobile-page-padding
-.about-home-left .dropcap {
+.section-full.mobile-page-padding .about-home-left .dropcap {
   float: left;
   font-family: var(--font-heading);
   font-size: 4.8rem;
@@ -9616,8 +9682,7 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* Финальная точка */
-.section-full.mobile-page-padding
-.about-home-left p:last-of-type::after {
+.section-full.mobile-page-padding .about-home-left p:last-of-type::after {
   content: "•";
   margin-left: 10px;
   color: #d7b39a;
@@ -9626,18 +9691,15 @@ blockquote.author-quote .fa-quote-left {
 
 /* Mobile */
 @media (max-width: 768px) {
-  .section-full.mobile-page-padding
-  .about-home-left {
+  .section-full.mobile-page-padding .about-home-left {
     padding-left: 0;
   }
 
-  .section-full.mobile-page-padding
-  .about-home-left::before {
+  .section-full.mobile-page-padding .about-home-left::before {
     display: none;
   }
 
-  .section-full.mobile-page-padding
-  .about-home-left .dropcap {
+  .section-full.mobile-page-padding .about-home-left .dropcap {
     float: none;
     font-size: inherit;
     padding: 0;
@@ -9649,8 +9711,7 @@ blockquote.author-quote .fa-quote-left {
    ========================================================= */
 
 /* Карточка */
-.section-full.mobile-page-padding
-.about-home.owl-carousel .item {
+.section-full.mobile-page-padding .about-home.owl-carousel .item {
   height: 520px;
   background: #ffffff;
   border-radius: 18px;
@@ -9660,18 +9721,16 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* Контейнер изображения */
-.section-full.mobile-page-padding
-.about-home.owl-carousel .sx-img-effect {
+.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect {
   height: 100%;
   background: #ffffff;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.18);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
 }
 
 /* Картинка */
-.section-full.mobile-page-padding
-.about-home.owl-carousel .sx-img-effect img {
+.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -9681,21 +9740,18 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* Очень мягкий zoom */
-.section-full.mobile-page-padding
-.sx-img-effect.zoom-slow:hover img {
+.section-full.mobile-page-padding .sx-img-effect.zoom-slow:hover img {
   transform: scale(1.05);
 }
 
 /* Фоновое статичное фото */
-.section-full.mobile-page-padding
-.about-home-before {
+.section-full.mobile-page-padding .about-home-before {
   opacity: 0.22;
   filter: grayscale(100%) contrast(0.9);
 }
 
 /* ---------- PROGRESS LINE ---------- */
-.section-full.mobile-page-padding
-.about-home.owl-carousel .owl-dots {
+.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots {
   position: relative;
   height: 2px;
   margin-top: 28px;
@@ -9704,14 +9760,12 @@ blockquote.author-quote .fa-quote-left {
 }
 
 /* убираем точки */
-.section-full.mobile-page-padding
-.about-home.owl-carousel .owl-dot {
+.section-full.mobile-page-padding .about-home.owl-carousel .owl-dot {
   display: none;
 }
 
 /* линия прогресса */
-.section-full.mobile-page-padding
-.about-home.owl-carousel .owl-dots::after {
+.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -9723,8 +9777,7 @@ blockquote.author-quote .fa-quote-left {
 
 /* Mobile */
 @media (max-width: 768px) {
-  .section-full.mobile-page-padding
-  .about-home.owl-carousel .item {
+  .section-full.mobile-page-padding .about-home.owl-carousel .item {
     height: 420px;
   }
 }
@@ -9734,39 +9787,33 @@ blockquote.author-quote .fa-quote-left {
    ========================================================= */
 
 @media (max-width: 768px) {
-
   /* Контейнер */
-  .section-full.mobile-page-padding
-  .about-home-left {
+  .section-full.mobile-page-padding .about-home-left {
     text-align: center;
     padding-left: 0;
   }
 
   /* Убираем вертикальный акцент */
-  .section-full.mobile-page-padding
-  .about-home-left::before {
+  .section-full.mobile-page-padding .about-home-left::before {
     display: none;
   }
 
   /* Заголовок */
-  .section-full.mobile-page-padding
-  .about-home-left h3 {
+  .section-full.mobile-page-padding .about-home-left h3 {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
   }
 
   /* Абзацы */
-  .section-full.mobile-page-padding
-  .about-home-left p {
+  .section-full.mobile-page-padding .about-home-left p {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
   }
 
   /* Drop cap отключаем */
-  .section-full.mobile-page-padding
-  .about-home-left .dropcap {
+  .section-full.mobile-page-padding .about-home-left .dropcap {
     float: none;
     font-size: inherit;
     padding: 0;
@@ -9774,48 +9821,41 @@ blockquote.author-quote .fa-quote-left {
   }
 
   /* Кнопка по центру */
-  .section-full.mobile-page-padding
-  .about-home-left .text-left {
+  .section-full.mobile-page-padding .about-home-left .text-left {
     text-align: center;
   }
 
-  .section-full.mobile-page-padding
-  .about-home-left .site-button-secondry {
+  .section-full.mobile-page-padding .about-home-left .site-button-secondry {
     margin-left: auto;
     margin-right: auto;
   }
 }
 
-  .section-full.mobile-page-padding
-  .about-home-left .text-left {
-    text-align: center;
-  }
+.section-full.mobile-page-padding .about-home-left .text-left {
+  text-align: center;
+}
 
+.section-full.mobile-page-padding .about-home-left .site-button-secondry {
+  display: inline-flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  .section-full.mobile-page-padding
-  .about-home-left .site-button-secondry {
-    display: inline-flex;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
-  }
+/* ломаем text-left */
+.section-full.mobile-page-padding .about-home-left .text-left {
+  display: flex !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
 
-   /* ломаем text-left */
-  .section-full.mobile-page-padding
-  .about-home-left .text-left {
-    display: flex !important;
-    justify-content: center !important;
-    text-align: center !important;
-  }
+/* сбрасываем возможные float / inline */
+.section-full.mobile-page-padding .about-home-left .site-button-secondry {
+  float: none !important;
+  margin: 0 auto !important;
+}
 
-  /* сбрасываем возможные float / inline */
-  .section-full.mobile-page-padding
-  .about-home-left .site-button-secondry {
-    float: none !important;
-    margin: 0 auto !important;
-  }
-
-  /* =========================================================
+/* =========================================================
    LARGE TITLE BLOCK — PREMIUM MANIFEST
    ========================================================= */
 
@@ -9851,7 +9891,7 @@ blockquote.author-quote .fa-quote-left {
   background: linear-gradient(
     180deg,
     #d7b39a 0%,
-    rgba(215,179,154,0.35) 100%
+    rgba(215, 179, 154, 0.35) 100%
   );
 }
 
@@ -9900,7 +9940,6 @@ blockquote.author-quote .fa-quote-left {
    --------------------------------------------------------- */
 
 @media (max-width: 768px) {
-
   .large-title-block {
     padding: 60px 0;
   }
@@ -9926,7 +9965,6 @@ blockquote.author-quote .fa-quote-left {
 }
 
 @media (max-width: 576px) {
-
   .filter-item.filter-price .price-fields {
     display: flex;
     gap: 8px;
@@ -9943,12 +9981,7 @@ blockquote.author-quote .fa-quote-left {
    ===================================================== */
 
 .page-intro {
-  background:
-    linear-gradient(
-      180deg,
-      #155945 0%,
-      #0f3f32 100%
-    );
+  background: linear-gradient(180deg, #155945 0%, #0f3f32 100%);
 
   /* компенсация фиксированного хедера */
   padding-top: calc(1.5rem + 72px);
@@ -10056,9 +10089,8 @@ blockquote.author-quote .fa-quote-left {
    ===================================================== */
 
 @media (max-width: 768px) {
-
   .page-intro {
-      padding-bottom: 1rem;
+    padding-bottom: 1rem;
   }
 
   .page-intro-inner {
@@ -10142,7 +10174,9 @@ blockquote.author-quote .fa-quote-left {
 
   opacity: 0;
   transform: translateY(14px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
 }
 
 /* final accent */
@@ -10200,7 +10234,6 @@ blockquote.author-quote .fa-quote-left {
    ===================================================== */
 
 @media (max-width: 768px) {
-
   /* left block */
   .contact-form.cons-contact-form {
     padding-right: 0;
@@ -10264,7 +10297,6 @@ blockquote.author-quote .fa-quote-left {
    ===================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-
   .contact-form .about-home-3 p {
     opacity: 1 !important;
     transform: none !important;
@@ -10282,7 +10314,6 @@ blockquote.author-quote .fa-quote-left {
     display: none;
   }
 }
-
 
 /* =====================================================
    FAQ — EDITORIAL CLEAN
@@ -10380,7 +10411,9 @@ blockquote.author-quote .fa-quote-left {
 
   opacity: 0;
   transform: translateY(-6px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
 }
 
 /* open state */
@@ -10394,7 +10427,6 @@ blockquote.author-quote .fa-quote-left {
    =============================== */
 
 @media (max-width: 768px) {
-
   /* left block */
   .faq-list h4 {
     font-size: 20px;
@@ -10427,7 +10459,6 @@ blockquote.author-quote .fa-quote-left {
    =============================== */
 
 @media (prefers-reduced-motion: reduce) {
-
   .sx-panel .acod-content {
     opacity: 1 !important;
     transform: none !important;
@@ -10492,13 +10523,11 @@ blockquote.author-quote .fa-quote-left {
   color: var(--color-primary);
 }
 
-
 /* ===============================
    MOBILE
    =============================== */
 
 @media (max-width: 768px) {
-
   .about-home-3 {
     max-width: 100%;
     text-align: center;
@@ -10523,4 +10552,166 @@ blockquote.author-quote .fa-quote-left {
     font-size: 32px;
     text-align: center;
   }
+}
+
+.objects-load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.objects-load-more-btn {
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid #006064;
+  color: #006064;
+  border-radius: 40px;
+  transition: all 0.25s ease;
+}
+.objects-load-more-btn:hover {
+  background: #006064;
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .objects-load-more-btn {
+    width: 100%;
+    max-width: 320px;
+    font-size: 15px;
+  }
+}
+.objects-load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.objects-load-more-btn.is-complete {
+  opacity: 0.6;
+  cursor: default;
+}
+.objects-load-more-btn.is-complete:hover {
+  background: transparent;
+  color: #006064;
+}
+.load-more-counter {
+  font-size: 14px;
+  opacity: 0.75;
+}
+@media (max-width: 768px) {
+  .objects-load-more-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.objects-load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+} /* ===== Spinner ===== */
+.load-more-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 96, 100, 0.25);
+  border-top-color: #006064;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.load-more-spinner.is-visible {
+  opacity: 1;
+  transform: scale(1);
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+} /* ===== Loading state ===== */
+.objects-load-more-btn.is-loading {
+  pointer-events: none;
+} /* ===== Complete state ===== */
+.objects-load-more-btn.is-complete {
+  opacity: 0.65;
+  cursor: default;
+}
+.load-more-done {
+  font-weight: 500;
+}
+.load-more-counter {
+  font-size: 14px;
+  opacity: 0.7;
+} /* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .objects-load-more-btn {
+    width: 100%;
+    justify-content: center;
+  }
+} /* ===================================================== OBJECT CARD MICRO FADE-IN ===================================================== */
+.object-item {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.object-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+} /* На мобильных ещё мягче */
+@media (max-width: 768px) {
+  .object-item {
+    transform: translateY(4px);
+  }
+} /* ===================================================== LOAD MORE — APPEAR PULSE ===================================================== */
+@keyframes loadMorePulse {
+  0% {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.objects-load-more-btn.is-appear {
+  animation: loadMorePulse 0.55s ease-out both;
+} /* ===================================================== LOAD MORE — STICKY MOBILE ===================================================== */
+@media (max-width: 768px) {
+  .objects-load-more-wrap {
+    position: sticky;
+    bottom: 12px;
+    z-index: 50;
+    padding: 0 16px;
+    margin-top: 24px;
+  }
+  .objects-load-more-btn {
+    width: 100%;
+    max-width: none;
+    box-shadow: 0 10px 28px rgba(0, 96, 100, 0.22);
+  } /* когда всё загружено — визуально спокойнее */
+  .objects-load-more-btn.is-complete {
+    box-shadow: none;
+  }
+}
+@media (max-width: 768px) {
+  #objectsList {
+    padding-bottom: 96px;
+  }
+}
+.objects-load-more-btn,
+.objects-load-more-btn:focus,
+.objects-load-more-btn:active,
+.objects-load-more-btn:focus-visible {
+  outline: none !important;
+  box-shadow: none;
+} /* iOS / Android tap highlight */
+.objects-load-more-btn {
+  -webkit-tap-highlight-color: transparent;
 }

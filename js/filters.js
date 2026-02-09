@@ -6,6 +6,18 @@
 let allObjects = [];
 
 /* =========================================================
+   LOAD MORE STATE
+========================================================= */
+const OBJECTS_STEP = 6;
+let visibleCount = OBJECTS_STEP;
+let lastRenderedList = [];
+let isAppendMode = false;
+
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+let loadMoreAppearedOnce = false;
+
+
+/* =========================================================
    DOM ELEMENTS
 ========================================================= */
 const sortSelect = document.getElementById("sortSelect");
@@ -212,64 +224,113 @@ function handlePriceInput() {
 ========================================================= */
 function applyFiltersAndSort() {
   let result = [...allObjects];
-  
-// ONLY FAVORITES MODE
-if (isFavoritesMode()) {
-  const favs = getFavorites();
-  result = result.filter((o) => favs.includes(o.slug));
-}
+
+  /* =========================================
+     ONLY FAVORITES MODE
+  ========================================= */
+  if (isFavoritesMode()) {
+    const favs = getFavorites();
+    result = result.filter((o) => favs.includes(o.slug));
+  }
+
+  /* =========================================
+     TYPE FILTER
+  ========================================= */
   if (typeSelect.value !== "all") {
     result = result.filter((o) => o.type === typeSelect.value);
   }
 
+  /* =========================================
+     ROOMS FILTER (ONLY FOR FLATS)
+  ========================================= */
   if (typeSelect.value === "Квартира" && roomsSelect.value !== "all") {
     result = result.filter((o) =>
       roomsSelect.value === "4"
         ? o.rooms >= 4
-        : o.rooms === Number(roomsSelect.value),
+        : o.rooms === Number(roomsSelect.value)
     );
   }
 
+  /* =========================================
+     PRICE FILTER
+  ========================================= */
   const from = parsePrice(priceFromInput.value);
   const to = parsePrice(priceToInput.value);
 
   if (from) result = result.filter((o) => o.priceBYN >= from);
   if (to) result = result.filter((o) => o.priceBYN <= to);
 
+  /* =========================================
+     LOCATION FILTER
+  ========================================= */
   if (locationSelect.value !== "all") {
     result = result.filter((o) => {
-      if (locationSelect.value === "lida") return o.city === "Лида";
-      if (locationSelect.value === "district")
+      if (locationSelect.value === "lida") {
+        return o.city === "Лида";
+      }
+      if (locationSelect.value === "district") {
         return o.city === "Лидский район";
+      }
       return o.city !== "Лида" && o.city !== "Лидский район";
     });
   }
 
+  /* =========================================
+     SORTING
+  ========================================= */
   switch (sortSelect.value) {
     case "cheap":
       result.sort((a, b) => a.priceBYN - b.priceBYN);
       break;
+
     case "expensive":
       result.sort((a, b) => b.priceBYN - a.priceBYN);
       break;
+
     case "new":
-      result.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+      result.sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      );
       break;
+
     case "pricePerMeter":
       result.sort((a, b) => {
         const aArea = getObjectArea(a);
         const bArea = getObjectArea(b);
+
         if (!aArea) return 1;
         if (!bArea) return -1;
+
         return a.priceBYN / aArea - b.priceBYN / bArea;
       });
       break;
+
     default:
-      result.sort((a, b) => (b.recommended || 0) - (a.recommended || 0));
+      result.sort(
+        (a, b) => (b.recommended || 0) - (a.recommended || 0)
+      );
   }
 
+  /* =========================================
+     COUNTER
+  ========================================= */
   updateObjectsCounter(result.length);
+
+  /* =========================================
+     LOAD MORE RESET (ВАЖНО)
+  ========================================= */
+isAppendMode = false;
+visibleCount = OBJECTS_STEP;
+lastRenderedList = result;
+
+  /* =========================================
+     RENDER
+  ========================================= */
   renderObjects(result);
+
+  /* =========================================
+     UI STATE
+  ========================================= */
   updateActiveFilters();
   saveFiltersToStorage();
 }
@@ -278,56 +339,74 @@ if (isFavoritesMode()) {
    RENDER
 ========================================================= */
 function renderObjects(list) {
-  objectsList.innerHTML = "";
-
+  /* =========================================
+     EMPTY STATE
+  ========================================= */
   if (!list.length) {
     objectsList.innerHTML =
       "<li class='object-item'><p>Объекты не найдены</p></li>";
+    updateShownCounter(0, 0);
+    toggleLoadMore(false);
     return;
   }
 
-  const isFirstRender = !objectsList.hasChildNodes();
+  /* =========================================
+     CLEAR ONLY ON NEW SEARCH
+  ========================================= */
+  if (!isAppendMode) {
+    objectsList.innerHTML = "";
+  }
 
-  list.forEach((obj, index) => {
+  /* =========================================
+     CALCULATE RANGE
+  ========================================= */
+  const alreadyRendered = objectsList.children.length;
+  const nextItems = list.slice(alreadyRendered, visibleCount);
+
+  /* =========================================
+     APPEND NEW ITEMS ONLY
+  ========================================= */
+  nextItems.forEach((obj, index) => {
     const li = document.createElement("li");
     li.className = "object-item";
 
-    const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
+    const imgSrc =
+      previewImages[obj.slug] || "images/objects/placeholder.webp";
 
     const area = getObjectArea(obj);
     const pricePerMeter = area ? Math.round(obj.priceBYN / area) : null;
     const contractNumber = obj.contractNumber || null;
-
-    const delay = isFirstRender ? index * 50 : index * 20;
-
-    // ⬇️ ВАЖНО: бейджи формируются ТУТ
     const badgesHTML = renderBadges(obj);
 
     li.innerHTML = `
       <div class="project-mas hover-shadow">
 
-        <!-- Кликабельная карточка -->
         <a
           href="/object-detail?slug=${obj.slug}"
           class="card-link-overlay"
           aria-label="Открыть объект ${obj.title}"
         ></a>
 
-<div class="image-effect-one">
+        <div class="image-effect-one">
 
-<div
-  class="favorite-btn ${isFavorite(obj.slug) ? "is-active" : ""}"
-  data-slug="${obj.slug}"
-  aria-label="${isFavorite(obj.slug)
-    ? "Убрать из избранного"
-    : "Добавить в избранное"}"
->
-  <i class="fa-${isFavorite(obj.slug) ? "solid" : "regular"} fa-heart"></i>
-</div>
+          <div
+            class="favorite-btn ${isFavorite(obj.slug) ? "is-active" : ""}"
+            data-slug="${obj.slug}"
+            aria-label="${
+              isFavorite(obj.slug)
+                ? "Убрать из избранного"
+                : "Добавить в избранное"
+            }"
+          >
+            <i class="fa-${
+              isFavorite(obj.slug) ? "solid" : "regular"
+            } fa-heart"></i>
+          </div>
 
-  ${badgesHTML}
-  <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
-</div>
+          ${badgesHTML}
+
+          <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
+        </div>
 
         <div class="project-info p-a20 bg-gray">
           <h4 class="sx-tilte m-t0">
@@ -365,13 +444,74 @@ function renderObjects(list) {
 
     objectsList.appendChild(li);
 
+    /* =========================================
+       APPEAR ANIMATION (ONLY FOR NEW ITEMS)
+    ========================================= */
     requestAnimationFrame(() => {
-      setTimeout(() => {
-        li.classList.add("is-visible");
-      }, delay);
+ requestAnimationFrame(() => {
+    li.classList.add("is-visible");
+  });
     });
   });
+
+  /* =========================================
+     COUNTERS & LOAD MORE STATE
+  ========================================= */
+  updateShownCounter(
+    Math.min(visibleCount, list.length),
+    list.length
+  );
+
+  toggleLoadMore(visibleCount < list.length);
 }
+
+
+
+
+function toggleLoadMore(canLoadMore, isLoading = false) {
+
+  if (!loadMoreAppearedOnce && canLoadMore) {
+  loadMoreBtn.classList.add("is-appear");
+  loadMoreAppearedOnce = true;
+
+  loadMoreBtn.addEventListener(
+    "animationend",
+    () => loadMoreBtn.classList.remove("is-appear"),
+    { once: true }
+  );
+}
+  if (!loadMoreBtn) return;
+
+  const total = lastRenderedList.length;
+  const shown = Math.min(visibleCount, total);
+
+  if (!canLoadMore) {
+    loadMoreBtn.innerHTML = `
+      <span class="load-more-done">✓ Все объекты загружены</span>
+      <span class="load-more-counter">
+        · Показано ${shown} из ${total}
+      </span>
+    `;
+    loadMoreBtn.disabled = true;
+    loadMoreBtn.classList.add("is-complete");
+    loadMoreBtn.classList.remove("is-loading");
+    return;
+  }
+
+  loadMoreBtn.innerHTML = `
+    <span class="load-more-spinner ${isLoading ? "is-visible" : ""}"></span>
+    <span class="load-more-text">Показать ещё</span>
+    <span class="load-more-counter">
+      · Показано ${shown} из ${total}
+    </span>
+  `;
+
+  loadMoreBtn.disabled = false;
+  loadMoreBtn.classList.remove("is-complete");
+  loadMoreBtn.classList.toggle("is-loading", isLoading);
+}
+
+
 
 function renderBadges(obj) {
   let html = "";
@@ -592,4 +732,59 @@ function setViewMode(mode) {
     btn.classList.toggle("is-active", btn.dataset.view === mode);
   });
 }
+
+function updateShownCounter(shown, total) {
+  const el = document.getElementById("objectsShownCounter");
+  if (!el) return;
+
+  el.textContent = `Показано ${shown} из ${total}`;
+}
+
+if (loadMoreBtn) {
+  loadMoreBtn.addEventListener("click", () => {
+    if (visibleCount >= lastRenderedList.length) return;
+
+    isAppendMode = true;
+    toggleLoadMore(true, true); // spinner ON
+
+    requestAnimationFrame(() => {
+      visibleCount += OBJECTS_STEP;
+      renderObjects(lastRenderedList);
+    });
+  });
+}
+
+(function () {
+  const wrap = document.querySelector(".objects-load-more-wrap");
+  if (!wrap) return;
+
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function onScroll() {
+    const currentY = window.scrollY;
+
+    // только мобилки
+    if (window.innerWidth > 768) return;
+
+    if (currentY > lastScrollY + 10) {
+      // скролл вниз → показываем кнопку
+      wrap.classList.remove("is-hidden");
+    } else if (currentY < lastScrollY - 10) {
+      // скролл вверх → прячем кнопку
+      wrap.classList.add("is-hidden");
+    }
+
+    lastScrollY = currentY;
+    ticking = false;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(onScroll);
+      ticking = true;
+    }
+  });
+})();
+
 
