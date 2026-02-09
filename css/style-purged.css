@@ -10474,16 +10474,13 @@ recent-posts-entry-date .sx-post-info .post-title {
    SECTION RESET
    =============================== */
 
-.section-full.bg-gray {
-  background: #f6f6f6;
-}
 
 /* ===============================
    LEFT — EDITORIAL TEXT
    =============================== */
 
 .about-home-3 {
-  background: transparent !important;
+  
   padding: 0;
   max-width: 720px;
 }
@@ -10738,5 +10735,328 @@ recent-posts-entry-date .sx-post-info .post-title {
 @media (max-width: 768px) {
   .object-item.is-visible .project-mas:hover .image-effect-one img {
     transform: scale(1.03);
+  }
+}
+
+/* =====================================================
+   FAQ — LEFT TEXT BLOCK AS CARDS
+   ===================================================== */
+
+.faq-list > div {
+  position: relative;
+
+  background: #ffffff;
+  border-radius: 16px;
+
+  padding: 28px 28px;
+  margin-bottom: 24px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.06);
+
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* Hover — аккуратный подъём */
+.faq-list > div:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.10);
+}
+
+/* Заголовок */
+.faq-list h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  line-height: 1.35;
+}
+
+/* Текст */
+.faq-list p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  margin: 0;
+  color: #333;
+}
+
+/* Небольшой акцент слева (очень тонкий) */
+.faq-list > div::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20px;
+  bottom: 20px;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 96, 100, 0.9),
+    rgba(0, 96, 100, 0.2)
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.faq-list > div:hover::before {
+  opacity: 1;
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .faq-list > div {
+    padding: 22px 20px;
+    border-radius: 14px;
+  }
+
+  .faq-list h4 {
+    font-size: 17px;
+  }
+
+  .faq-list p {
+    font-size: 15px;
+  }
+}
+
+/* =====================================================
+   PREFERS REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-list > div {
+    transition: none;
+  }
+
+  .faq-list > div:hover {
+    transform: none;
+  }
+}
+
+/* =====================================================
+   ABOUT HOME — TEXT BLOCK AS CARD (MATCH FAQ STYLE)
+   ===================================================== */
+
+.about-home-3 {
+  position: relative;
+
+  background: #ffffff;
+  border-radius: 16px;
+
+  padding: 32px 32px;
+  height: 100%;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.06);
+
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* Hover — мягкий подъём, без резких scale */
+.about-home-3:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.10);
+}
+
+/* Акцентная линия слева (как в FAQ) */
+.about-home-3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 24px;
+  bottom: 24px;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 96, 100, 0.9),
+    rgba(0, 96, 100, 0.25)
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.about-home-3:hover::before {
+  opacity: 1;
+}
+
+/* Заголовок */
+.about-home-3 h3 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 18px;
+}
+
+/* Текст */
+.about-home-3 p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: #333;
+  margin: 0;
+}
+
+/* Акцент бренда */
+.about-home-3 .hermes {
+  color: #006064;
+  font-weight: 600;
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .about-home-3 {
+    padding: 24px 22px;
+    border-radius: 14px;
+  }
+
+  .about-home-3 h3 {
+    font-size: 20px;
+  }
+
+  .about-home-3 p {
+    font-size: 15.5px;
+  }
+}
+
+/* =====================================================
+   PREFERS REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .about-home-3 {
+    transition: none;
+  }
+
+  .about-home-3:hover {
+    transform: none;
+  }
+}
+
+
+/* =====================================================
+   CONTACTS — TEXT BLOCK AS FAQ CARD
+   ===================================================== */
+
+/* базовая карточка как в FAQ */
+.contact-form .about-home-3 {
+  position: relative;
+
+  background: #ffffff;
+  border-radius: 16px;
+
+  padding: 28px 28px;
+  margin-bottom: 24px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.06);
+
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* hover — как у FAQ */
+.contact-form .about-home-3:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.10);
+}
+
+/* левая акцентная линия — ТА ЖЕ, что в FAQ */
+.contact-form .about-home-3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20px;
+  bottom: 20px;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 96, 100, 0.9),
+    rgba(0, 96, 100, 0.2)
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.contact-form .about-home-3:hover::before {
+  opacity: 1;
+}
+
+/* заголовок — как в FAQ */
+.contact-form .about-home-3 h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  line-height: 1.35;
+}
+
+/* текст — читаемый, как в FAQ */
+.contact-form .about-home-3 p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  margin: 0;
+  color: #333;
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .contact-form .about-home-3 {
+    padding: 22px 20px;
+    border-radius: 14px;
+  }
+
+  .contact-form .about-home-3 h3 {
+    font-size: 17px;
+  }
+
+  .contact-form .about-home-3 p {
+    font-size: 15px;
+  }
+}
+
+/* =====================================================
+   PREFERS REDUCED MOTION
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-form .about-home-3 {
+    transition: none;
+  }
+
+  .contact-form .about-home-3:hover {
+    transform: none;
+  }
+}
+
+/* =====================================================
+   CONTACTS — MOBILE WIDTH ALIGN FIX
+   ===================================================== */
+
+@media (max-width: 768px) {
+  /* убираем лишний сдвиг у левого текстового блока */
+  .contact-form {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .contact-form .about-home-3 {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
   }
 }

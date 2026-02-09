@@ -55,7 +55,8 @@ const previewImages = {
   "kvartira-lida-ul-zarechnaya-7": "images/objects/pic18.webp",
   "dom-lidskiy-rayon-ostrovlya-novoselov": "images/objects/pic19.webp",
   "kvartira-laykovshchina-lidskiy-rayon":"images/objects/pic20.webp",
-  "kvartira-lida-ul-prolygina-4": "images/objects/pic21.webp"
+  "kvartira-lida-ul-prolygina-4": "images/objects/pic21.webp",
+  "dom-shchuchinskiy-rayon-skribovtsy":"images/objects/pic22.webp"
 };
 
 /* =========================================================
