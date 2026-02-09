@@ -10435,3 +10435,92 @@ blockquote.author-quote .fa-quote-left {
   }
 }
 
+/* =====================================================
+   ABOUT + VIDEO — EDITORIAL STYLE
+   ===================================================== */
+
+/* ===============================
+   SECTION RESET
+   =============================== */
+
+.section-full.bg-gray {
+  background: #f6f6f6;
+}
+
+/* ===============================
+   LEFT — EDITORIAL TEXT
+   =============================== */
+
+.about-home-3 {
+  background: transparent !important;
+  padding: 0;
+  max-width: 720px;
+}
+
+/* heading */
+.about-home-3 h3 {
+  font-size: 38px;
+  line-height: 1.15;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 32px;
+  position: relative;
+}
+
+/* editorial divider */
+.about-home-3 h3::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 2px;
+  background: var(--color-primary);
+  margin-top: 24px;
+  opacity: 0.6;
+}
+
+/* text */
+.about-home-3 p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: #2a2a2a;
+  max-width: 92%;
+}
+
+/* bold accents */
+.about-home-3 p b {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+
+/* ===============================
+   MOBILE
+   =============================== */
+
+@media (max-width: 768px) {
+
+  .about-home-3 {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .about-home-3 h3 {
+    font-size: 30px;
+  }
+
+  .about-home-3 h3::after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .about-home-3 p {
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 100%;
+  }
+
+  .video-section-bottom h3 {
+    font-size: 32px;
+    text-align: center;
+  }
+}

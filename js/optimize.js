@@ -631,3 +631,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   observer.observe(textBlock);
 });
+
