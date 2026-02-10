@@ -56,7 +56,8 @@ const previewImages = {
   "dom-lidskiy-rayon-ostrovlya-novoselov": "images/objects/pic19.webp",
   "kvartira-laykovshchina-lidskiy-rayon":"images/objects/pic20.webp",
   "kvartira-lida-ul-prolygina-4": "images/objects/pic21.webp",
-  "dom-shchuchinskiy-rayon-skribovtsy":"images/objects/pic22.webp"
+  "dom-shchuchinskiy-rayon-skribovtsy":"images/objects/pic22.webp",
+  "dom-shchuchinskiy-rayon-boyary-zheludokskie":"images/objects/pic23.webp"
 };
 
 /* =========================================================
