@@ -40,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 
 
-
 /**
  * =====================================================
  * Menu active + underline
@@ -431,11 +430,29 @@ function handleAccordion(e) {
  * =====================================================
  */
 function handleMobileDrawer(e) {
-  const drawer = document.querySelector(".mobile-sider-drawer-menu");
-  if (!drawer) return;
   e.preventDefault();
-  drawer.classList.toggle("active");
+
+  const nav = document.querySelector(".header-nav");
+  const btn = document.querySelector("#mobile-side-drawer");
+
+  if (!nav || !btn) return;
+
+  nav.classList.toggle("is-open");
+  btn.classList.toggle("is-active");
+
+  document.body.style.overflow = nav.classList.contains("is-open")
+    ? "hidden"
+    : "";
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const nav = document.querySelector(".header-nav");
+  const btn = document.querySelector("#mobile-side-drawer");
+
+  if (nav) nav.classList.remove("is-open");
+  if (btn) btn.classList.remove("is-active");
+});
 
 /**
  * =====================================================
@@ -653,3 +670,88 @@ document.addEventListener("DOMContentLoaded", () => {
   observer.observe(textBlock);
 });
 
+
+/* =====================================================
+   MOBILE NAV — ADVANCED (SWIPE + ACTIVE + CTA)
+   ===================================================== */
+(function () {
+  const btn = document.getElementById("mobile-side-drawer");
+  const nav = document.getElementById("mnav");
+  const overlay = document.getElementById("mnavOverlay");
+  const links = nav ? nav.querySelectorAll("a[data-path]") : [];
+
+  if (!btn || !nav || !overlay) return;
+
+  /* ---------- OPEN / CLOSE ---------- */
+  const openMenu = () => {
+    nav.classList.add("is-open");
+    overlay.classList.add("is-open");
+    btn.classList.add("is-active");
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeMenu = () => {
+    nav.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    btn.classList.remove("is-active");
+    document.body.style.overflow = "";
+  };
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    nav.classList.contains("is-open") ? closeMenu() : openMenu();
+  });
+
+  overlay.addEventListener("click", closeMenu);
+
+  /* ---------- ACTIVE STATE ---------- */
+  const setActiveLink = () => {
+    const path = location.pathname.replace(/\/$/, "") || "/";
+    links.forEach((link) => {
+      const linkPath = link.dataset.path;
+      link.classList.toggle("is-active", linkPath === path);
+    });
+  };
+
+  setActiveLink();
+
+  links.forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  /* ---------- SWIPE CLOSE ---------- */
+  let startX = 0;
+  let currentX = 0;
+  let isSwiping = false;
+
+  nav.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    isSwiping = true;
+  }, { passive: true });
+
+  nav.addEventListener("touchmove", (e) => {
+    if (!isSwiping) return;
+    currentX = e.touches[0].clientX;
+    const dx = currentX - startX;
+
+    if (dx < 0) return;
+    nav.style.transform = `translateX(${dx}px)`;
+  }, { passive: true });
+
+  nav.addEventListener("touchend", () => {
+    if (!isSwiping) return;
+    isSwiping = false;
+
+    const dx = currentX - startX;
+    nav.style.transform = "";
+
+    if (dx > 80) closeMenu();
+  });
+
+  /* ---------- SAFETY ---------- */
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 991) closeMenu();
+  });
+
+  document.addEventListener("DOMContentLoaded", closeMenu);
+})();

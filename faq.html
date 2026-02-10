@@ -101,50 +101,109 @@
       <!-- =========================================
          HEADER START
          ========================================= -->
-      <header
-        class="site-header nav-wide nav-transparent mobile-sider-drawer-menu"
-      >
-        <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
-          <div class="main-bar">
-            <div class="container clearfix">
-              <!-- Logo -->
-              <div class="logo-header">
-                <div class="logo-header-inner logo-header-one">
-                  <a href="/">
-                    <img src="images/logo-light.webp" alt="logo" />
-                  </a>
-                </div>
-              </div>
-              <!-- Mobile Toggle -->
-              <button
-                id="mobile-side-drawer"
-                data-target=".header-nav"
-                data-toggle="collapse"
-                type="button"
-                class="navbar-toggler collapsed"
-              >
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar icon-bar-first"></span>
-                <span class="icon-bar icon-bar-two"></span>
-                <span class="icon-bar icon-bar-three"></span>
-              </button>
-              <!-- Navigation -->
-              <div
-                class="header-nav nav-dark navbar-collapse collapse justify-content-start collapse"
-              >
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="/">Главная</a></li>
-                  <li><a href="/about">Обо мне</a></li>
-                  <li><a href="/objects">Объекты</a></li>
-                  <li><a href="/blog">Блог</a></li>
-                  <li><a href="/faq">Вопросы</a></li>
-                  <li><a href="/contact">Контакты</a></li>
-                </ul>
-              </div>
-            </div>
+<header class="site-header nav-wide nav-transparent">
+  <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
+    <div class="main-bar">
+      <div class="container clearfix">
+
+        <!-- Logo -->
+        <div class="logo-header">
+          <div class="logo-header-inner logo-header-one">
+            <a href="/">
+              <img src="images/logo-light.webp" alt="logo" />
+            </a>
           </div>
         </div>
-      </header>
+
+        <!-- Mobile Toggle (ONLY new mobile menu) -->
+        <button
+          id="mobile-side-drawer"
+          type="button"
+          class="navbar-toggler"
+          aria-label="Открыть меню"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar icon-bar-first"></span>
+          <span class="icon-bar icon-bar-two"></span>
+          <span class="icon-bar icon-bar-three"></span>
+        </button>
+
+        <!-- Desktop Navigation ONLY -->
+        <div class="header-nav nav-dark justify-content-start">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Главная</a></li>
+            <li><a href="/about">Обо мне</a></li>
+            <li><a href="/objects">Объекты</a></li>
+            <li><a href="/blog">Блог</a></li>
+            <li><a href="/faq">Вопросы</a></li>
+            <li><a href="/contact">Контакты</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+
+
+       <!-- MOBILE MENU (NEW, ISOLATED) -->
+<div class="mnav-overlay" id="mnavOverlay"></div>
+
+<nav class="mnav" id="mnav">
+<ul class="mnav-list">
+  <li>
+    <a href="/" data-path="/">
+      <i class="fa-solid fa-house"></i>
+      <span>Главная</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="/about" data-path="/about">
+      <i class="fa-solid fa-user"></i>
+      <span>Обо мне</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="/objects" data-path="/objects">
+      <i class="fa-solid fa-building"></i>
+      <span>Объекты</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="/blog" data-path="/blog">
+      <i class="fa-solid fa-pen-nib"></i>
+      <span>Блог</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="/faq" data-path="/faq">
+      <i class="fa-solid fa-circle-question"></i>
+      <span>Вопросы</span>
+    </a>
+  </li>
+
+  <li>
+    <a href="/contact" data-path="/contact">
+      <i class="fa-solid fa-phone"></i>
+      <span>Контакты</span>
+    </a>
+  </li>
+</ul>
+
+
+  <!-- CTA -->
+<div class="mnav-cta">
+  <a href="tel:+375291809516" class="mnav-cta-btn">
+    <i class="fa-solid fa-phone"></i>
+    Позвонить мне
+  </a>
+</div>
+</nav>
       <!-- =========================================
          CONTENT START
          ========================================= -->
