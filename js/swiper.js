@@ -1,25 +1,20 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const swiper = new Swiper('.swiper', {
+(function () {
+  if (typeof Swiper === 'undefined') {
+      return;
+  }
 
-     direction: 'horizontal',
+  const heroSwiper = new Swiper('.swiper', {
     slidesPerView: 1,
-    spaceBetween: 0,
-    loop: true,
-    speed: 1500,
-
-  
+    speed: 1200,
+    loop: false,
     parallax: true,
-
-     navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev'
-    },
-
+    grabCursor: true,
+    simulateTouch: true,
+    allowTouchMove: true,
     autoplay: {
-      delay: 2500,
-      disableOnInteraction: false 
+      delay: 3000,
+      disableOnInteraction: false
     }
+  });
 
-    
-  })
-})
+})();
