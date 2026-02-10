@@ -11061,3 +11061,159 @@ recent-posts-entry-date .sx-post-info .post-title {
   }
 }
 
+/* =====================================================
+   SECTION HEAD — DOUBLE BRACKET (CORRECT)
+===================================================== */
+
+.section-head--bracket {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4rem;
+}
+
+/* текст строго по центру */
+.section-title {
+  position: relative;
+  text-align: center;
+
+  font-family: var(--font-heading);
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-primary);
+
+  opacity: 0;
+  transform: translateY(12px);
+  animation: titleReveal 0.6s ease forwards;
+  animation-delay: 0.15s;
+}
+
+/* ОБЩЕЕ ДЛЯ СКОБОК */
+.section-title::before,
+.section-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+
+  height: 1.2em;
+  width: 12px;
+
+  opacity: 0;
+  transform: translateY(-50%) scaleY(0.6);
+  animation: bracketReveal 0.6s ease forwards;
+}
+
+/* ЛЕВАЯ СКОБКА ( */
+.section-title::before {
+  left: -36px;
+
+  border-left: 4px solid var(--color-primary);
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+/* ПРАВАЯ СКОБКА ) */
+.section-title::after {
+  right: -36px;
+
+  border-right: 4px solid var(--color-primary);
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* animations */
+@keyframes bracketReveal {
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scaleY(1);
+  }
+}
+
+@keyframes titleReveal {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .section-title::before {
+    left: -30px;
+    height: 1.2em;
+  }
+
+  .section-title::after {
+    right: -30px;
+    height: 1.2em;
+  }
+}
+
+/* =====================================================
+   HOVER — ARCHITECTURAL SHIFT
+===================================================== */
+
+@media (hover: hover) {
+  .section-head--bracket:hover .section-title::before {
+    left: -44px;
+  }
+
+  .section-head--bracket:hover .section-title::after {
+    right: -44px;
+  }
+
+  .section-head--bracket:hover .section-title {
+    letter-spacing: -0.015em;
+  }
+}
+
+/* плавность */
+.section-title,
+.section-title::before,
+.section-title::after {
+  transition:
+    left 0.35s ease,
+    right 0.35s ease,
+    letter-spacing 0.35s ease;
+}
+
+@media (max-width: 768px) {
+
+  .section-head--bracket {
+    padding-inline: 16px; /* безопасные края */
+  }
+
+  .section-title {
+    padding-inline: 20px; /* место для скобок */
+  }
+
+  /* ПЕРЕОПРЕДЕЛЯЕМ СКОБКИ */
+  .section-title::before,
+  .section-title::after {
+    top: auto;
+    bottom: -0.6em;
+    height: 1.2em;
+
+    transform: none;
+    opacity: 1;
+  }
+
+  /* левая */
+  .section-title::before {
+    left: 0;
+    border-left-width: 3px;
+  }
+
+  /* правая */
+  .section-title::after {
+    right: 0;
+    border-right-width: 3px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title::before,
+  .section-title::after {
+    display: none;
+  }
+}
