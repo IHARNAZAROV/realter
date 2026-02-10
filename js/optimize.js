@@ -20,6 +20,27 @@ document.addEventListener("DOMContentLoaded", function () {
   initServiceCardsAnimation();
 });
 
+
+(function () {
+  if (!window.SITE_VERSION) return;
+
+  // CSS
+  document.querySelectorAll('link[data-versioned]').forEach(link => {
+    if (!link.href.includes('?v=')) {
+      link.href += `?v=${window.SITE_VERSION}`;
+    }
+  });
+
+  // JS
+  document.querySelectorAll('script[data-versioned]').forEach(script => {
+    if (!script.src.includes('?v=')) {
+      script.src += `?v=${window.SITE_VERSION}`;
+    }
+  });
+})();
+
+
+
 /**
  * =====================================================
  * Menu active + underline
