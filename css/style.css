@@ -11466,3 +11466,440 @@ recent-posts-entry-date .sx-post-info .post-title {
     display: none !important;
   }
 }
+
+/* =====================================================
+   STEPS NAV
+   ===================================================== */
+
+.work-steps-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 50px 0;
+}
+
+.work-step {
+  background: none;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0.35;
+  flex-shrink: 0;
+  transition: opacity .25s ease;
+}
+
+.work-step.active {
+  opacity: 1;
+}
+
+/* =====================================================
+   STEP ICON CIRCLE
+   ===================================================== */
+
+.work-step-icon {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 2px dashed var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  transition: background .3s ease;
+}
+
+.work-step.active .work-step-icon {
+  background: var(--color-primary);
+}
+
+/* Font Awesome icon */
+.work-step-icon i {
+  font-size: 22px;
+  color: var(--color-primary);
+  transition: transform .35s ease, color .3s ease;
+}
+
+.work-step.active .work-step-icon i {
+  color: #fff;
+  animation: icon-bounce .6s ease;
+}
+
+/* =====================================================
+   STEP NUMBER
+   ===================================================== */
+
+.work-step-num {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background .25s ease, color .25s ease, transform .25s ease;
+}
+
+/* Active number (premium contrast) */
+.work-step.active .work-step-num {
+  background: #fff;
+  color: var(--color-primary);
+  box-shadow: 0 4px 10px rgba(31, 127, 76, 0.25);
+  animation: num-focus .35s ease;
+}
+
+/* =====================================================
+   STEP LABEL
+   ===================================================== */
+
+.work-step-label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* =====================================================
+   PULSE + HOVER
+   ===================================================== */
+
+.work-step.active .work-step-icon::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+  animation: pulse 1.6s infinite;
+}
+
+@media (hover: hover) {
+  .work-step:hover .work-step-icon {
+    transform: translateY(-4px);
+  }
+
+  .work-step:hover .work-step-icon i {
+    transform: scale(1.15);
+  }
+}
+
+/* =====================================================
+   PROGRESS LINE (SEGMENTS)
+   ===================================================== */
+
+.work-step-line {
+  flex: 1;
+  height: 2px;
+  margin: 0 12px;
+  background: #d9d9d9;
+}
+
+.work-step-line.active {
+  background: var(--color-primary);
+}
+
+/* =====================================================
+   STACK (IMAGE + CARD)
+   ===================================================== */
+
+.work-stack {
+  position: relative;
+  padding: 40px;
+  min-height: 420px;
+  background: var(--color-bg-light);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* Image */
+.work-stack-image {
+  position: relative;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.work-stack-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.08);
+  transition: transform .6s ease;
+  will-change: transform;
+}
+
+.work-stack-image.slide-out {
+  transform: translateX(-40px);
+  opacity: 0;
+}
+
+.work-stack-image.slide-in {
+  transform: translateX(40px);
+  opacity: 0;
+}
+
+/* Card */
+.work-stack-card {
+  position: absolute;
+  top: 50%;
+  right: 40px;
+  transform: translateY(-50%);
+  width: 420px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.12);
+  transition: .35s ease;
+}
+
+.work-stack-card.fade {
+  opacity: 0;
+  transform: translateY(-50%) translateX(20px);
+}
+
+.work-stack-card h3 {
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.work-stack-card p {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Footer */
+.work-step-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+/* =====================================================
+   NEXT BUTTON
+   ===================================================== */
+
+#turkoNextStep {
+  appearance: none;
+  background: transparent;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition:
+    background-color .25s ease,
+    color .25s ease,
+    box-shadow .25s ease,
+    transform .2s ease;
+}
+
+@media (hover: hover) {
+  #turkoNextStep:hover {
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(31, 127, 76, 0.25);
+    transform: translateY(-1px);
+  }
+}
+
+#turkoNextStep:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(31, 127, 76, 0.2);
+}
+
+#turkoNextStep:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(31, 127, 76, 0.35);
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 991px) {
+  .work-step-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .work-step-num {
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+    top: -4px;
+    right: -4px;
+  }
+
+  .work-step-icon i {
+    font-size: 20px;
+  }
+
+  .work-stack {
+    padding: 20px;
+    min-height: auto;
+  }
+
+  .work-stack-image {
+    height: 260px;
+  }
+
+  .work-stack-card {
+    position: relative;
+    width: 100%;
+    top: auto;
+    right: auto;
+    transform: none;
+    margin-top: -40px;
+    z-index: 2;
+  }
+}
+
+/* =====================================================
+   ANIMATIONS
+   ===================================================== */
+
+@keyframes icon-bounce {
+  0%   { transform: rotate(0) scale(1); }
+  40%  { transform: rotate(-10deg) scale(1.15); }
+  70%  { transform: rotate(5deg) scale(0.95); }
+  100% { transform: rotate(0) scale(1); }
+}
+
+@keyframes num-focus {
+  0%   { transform: scale(0.9); }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%   { opacity: .6; transform: scale(.9); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
+
+
+.work-stack-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.step-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity .4s ease, transform .6s ease;
+}
+
+.step-image.active {
+  opacity: 1;
+}
+
+/* =====================================================
+   IMAGE STAGE — BACKGROUND LAYERS (NO IMG TAGS)
+   ===================================================== */
+
+.work-stack-image {
+  position: relative;
+  height: 100%;
+  min-height: 360px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #e5e5e5;
+}
+
+/* layers */
+.work-stack-image .image-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: translateX(40px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.6s ease;
+}
+
+/* active layer */
+.work-stack-image .image-layer.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* =====================================================
+   CARD FADE (SAFE)
+   ===================================================== */
+
+.work-stack-card.fade {
+  opacity: 0;
+  transform: translateY(-50%) translateX(20px);
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 991px) {
+  .work-stack-image {
+    min-height: 260px;
+  }
+
+  .work-stack-card {
+    position: relative;
+    width: 100%;
+    right: auto;
+    top: auto;
+    transform: none;
+    margin-top: -40px;
+  }
+}
+
+.work-stack-image {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .image-layer {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* subtle zoom for active image */
+.image-layer {
+  transform: scale(1.04);
+}
+
+.image-layer.active {
+  transform: scale(1);
+  transition:
+    opacity 0.45s ease,
+    transform 1.2s ease;
+}
+
+@media (hover: hover) {
+  .image-layer.active {
+    transition: opacity 0.45s ease, transform 1.4s ease;
+  }
+}

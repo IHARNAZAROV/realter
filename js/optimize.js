@@ -755,3 +755,146 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.addEventListener("DOMContentLoaded", closeMenu);
 })();
+
+
+(function () {
+  const steps = document.querySelectorAll('.work-step');
+  const lines = document.querySelectorAll('.work-step-line');
+
+  const title = document.getElementById('turkoStepTitle');
+  const text = document.getElementById('turkoStepText');
+  const counter = document.getElementById('turkoStepCounter');
+  const nextBtn = document.getElementById('turkoNextStep');
+  const card = document.getElementById('turkoCard');
+
+  const imageStage = document.querySelector('.work-stack-image');
+  const layers = imageStage
+    ? imageStage.querySelectorAll('.image-layer')
+    : [];
+
+  if (!steps.length || layers.length !== 2) {
+    console.warn('Turko steps: required elements not found');
+    return;
+  }
+
+  /* =====================================================
+     DATA (IMAGES + TEXT)
+     ===================================================== */
+
+  const data = [
+    {
+      title: 'Подбор недвижимости',
+      text: 'Анализирую рынок Лиды и района, подбираю только реальные варианты.',
+      image: 'images/steps/st1.webp'
+    },
+    {
+      title: 'Организация показов',
+      text: 'Согласовываю показы и сопровождаю клиентов.',
+      image: 'images/steps/st2.webp'
+    },
+    {
+      title: 'Юридическая сделка',
+      text: 'Проверка документов и безопасность сделки.',
+      image: 'images/steps/st3.webp'
+    },
+    {
+      title: 'Передача ключей',
+      text: 'Контроль расчётов и финальная передача объекта.',
+      image: 'images/steps/st4.webp'
+    }
+  ];
+
+  let current = 0;
+  let activeLayer = 0;
+
+  /* =====================================================
+     PRELOAD (OPTIONAL BUT SAFE)
+     ===================================================== */
+
+  data.forEach(item => {
+    const img = new Image();
+    img.src = item.image;
+  });
+
+  /* =====================================================
+     INIT FIRST STATE (CRITICAL)
+     ===================================================== */
+
+  layers[0].style.backgroundImage = `url(${data[0].image})`;
+  layers[0].classList.add('active');
+  layers[1].classList.remove('active');
+
+  title.textContent = data[0].title;
+  text.textContent = data[0].text;
+  counter.textContent = `1 / ${data.length}`;
+
+  steps.forEach(s => s.classList.remove('active'));
+  steps[0].classList.add('active');
+
+  lines.forEach(l => l.classList.remove('active'));
+
+  /* =====================================================
+     IMAGE SWITCH (NO EMPTY FRAMES)
+     ===================================================== */
+
+  function changeImage(index) {
+    const nextLayer = 1 - activeLayer;
+
+    layers[nextLayer].style.backgroundImage =
+      `url(${data[index].image})`;
+
+    layers[nextLayer].classList.add('active');
+    layers[activeLayer].classList.remove('active');
+
+    activeLayer = nextLayer;
+  }
+
+  /* =====================================================
+     STEP SWITCH
+     ===================================================== */
+
+  function setStep(index) {
+    if (index === current || !data[index]) return;
+
+    // steps
+    steps.forEach(s => s.classList.remove('active'));
+    steps[index].classList.add('active');
+
+    // progress segments
+    lines.forEach(l => l.classList.remove('active'));
+    for (let i = 0; i < index; i++) {
+      if (lines[i]) lines[i].classList.add('active');
+    }
+
+    // card text
+    card.classList.add('fade');
+    setTimeout(() => {
+      title.textContent = data[index].title;
+      text.textContent = data[index].text;
+      counter.textContent = `${index + 1} / ${data.length}`;
+      card.classList.remove('fade');
+    }, 200);
+
+    // image
+    changeImage(index);
+
+    current = index;
+  }
+
+  /* =====================================================
+     EVENTS
+     ===================================================== */
+
+  steps.forEach(step => {
+    step.addEventListener('click', () => {
+      setStep(+step.dataset.step);
+    });
+  });
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      setStep((current + 1) % data.length);
+    });
+  }
+
+})();
