@@ -11471,14 +11471,14 @@ recent-posts-entry-date .sx-post-info .post-title {
    STEPS NAV
    ===================================================== */
 
-.work-steps-nav {
+.turko-steps-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin: 50px 0;
 }
 
-.work-step {
+.turko-step {
   background: none;
   border: none;
   text-align: center;
@@ -11488,7 +11488,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   transition: opacity .25s ease;
 }
 
-.work-step.active {
+.turko-step.active {
   opacity: 1;
 }
 
@@ -11496,7 +11496,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    STEP ICON CIRCLE
    ===================================================== */
 
-.work-step-icon {
+.turko-step-icon {
   position: relative;
   width: 56px;
   height: 56px;
@@ -11510,18 +11510,18 @@ recent-posts-entry-date .sx-post-info .post-title {
   transition: background .3s ease;
 }
 
-.work-step.active .work-step-icon {
+.turko-step.active .turko-step-icon {
   background: var(--color-primary);
 }
 
 /* Font Awesome icon */
-.work-step-icon i {
+.turko-step-icon i {
   font-size: 22px;
   color: var(--color-primary);
   transition: transform .35s ease, color .3s ease;
 }
 
-.work-step.active .work-step-icon i {
+.turko-step.active .turko-step-icon i {
   color: #fff;
   animation: icon-bounce .6s ease;
 }
@@ -11530,7 +11530,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    STEP NUMBER
    ===================================================== */
 
-.work-step-num {
+.turko-step-num {
   position: absolute;
   top: -6px;
   right: -6px;
@@ -11550,7 +11550,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* Active number (premium contrast) */
-.work-step.active .work-step-num {
+.turko-step.active .turko-step-num {
   background: #fff;
   color: var(--color-primary);
   box-shadow: 0 4px 10px rgba(31, 127, 76, 0.25);
@@ -11561,7 +11561,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    STEP LABEL
    ===================================================== */
 
-.work-step-label {
+.turko-step-label {
   display: block;
   margin-top: 10px;
   font-weight: 500;
@@ -11572,7 +11572,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    PULSE + HOVER
    ===================================================== */
 
-.work-step.active .work-step-icon::after {
+.turko-step.active .turko-step-icon::after {
   content: "";
   position: absolute;
   inset: -6px;
@@ -11582,11 +11582,11 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 @media (hover: hover) {
-  .work-step:hover .work-step-icon {
+  .turko-step:hover .turko-step-icon {
     transform: translateY(-4px);
   }
 
-  .work-step:hover .work-step-icon i {
+  .turko-step:hover .turko-step-icon i {
     transform: scale(1.15);
   }
 }
@@ -11595,14 +11595,14 @@ recent-posts-entry-date .sx-post-info .post-title {
    PROGRESS LINE (SEGMENTS)
    ===================================================== */
 
-.work-step-line {
+.turko-step-line {
   flex: 1;
   height: 2px;
   margin: 0 12px;
   background: #d9d9d9;
 }
 
-.work-step-line.active {
+.turko-step-line.active {
   background: var(--color-primary);
 }
 
@@ -11610,7 +11610,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    STACK (IMAGE + CARD)
    ===================================================== */
 
-.work-stack {
+.turko-stack {
   position: relative;
   padding: 40px;
   min-height: 420px;
@@ -11620,14 +11620,14 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* Image */
-.work-stack-image {
+.turko-stack-image {
   position: relative;
   height: 100%;
   border-radius: 20px;
   overflow: hidden;
 }
 
-.work-stack-image img {
+.turko-stack-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -11636,18 +11636,18 @@ recent-posts-entry-date .sx-post-info .post-title {
   will-change: transform;
 }
 
-.work-stack-image.slide-out {
+.turko-stack-image.slide-out {
   transform: translateX(-40px);
   opacity: 0;
 }
 
-.work-stack-image.slide-in {
+.turko-stack-image.slide-in {
   transform: translateX(40px);
   opacity: 0;
 }
 
 /* Card */
-.work-stack-card {
+.turko-stack-card {
   position: absolute;
   top: 50%;
   right: 40px;
@@ -11660,23 +11660,23 @@ recent-posts-entry-date .sx-post-info .post-title {
   transition: .35s ease;
 }
 
-.work-stack-card.fade {
+.turko-stack-card.fade {
   opacity: 0;
   transform: translateY(-50%) translateX(20px);
 }
 
-.work-stack-card h3 {
+.turko-stack-card h3 {
   font-size: 24px;
   margin-bottom: 18px;
 }
 
-.work-stack-card p {
+.turko-stack-card p {
   color: #555;
   line-height: 1.6;
 }
 
 /* Footer */
-.work-step-footer {
+.turko-step-footer {
   display: flex;
   justify-content: space-between;
   margin-top: 25px;
@@ -11730,12 +11730,12 @@ recent-posts-entry-date .sx-post-info .post-title {
    ===================================================== */
 
 @media (max-width: 991px) {
-  .work-step-icon {
+  .turko-step-icon {
     width: 48px;
     height: 48px;
   }
 
-  .work-step-num {
+  .turko-step-num {
     width: 22px;
     height: 22px;
     font-size: 10px;
@@ -11743,20 +11743,20 @@ recent-posts-entry-date .sx-post-info .post-title {
     right: -4px;
   }
 
-  .work-step-icon i {
+  .turko-step-icon i {
     font-size: 20px;
   }
 
-  .work-stack {
+  .turko-stack {
     padding: 20px;
     min-height: auto;
   }
 
-  .work-stack-image {
+  .turko-stack-image {
     height: 260px;
   }
 
-  .work-stack-card {
+  .turko-stack-card {
     position: relative;
     width: 100%;
     top: auto;
@@ -11790,7 +11790,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 
-.work-stack-image {
+.turko-stack-image {
   position: relative;
   overflow: hidden;
 }
@@ -11813,7 +11813,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    IMAGE STAGE — BACKGROUND LAYERS (NO IMG TAGS)
    ===================================================== */
 
-.work-stack-image {
+.turko-stack-image {
   position: relative;
   height: 100%;
   min-height: 360px;
@@ -11823,7 +11823,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* layers */
-.work-stack-image .image-layer {
+.turko-stack-image .image-layer {
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -11837,7 +11837,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* active layer */
-.work-stack-image .image-layer.active {
+.turko-stack-image .image-layer.active {
   opacity: 1;
   transform: translateX(0);
 }
@@ -11846,7 +11846,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    CARD FADE (SAFE)
    ===================================================== */
 
-.work-stack-card.fade {
+.turko-stack-card.fade {
   opacity: 0;
   transform: translateY(-50%) translateX(20px);
 }
@@ -11856,11 +11856,11 @@ recent-posts-entry-date .sx-post-info .post-title {
    ===================================================== */
 
 @media (max-width: 991px) {
-  .work-stack-image {
+  .turko-stack-image {
     min-height: 260px;
   }
 
-  .work-stack-card {
+  .turko-stack-card {
     position: relative;
     width: 100%;
     right: auto;
@@ -11870,7 +11870,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   }
 }
 
-.work-stack-image {
+.turko-stack-image {
   background: transparent;
 }
 
