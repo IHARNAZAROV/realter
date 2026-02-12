@@ -4992,22 +4992,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Overlay */
-.cookie-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 12, 20, 0.55);
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-  z-index: 9998;
-}
-
-.cookie-overlay.show {
-  opacity: 1;
-  pointer-events: auto;
-}
 
 /* =========================
    DESKTOP / DEFAULT
@@ -5236,6 +5220,21 @@ body {
   transform: translateX(20px);
 }
 
+
+
+html,
+body {
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+
+
+.cookie-modal {
+  position: fixed;
+  pointer-events: auto;
+  z-index: 9999;
+}
 /* =========================
    MOBILE — FIXED CORRECTLY
 ========================= */

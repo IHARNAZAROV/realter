@@ -773,7 +773,6 @@ document.addEventListener("DOMContentLoaded", () => {
     : [];
 
   if (!steps.length || layers.length !== 2) {
-    console.warn('turkoSteps: required elements not found');
     return;
   }
 
