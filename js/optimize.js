@@ -761,11 +761,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const steps = document.querySelectorAll('.work-step');
   const lines = document.querySelectorAll('.work-step-line');
 
-  const title = document.getElementById('turkoStepTitle');
-  const text = document.getElementById('turkoStepText');
-  const counter = document.getElementById('turkoStepCounter');
-  const nextBtn = document.getElementById('turkoNextStep');
-  const card = document.getElementById('turkoCard');
+  const title = document.getElementById('workStepTitle');
+  const text = document.getElementById('workStepText');
+  const counter = document.getElementById('workStepCounter');
+  const nextBtn = document.getElementById('workNextStep');
+  const card = document.getElementById('workCard');
 
   const imageStage = document.querySelector('.work-stack-image');
   const layers = imageStage
@@ -773,7 +773,7 @@ document.addEventListener("DOMContentLoaded", () => {
     : [];
 
   if (!steps.length || layers.length !== 2) {
-    console.warn('Turko steps: required elements not found');
+    console.warn('work steps: required elements not found');
     return;
   }
 
