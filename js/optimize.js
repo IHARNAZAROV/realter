@@ -39,6 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 })();
 
+// legacy stub (for backward compatibility)
+function handleMobileDrawer(e) {
+  // intentionally empty — mobile menu handled elsewhere
+}
 
 /**
  * =====================================================
@@ -429,30 +433,6 @@ function handleAccordion(e) {
  * Mobile drawer
  * =====================================================
  */
-function handleMobileDrawer(e) {
-  e.preventDefault();
-
-  const nav = document.querySelector(".header-nav");
-  const btn = document.querySelector("#mobile-side-drawer");
-
-  if (!nav || !btn) return;
-
-  nav.classList.toggle("is-open");
-  btn.classList.toggle("is-active");
-
-  document.body.style.overflow = nav.classList.contains("is-open")
-    ? "hidden"
-    : "";
-}
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const nav = document.querySelector(".header-nav");
-  const btn = document.querySelector("#mobile-side-drawer");
-
-  if (nav) nav.classList.remove("is-open");
-  if (btn) btn.classList.remove("is-active");
-});
 
 /**
  * =====================================================
@@ -890,4 +870,111 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+})();
+
+
+/* =====================================================
+   MOBILE NAV — TOP MENU (FINAL, WORKING)
+===================================================== */
+(function () {
+  const btn = document.getElementById("mobile-side-drawer");
+  const nav = document.getElementById("mnav");
+  const overlay = document.getElementById("mnavOverlay");
+
+  if (!btn || !nav || !overlay) return;
+
+  const open = () => {
+    nav.classList.add("is-open");
+    overlay.classList.add("is-open");
+    btn.classList.add("is-active");
+    document.body.style.overflow = "hidden";
+  };
+
+  const close = () => {
+    nav.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    btn.classList.remove("is-active");
+    document.body.style.overflow = "";
+  };
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    nav.classList.contains("is-open") ? close() : open();
+  });
+
+  overlay.addEventListener("click", close);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && nav.classList.contains("is-open")) {
+      close();
+    }
+  });
+
+  // safety reset on load
+  window.addEventListener("load", () => {
+    close();
+  });
+})();
+
+/* =====================================================
+   MOBILE NAV — HARD BIND (BYPASS DELEGATION)
+===================================================== */
+document.addEventListener("DOMContentLoaded", function () {
+  const btn = document.getElementById("mobile-side-drawer");
+  const nav = document.getElementById("mnav");
+  const overlay = document.getElementById("mnavOverlay");
+
+  if (!btn || !nav || !overlay) return;
+
+  const open = () => {
+    nav.classList.add("is-open");
+    overlay.classList.add("is-open");
+    btn.classList.add("is-active");
+    document.body.style.overflow = "hidden";
+  };
+
+  const close = () => {
+    nav.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    btn.classList.remove("is-active");
+    document.body.style.overflow = "";
+  };
+
+  btn.addEventListener(
+    "click",
+    function (e) {
+      e.stopPropagation(); // 🔑 важно
+      e.preventDefault();
+      nav.classList.contains("is-open") ? close() : open();
+    },
+    true // 🔑 capture phase — ОБХОД делегатов
+  );
+
+  overlay.addEventListener("click", close);
+});
+
+/* =====================================================
+   MOBILE NAV — AUTO CLOSE ON SCROLL
+===================================================== */
+(function () {
+  const nav = document.getElementById("mnav");
+  const overlay = document.getElementById("mnavOverlay");
+  const btn = document.getElementById("mobile-side-drawer");
+
+  if (!nav || !overlay || !btn) return;
+
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener("scroll", () => {
+    if (!nav.classList.contains("is-open")) return;
+
+    if (Math.abs(window.scrollY - lastScrollY) > 10) {
+      nav.classList.remove("is-open");
+      overlay.classList.remove("is-open");
+      btn.classList.remove("is-active");
+      document.body.style.overflow = "";
+    }
+
+    lastScrollY = window.scrollY;
+  });
 })();
