@@ -85,14 +85,17 @@
     });
   }
 
-  function applyConsent(consent) {
-    if (!consent || consent.necessary !== true) return;
+ function applyConsent(consent) {
+  if (!consent || consent.necessary !== true) return;
 
-    if (consent.analytics) {
-      loadGTM(GTM_ID);
-      loadYandexMetrika(YM_ID);
-    }
+  if (consent.analytics) {
+    loadYandexMetrika(YM_ID);
   }
+
+  if (consent.marketing) {
+    loadGTM(GTM_ID);
+  }
+}
 
   // Для баннера: применить прямо сейчас после клика
   window.__applyCookieConsent = function () {

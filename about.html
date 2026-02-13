@@ -38,7 +38,7 @@
       href="https://turko.by/web-app-manifest-192x192.png"
     />
 
-         <!-- ==============================================
+    <!-- ==============================================
          SITE VERSION (AUTO CACHE BUSTING)
     =============================================== -->
     <script src="/site-version.php"></script>
@@ -48,7 +48,12 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
     <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="css/style.css"
+      data-versioned
+    />
     <link
       rel="stylesheet"
       class="skin"
@@ -66,108 +71,107 @@
       <!-- =========================================
          HEADER START
          ========================================= -->
-<header class="site-header nav-wide nav-transparent">
-  <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
-    <div class="main-bar">
-      <div class="container clearfix">
+      <header class="site-header nav-wide nav-transparent">
+        <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
+          <div class="main-bar">
+            <div class="container clearfix">
+              <!-- Logo -->
+              <div class="logo-header">
+                <div class="logo-header-inner logo-header-one">
+                  <a href="/">
+                    <img src="images/logo-light.webp" alt="logo" />
+                  </a>
+                </div>
+              </div>
 
-        <!-- Logo -->
-        <div class="logo-header">
-          <div class="logo-header-inner logo-header-one">
-            <a href="/">
-              <img src="images/logo-light.webp" alt="logo" />
-            </a>
+              <!-- Mobile Toggle (ONLY new mobile menu) -->
+              <button
+                id="mobile-side-drawer"
+                type="button"
+                class="navbar-toggler"
+                aria-label="Открыть меню"
+              >
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar icon-bar-first"></span>
+                <span class="icon-bar icon-bar-two"></span>
+                <span class="icon-bar icon-bar-three"></span>
+              </button>
+
+              <!-- Desktop Navigation ONLY -->
+              <div class="header-nav nav-dark justify-content-start">
+                <ul class="nav navbar-nav">
+                  <li><a href="/">Главная</a></li>
+                  <li><a href="/about">Обо мне</a></li>
+                  <li><a href="/objects">Объекты</a></li>
+                  <li><a href="/blog">Блог</a></li>
+                  <li><a href="/faq">Вопросы</a></li>
+                  <li><a href="/contact">Контакты</a></li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
+      </header>
 
-        <!-- Mobile Toggle (ONLY new mobile menu) -->
-        <button
-          id="mobile-side-drawer"
-          type="button"
-          class="navbar-toggler"
-          aria-label="Открыть меню"
-        >
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar icon-bar-first"></span>
-          <span class="icon-bar icon-bar-two"></span>
-          <span class="icon-bar icon-bar-three"></span>
-        </button>
+      <!-- MOBILE MENU (NEW, ISOLATED) -->
+      <div class="mnav-overlay" id="mnavOverlay"></div>
 
-        <!-- Desktop Navigation ONLY -->
-        <div class="header-nav nav-dark justify-content-start">
-          <ul class="nav navbar-nav">
-            <li><a href="/">Главная</a></li>
-            <li><a href="/about">Обо мне</a></li>
-            <li><a href="/objects">Объекты</a></li>
-            <li><a href="/blog">Блог</a></li>
-            <li><a href="/faq">Вопросы</a></li>
-            <li><a href="/contact">Контакты</a></li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</header>
-
-
- <!-- MOBILE MENU (NEW, ISOLATED) -->
-<div class="mnav-overlay" id="mnavOverlay"></div>
-
-<nav class="mnav" id="mnav">
-<ul class="mnav-list">
-  <li>
-    <a href="/" data-path="/">
-      <i class="fa-solid fa-house"></i>
-      <span>Главная</span>
-    </a>
-  </li>
-
-  <li>
-    <a href="/about" data-path="/about">
-      <i class="fa-solid fa-user"></i>
-      <span>Обо мне</span>
-    </a>
-  </li>
-
-  <li>
-    <a href="/objects" data-path="/objects">
-      <i class="fa-solid fa-building"></i>
-      <span>Объекты</span>
-    </a>
-  </li>
-
-  <li>
-    <a href="/blog" data-path="/blog">
-      <i class="fa-solid fa-pen-nib"></i>
-      <span>Блог</span>
-    </a>
-  </li>
-
-  <li>
-    <a href="/faq" data-path="/faq">
-      <i class="fa-solid fa-circle-question"></i>
-      <span>Вопросы</span>
-    </a>
-  </li>
-
-  <li>
-    <a href="/contact" data-path="/contact">
-      <i class="fa-solid fa-phone"></i>
-      <span>Контакты</span>
-    </a>
-  </li>
-</ul>
-
-
-  <!-- CTA -->
-<div class="mnav-cta">
-  <a href="tel:+375291809516" class="mnav-cta-btn">
-    <i class="fa-solid fa-phone"></i>
-    Позвонить мне
-  </a>
+      <nav class="mnav" id="mnav">
+          <div class="mnav-header">
+  <div class="mnav-name">Ольга Турко · Риэлтер · Лида</div>
 </div>
-</nav>
+        <ul class="mnav-list">
+          <li>
+            <a href="/" data-path="/">
+              <i class="fa-solid fa-house"></i>
+              <span>Главная</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/about" data-path="/about">
+              <i class="fa-solid fa-user"></i>
+              <span>Обо мне</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/objects" data-path="/objects">
+              <i class="fa-solid fa-building"></i>
+              <span>Объекты</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/blog" data-path="/blog">
+              <i class="fa-solid fa-pen-nib"></i>
+              <span>Блог</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/faq" data-path="/faq">
+              <i class="fa-solid fa-circle-question"></i>
+              <span>Вопросы</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="/contact" data-path="/contact">
+              <i class="fa-solid fa-phone"></i>
+              <span>Контакты</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- CTA -->
+        <div class="mnav-cta">
+          <a href="tel:+375291809516" class="mnav-cta-btn">
+            <i class="fa-solid fa-phone"></i>
+            Позвонить мне
+          </a>
+        </div>
+      </nav>
 
       <!-- =========================================
          CONTENT START
@@ -175,42 +179,115 @@
       <div class="page-content">
         <!-- Inner Page Banner -->
 
-
         <section class="page-intro">
-  <div class="container">
+          <div class="container">
+            <div class="page-intro-inner">
+              <span class="page-intro-eyebrow"> Обо мне — мои услуги </span>
 
-    <div class="page-intro-inner">
+              <h1 class="page-intro-title">Я помогаю переезжать красиво</h1>
 
-      <span class="page-intro-eyebrow">
-        Обо мне — мои услуги
-      </span>
+              <p class="page-intro-description">
+                Моя история и философия работы. Я верю, что за каждой сделкой
+                стоят не только документы, но и мечты, надежды, эмоции.
+                <br />Именно поэтому я всегда на вашей стороне, чтобы помочь
+                сделать правильный выбор.
+              </p>
 
-      <h1 class="page-intro-title">
-        Я помогаю переезжать красиво
-      </h1>
+              <div class="page-intro-divider"></div>
 
-      <p class="page-intro-description">
-        Моя история и философия работы. Я верю, что за каждой сделкой
-        стоят не только документы, но и мечты, надежды, эмоции.
-        <br />Именно поэтому я всегда на вашей стороне, чтобы помочь
-        сделать правильный выбор.
+              <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
+                <ul>
+                  <li><a href="/">Главная</a></li>
+                  <li>Обо мне</li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </section>
+        <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
+          <div class="container">
+<section class="turko-steps-section">
+
+  <header class="section-head section-head--bracket">
+    <h2 class="section-title">Как проходит работа со мной</h2>
+  </header>
+
+  <!-- STEPS -->
+   <div class="turko-steps-wrapper">
+     <div class="turko-steps-progress"></div>
+<div class="turko-steps-nav">
+
+  <div class="turko-step active" data-step="0">
+    <div class="turko-step-icon">
+      <i class="fa-solid fa-house"></i>
+      <span class="turko-step-num">1</span>
+    </div>
+    <span class="turko-step-label">Подбор</span>
+  </div>
+
+  <span class="turko-step-line"></span>
+
+  <div class="turko-step" data-step="1">
+    <div class="turko-step-icon">
+      <i class="fa-solid fa-calendar-check"></i>
+      <span class="turko-step-num">2</span>
+    </div>
+    <span class="turko-step-label">Просмотр</span>
+  </div>
+
+  <span class="turko-step-line"></span>
+
+  <div class="turko-step" data-step="2">
+    <div class="turko-step-icon">
+      <i class="fa-solid fa-file-signature"></i>
+      <span class="turko-step-num">3</span>
+    </div>
+    <span class="turko-step-label">Сделка</span>
+  </div>
+
+  <span class="turko-step-line"></span>
+
+  <div class="turko-step" data-step="3">
+    <div class="turko-step-icon">
+      <i class="fa-solid fa-key"></i>
+      <span class="turko-step-num">4</span>
+    </div>
+    <span class="turko-step-label">Ключи</span>
+  </div>
+
+</div>
+
+
+</div>
+
+  <!-- STACK -->
+  <div class="turko-stack">
+
+    <!-- IMAGE / PHOTO -->
+<div class="turko-stack-image">
+  <div class="image-layer active"></div>
+  <div class="image-layer"></div>
+</div>
+
+    <!-- CARD -->
+    <div class="turko-stack-card" id="turkoCard">
+      <h3 id="turkoStepTitle">Подбор недвижимости</h3>
+      <p id="turkoStepText">
+        Анализирую рынок Лиды и района, подбираю только реальные варианты.
       </p>
 
-      <div class="page-intro-divider"></div>
-
-      <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
-        <ul>
-          <li><a href="/">Главная</a></li>
-          <li>Обо мне</li>
-        </ul>
-      </nav>
-
+      <div class="turko-step-footer">
+        <span id="turkoStepCounter">1 / 4</span>
+        <button id="turkoNextStep">Далее →</button>
+      </div>
     </div>
 
   </div>
+
 </section>
 
-
+          </div>
+        </div>
         <!-- About Company Section -->
         <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
           <div class="container">
@@ -279,10 +356,9 @@
           <div class="container">
             <!-- Title -->
 
-
-                                      <header class="section-head section-head--bracket">
-  <h2 class="section-title">Помощь на каждом шаге</h2>
-</header>
+            <header class="section-head section-head--bracket">
+              <h2 class="section-title">Помощь на каждом шаге</h2>
+            </header>
             <!-- Services Grid -->
             <div class="section-content">
               <div class="row number-block-three-outer justify-content-center">
@@ -574,6 +650,7 @@
             </div>
           </div>
         </div>
+
         <!-- Counter Section -->
         <div
           class="section-full overlay-wraper sx-bg-secondry mobile-page-padding p-t80 p-b50 bg-parallax ml-auto"
@@ -642,10 +719,9 @@
           <div class="container">
             <!-- Title -->
 
-
-                                                  <header class="section-head section-head--bracket">
-  <h2 class="section-title">Клиенты — сердце моей работы</h2>
-</header>
+            <header class="section-head section-head--bracket">
+              <h2 class="section-title">Клиенты — сердце моей работы</h2>
+            </header>
             <div class="section-content">
               <div class="client-grid">
                 <div class="row justify-content-center">
@@ -778,6 +854,7 @@
         </div>
         <!-- Our Clients End -->
       </div>
+
       <!-- CONTENT END -->
       <!-- =========================================
          FOOTER START
