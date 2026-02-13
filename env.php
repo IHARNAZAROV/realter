@@ -1,3 +1,3 @@
 <?php
 // окружение сайта
-define('ENV', 'prod');
+define('ENV', 'prod'); // prod | dev
