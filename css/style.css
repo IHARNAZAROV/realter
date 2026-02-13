@@ -11831,10 +11831,7 @@ recent-posts-entry-date .sx-post-info .post-title {
     transform: translateY(2px);
   }
 
-  /* active item */
-  .mnav-list a.is-active {
-    background: rgba(0, 96, 96, 0.12);
-  }
+ 
 
   /* icons */
   .mnav-list i {
