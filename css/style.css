@@ -11636,17 +11636,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   background: transparent;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
 
-  .image-layer {
-    transform: none !important;
-    opacity: 1 !important;
-  }
-}
 
 /* subtle zoom for active image */
 .image-layer {
