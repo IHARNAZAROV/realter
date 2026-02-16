@@ -3,6 +3,16 @@
 
   const COOKIE_NAME = "cookieConsent";
   const COOKIE_DAYS = 180;
+  const COUNTER_ID = 105770392; // ← ID Яндекс.Метрики
+
+  // =========================
+  // METRIKA
+  // =========================
+  function reachGoal(goal, params) {
+    if (typeof ym === "function") {
+      ym(COUNTER_ID, "reachGoal", goal, params || {});
+    }
+  }
 
   // =========================
   // HTML INJECT
@@ -156,7 +166,6 @@
   // INIT
   // =========================
   function init() {
-    // 🔑 сначала внедряем HTML
     injectHTML();
 
     const modal = document.getElementById("cookieModal");
@@ -173,24 +182,25 @@
     const checkboxMarketing = document.getElementById("cookieMarketing");
     const settingsPanel = document.getElementById("cookieSettings");
 
-    // Если выбор уже был
     const saved = getConsent();
     if (saved) {
       if (saved.analytics) applyConsent();
       return;
     }
 
-    // Первый показ
+    // 🔥 Показ модалки
     showModal();
+    reachGoal("cookie_modal_shown");
 
-    // Events
     btnAccept.addEventListener("click", () => {
+      reachGoal("cookie_accept_all");
       saveConsent({ analytics: true, marketing: true });
       applyConsent();
       hideModal();
     });
 
     btnDecline.addEventListener("click", () => {
+      reachGoal("cookie_decline_all");
       saveConsent({ analytics: false, marketing: false });
       hideModal();
     });
@@ -208,17 +218,23 @@
         analytics: checkboxAnalytics.checked,
         marketing: checkboxMarketing.checked,
       };
+
+      reachGoal("cookie_save_settings", {
+        analytics: consent.analytics ? 1 : 0,
+        marketing: consent.marketing ? 1 : 0,
+      });
+
       saveConsent(consent);
       if (consent.analytics) applyConsent();
       hideModal();
     });
 
     btnClose.addEventListener("click", () => {
+      reachGoal("cookie_decline_all");
       saveConsent({ analytics: false, marketing: false });
       hideModal();
     });
 
-    // Глобальное открытие из футера
     window.openCookieSettings = function () {
       showModal();
       settingsPanel.classList.add("open");
