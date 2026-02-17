@@ -15,6 +15,7 @@
   --trans-default: all 0.2s linear;
   --trans-slow: all 0.5s linear;
   --corporate-color: #155945;
+   --accent-color: #d7b39a;
 }
 
 /* ======================================================
@@ -11875,5 +11876,211 @@ recent-posts-entry-date .sx-post-info .post-title {
   .mnav-cta-btn:active {
     transform: translateY(1px);
     box-shadow: 0 6px 18px rgba(0, 96, 96, 0.22);
+  }
+}
+
+/* =====================================================
+   STEP ICON (BASE)
+   ===================================================== */
+
+.turko-step-icon {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--accent-color);
+  color: var(--corporate-color);
+
+  outline: 2px dashed rgba(21, 89, 69, 0.35);
+  outline-offset: 4px;
+
+  transition:
+    background 0.35s ease,
+    color 0.35s ease,
+    transform 0.35s ease;
+}
+
+/* =====================================================
+   SVG ICON
+   ===================================================== */
+
+.turko-step-svg {
+  width: 44px;
+  height: 44px;
+  display: block;
+}
+
+/* SVG visible by default */
+.turko-step-svg path,
+.turko-step-svg line,
+.turko-step-svg polygon,
+.turko-step-svg rect {
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+  transition: stroke-width 0.25s ease;
+}
+
+/* stroke thickness */
+.turko-step:not(.active) .turko-step-svg g {
+  stroke-width: 1.2;
+}
+
+.turko-step.active .turko-step-svg g {
+  stroke-width: 1.4;
+}
+
+/* =====================================================
+   SVG DRAW ANIMATION (ACTIVE ONLY)
+   ===================================================== */
+
+.turko-step.active .turko-step-svg-animated path,
+.turko-step.active .turko-step-svg-animated line,
+.turko-step.active .turko-step-svg-animated polygon,
+.turko-step.active .turko-step-svg-animated rect {
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: svg-draw 2.8s ease forwards;
+}
+
+@keyframes svg-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* =====================================================
+   ACTIVE / INACTIVE STATES
+   ===================================================== */
+
+.turko-step.active .turko-step-icon {
+  background: var(--corporate-color);
+  color: var(--accent-color);
+  transform: scale(1.08);
+  outline: none;
+}
+
+.turko-step:not(.active) .turko-step-icon {
+  background: var(--accent-color);
+  color: var(--corporate-color);
+}
+
+/* =====================================================
+   STEP NUMBER
+   ===================================================== */
+
+.turko-step-num {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: var(--corporate-color);
+
+  font-size: 14px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.turko-step.active .turko-step-num {
+  background: var(--accent-color);
+  color: var(--corporate-color);
+}
+
+/* =====================================================
+   STEP LINE
+   ===================================================== */
+
+.turko-step-line {
+  width: 72px;
+  height: 2px;
+  background: rgba(21, 89, 69, 0.25);
+}
+
+/* =====================================================
+   STEPS NAV (DESKTOP)
+   ===================================================== */
+
+.turko-steps-wrapper {
+  position: relative;
+}
+
+.turko-steps-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media (max-width: 768px) {
+  .turko-steps-wrapper,
+  .turko-steps-nav {
+    overflow-y: visible;
+  }
+
+  .turko-steps-nav {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    overflow-x: auto;
+    padding: 12px 16px 16px;
+
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .turko-steps-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .turko-step {
+    flex: 0 0 auto;
+    width: 96px;
+    scroll-snap-align: center;
+    text-align: center;
+  }
+
+  .turko-step-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .turko-step-svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .turko-step-num {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
+    top: -4px;
+    right: -4px;
+  }
+
+  .turko-step-line,
+  .turko-steps-progress {
+    display: none;
   }
 }

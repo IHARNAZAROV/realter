@@ -978,3 +978,17 @@ document.addEventListener("DOMContentLoaded", function () {
     lastScrollY = window.scrollY;
   });
 })();
+
+
+(function () {
+  const activeStep = document.querySelector('.turko-step.active');
+  const nav = document.querySelector('.turko-steps-nav');
+
+  if (activeStep && nav && window.innerWidth <= 768) {
+    activeStep.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest'
+    });
+  }
+})();
