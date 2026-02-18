@@ -2,6 +2,7 @@
   "use strict";
 
   const DATA_URL = "/data/objects.json";
+  const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
 
   /* =====================================================
      HELPERS
@@ -847,6 +848,66 @@ function initRevealBlocks() {
 document.addEventListener("DOMContentLoaded", initRevealBlocks);
 
 
+
+
+
+function initObjectMap(obj) {
+  if (!obj || !obj.location || !obj.location.lat || !obj.location.lng) {
+    console.warn("Координаты объекта не найдены");
+    return;
+  }
+
+  const mapEl = document.getElementById("objectMap");
+  if (!mapEl) {
+    console.warn("Контейнер #objectMap не найден");
+    return;
+  }
+
+  const { lat, lng } = obj.location;
+
+  const map = new maplibregl.Map({
+    container: mapEl,
+   style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
+    center: [lng, lat],
+    zoom: 15,
+    attributionControl: true
+    
+  });
+
+
+  map.on("load", () => {
+  const layers = map.getStyle().layers;
+
+  layers.forEach(layer => {
+    if (
+      layer.type === "symbol" &&
+      layer.layout &&
+      layer.layout["text-field"]
+    ) {
+      map.setLayoutProperty(layer.id, "text-field", [
+        "coalesce",
+        ["get", "name:ru"],
+        ["get", "name"]
+      ]);
+    }
+  });
+});
+
+  map.addControl(new maplibregl.NavigationControl(), "top-right");
+  map.scrollZoom.disable(); // чтобы не мешала скроллу страницы
+map.dragRotate.disable();
+map.touchZoomRotate.disableRotation();
+
+new maplibregl.Marker({
+  color: "var(--color-primary)", 
+  scale: 1.1
+})
+  .setLngLat([lng, lat])
+  .addTo(map);
+}
+
+
+
   /* =====================================================
      INIT
   ===================================================== */
@@ -896,6 +957,7 @@ async function init() {
     animateAgentCardOnce();
     renderAmenities(obj);
     generateObjectSchema(obj);
+    initObjectMap(obj);
 
   } catch (e) {
     console.error("INIT ERROR:", e);
