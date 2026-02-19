@@ -303,9 +303,21 @@ saveBtn.addEventListener("click", saveToServer);
    INIT
 ===================================================== */
 
-fetch("/data/objects.json")
-  .then(r => r.json())
+const DATA_URL = '/data/objects.json';
+
+fetch(DATA_URL, { cache: 'no-store' })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error('JSON не загрузился: ' + res.status);
+    }
+    return res.json();
+  })
   .then(data => {
+    console.log('JSON загружен:', data);
     objects = data;
-    render();
+    renderObjects();
+  })
+  .catch(err => {
+    console.error(err);
+    showError('Не удалось загрузить objects.json');
   });
