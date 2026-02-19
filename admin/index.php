@@ -1,3 +1,4 @@
+<?php require __DIR__ . '/auth.php'; ?>
 <!doctype html>
 <html lang="ru">
 <head>
@@ -5,6 +6,7 @@
   <title>Админка объектов</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/admin/admin.css">
+  <meta name="robots" content="noindex, nofollow">
 </head>
 <body>
 

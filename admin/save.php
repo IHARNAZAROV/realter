@@ -1,3 +1,4 @@
+<?php require __DIR__ . '/auth.php'; ?>
 <?php
 $data = file_get_contents("php://input");
 
