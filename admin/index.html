@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Админка объектов</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="admin-header">
+  <h1>🏠 Админка объектов</h1>
+
+  <div class="admin-actions">
+    <button id="openAddModal" class="btn-primary">➕ Добавить объект</button>
+    <button id="downloadBtn" class="btn-secondary">⬇ Скачать копию</button>
+  </div>
+</div>
+
+<div class="admin-bar">
+  <span id="dirtyIndicator" class="dirty-indicator">
+    ● Есть несохранённые изменения
+  </span>
+</div>
+
+<div id="errors" class="errors"></div>
+<div id="objects"></div>
+
+<button id="saveBtn" class="btn-secondary">💾 Сохранить изменения</button>
+
+<!-- ===== MODAL ===== -->
+<div id="addModal" class="modal-overlay">
+  <div class="modal">
+
+    <div class="modal-header">
+      <h2>➕ Добавить объект</h2>
+      <button id="closeAddModal" class="modal-close">✕</button>
+    </div>
+
+    <form id="addObjectForm" class="modal-body">
+
+      <!-- ОСНОВНОЕ -->
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Заголовок</label>
+          <input type="text" name="title" required>
+        </div>
+
+        <div class="form-field">
+          <label>Тип объекта</label>
+          <select name="type" id="addType" required>
+            <option value="">— выбрать —</option>
+            <option value="Квартира">Квартира</option>
+            <option value="Дом">Дом</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Город</label>
+          <input type="text" name="city" required>
+        </div>
+
+        <div class="form-field">
+          <label>Адрес</label>
+          <input type="text" name="address" required>
+        </div>
+
+        <div class="form-field">
+          <label>Цена BYN</label>
+          <input type="number" name="priceBYN" required>
+        </div>
+
+        <div class="form-field">
+          <label>Цена USD</label>
+          <input type="number" name="priceUSD" required>
+        </div>
+
+        <div class="form-field full">
+          <label>Краткое описание</label>
+          <textarea name="cardDescription" rows="2"></textarea>
+        </div>
+
+        <div class="form-field full">
+          <label>Полное описание</label>
+          <textarea name="description" rows="4"></textarea>
+        </div>
+      </div>
+
+      <!-- FEATURES -->
+<div class="form-section">
+  <div class="features-header">
+    <h4>Особенности</h4>
+
+    <button
+      type="button"
+      id="regenFeatures"
+      class="btn-link"
+      title="Сгенерировать из описания заново"
+    >
+      🔄 Сгенерировать
+    </button>
+  </div>
+
+  <div class="form-grid features-grid">
+    <div class="form-field">
+      <input type="text" name="feature" data-auto="0">
+    </div>
+    <div class="form-field">
+      <input type="text" name="feature" data-auto="0">
+    </div>
+    <div class="form-field">
+      <input type="text" name="feature" data-auto="0">
+    </div>
+    <div class="form-field">
+      <input type="text" name="feature" data-auto="0">
+    </div>
+    <div class="form-field">
+      <input type="text" name="feature" data-auto="0">
+    </div>
+    <div class="form-field">
+      <input type="text" name="feature" data-auto="0">
+    </div>
+  </div>
+</div>
+
+
+      <!-- ===== КВАРТИРА ===== -->
+      <div id="addFlat" class="form-section" hidden>
+        <h4>Квартира — параметры</h4>
+
+        <div class="form-grid">
+          <div class="form-field"><label>Комнат</label><input type="number" name="rooms"></div>
+          <div class="form-field"><label>Раздельных комнат</label><input type="number" name="roomsSeparate"></div>
+
+          <div class="form-field"><label>Площадь общая</label><input type="number" name="areaTotal"></div>
+          <div class="form-field"><label>Площадь жилая</label><input type="number" name="areaLiving"></div>
+
+          <div class="form-field"><label>Год постройки</label><input type="number" name="yearBuilt"></div>
+          <div class="form-field"><label>Этаж</label><input type="number" name="floor"></div>
+
+          <div class="form-field"><label>Этажность</label><input type="number" name="floorsTotal"></div>
+          <div class="form-field"><label>Тип дома</label><input type="text" name="houseType"></div>
+
+          <div class="form-field"><label>Балкон</label><input type="text" name="balcony"></div>
+
+          <div class="form-field">
+            <label>Ремонт</label>
+            <select name="repair">
+              <option>Хороший</option>
+              <option>Обычный</option>
+              <option>Требует ремонта</option>
+            </select>
+          </div>
+
+          <div class="form-field"><label>Высота потолков</label><input type="number" step="0.01" name="ceilingHeight"></div>
+
+          <div class="form-field">
+            <label>Санузел</label>
+            <select name="bathroom">
+              <option>Совмещенный</option>
+              <option>Раздельный</option>
+            </select>
+          </div>
+
+          <div class="form-field"><label>Номер договора</label><input type="text" name="contractNumber"></div>
+        </div>
+      </div>
+
+      <!-- ===== ДОМ ===== -->
+      <div id="addHouse" class="form-section" hidden>
+        <h4>Дом — параметры</h4>
+
+        <div class="form-grid">
+          <div class="form-field"><label>Площадь участка</label><input type="number" name="areaPlot"></div>
+          <div class="form-field"><label>Площадь общая</label><input type="number" name="areaTotal"></div>
+          <div class="form-field"><label>Площадь жилая</label><input type="number" name="areaLiving"></div>
+          <div class="form-field"><label>Площадь кухни</label><input type="number" name="areaKitchen"></div>
+
+          <div class="form-field"><label>Уровней в доме</label><input type="number" name="levels"></div>
+          <div class="form-field"><label>Год постройки</label><input type="number" name="yearBuilt"></div>
+
+          <div class="form-field"><label>Процент готовности</label><input type="number" name="readyPercent"></div>
+          <div class="form-field"><label>Материал стен</label><input type="text" name="houseMaterial"></div>
+
+          <div class="form-field"><label>Материал крыши</label><input type="text" name="roofMaterial"></div>
+          <div class="form-field"><label>Ремонт</label><input type="text" name="repair"></div>
+
+          <div class="form-field"><label>Отопление</label><input type="text" name="heating"></div>
+          <div class="form-field"><label>Канализация</label><input type="text" name="sewerage"></div>
+
+          <div class="form-field"><label>Электроснабжение</label><input type="text" name="electricity"></div>
+          <div class="form-field"><label>Вода</label><input type="text" name="water"></div>
+
+          <div class="form-field"><label>Статус земли</label><input type="text" name="landStatus"></div>
+          <div class="form-field"><label>Номер договора</label><input type="text" name="contractNumber"></div>
+        </div>
+      </div>
+
+    </form>
+
+    <div class="modal-footer">
+      <button type="submit" form="addObjectForm" class="btn-primary">Добавить</button>
+      <button type="button" id="cancelAdd" class="btn-secondary">Отмена</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="validate.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

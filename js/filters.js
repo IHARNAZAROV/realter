@@ -227,7 +227,7 @@ function handlePriceInput() {
 ========================================================= */
 function applyFiltersAndSort() {
   let result = [...allObjects];
-
+result = result.filter(obj => !shouldHideSold(obj, 7));
   /* =========================================
      ONLY FAVORITES MODE
   ========================================= */
@@ -527,10 +527,15 @@ function renderBadges(obj) {
     html += `<span class="badge badge-new">Новинка</span>`;
   }
 
+  if (isSold(obj)) {
+    html += `<span class="badge badge-sold">Продана</span>`;
+  }
+
   if (!html) return "";
 
   return `<div class="object-badges">${html}</div>`;
 }
+
 
 function isNewObject(obj, days = 7) {
   if (!obj.publishedAt) return false;
@@ -790,4 +795,18 @@ if (loadMoreBtn) {
   });
 })();
 
+function isSold(obj) {
+  return obj.status?.type === "sold";
+}
+
+function shouldHideSold(obj, days = 7) {
+  if (!isSold(obj)) return false;
+  if (!obj.status.date) return false;
+
+  const soldDate = new Date(obj.status.date);
+  const now = new Date();
+
+  const diffDays = (now - soldDate) / 86400000;
+  return diffDays > days;
+}
 
