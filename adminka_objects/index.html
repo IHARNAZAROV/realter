@@ -13,8 +13,28 @@
 <div class="admin-header">
   <h1>🏠 Админка объектов</h1>
 
+<div class="admin-stats" id="adminStats">
+  <div class="stat">
+    <span class="stat-value" id="statTotal">0</span>
+    <span class="stat-label">Всего</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="statActive">0</span>
+    <span class="stat-label">В продаже</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="statSold">0</span>
+    <span class="stat-label">Продано</span>
+  </div>
+  <div class="stat">
+    <span class="stat-value" id="statRecommended">0</span>
+    <span class="stat-label">⭐ Рекоменд.</span>
+  </div>
+</div>
+
   <div class="admin-actions">
     <button id="openAddModal" class="btn-primary">➕ Добавить объект</button>
+    <button id="downloadBtn" class="btn-secondary">⬇ Скачать копию</button>
   </div>
 </div>
 

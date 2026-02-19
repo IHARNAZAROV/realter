@@ -532,3 +532,206 @@ select:focus {
   box-sizing: border-box;
   min-width: 0;
 }
+
+.object {
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+
+.object:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  transform: translateY(-2px);
+}
+
+.object-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.object-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.badge-star {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.object-price {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #0f766e;
+}
+
+.price-usd {
+  font-size: 13px;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.object-address {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.badge-active {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.badge-sold {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.badge-star {
+  background: #fff7ed;
+  color: #b45309;
+}
+
+.object-badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.object-controls {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.object-controls .edit-btn {
+  background: #f3f4f6;
+  color: #374151;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.object-controls .edit-btn:hover {
+  background: #e5e7eb;
+}
+
+.object {
+  position: relative;
+}
+
+.object:has(.badge-sold) {
+  opacity: 0.85;
+}
+
+.object:has(.badge-star)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #f59e0b;
+  border-radius: 4px 0 0 4px;
+}
+
+.recommend-toggle {
+  cursor: pointer;
+}
+
+.recommend-toggle.is-muted {
+  opacity: 0.4;
+}
+
+.recommend-toggle:hover {
+  opacity: 1;
+}
+
+.editable-price {
+  cursor: pointer;
+}
+
+.editable-price:hover {
+  text-decoration: underline dotted;
+}
+
+.inline-input {
+  width: 120px;
+  padding: 4px 6px;
+  font-size: 14px;
+}
+
+.object {
+  animation: fadeIn .15s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.badge {
+  transition: background .15s ease, color .15s ease;
+}
+
+.object-controls {
+  opacity: 0.6;
+  transition: opacity .15s ease;
+}
+
+.object:hover .object-controls {
+  opacity: 1;
+}
+
+.admin-stats {
+  display: flex;
+  gap: 24px;
+  margin: 8px 0 24px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+}
+.form-section h3 {
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: 12px;
+}
