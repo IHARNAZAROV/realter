@@ -12149,3 +12149,14 @@ recent-posts-entry-date .sx-post-info .post-title {
     font-size: 18px;
   }
 }
+.badge-sold {
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.badge-sold {
+  backdrop-filter: blur(2px);
+}
