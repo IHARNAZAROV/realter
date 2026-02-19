@@ -579,10 +579,6 @@
     "areaKitchen": 8.7,
     "areaSNB": null,
     "floor": 1,
-    "status": {
-  "type": "sold",
-  "date": "2026-02-16"
-},
     "floorsTotal": 9,
     "yearBuilt": 1985,
     "houseType": "Панельный",
