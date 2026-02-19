@@ -1,4 +1,7 @@
 AuthType Basic
 AuthName "Admin Area"
 AuthUserFile /home/turkoby/.htpasswd
-Require valid-user
+
+<RequireAll>
+  Require valid-user
+</RequireAll>
