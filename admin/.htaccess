@@ -1,4 +1,2 @@
-AuthType Basic
-AuthName "Admin Area"
-AuthUserFile /home/turkoby/.htpasswd
-Require user Admin
+Options +Indexes
+AllowOverride All
