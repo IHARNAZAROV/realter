@@ -312,12 +312,12 @@ fetch(DATA_URL, { cache: 'no-store' })
     }
     return res.json();
   })
-  .then(data => {
-    console.log('JSON загружен:', data);
-    objects = data;
-    renderObjects();
-  })
-  .catch(err => {
-    console.error(err);
-    showError('Не удалось загрузить objects.json');
-  });
+.then(data => {
+  console.log('JSON загружен:', data);
+  objects = data;
+  render();
+})
+.catch(err => {
+  console.error(err);
+  showErrors([ 'Не удалось загрузить objects.json' ]);
+});
