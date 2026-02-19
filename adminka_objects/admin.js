@@ -1,11 +1,30 @@
 "use strict";
 
-/* ======================================================
+/* =====================================================
    STATE
-====================================================== */
+===================================================== */
+
 let objects = [];
 let isDirty = false;
-let autosaveTimer = null;
+
+const container = document.getElementById("objects");
+const saveBtn = document.getElementById("saveBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const dirtyIndicator = document.getElementById("dirtyIndicator");
+const errorsBox = document.getElementById("errors");
+
+/* ===== EDIT MODAL ===== */
+const editModal = document.getElementById("editModal");
+const modalBody = document.getElementById("editModalBody");
+const modalTitle = document.getElementById("editModalTitle");
+const closeEditModal = document.getElementById("closeEditModal");
+const cancelEdit = document.getElementById("cancelEdit");
+const saveEdit = document.getElementById("saveEdit");
+
+/* =====================================================
+   SCHEMA
+===================================================== */
+
 const SCHEMA = {
   common: {
     title: { label: "Заголовок", type: "text" },
@@ -18,7 +37,7 @@ const SCHEMA = {
   },
 
   flat: {
-    rooms: { label: "Количество комнат", type: "number" },
+    rooms: { label: "Комнат", type: "number" },
     roomsSeparate: { label: "Раздельных комнат", type: "number" },
     areaTotal: { label: "Площадь общая", type: "float" },
     areaLiving: { label: "Площадь жилая", type: "float" },
@@ -32,9 +51,9 @@ const SCHEMA = {
   },
 
   house: {
-    areaPlot: { label: "Площадь участка", type: "number" },
-    areaTotal: { label: "Площадь общая", type: "number" },
-    areaLiving: { label: "Площадь жилая", type: "number" },
+    areaPlot: { label: "Площадь участка", type: "float" },
+    areaTotal: { label: "Площадь общая", type: "float" },
+    areaLiving: { label: "Площадь жилая", type: "float" },
     houseMaterial: { label: "Материал стен", type: "text" },
     roofMaterial: { label: "Материал крыши", type: "text" },
     heating: { label: "Отопление", type: "text" },
@@ -45,520 +64,66 @@ const SCHEMA = {
   }
 };
 
-/* ======================================================
-   DOM
-====================================================== */
-const container = document.getElementById("objects");
-const saveBtn = document.getElementById("saveBtn");
-const downloadBtn = document.getElementById("downloadBtn");
-const dirtyIndicator = document.getElementById("dirtyIndicator");
-const errorsBox = document.getElementById("errors");
+/* =====================================================
+   HELPERS
+===================================================== */
 
-/* ===== MODAL ===== */
-const addModal = document.getElementById("addModal");
-const openAddModal = document.getElementById("openAddModal");
-const closeAddModal = document.getElementById("closeAddModal");
-const cancelAdd = document.getElementById("cancelAdd");
+function setDirty(val = true) {
+  isDirty = val;
+  dirtyIndicator.style.display = isDirty ? "inline-block" : "none";
+}
 
-/* ===== ADD FORM ===== */
-const addForm = document.getElementById("addObjectForm");
-const addType = document.getElementById("addType");
-const addFlat = document.getElementById("addFlat");
-const addHouse = document.getElementById("addHouse");
-/* ===== EDIT MODAL ===== */
-const editModal = document.getElementById("editModal");
-const modalBody = document.getElementById("editModalBody");
-const modalTitle = document.getElementById("editModalTitle");
-const closeEditModal = document.getElementById("closeEditModal");
-const cancelEdit = document.getElementById("cancelEdit");
-const saveEdit = document.getElementById("saveEdit");
+function showErrors(errors) {
+  errorsBox.innerHTML = "";
+  if (!errors.length) return;
 
-
-/* ======================================================
-   LOAD DATA
-====================================================== */
-fetch("/data/objects.json")
-  .then(r => r.json())
-  .then(data => {
-    objects = data;
-    render();
+  const ul = document.createElement("ul");
+  errors.forEach(err => {
+    const li = document.createElement("li");
+    li.textContent = err;
+    ul.appendChild(li);
   });
 
-/* ======================================================
-   DIRTY STATE + AUTOSAVE
-====================================================== */
-function setDirty(state = true) {
-  isDirty = state;
-  dirtyIndicator.classList.toggle("is-visible", isDirty);
-  if (isDirty) scheduleAutosave();
+  errorsBox.appendChild(ul);
 }
 
-function scheduleAutosave(delay = 3000) {
-  clearTimeout(autosaveTimer);
-  autosaveTimer = setTimeout(() => {
-    if (!isDirty) return;
-    downloadJSON("objects.autosave.json");
-    setDirty(false);
-  }, delay);
-}
-
-/* ======================================================
-   RENDER
-====================================================== */
-function render() {
-  container.innerHTML = "";
-
-  const sorted = [...objects].sort(
-    (a, b) => (b.recommended === true) - (a.recommended === true)
-  );
-
-  sorted.forEach(obj => {
-    const index = objects.indexOf(obj);
-    container.appendChild(renderObject(obj, index));
-  });
-
-  bind();
-  bindEditButtons();
-}
-
-function renderObject(obj, index) {
-  const status = obj.status?.type || "active";
-  const date = obj.status?.date || "";
-
+function renderSection(title) {
   const div = document.createElement("div");
-  div.className = "object";
-
-  div.innerHTML = `
-    <div class="object-main">
-      <div class="object-title">
-        ${obj.title}${obj.recommended ? " ⭐" : ""}
-      </div>
-
-      <label>
-        Цена BYN
-        <input type="number" class="price" data-index="${index}" value="${obj.priceBYN}">
-      </label>
-
-      <label>
-        Описание карточки
-        <textarea class="desc" data-index="${index}">${obj.cardDescription || ""}</textarea>
-      </label>
-    </div>
-
-    <div class="object-meta">
-      <label>
-        Статус
-        <select class="status" data-index="${index}">
-          <option value="active" ${status === "active" ? "selected" : ""}>В продаже</option>
-          <option value="sold" ${status === "sold" ? "selected" : ""}>Продана</option>
-        </select>
-      </label>
-
-      <label>
-        Дата продажи
-        <input type="date" class="date" data-index="${index}" value="${date}" ${status !== "sold" ? "disabled" : ""}>
-      </label>
-
-      <label>
-        <input type="checkbox" class="recommended" data-index="${index}" ${obj.recommended ? "checked" : ""}>
-        Рекомендуемый
-      </label>
-
-        <button
-    class="edit-btn"
-    data-index="${index}"
-    style="margin-top:12px"
-  >
-    ✏️ Редактировать
-  </button>
-    </div>
-  `;
-
+  div.className = "form-section";
+  div.innerHTML = `<h3>${title}</h3>`;
   return div;
 }
 
-/* ======================================================
-   EVENTS (LIST)
-====================================================== */
-function bind() {
+/* =====================================================
+   FIELD RENDER
+===================================================== */
 
-  container.querySelectorAll(".price").forEach(el => {
-    el.addEventListener("input", e => {
-      objects[e.target.dataset.index].priceBYN = Number(e.target.value);
-      setDirty();
-    });
-  });
-
-  container.querySelectorAll(".desc").forEach(el => {
-    el.addEventListener("input", e => {
-      objects[e.target.dataset.index].cardDescription = e.target.value.trim();
-      setDirty();
-    });
-  });
-
-  container.querySelectorAll(".recommended").forEach(el => {
-    el.addEventListener("change", e => {
-      objects[e.target.dataset.index].recommended = e.target.checked;
-      setDirty();
-      render();
-    });
-  });
-
-  container.querySelectorAll(".status").forEach(el => {
-    el.addEventListener("change", e => {
-      const i = e.target.dataset.index;
-
-      if (e.target.value === "sold") {
-        objects[i].status = {
-          type: "sold",
-          date: new Date().toISOString().slice(0, 10)
-        };
-      } else {
-        delete objects[i].status;
-      }
-
-      setDirty();
-      render();
-    });
-  });
-
-  container.querySelectorAll(".date").forEach(el => {
-    el.addEventListener("change", e => {
-      const i = e.target.dataset.index;
-      if (objects[i].status) {
-        objects[i].status.date = e.target.value;
-        setDirty();
-      }
-    });
-  });
-}
-
-/* ======================================================
-   MODAL LOGIC
-====================================================== */
-if (openAddModal && addModal) {
-
-openAddModal.addEventListener("click", () => {
-  addModal.classList.add("is-open");
-  document.body.style.overflow = "hidden";
-});
-
-function closeModal() {
-  addModal.classList.remove("is-open");
-  document.body.style.overflow = "";
-}
-
-closeAddModal.addEventListener("click", closeModal);
-cancelAdd.addEventListener("click", closeModal);
-
-addModal.addEventListener("click", e => {
-  if (e.target === addModal) closeModal();
-});
-
-}
-
-/* ======================================================
-   ADD OBJECT FORM
-====================================================== */
-/* ======================================================
-   ADD OBJECT FORM
-====================================================== */
-addType.addEventListener("change", () => {
-  addFlat.hidden = addType.value !== "Квартира";
-  addHouse.hidden = addType.value !== "Дом";
-});
-
-addForm.addEventListener("submit", e => {
-  e.preventDefault();
-
-  const fd = new FormData(addForm);
-
-  const features = fd.getAll("feature").map(f => f.trim()).filter(Boolean);
-
-  const obj = {
-    id: "obj-" + Date.now(),
-    slug: slugifyLatin(fd.get("title")),
-    title: fd.get("title"),
-    type: fd.get("type"),
-    dealType: "Продажа",
-    city: fd.get("city"),
-    address: fd.get("address"),
-    priceBYN: Number(fd.get("priceBYN")),
-    priceUSD: Number(fd.get("priceUSD")),
-    cardDescription: fd.get("cardDescription"),
-    description: fd.get("description"),
-    features,
-    publishedAt: new Date().toISOString().slice(0, 10)
-  };
-
-  if (obj.type === "Квартира") {
-    Object.assign(obj, {
-      rooms: fd.get("rooms"),
-      roomsSeparate: fd.get("roomsSeparate"),
-      areaTotal: fd.get("areaTotal"),
-      areaLiving: fd.get("areaLiving"),
-      yearBuilt: fd.get("yearBuilt"),
-      floor: fd.get("floor"),
-      floorsTotal: fd.get("floorsTotal"),
-      houseType: fd.get("houseType"),
-      balcony: fd.get("balcony"),
-      repair: fd.get("repair"),
-      ceilingHeight: fd.get("ceilingHeight"),
-      bathroom: fd.get("bathroom"),
-      contractNumber: fd.get("contractNumber")
-    });
-  }
-
-  if (obj.type === "Дом") {
-    Object.assign(obj, {
-      areaPlot: fd.get("areaPlot"),
-      areaTotal: fd.get("areaTotal"),
-      areaLiving: fd.get("areaLiving"),
-      areaKitchen: fd.get("areaKitchen"),
-      levels: fd.get("levels"),
-      yearBuilt: fd.get("yearBuilt"),
-      readyPercent: fd.get("readyPercent"),
-      houseMaterial: fd.get("houseMaterial"),
-      roofMaterial: fd.get("roofMaterial"),
-      repair: fd.get("repair"),
-      heating: fd.get("heating"),
-      sewerage: fd.get("sewerage"),
-      electricity: fd.get("electricity"),
-      water: fd.get("water"),
-      landStatus: fd.get("landStatus"),
-      contractNumber: fd.get("contractNumber")
-    });
-  }
-
-  downloadSingleObject(obj);
-  closeModal();
-});
-
-/* ======================================================
-   SAVE / DOWNLOAD
-====================================================== */
-function downloadJSON(filename) {
-  const blob = new Blob(
-    [JSON.stringify(objects, null, 2)],
-    { type: "application/json" }
-  );
-
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
-
-  URL.revokeObjectURL(a.href);
-}
-
-downloadBtn.addEventListener("click", () => {
-  const errors = validateJSON(objects);
-  showErrors(errors);
-  if (errors.length) return;
-  downloadJSON("objects.modified.json");
-  setDirty(false);
-});
-
-saveBtn.addEventListener("click", () => {
-  const errors = validateJSON(objects);
-  showErrors(errors);
-  if (errors.length) return;
-  downloadJSON("objects.modified.json");
-  setDirty(false);
-});
-
-/* ======================================================
-   ERRORS UI
-====================================================== */
-function showErrors(errors) {
-  if (!errors.length) {
-    errorsBox.style.display = "none";
-    return;
-  }
-
-  errorsBox.innerHTML = `
-    <strong>Ошибки:</strong>
-    <ul>${errors.map(e => `<li>${e}</li>`).join("")}</ul>
-  `;
-  errorsBox.style.display = "block";
-}
-
-/* ======================================================
-   HELPERS
-====================================================== */
-function slugifyLatin(text) {
-  const map = {
-    а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",
-    й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",
-    у:"u",ф:"f",х:"h",ц:"c",ч:"ch",ш:"sh",щ:"sch",ы:"y",э:"e",
-    ю:"yu",я:"ya"
-  };
-
-  return text
-    .toLowerCase()
-    .split("")
-    .map(c => map[c] || c)
-    .join("")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-function downloadSingleObject(obj) {
-  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `${obj.slug}.json`;
-  a.click();
-}
-
-function generateFeaturesFromDescription(text, type) {
-  if (!text) return [];
-
-  const features = [];
-  const t = text.toLowerCase();
-
-  const common = [
-    { re: /(\d+[,\.]?\d*)\s*м²/, f: v => `Площадь ${v} м²` },
-    { re: /(центр|центре)/, f: () => "Центральный район" },
-    { re: /(тихий|спокойный)/, f: () => "Тихий район" },
-    { re: /(школ|сад|магазин)/, f: () => "Развитая инфраструктура" }
-  ];
-
-  const flatRules = [
-    { re: /(\d+)[-\s]?комнат/, f: v => `${v}-комнатная` },
-    { re: /этаж\s*(\d+)/, f: v => `Этаж ${v}` },
-    { re: /(\d+)[-\s]?этажного/, f: v => `${v}-этажный дом` },
-    { re: /(балкон|лоджия)/, f: v => `Есть ${v}` },
-    { re: /(ремонт|отремонтирован)/, f: () => "Хорошее состояние" }
-  ];
-
-  const houseRules = [
-    { re: /участ(ок|ке)/, f: () => "Собственный участок" },
-    { re: /(отоплен|печ)/, f: () => "Отопление" },
-    { re: /(вода|скважин)/, f: () => "Вода заведена" },
-    { re: /(канализац)/, f: () => "Канализация" },
-    { re: /(гараж)/, f: () => "Есть гараж" }
-  ];
-
-  const rules = [
-    ...common,
-    ...(type === "Квартира" ? flatRules : []),
-    ...(type === "Дом" ? houseRules : [])
-  ];
-
-  rules.forEach(r => {
-    const m = t.match(r.re);
-    if (m) {
-      const val = m[1] || m[0];
-      const feat = r.f(val.toString().replace(",", "."));
-      if (!features.includes(feat)) features.push(feat);
-    }
-  });
-
-  const fallback = type === "Дом"
-    ? [
-        "Подходит для постоянного проживания",
-        "Удобный подъезд",
-        "Хорошее состояние",
-        "Документы готовы",
-        "Выгодная цена",
-        "Перспективный район"
-      ]
-    : [
-        "Удобная планировка",
-        "Хорошее состояние",
-        "Подходит для проживания",
-        "Документы готовы",
-        "Выгодное предложение",
-        "Комфортный район"
-      ];
-
-  while (features.length < 6) {
-    const next = fallback[features.length % fallback.length];
-    if (!features.includes(next)) features.push(next);
-  }
-
-  return features.slice(0, 8);
-}
-
-
-const descriptionField = addForm.querySelector('[name="description"]');
-
-descriptionField.addEventListener("blur", () => {
-  const text = descriptionField.value;
-  const features = generateFeaturesFromDescription(text);
-
-  const featureInputs = addForm.querySelectorAll('input[name="feature"]');
-
-  featureInputs.forEach((input, i) => {
-    input.value = features[i] || "";
-  });
-});
-const regenBtn = document.getElementById("regenFeatures");
-const descField = addForm.querySelector('[name="description"]');
-
-function applyFeatures(features) {
-  const inputs = addForm.querySelectorAll('input[name="feature"]');
-
-  inputs.forEach((input, i) => {
-    if (features[i]) {
-      input.value = features[i];
-      input.dataset.auto = "1";
-    } else {
-      input.value = "";
-      input.dataset.auto = "0";
-    }
-  });
-}
-
-function regenerateFeatures() {
-  const text = descField.value;
-  const type = addType.value;
-
-  if (!text || !type) return;
-
-  const features = generateFeaturesFromDescription(text, type);
-  applyFeatures(features);
-}
-
-regenBtn.addEventListener("click", regenerateFeatures);
-
-descField.addEventListener("blur", () => {
-  regenerateFeatures();
-});
-
-addForm.querySelectorAll('input[name="feature"]').forEach(input => {
-  input.addEventListener("input", () => {
-    input.dataset.auto = "0";
-  });
-});
-
-function renderField(key, config, value, onChange) {
-  const wrapper = document.createElement("label");
-  wrapper.className = "field";
+function renderField(key, cfg, value, onChange) {
+  const wrap = document.createElement("label");
+  wrap.className = "field";
 
   const title = document.createElement("span");
-  title.textContent = config.label;
-  wrapper.appendChild(title);
+  title.textContent = cfg.label;
+  wrap.appendChild(title);
 
   let input;
 
-  if (config.type === "textarea") {
+  if (cfg.type === "textarea") {
     input = document.createElement("textarea");
     input.rows = 3;
     input.value = value ?? "";
   } 
-  else if (config.type === "checkbox") {
+  else if (cfg.type === "checkbox") {
     input = document.createElement("input");
     input.type = "checkbox";
     input.checked = !!value;
   } 
-  else if (config.type === "number") {
+  else if (cfg.type === "number") {
     input = document.createElement("input");
     input.type = "number";
     input.value = value ?? "";
-  }
-  else if (config.type === "float") {
+  } 
+  else if (cfg.type === "float") {
     input = document.createElement("input");
     input.type = "text";
     input.inputMode = "decimal";
@@ -572,20 +137,19 @@ function renderField(key, config, value, onChange) {
         setDirty();
       }
     });
-  }
+  } 
   else {
     input = document.createElement("input");
     input.type = "text";
     input.value = value ?? "";
   }
 
-  // обычный обработчик (кроме float — он уже выше)
-  if (config.type !== "float") {
+  if (cfg.type !== "float") {
     input.addEventListener("input", () => {
       const newValue =
-        config.type === "checkbox"
+        cfg.type === "checkbox"
           ? input.checked
-          : config.type === "number"
+          : cfg.type === "number"
           ? Number(input.value)
           : input.value;
 
@@ -594,83 +158,58 @@ function renderField(key, config, value, onChange) {
     });
   }
 
-  wrapper.appendChild(input);
-  return wrapper;
+  wrap.appendChild(input);
+  return wrap;
 }
 
+/* =====================================================
+   OBJECT EDITOR
+===================================================== */
 
 function renderObjectEditor(obj) {
-  const container = document.createElement("div");
-  container.className = "object-editor";
+  const editor = document.createElement("div");
+  editor.className = "object-editor";
 
-  /* ===== ОСНОВНОЕ ===== */
-  container.appendChild(renderSection("Основное"));
+  editor.appendChild(renderSection("Основное"));
 
   Object.entries(SCHEMA.common).forEach(([key, cfg]) => {
     if (key in obj) {
-      const field = renderField(key, cfg, obj[key], val => (obj[key] = val));
+      const field = renderField(key, cfg, obj[key], v => (obj[key] = v));
       if (["title", "cardDescription", "description"].includes(key)) {
         field.classList.add("full");
       }
-      container.appendChild(field);
+      editor.appendChild(field);
     }
   });
 
-  /* ===== ПАРАМЕТРЫ ===== */
   const typeKey = obj.type === "Квартира" ? "flat" : "house";
-
-  container.appendChild(
-    renderSection(
-      obj.type === "Квартира"
-        ? "Параметры квартиры"
-        : "Параметры дома"
-    )
+  editor.appendChild(
+    renderSection(obj.type === "Квартира" ? "Параметры квартиры" : "Параметры дома")
   );
 
   Object.entries(SCHEMA[typeKey]).forEach(([key, cfg]) => {
     if (key in obj) {
-      container.appendChild(
-        renderField(key, cfg, obj[key], val => (obj[key] = val))
+      editor.appendChild(
+        renderField(key, cfg, obj[key], v => (obj[key] = v))
       );
     }
   });
 
-  /* ===== ЮРИДИЧЕСКОЕ ===== */
-  if ("contractNumber" in obj) {
-    container.appendChild(renderSection("Юридическое"));
-
-    container.appendChild(
-      renderField(
-        "contractNumber",
-        SCHEMA.common.contractNumber,
-        obj.contractNumber,
-        val => (obj.contractNumber = val)
-      )
-    );
-  }
-
-  return container;
+  return editor;
 }
 
-
-function bindEditButtons() {
-  document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const index = Number(btn.dataset.index);
-      openEditModal(index);
-    });
-  });
-}
+/* =====================================================
+   MODAL
+===================================================== */
 
 function openEditModal(index) {
   const obj = objects[index];
-
   modalTitle.textContent = `Редактирование: ${obj.title}`;
   modalBody.innerHTML = "";
   modalBody.appendChild(renderObjectEditor(obj));
 
   editModal.classList.add("is-open");
-document.body.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
 }
 
 function closeEdit() {
@@ -679,18 +218,94 @@ function closeEdit() {
   modalBody.innerHTML = "";
 }
 
-closeEditModal.addEventListener("click", closeEdit);
-cancelEdit.addEventListener("click", closeEdit);
+closeEditModal.onclick = cancelEdit.onclick = closeEdit;
+saveEdit.onclick = closeEdit;
 
-editModal.addEventListener("click", e => {
-  if (e.target === editModal) closeEdit();
-});
+/* =====================================================
+   LIST RENDER
+===================================================== */
 
-function renderSection(title) {
-  const wrap = document.createElement("div");
-  wrap.className = "form-section";
-  wrap.innerHTML = `<h3>${title}</h3>`;
-  return wrap;
+function bindEditButtons() {
+  document.querySelectorAll(".edit-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      openEditModal(Number(btn.dataset.index));
+    });
+  });
 }
 
+function render() {
+  container.innerHTML = "";
 
+  const sorted = [...objects].sort(
+    (a, b) => (b.recommended === true) - (a.recommended === true)
+  );
+
+  sorted.forEach(obj => {
+    const index = objects.indexOf(obj);
+
+    const div = document.createElement("div");
+    div.className = "object";
+
+    div.innerHTML = `
+      <div class="object-main">
+        <div class="object-title">${obj.title}</div>
+      </div>
+
+      <div class="object-meta">
+        <button class="edit-btn" data-index="${index}">
+          ✏️ Редактировать
+        </button>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  bindEditButtons();
+}
+
+/* =====================================================
+   SAVE TO SERVER
+===================================================== */
+
+async function saveToServer() {
+  const errors = validateJSON(objects);
+  showErrors(errors);
+  if (errors.length) return;
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = "⏳ Сохранение...";
+
+  try {
+    const res = await fetch("/admin/save.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(objects)
+    });
+
+    const data = await res.json();
+    if (!res.ok || data.error) throw new Error(data.error || "Ошибка");
+
+    setDirty(false);
+    alert("✅ Изменения сохранены");
+
+  } catch (e) {
+    alert("❌ " + e.message);
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = "💾 Сохранить изменения";
+  }
+}
+
+saveBtn.addEventListener("click", saveToServer);
+
+/* =====================================================
+   INIT
+===================================================== */
+
+fetch("/data/objects.json")
+  .then(r => r.json())
+  .then(data => {
+    objects = data;
+    render();
+  });
