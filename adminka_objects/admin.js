@@ -277,7 +277,7 @@ async function saveToServer() {
   saveBtn.textContent = "⏳ Сохранение...";
 
   try {
-    const res = await fetch("/admin/save.php", {
+    const res = await fetch("/adminka_objects/save.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(objects)
