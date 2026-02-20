@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="/adminka_objects/admin.css">
   <link rel="stylesheet" href="/adminka_objects/dashboard-header.css">
   <link rel="stylesheet" href="/adminka_objects/dashboard-objects-dark.css">
+  <link rel="stylesheet" href="/adminka_objects/object-metrics.css">
+  <link rel="stylesheet" href="/adminka_objects/modal-edit-dark.css">
   <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="dashboard-theme">
@@ -46,6 +48,17 @@
   </div>
 
 </div>
+
+<div class="admin-sort">
+  <label class="admin-sort__label">Сортировка:</label>
+
+  <select class="admin-sort__select" id="objectsSort" title="Изменяет порядок отображения объектов">
+    <option value="new">Сначала новые</option>
+    <option value="price-desc">Сначала дорогие</option>
+    <option value="price-asc">Сначала дешёвые</option>
+  </select>
+</div>
+
 
   <div class="admin-actions">
     <button id="openAddModal" class="btn-primary">➕ Добавить объект</button>
@@ -266,6 +279,22 @@
 
   </div>
 </div>
+
+<!-- =====================================================
+     METRICS INFO MODAL
+===================================================== -->
+<div class="metrics-modal" id="metricsModal" hidden>
+  <div class="metrics-modal__overlay"></div>
+
+  <div class="metrics-modal__window">
+    <button class="metrics-modal__close" aria-label="Закрыть">✕</button>
+
+    <h3 class="metrics-modal__title"></h3>
+
+    <div class="metrics-modal__content"></div>
+  </div>
+</div>
+
 
 <div id="chartTooltip" class="chart-tooltip"></div>
 <script src="validate.js"></script>

@@ -1,0 +1,336 @@
+/* ======================================================
+   OBJECT METRICS — ISOLATED MODULE
+   НИЧЕГО кроме метрик
+   Подключать ПОСЛЕДНИМ
+====================================================== */
+
+/* 🔒 ЖЁСТКАЯ ИЗОЛЯЦИЯ: только внутри карточки */
+.dashboard-theme .object .object-metrics {
+  /* сетка метрик */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+
+  min-width: 0;
+}
+
+/* ===== METRIC CARD ===== */
+.dashboard-theme .object .metric {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  min-width: 0; /* ⛑ против наездов */
+}
+
+/* ===== LABEL ===== */
+.dashboard-theme .object .metric-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  color: #9ca3af;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== VALUE ===== */
+.dashboard-theme .object .metric-value {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+
+  color: #e5e7eb;
+
+  white-space: nowrap;
+}
+
+/* ===== SUBTEXT ===== */
+.dashboard-theme .object .metric-sub {
+  font-size: 12px;
+  color: #9ca3af;
+
+  white-space: nowrap;
+}
+
+/* ===== PRICE DEVIATION COLORS ===== */
+.dashboard-theme .object .metric .good {
+  color: #34d399;
+}
+
+.dashboard-theme .object .metric .neutral {
+  color: #fbbf24;
+}
+
+.dashboard-theme .object .metric .bad {
+  color: #f87171;
+}
+
+/* ======================================================
+   LIQUIDITY BAR
+====================================================== */
+
+.dashboard-theme .object .liquidity-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  overflow: hidden;
+}
+
+.dashboard-theme .object .liquidity-bar span {
+  display: block;
+  height: 100%;
+  width: calc(var(--value) * 1%);
+
+  background: linear-gradient(
+    90deg,
+    #ef4444 0%,
+    #fbbf24 50%,
+    #34d399 100%
+  );
+
+  transition: width 0.25s ease;
+}
+
+/* ======================================================
+   TOOLTIP — СПОКОЙНЫЙ, ПРОФЕССИОНАЛЬНЫЙ
+====================================================== */
+
+.dashboard-theme .object .metric[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+.dashboard-theme .object .metric[data-tooltip]::after {
+  content: attr(data-tooltip);
+
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+
+  background: rgba(15, 23, 42, 0.96);
+  color: #ffffff;
+
+  font-size: 11px;
+  line-height: 1.3;
+
+  padding: 6px 8px;
+  border-radius: 8px;
+
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+
+  z-index: 50;
+}
+
+.dashboard-theme .object .metric[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ======================================================
+   SAFETY NET — НИЧЕГО НЕ ВЫЛАЗИТ
+====================================================== */
+
+.dashboard-theme .object .object-metrics *,
+.dashboard-theme .object .metric * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ======================================================
+   OBJECT CARD — FINAL GRID FIX
+   ПЕРЕОПРЕДЕЛЯЕТ legacy 72px + 1fr
+====================================================== */
+
+
+
+/* ======================================================
+   RECOMMENDED BADGE — FIX
+====================================================== */
+
+.dashboard-theme .object .object-info {
+  position: relative;
+}
+
+/* сам бейдж */
+.dashboard-theme .object .badge--recommended,
+.dashboard-theme .object .badge-recommended,
+.dashboard-theme .object .badge-star {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15);
+
+  white-space: nowrap;
+}
+
+/* если это звёздочка */
+.dashboard-theme .object .badge-star {
+  cursor: pointer;
+}
+
+/* приглушённое состояние */
+.dashboard-theme .object .badge-star.is-muted {
+  opacity: 0.4;
+}
+
+/* ======================================================
+   OBJECT ACTION BUTTONS — UNIFIED SIZE
+====================================================== */
+
+.dashboard-theme .object .object-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+/* общая кнопка */
+.dashboard-theme .object .object-actions button,
+.dashboard-theme .object .edit-btn,
+.dashboard-theme .object .view-btn {
+  width: 40px;
+  height: 40px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e5e7eb;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+/* hover */
+.dashboard-theme .object .object-actions button:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+/* иконки внутри */
+.dashboard-theme .object .object-actions button svg,
+.dashboard-theme .object .object-actions button span {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* ======================================================
+   METRICS MODAL
+====================================================== */
+
+.metrics-modal[hidden] {
+  display: none;
+}
+
+.metrics-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.metrics-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.metrics-modal__window {
+  position: relative;
+  max-width: 520px;
+  margin: 8vh auto 0;
+  padding: 24px 24px 28px;
+
+  background: #0f141a;
+  color: #e5e7eb;
+
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.metrics-modal__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.metrics-modal__content {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d1d5db;
+}
+
+.metrics-modal__content p {
+  margin: 0 0 12px;
+}
+
+.metrics-modal__content ul {
+  margin: 8px 0 12px 18px;
+}
+
+.metrics-modal__content li {
+  margin-bottom: 6px;
+}
+
+.metrics-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 10px;
+  border: none;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+
+  cursor: pointer;
+}
+
+.metrics-modal__close:hover {
+  background: rgba(255, 255, 255, 0.16);
+}

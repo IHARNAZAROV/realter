@@ -48,16 +48,7 @@
       opacity: .6;
       cursor: default;
     }
-    .object {
-  display: grid;
-  grid-template-columns: 1fr 260px;
-  gap: 24px;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 16px;
-  border: 1px solid #e3e6e8;
-}
+
 
 .object-title {
   font-size: 16px;
@@ -373,151 +364,7 @@ select:focus {
 }
 .hidden { display: none; }
 
-/* ===== EDIT MODAL FORM ===== */
 
-.modal-body {
-  padding: 24px;
-}
-
-.object-editor {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 16px 20px;
-}
-
-/* textarea на всю ширину */
-.object-editor .field textarea {
-  min-height: 96px;
-  resize: vertical;
-}
-
-/* поля, которые должны быть широкими */
-.object-editor .field.full {
-  grid-column: 1 / -1;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.field span,
-.field label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #374151; /* тёплый серый */
-}
-
-.field input,
-.field textarea,
-.field select {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
-
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #fff;
-
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.field input::placeholder,
-.field textarea::placeholder {
-  color: #9ca3af;
-}
-
-
-
-.field span,
-.field label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #374151; /* тёплый серый */
-}
-
-.field input,
-.field textarea,
-.field select {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
-
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #fff;
-
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.field input::placeholder,
-.field textarea::placeholder {
-  color: #9ca3af;
-}
-
-.field input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #0f766e;
-}
-
-.field.checkbox {
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
-
-.object-editor::before {
-  content: "";
-  grid-column: 1 / -1;
-  height: 1px;
-  background: #e5e7eb;
-  margin: 8px 0 16px;
-}
-
-.modal-footer {
-  padding: 16px 24px;
-  border-top: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-.modal {
-  max-width: 960px;
-  width: 100%;
-  max-height: 90vh;
-  overflow: hidden; /* ⬅️ важно */
-}
-
-.modal-body {
-  overflow-y: auto;
-  overflow-x: hidden; /* ⬅️ УБИРАЕТ ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ */
-}
-
-.field.full {
-  grid-column: 1 / -1;
-}
-
-.form-section {
-  grid-column: 1 / -1;
-  margin: 8px 0 4px;
-}
-
-.form-section h3 {
-  font-size: 14px;
-  font-weight: 600;
-  color: #0f766e;
-  margin: 16px 0 8px;
-}
-
-.form-section-divider {
-  grid-column: 1 / -1;
-  height: 1px;
-  background: #e5e7eb;
-  margin-bottom: 8px;
-}
 
 .object-editor > * {
   min-width: 0;
@@ -757,3 +604,86 @@ select:focus {
   height: 46px;           /* ВАЖНО */
   margin-top: 12px;
 }
+
+
+.object-main {
+  min-width: 0;
+}
+
+/* ======================================================
+   EDIT BUTTON — TOP RIGHT (UNDER BADGES)
+====================================================== */
+
+.dashboard-theme .object {
+  position: relative;
+}
+
+.dashboard-theme .object-controls {
+  position: absolute;
+  top: 56px;            /* ниже бейджей */
+  right: 16px;
+
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-theme .object-controls .edit-btn {
+  width: 36px;
+  height: 36px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.dashboard-theme .object-controls .edit-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+}
+
+.dashboard-theme .object-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dashboard-theme .object:hover .object-controls {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* ======================================================
+   DRAG & DROP
+====================================================== */
+
+.dashboard-theme .object {
+  cursor: grab;
+}
+
+.dashboard-theme .object.dragging {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+
+.dashboard-theme .object.drag-over {
+  box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.6);
+}
+
+.dashboard-theme .view-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+
+  cursor: pointer;
+}
+

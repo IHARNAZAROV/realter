@@ -280,3 +280,41 @@
   transition: opacity .1s ease;
   z-index: 9999;
 }
+
+/* ======================================================
+   HEADER SORT
+====================================================== */
+
+.dashboard-header .admin-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-header .admin-sort__label {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.dashboard-header .admin-sort__select {
+  height: 36px;
+  padding: 0 10px;
+
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.dashboard-header .admin-sort__select:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dashboard-header .admin-sort__select option {
+  background: #0f141a;
+  color: #e5e7eb;
+}

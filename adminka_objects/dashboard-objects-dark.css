@@ -259,3 +259,95 @@
   content: "📍";
   color: #ec4899;
 }
+
+@media (max-width: 640px) {
+  .dashboard-theme .object {
+    grid-template-columns: 56px 1fr;
+  }
+
+  .dashboard-theme .object-preview {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+.dashboard-theme .object.is-sold .object-preview {
+  opacity: 0.6;
+  filter: grayscale(0.4);
+}
+.dashboard-theme .object.is-recommended .object-preview {
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.25);
+}
+
+/* ======================================================
+   OBJECT PREVIEW (ADMIN LIST)
+====================================================== */
+
+.dashboard-theme .object-preview {
+
+  border-radius: 10px;
+  overflow: hidden;
+
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+
+
+/* hover — лёгкий zoom */
+.dashboard-theme .object:hover .object-preview img {
+  transform: scale(1.05);
+  transition: transform .25s ease;
+}
+
+/* статус объекта — кликабельный */
+.dashboard-theme .object .status-badge {
+  cursor: pointer;
+}
+
+
+
+/* ======================================================
+   OBJECT CARD — FINAL GRID (ЕДИНСТВЕННЫЙ)
+====================================================== */
+
+.dashboard-theme .object {
+  display: grid !important;
+  grid-template-columns:
+    180px                 /* фото */
+    minmax(0, 1.4fr)      /* инфо */
+    minmax(320px, 1fr)    /* метрики */
+    56px;                 /* кнопки */
+
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* фото */
+.dashboard-theme .object-preview {
+  width: 100%;
+  height: 100%;
+  align-self: stretch;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.dashboard-theme .object-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .dashboard-theme .object {
+    grid-template-columns: 56px 1fr;
+  }
+
+  .dashboard-theme .object-preview {
+    width: 56px;
+    height: 56px;
+  }
+}

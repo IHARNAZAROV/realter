@@ -7,6 +7,107 @@ let objects = [];
 let isDirty = false;
 let currentFilter = "all";
 let selectedDate = null;
+let objectsListEl;
+let currentSort = "new";
+/* ===== MARKET SETTINGS ===== */
+const MARKET = {
+  Lida: {
+    flat: 850,   // $/м²
+    house: 420
+  },
+  default: {
+    flat: 800,
+    house: 400
+  }
+};
+
+const METRICS_INFO = {
+  price: {
+    title: "Цена за м²",
+    html: `
+      <p><strong>Что это:</strong><br>
+      Стоимость одного квадратного метра объекта.</p>
+
+      <p><strong>Как считается:</strong></p>
+      <ul>
+        <li>Цена объекта / Общая площадь</li>
+      </ul>
+
+      <p><strong>Как интерпретировать:</strong></p>
+      <ul>
+        <li>Ниже рынка — выгодная цена</li>
+        <li>В рынке — адекватная стоимость</li>
+        <li>Выше рынка — возможен торг</li>
+      </ul>
+    `
+  },
+
+  liquidity: {
+    title: "Индекс ликвидности",
+    html: `
+      <p><strong>Что это:</strong><br>
+      Оценка того, насколько легко объект продаётся на рынке.</p>
+
+      <p><strong>На что влияет:</strong></p>
+      <ul>
+        <li>Этаж</li>
+        <li>Количество комнат</li>
+        <li>Цена относительно рынка</li>
+        <li>Район</li>
+      </ul>
+
+      <p><strong>Интерпретация:</strong></p>
+      <ul>
+        <li>0–40 — низкая</li>
+        <li>40–70 — средняя</li>
+        <li>70+ — высокая</li>
+      </ul>
+    `
+  },
+
+  layout: {
+    title: "Коэффициент планировки",
+    html: `
+      <p><strong>Что это:</strong><br>
+      Соотношение жилой площади к общей.</p>
+
+      <p><strong>Формула:</strong></p>
+      <ul>
+        <li>Жилая / Общая площадь</li>
+      </ul>
+
+      <p><strong>Интерпретация:</strong></p>
+      <ul>
+        <li>&lt; 0.45 — слабая</li>
+        <li>0.45–0.55 — хорошая</li>
+        <li>&gt; 0.55 — отличная</li>
+      </ul>
+    `
+  },
+
+  resale: {
+    title: "Потенциал перепродажи",
+    html: `
+      <p><strong>Что это:</strong><br>
+      Прогноз возможности выгодной перепродажи.</p>
+
+      <p><strong>Учитывается:</strong></p>
+      <ul>
+        <li>Ликвидность</li>
+        <li>Цена</li>
+        <li>Планировка</li>
+      </ul>
+
+      <p><strong>Значения:</strong></p>
+      <ul>
+        <li>Высокий — можно продать без дисконта</li>
+        <li>Средний — возможен небольшой торг</li>
+        <li>Ограниченный — сложная перепродажа</li>
+      </ul>
+    `
+  }
+};
+
 const SCHEMA = {
   common: {
     title: { label: "Заголовок", type: "text" },
@@ -44,6 +145,34 @@ const SCHEMA = {
     electricity: { label: "Электроснабжение", type: "text" },
     landStatus: { label: "Статус земли", type: "text" }
   }
+};
+
+const previewImages = {
+  "dom-lidskiy-rayon-krupovo": "/images/objects/pic1.webp",
+  "dom-lida-severnyy-gorodok-ul-govorova": "/images/objects/pic2.webp",
+  "kvartira-lida-ul-zarechnaya-39": "/images/objects/pic3.webp",
+  "dom-lidskiy-rayon-sheybaki": "/images/objects/pic4.webp",
+  "kvartira-lida-yuzhnyy-gorodok": "/images/objects/pic5.webp",
+  "dom-shchuchinskiy-rayon-rozhanka": "/images/objects/pic6.webp",
+  "kvartira-lida-yuzhnyy-gorodok-d-19": "/images/objects/pic7.webp",
+  "dom-dokudovo-2": "/images/objects/pic8.webp",
+  "kvartira-lida-ul-varshavskaya-44": "/images/objects/pic9.webp",
+  "kvartira-lida-ul-letnaya-8": "/images/objects/pic10.webp",
+  "dom-lidskiy-rayon-melyashi": "/images/objects/pic11.webp",
+  "kvartira-lida-ul-tuhachevskogo-65-k1": "/images/objects/pic12.webp",
+  "kvartira-lida-ul-masherova-7-k2": "/images/objects/pic13.webp",
+  "kvartira-lida-ul-masherova": "/images/objects/pic14.webp",
+  "kvartira-lida-ul-tuhachevskogo": "/images/objects/pic15.webp",
+  "dom-lidskiy-rayon-minoyty": "/images/objects/pic16.webp",
+  "kvartira-lida-ul-kosmonavtov": "/images/objects/pic17.webp",
+  "kvartira-lida-ul-zarechnaya-7": "/images/objects/pic18.webp",
+  "dom-lidskiy-rayon-ostrovlya-novoselov": "/images/objects/pic19.webp",
+  "kvartira-laykovshchina-lidskiy-rayon":"/images/objects/pic20.webp",
+  "kvartira-lida-ul-prolygina-4": "/images/objects/pic21.webp",
+  "dom-shchuchinskiy-rayon-skribovtsy":"/images/objects/pic22.webp",
+  "dom-shchuchinskiy-rayon-boyary-zheludokskie":"/images/objects/pic23.webp",
+  "kvartira-volkovysk-centr": "/images/objects/pic24.webp",
+  "kvartira-lida-knyazya-gedimina-7":"/images/objects/pic25.webp"
 };
 
 /* ======================================================
@@ -85,6 +214,8 @@ fetch("/data/objects.json")
     render();
   });
 
+
+
 /* ======================================================
    DIRTY STATE + AUTOSAVE
 ====================================================== */
@@ -93,20 +224,30 @@ function setDirty(state = true) {
   dirtyIndicator.classList.toggle("is-visible", isDirty);
 }
 
+
+objects.forEach(obj => {
+  if (!obj.createdAt) {
+    obj.createdAt = obj.publishedAt || new Date().toISOString();
+    setDirty();
+  }
+});
 /* ======================================================
    RENDER
 ====================================================== */
 function render() {
   container.innerHTML = "";
 
-  const sorted = [...objects].sort(
-    (a, b) => (b.recommended === true) - (a.recommended === true)
-  );
+// 1. применяем фильтры
+let list = applyFilter(objects);
 
-  sorted.forEach(obj => {
-    const index = objects.indexOf(obj);
-    container.appendChild(renderObject(obj, index));
-  });
+// 2. применяем сортировку из хедера
+list = sortObjects(list);
+
+// 3. рендерим
+list.forEach(obj => {
+  const index = objects.indexOf(obj);
+  container.appendChild(renderObject(obj, index));
+});
 
   bind();
   bindEditButtons();
@@ -116,73 +257,159 @@ function render() {
   bindDashboardFilters();
 renderDashboardCharts();
 bindDashboardFilters();
+enableDragAndDrop(container, objects);
+}
+
+function enableDragAndDrop(container, dataArray) {
+  if (!container) return;
+
+  let draggedEl = null;
+
+  container.querySelectorAll(".object").forEach((item) => {
+    item.draggable = true;
+
+    item.addEventListener("dragstart", () => {
+      draggedEl = item;
+      item.classList.add("dragging");
+    });
+
+    item.addEventListener("dragend", () => {
+      item.classList.remove("dragging");
+      draggedEl = null;
+    });
+
+    item.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    item.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if (!draggedEl || draggedEl === item) return;
+
+      const fromIndex = Number(draggedEl.dataset.index);
+      const toIndex = Number(item.dataset.index);
+      if (Number.isNaN(fromIndex) || Number.isNaN(toIndex)) return;
+
+      /* ===== 1. ДВИГАЕМ DOM (БЕЗ RENDER) ===== */
+      const rect = item.getBoundingClientRect();
+      const isAfter = e.clientY > rect.top + rect.height / 2;
+
+      container.insertBefore(
+        draggedEl,
+        isAfter ? item.nextSibling : item
+      );
+
+      /* ===== 2. ОБНОВЛЯЕМ МАССИВ ===== */
+      const moved = dataArray.splice(fromIndex, 1)[0];
+      dataArray.splice(toIndex, 0, moved);
+
+      /* ===== 3. ОБНОВЛЯЕМ data-index У ВСЕХ ===== */
+      container.querySelectorAll(".object").forEach((el, i) => {
+        el.dataset.index = i;
+      });
+
+      setDirty(); // или isDirty = true
+    });
+  });
 }
 
 function renderObject(obj, index) {
   const status = obj.status?.type || "active";
   const date = obj.status?.date || "";
+  const previewSrc = resolvePreviewImage(obj);
+  const metrics = calculateMetrics(obj);
 
   const div = document.createElement("div");
-  div.className = "object";
+  div.className = `object ${obj.recommended ? "is-recommended" : ""} ${status === "sold" ? "is-sold" : ""}`;
+  div.dataset.index = index;
 
-div.innerHTML = `
-  <div class="object-main">
-
-    <div class="object-header">
-      <div class="object-title">
-        ${obj.title}
-      </div>
-
-      <div class="object-badges">
-       ${obj.recommended
-  ? `<span class="badge badge-star recommend-toggle" data-index="${index}" title="Убрать из рекомендованных">⭐</span>`
-  : `<span class="badge badge-star recommend-toggle is-muted" data-index="${index}" title="Добавить в рекомендованные">☆</span>`
-}
-<span
-  class="badge ${obj.status?.type === "sold" ? "badge-sold" : "badge-active"} status-badge"
-  data-index="${index}"
->
-  ${obj.status?.type === "sold"
-    ? `Продано${obj.status?.date ? " • " + obj.status.date : ""}`
-    : "В продаже"}
-</span>
-      </div>
+  div.innerHTML = `
+    <!-- ФОТО -->
+    <div class="object-preview">
+      ${previewSrc ? `<img src="${previewSrc}" alt="" loading="lazy">` : ""}
     </div>
 
-<div
-  class="object-price editable-price"
-  data-index="${index}"
->
-  <span class="price-view">
-    ${obj.priceBYN?.toLocaleString()} BYN
-    <span class="price-usd">
-      / ${obj.priceUSD?.toLocaleString()} $
+    <!-- ИНФОРМАЦИЯ -->
+    <div class="object-info">
+<div class="object-header">
+  <div class="object-title">${obj.title}</div>
+
+  <div class="object-badges">
+    <span
+      class="badge badge-star recommend-toggle ${obj.recommended ? "" : "is-muted"}"
+      data-index="${index}"
+      title="Рекомендованный объект"
+    >
+      ⭐
     </span>
-  </span>
+
+<span
+  class="badge status-badge ${status === "sold" ? "badge--sold" : "badge--active"}"
+  data-index="${index}"
+  title="Изменить статус объекта"
+>
+  ${
+    status === "sold"
+      ? `Продано${date ? " • " + date : ""}`
+      : "В продаже"
+  }
+</span>
+  </div>
 </div>
 
-    <div class="object-address">
-      📍 ${obj.city || ""}${obj.address ? ", " + obj.address : ""}
+      <div class="object-price">
+        ${obj.priceBYN?.toLocaleString()} BYN
+        <span class="price-usd">/ ${obj.priceUSD?.toLocaleString()} $</span>
+      </div>
+
+      <div class="object-address">
+        📍 ${obj.city || ""}${obj.address ? ", " + obj.address : ""}
+      </div>
     </div>
 
-  </div>
+    <!-- МЕТРИКИ -->
+    ${
+      metrics ? `
+      <div class="object-metrics">
 
-  <div class="object-controls">
-    <button
-      class="edit-btn"
-      data-index="${index}"
-      title="Редактировать объект"
-    >
-      ✏️
-    </button>
-  </div>
-`;
+        <div class="metric"  data-metric="price" data-tooltip="Цена одного квадратного метра">
+          <span class="metric-label">Цена / м²</span>
+          <span class="metric-value">${metrics.pricePerM2} $</span>
+          <span class="${metrics.deviation <= -7 ? "good" : metrics.deviation >= 7 ? "bad" : "neutral"}">
+            ${metrics.deviation > 0 ? "+" : ""}${metrics.deviation}% от рынка
+          </span>
+        </div>
 
+        <div class="metric" data-metric="liquidity" data-tooltip="Насколько легко объект продаётся">
+          <span class="metric-label">Ликвидность</span>
+          <div class="liquidity-bar">
+            <span style="--value:${metrics.liquidity}"></span>
+          </div>
+          <span class="metric-sub">${metrics.liquidity} / 100</span>
+        </div>
+
+        <div class="metric" data-metric="layout" data-tooltip="Соотношение жилой площади">
+          <span class="metric-label">Планировка</span>
+          <span class="metric-value">${metrics.usefulRatio ?? "—"}</span>
+        </div>
+
+        <div class="metric" data-metric="resale" data-tooltip="Потенциал перепродажи">
+          <span class="metric-label">Перепродажа</span>
+          <span class="metric-value">${metrics.resale}</span>
+        </div>
+
+      </div>` : ""
+    }
+
+    <!-- КНОПКИ -->
+    <div class="object-actions">
+      <button class="edit-btn" data-index="${index}">✏️</button>
+      <button class="view-btn" data-slug="${obj.slug}">👁</button>
+    </div>
+  `;
 
   return div;
-  
 }
-
 /* ======================================================
    EVENTS (LIST)
 ====================================================== */
@@ -1014,4 +1241,137 @@ function applyFilter(list) {
   }
 
   return result;
+}
+
+function resolvePreviewImage(obj) {
+  // 1. если есть явное поле в объекте
+  if (obj.previewImage) {
+    return obj.previewImage;
+  }
+
+  // 2. если есть mapping по slug — путь уже готовый
+  if (typeof previewImages !== "undefined" && previewImages[obj.slug]) {
+    return previewImages[obj.slug];
+  }
+
+  // 3. нет картинки
+  return null;
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".view-btn");
+  if (!btn) return;
+
+  const slug = btn.dataset.slug;
+  if (!slug) return;
+
+  window.open(
+    `https://turko.by/object-detail?slug=${encodeURIComponent(slug)}`,
+    "_blank",
+    "noopener"
+  );
+});
+
+function calculateMetrics(obj) {
+  const area = Number(obj.areaTotal);
+  const living = Number(obj.areaLiving);
+  const price = Number(obj.priceUSD);
+
+  if (!area || !price) return null;
+
+  const typeKey = obj.type === "Дом" ? "house" : "flat";
+  const cityKey = MARKET[obj.city] ? obj.city : "default";
+  const marketPrice = MARKET[cityKey][typeKey];
+
+  /* 1. Цена за м² */
+  const pricePerM2 = Math.round(price / area);
+
+  /* 2. Отклонение от рынка */
+  const deviation = Math.round(
+    ((pricePerM2 - marketPrice) / marketPrice) * 100
+  );
+
+  /* 3. Полезная площадь */
+  const usefulRatio =
+    living && area ? Number((living / area).toFixed(2)) : null;
+
+  /* 4. Ликвидность */
+  let liquidity = 0;
+
+  if (obj.rooms && obj.rooms <= 2) liquidity += 20;
+  if (obj.floor >= 3 && obj.floor <= 7) liquidity += 15;
+  if (obj.yearBuilt && new Date().getFullYear() - obj.yearBuilt <= 20)
+    liquidity += 15;
+  if (deviation <= 0) liquidity += 25;
+  if (obj.city === "Лида") liquidity += 15;
+
+  liquidity = Math.min(liquidity, 100);
+
+  /* 5. Перепродажа */
+  let resale = "Ограниченный";
+  if (liquidity >= 70 && deviation <= 0) resale = "Высокий";
+  else if (liquidity >= 55) resale = "Средний";
+
+  return {
+    pricePerM2,
+    deviation,
+    usefulRatio,
+    liquidity,
+    resale
+  };
+}
+
+const metricsInfoModal = document.getElementById("metricsModal");
+const metricsInfoTitle = metricsInfoModal.querySelector(".metrics-modal__title");
+const metricsInfoContent = metricsInfoModal.querySelector(".metrics-modal__content");
+
+document.addEventListener("click", (e) => {
+  const metricEl = e.target.closest(".metric");
+  if (!metricEl || !metricEl.dataset.metric) return;
+
+  const info = METRICS_INFO[metricEl.dataset.metric];
+  if (!info) return;
+
+  metricsInfoTitle.textContent = info.title;
+  metricsInfoContent.innerHTML = info.html;
+
+  metricsInfoModal.hidden = false;
+});
+
+metricsInfoModal.addEventListener("click", (e) => {
+  if (
+    e.target.classList.contains("metrics-modal__overlay") ||
+    e.target.classList.contains("metrics-modal__close")
+  ) {
+    metricsInfoModal.hidden = true;
+  }
+});
+
+function sortObjects(list) {
+  const arr = [...list];
+
+  switch (currentSort) {
+    case "price-desc":
+      return arr.sort((a, b) => (b.priceUSD || 0) - (a.priceUSD || 0));
+
+    case "price-asc":
+      return arr.sort((a, b) => (a.priceUSD || 0) - (b.priceUSD || 0));
+
+    case "new":
+    default:
+      return arr.sort((a, b) => {
+        const da = new Date(a.publishedAt  || 0).getTime();
+        const db = new Date(b.publishedAt  || 0).getTime();
+        return db - da;
+      });
+  }
+}
+
+const sortSelect = document.getElementById("objectsSort");
+
+if (sortSelect) {
+  sortSelect.addEventListener("change", () => {
+    currentSort = sortSelect.value;
+    render();
+  });
 }
