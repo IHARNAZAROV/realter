@@ -5,7 +5,8 @@
 ====================================================== */
 let objects = [];
 let isDirty = false;
-
+let currentFilter = "all";
+let selectedDate = null;
 const SCHEMA = {
   common: {
     title: { label: "Заголовок", type: "text" },
@@ -112,6 +113,9 @@ function render() {
   bindInlinePriceEdit();
   bindQuickActions();
   updateStats();
+  bindDashboardFilters();
+renderDashboardCharts();
+bindDashboardFilters();
 }
 
 function renderObject(obj, index) {
@@ -768,8 +772,246 @@ function updateStats() {
   const active = total - sold;
   const recommended = objects.filter(o => o.recommended).length;
 
-  document.getElementById("statTotal").textContent = total;
-  document.getElementById("statActive").textContent = active;
-  document.getElementById("statSold").textContent = sold;
-  document.getElementById("statRecommended").textContent = recommended;
+animateNumber(document.getElementById("statTotal"), total);
+animateNumber(document.getElementById("statActive"), active);
+animateNumber(document.getElementById("statSold"), sold);
+animateNumber(document.getElementById("statRecommended"), recommended);
+}
+
+
+function renderDashboardCharts() {
+  // ⏱ временная ось
+  const publishedStats = groupByDate(objects, o => o.publishedAt);
+
+  // 🔴 продажи
+  const soldStats = groupByDate(objects, o => o.status?.date);
+
+  // ⭐ рекомендованные
+  const recommendedStats = groupByDate(
+    objects.filter(o => o.recommended),
+    o => o.publishedAt
+  );
+
+  const cards = document.querySelectorAll(".admin-stats .stat");
+
+  cards.forEach((card, i) => {
+    const canvas = card.querySelector("canvas");
+    if (!canvas) return;
+
+    let data = [];
+    let color = "#3b82f6";
+
+    switch (i) {
+      case 0: // Всего
+        data = publishedStats;
+        color = "#3b82f6";
+        break;
+
+      case 1: // В продаже
+        data = publishedStats.filter(d =>
+          objects.some(o =>
+            !o.status &&
+            o.publishedAt?.startsWith(d.date)
+          )
+        );
+        color = "#22c55e";
+        break;
+
+      case 2: // Продано
+        data = soldStats;
+        color = "#ef4444";
+        break;
+
+      case 3: // ⭐ Рекоменд.
+        data = recommendedStats;
+        color = "#f59e0b";
+        break;
+    }
+
+    drawInteractiveDateChart(
+      canvas,
+      data,
+      color,
+      date => {
+        selectedDate = selectedDate === date ? null : date;
+        render();
+      }
+    );
+  });
+}
+const createdStats = groupByDate(objects, o => o.createdAt);
+const soldStats = groupByDate(objects, o => o.status?.date);
+
+const canvases = document.querySelectorAll(".admin-stats canvas");
+
+
+document
+  .querySelectorAll(".admin-stats .stat")
+  .forEach((card, i) => {
+    const canvas = card.querySelector("canvas");
+    if (!canvas) return;
+
+    const colors = ["#3b82f6", "#22c55e", "#ef4444", "#f59e0b"];
+    drawMiniChart(canvas, colors[i]);
+  });
+
+function bindDashboardFilters() {
+  document.querySelectorAll(".admin-stats .stat").forEach(card => {
+    card.addEventListener("click", () => {
+      currentFilter = card.dataset.filter || "all";
+
+      document
+        .querySelectorAll(".admin-stats .stat")
+        .forEach(c => c.classList.remove("is-active"));
+
+      card.classList.add("is-active");
+      render();
+    });
+  });
+}
+
+function drawMiniChart(canvas, color) {
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  const points = Array.from({ length: 12 }, () =>
+    Math.random() * canvas.height * 0.6 + 8
+  );
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  points.forEach((v, i) => {
+    const x = (canvas.width / (points.length - 1)) * i;
+    const y = canvas.height - v;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+
+  ctx.stroke();
+}
+
+function animateNumber(el, to) {
+  const from = Number(el.textContent) || 0;
+  const duration = 600;
+  const start = performance.now();
+
+  function frame(time) {
+    const progress = Math.min((time - start) / duration, 1);
+    el.textContent = Math.round(from + (to - from) * progress);
+    if (progress < 1) requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+
+function groupByDate(objects, getter) {
+  const map = {};
+
+  objects.forEach(obj => {
+    const date = getter(obj);
+    if (!date) return;
+
+    const day = date.slice(0, 10); // YYYY-MM-DD
+    map[day] = (map[day] || 0) + 1;
+  });
+
+  return Object.entries(map)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([date, value]) => ({ date, value }));
+}
+
+function drawInteractiveDateChart(canvas, points, color, onPointClick) {
+  const ctx = canvas.getContext("2d");
+  const tooltip = document.getElementById("chartTooltip");
+
+  // 🔥 ЯВНО ЗАДАЁМ РАЗМЕР
+  const width = canvas.clientWidth;
+  const height = 46;
+
+  canvas.width = width;
+  canvas.height = height;
+
+  ctx.clearRect(0, 0, width, height);
+
+  if (!points || points.length < 2) return;
+
+  const max = Math.max(...points.map(p => p.value));
+  const padding = 6;
+
+  const coords = points.map((p, i) => {
+    const x = (width / (points.length - 1)) * i;
+    const y =
+      height -
+      (p.value / max) * (height - padding * 2) -
+      padding;
+    return { ...p, x, y };
+  });
+
+  // линия
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  coords.forEach((p, i) => {
+    i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y);
+  });
+  ctx.stroke();
+
+  // tooltip
+  canvas.onmousemove = e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+
+    const nearest = coords.reduce((a, b) =>
+      Math.abs(b.x - mx) < Math.abs(a.x - mx) ? b : a
+    );
+
+    tooltip.textContent = `${nearest.date}: ${nearest.value}`;
+    tooltip.style.left = `${e.clientX}px`;
+    tooltip.style.top = `${e.clientY}px`;
+    tooltip.style.opacity = 1;
+  };
+
+  canvas.onmouseleave = () => {
+    tooltip.style.opacity = 0;
+  };
+
+  canvas.onclick = e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+
+    const nearest = coords.reduce((a, b) =>
+      Math.abs(b.x - mx) < Math.abs(a.x - mx) ? b : a
+    );
+
+    onPointClick(nearest.date);
+  };
+}
+
+function applyFilter(list) {
+  let result = list;
+
+  if (currentFilter === "active") {
+    result = result.filter(o => !o.status);
+  }
+
+  if (currentFilter === "sold") {
+    result = result.filter(o => o.status?.type === "sold");
+  }
+
+  if (currentFilter === "recommended") {
+    result = result.filter(o => o.recommended);
+  }
+
+  if (selectedDate) {
+    result = result.filter(o =>
+      o.publishedAt?.startsWith(selectedDate) ||
+      o.status?.date?.startsWith(selectedDate)
+    );
+  }
+
+  return result;
 }

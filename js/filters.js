@@ -58,7 +58,8 @@ const previewImages = {
   "kvartira-lida-ul-prolygina-4": "images/objects/pic21.webp",
   "dom-shchuchinskiy-rayon-skribovtsy":"images/objects/pic22.webp",
   "dom-shchuchinskiy-rayon-boyary-zheludokskie":"images/objects/pic23.webp",
-  "kvartira-volkovysk-centr": "images/objects/pic24.webp"
+  "kvartira-volkovysk-centr": "images/objects/pic24.webp",
+  "kvartira-lida-knyazya-gedimina-7":"images/objects/pic25.webp"
 };
 
 /* =========================================================

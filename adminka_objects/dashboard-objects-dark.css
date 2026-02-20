@@ -1,0 +1,261 @@
+/* ======================================================
+   OBJECT CARDS — DARK GLASS THEME
+====================================================== */
+
+.dashboard-theme .object {
+  position: relative;
+
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  color: #e5e7eb;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+/* hover — карточка "всплывает" */
+.dashboard-theme .object:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.06);
+
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ======================================================
+   ТЕКСТ И МЕТА
+====================================================== */
+
+.dashboard-theme .object h3,
+.dashboard-theme .object .object-title {
+  color: #ffffff;
+}
+
+.dashboard-theme .object .object-price {
+  color: #34d399; /* спокойный зелёный */
+  font-weight: 600;
+}
+
+.dashboard-theme .object .object-meta,
+.dashboard-theme .object .object-location {
+  color: #9ca3af;
+}
+
+/* ======================================================
+   СТАТУСЫ
+====================================================== */
+
+/* В продаже */
+.dashboard-theme .badge--active {
+  background: rgba(34, 197, 94, 0.14);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+}
+
+/* Продано */
+.dashboard-theme .object.is-sold {
+  background: rgba(255, 255, 255, 0.02);
+  opacity: 0.75;
+}
+
+.dashboard-theme .badge--sold {
+  background: rgba(239, 68, 68, 0.14);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+/* ======================================================
+   ⭐ РЕКОМЕНДОВАННЫЕ
+====================================================== */
+
+.dashboard-theme .object.is-recommended {
+  border-left: 3px solid rgba(245, 158, 11, 0.8);
+}
+
+.dashboard-theme .object .star {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.35));
+}
+
+/* ======================================================
+   КНОПКА РЕДАКТИРОВАНИЯ
+====================================================== */
+
+.dashboard-theme .object .edit-btn {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+}
+
+.dashboard-theme .object .edit-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ======================================================
+   АКТИВНЫЙ ФИЛЬТР (если используешь)
+====================================================== */
+
+.dashboard-theme .object.is-filtered {
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.5),
+    0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* ======================================================
+   OBJECT LOCATION — VISUAL EMPHASIS
+====================================================== */
+
+.dashboard-theme .object .object-location {
+  margin-top: 8px;
+  padding-left: 12px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 13px;
+  color: #e5e7eb;
+
+  border-left: 2px solid rgba(236, 72, 153, 0.7); /* розово-ягодный акцент */
+}
+
+/* иконка локации */
+.dashboard-theme .object .object-location svg,
+.dashboard-theme .object .object-location .icon {
+  color: #ec4899;
+  opacity: 0.9;
+}
+
+/* ======================================================
+   BADGES — DARK GLASS STYLE
+====================================================== */
+
+.dashboard-theme .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 4px 10px;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 500;
+
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.08);
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e5e7eb;
+}
+
+/* В продаже */
+.dashboard-theme .badge--active {
+  background: rgba(34, 197, 94, 0.14);
+  border-color: rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+}
+
+/* Продано */
+.dashboard-theme .badge--sold {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+/* ======================================================
+   RECOMMENDED BADGE
+====================================================== */
+
+.dashboard-theme .badge--recommended {
+  background: rgba(245, 158, 11, 0.16);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15);
+}
+
+/* иконка звезды */
+.dashboard-theme .badge--recommended svg,
+.dashboard-theme .badge--recommended .star {
+  color: #fbbf24;
+}
+
+.dashboard-theme .object.is-recommended .object-location {
+  border-left-color: rgba(245, 158, 11, 0.8);
+}
+
+/* ======================================================
+   LOCATION — FORCE VISIBILITY (DARK THEME)
+====================================================== */
+
+/* ловим любой текст локации внутри карточки */
+.dashboard-theme .object .object-location,
+.dashboard-theme .object .location,
+.dashboard-theme .object .meta-location,
+.dashboard-theme .object .object-meta .location,
+.dashboard-theme .object .object-meta span {
+  color: #e5e7eb !important;
+  font-weight: 500;
+}
+
+/* если есть иконка */
+.dashboard-theme .object .object-location svg,
+.dashboard-theme .object .object-meta svg {
+  color: #ec4899 !important;
+}
+
+/* визуальный якорь */
+.dashboard-theme .object .object-location,
+.dashboard-theme .object .object-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding-left: 12px;
+  margin-top: 6px;
+
+  border-left: 2px solid rgba(236, 72, 153, 0.75);
+}
+
+.dashboard-theme .object.is-sold .object-location {
+  opacity: 0.75;
+}
+
+.dashboard-theme .object.is-recommended .object-location {
+  border-left-color: rgba(245, 158, 11, 0.85);
+}
+
+/* ======================================================
+   LOCATION — FINAL FIX (REAL DOM)
+====================================================== */
+
+/* Локация — это span внутри object-meta */
+.dashboard-theme .object .object-meta span {
+  color: #e5e7eb !important;
+  font-weight: 500;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding-left: 12px;
+  margin-top: 6px;
+
+  border-left: 2px solid rgba(236, 72, 153, 0.8);
+}
+
+/* Иконка локации */
+.dashboard-theme .object .object-meta span::before {
+  content: "📍";
+  color: #ec4899;
+}

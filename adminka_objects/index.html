@@ -5,49 +5,71 @@
   <title>Админка объектов</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/adminka_objects/admin.css">
+  <link rel="stylesheet" href="/adminka_objects/dashboard-header.css">
+  <link rel="stylesheet" href="/adminka_objects/dashboard-objects-dark.css">
   <meta name="robots" content="noindex, nofollow">
 </head>
-<body>
+<body class="dashboard-theme">
 
 <!-- ===== HEADER ===== -->
-<div class="admin-header">
-  <h1>🏠 Админка объектов</h1>
+<header class="dashboard-header">
+  <div class="breadcrumbs">
+    <span class="home">Ольга Турко</span>
+    <span class="sep">›</span>
+    <span class="project">turko.by</span>
+  </div>
 
 <div class="admin-stats" id="adminStats">
-  <div class="stat">
-    <span class="stat-value" id="statTotal">0</span>
+
+  <div class="stat" data-filter="all">
     <span class="stat-label">Всего</span>
+    <span class="stat-value" id="statTotal">0</span>
+    <canvas></canvas>
   </div>
-  <div class="stat">
-    <span class="stat-value" id="statActive">0</span>
+
+  <div class="stat" data-filter="active">
     <span class="stat-label">В продаже</span>
+    <span class="stat-value" id="statActive">0</span>
+    <canvas></canvas>
   </div>
-  <div class="stat">
-    <span class="stat-value" id="statSold">0</span>
+
+  <div class="stat" data-filter="sold">
     <span class="stat-label">Продано</span>
+    <span class="stat-value" id="statSold">0</span>
+    <canvas></canvas>
   </div>
-  <div class="stat">
-    <span class="stat-value" id="statRecommended">0</span>
+
+  <div class="stat" data-filter="recommended">
     <span class="stat-label">⭐ Рекоменд.</span>
+    <span class="stat-value" id="statRecommended">0</span>
+    <canvas></canvas>
   </div>
+
 </div>
 
   <div class="admin-actions">
     <button id="openAddModal" class="btn-primary">➕ Добавить объект</button>
     <button id="downloadBtn" class="btn-secondary">⬇ Скачать копию</button>
   </div>
-</div>
+</header>
 
-<div class="admin-bar">
-  <span id="dirtyIndicator" class="dirty-indicator">
-    ● Есть несохранённые изменения
-  </span>
-</div>
+<main class="dashboard-content">
 
-<div id="errors" class="errors"></div>
-<div id="objects"></div>
+  <div class="admin-bar">
+    <span id="dirtyIndicator" class="dirty-indicator">
+      ● Есть несохранённые изменения
+    </span>
+  </div>
 
-<button id="saveBtn" class="btn-secondary">💾 Сохранить изменения</button>
+  <div id="errors" class="errors"></div>
+
+  <section class="objects-section">
+    <div id="objects"></div>
+  </section>
+
+  <button id="saveBtn" class="btn-secondary">💾 Сохранить изменения</button>
+
+</main>
 
 <!-- ===== MODAL ===== -->
 <div id="addModal" class="modal-overlay">
@@ -245,7 +267,7 @@
   </div>
 </div>
 
-
+<div id="chartTooltip" class="chart-tooltip"></div>
 <script src="validate.js"></script>
 <script src="admin.js"></script>
 </body>
