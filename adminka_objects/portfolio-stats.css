@@ -1,0 +1,259 @@
+/* === ОБЩАЯ СЕТКА: 3 БЛОКА В РЯД === */
+.portfolio-stats {
+  margin-top: 32px;
+}
+
+.portfolio-stats__groups {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* === ЛОГИЧЕСКИЙ БЛОК === */
+.stats-block {
+  background: radial-gradient(
+    circle at top,
+    rgba(255,255,255,.04),
+    rgba(0,0,0,.25)
+  );
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+/* === ЗАГОЛОВОК === */
+.stats-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #7dd3fc;
+  margin-bottom: 14px;
+}
+
+/* === 🔥 КЛЮЧЕВОЙ МОМЕНТ 🔥 === */
+.stats-row {
+  display: block;
+}
+
+.stats-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* === КАРТОЧКА === */
+.stats-card {
+  width: 110px;
+  min-height: 96px;
+  background: radial-gradient(circle at top, #232930, #171b20);
+  border-radius: 14px;
+  padding: 14px 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  cursor: pointer;
+  transition: all .18s ease;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+}
+
+.stats-card.is-active {
+  background: linear-gradient(180deg, #14532d, #052e16);
+  box-shadow:
+    inset 0 0 0 1px rgba(34,197,94,.7),
+    0 0 0 2px rgba(34,197,94,.15);
+}
+
+/* === ФУТЕР === */
+.stats-footer {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+/* =========================================
+   STATS CARDS — VISUAL ONLY (NO LAYOUT)
+   ========================================= */
+
+.stats-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+
+  padding: 16px 18px;
+  min-height: 92px;
+
+  color: #e5e7eb;
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.15s ease;
+}
+
+/* число */
+.stats-card__value {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+/* подпись */
+.stats-card__label {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* "шт." */
+.stats-card__suffix {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+/* =====================
+   HOVER
+   ===================== */
+.stats-card:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.15),
+    rgba(59, 130, 246, 0.05)
+  );
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow:
+    0 0 0 1px rgba(59, 130, 246, 0.2),
+    0 10px 30px rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+/* =====================
+   ACTIVE (FILTER ON)
+   ===================== */
+.stats-card.is-active {
+  background: linear-gradient(
+    180deg,
+    rgba(34, 197, 94, 0.22),
+    rgba(34, 197, 94, 0.08)
+  );
+  border-color: rgba(34, 197, 94, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(34, 197, 94, 0.35),
+    0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+.stats-card.is-active .stats-card__value {
+  color: #22c55e;
+}
+
+/* =====================
+   DISABLED (0 шт.)
+   ===================== */
+.stats-card.is-empty {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* =========================================
+   PORTFOLIO STATS HEADER
+   ========================================= */
+
+.portfolio-stats__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 14px 18px;
+  margin-bottom: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.01)
+  );
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Заголовок */
+.portfolio-stats__header h3 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  color: #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Иконка (эмодзи) — делаем аккуратнее */
+.portfolio-stats__header h3::before {
+  content: "📊";
+  font-size: 18px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+/* ===============================
+   PORTFOLIO STATS FOOTER
+================================ */
+
+.stats-footer {
+  margin-top: 20px;
+  margin-bottom: 32px; /* 🔥 ВАЖНО: отступ от карточек объектов */
+
+  padding: 14px 18px;
+
+  border-radius: 14px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.035),
+    rgba(255,255,255,0.015)
+  );
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    0 8px 24px rgba(0,0,0,0.35);
+
+  font-size: 13px;
+  line-height: 1.5;
+  color: #d6dde4;
+
+  display: block;
+}
+
+/* Акценты в тексте */
+.stats-footer strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.stats-footer span,
+.stats-footer b {
+  color: #4fc3f7;
+}

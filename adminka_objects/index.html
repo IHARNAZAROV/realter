@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/adminka_objects/dashboard-objects-dark.css">
   <link rel="stylesheet" href="/adminka_objects/object-metrics.css">
   <link rel="stylesheet" href="/adminka_objects/modal-edit-dark.css">
+  <link rel="stylesheet" href="/adminka_objects/portfolio-stats.css">
   <meta name="robots" content="noindex, nofollow">
 </head>
 <body class="dashboard-theme">
@@ -75,6 +76,46 @@
   </div>
 
   <div id="errors" class="errors"></div>
+
+
+<!-- =====================================================
+     PORTFOLIO STATISTICS
+===================================================== -->
+<section class="portfolio-stats" id="portfolioStats">
+  <div class="portfolio-stats__header">
+    <h3>Статистика портфеля</h3>
+  </div>
+
+  <!-- ГРУППЫ В ОДНУ СТРОКУ -->
+  <div class="portfolio-stats__groups">
+
+ <div class="stats-block">
+  <h4 class="stats-title">Комнаты</h4>
+  <div class="stats-row">
+    <div class="stats-items" id="statsRooms"></div>
+  </div>
+</div>
+
+ <div class="stats-block">
+  <h4 class="stats-title">Города</h4>
+  <div class="stats-row">
+    <div class="stats-items" id="statsCities"></div>
+  </div>
+</div>
+
+<div class="stats-block">
+  <h4 class="stats-title">Цена</h4>
+  <div class="stats-row">
+    <div class="stats-items" id="statsPrices"></div>
+  </div>
+</div>
+
+  </div>
+
+  <!-- СРЕДНЯЯ ЦЕНА -->
+  <div class="stats-footer" id="statsAvgPrice"></div>
+</section>
+
 
   <section class="objects-section">
     <div id="objects"></div>
@@ -299,5 +340,6 @@
 <div id="chartTooltip" class="chart-tooltip"></div>
 <script src="validate.js"></script>
 <script src="admin.js"></script>
+<script src="portfolio-statistics.js"></script>
 </body>
 </html>

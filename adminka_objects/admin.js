@@ -6,6 +6,11 @@
 let objects = [];
 let isDirty = false;
 let currentFilter = "all";
+let statsFilters = {
+  rooms: null,  
+  city: null,   
+  priceRange: null 
+};
 let selectedDate = null;
 let objectsListEl;
 let currentSort = "new";
@@ -242,6 +247,9 @@ let list = applyFilter(objects);
 
 // 2. применяем сортировку из хедера
 list = sortObjects(list);
+
+// 🔥 2.1 РЕНДЕРИМ СТАТИСТИКУ ПОРТФЕЛЯ (НАД СПИСКОМ)
+  renderPortfolioStats(list); 
 
 // 3. рендерим
 list.forEach(obj => {
@@ -1221,6 +1229,7 @@ function drawInteractiveDateChart(canvas, points, color, onPointClick) {
 function applyFilter(list) {
   let result = list;
 
+  /* ===== existing filters ===== */
   if (currentFilter === "active") {
     result = result.filter(o => !o.status);
   }
@@ -1239,6 +1248,46 @@ function applyFilter(list) {
       o.status?.date?.startsWith(selectedDate)
     );
   }
+
+  /* ===== STATS FILTERS ===== */
+  if (statsFilters.rooms) {
+    result = result.filter(o => {
+      if (!o.rooms) return false;
+      return statsFilters.rooms === "4+"
+        ? o.rooms >= 4
+        : String(o.rooms) === statsFilters.rooms;
+    });
+  }
+
+  if (statsFilters.city) {
+    result = result.filter(o => o.city === statsFilters.city);
+  }
+
+
+  /* ===== PRICE RANGE FILTER ===== */
+  if (statsFilters.priceRange) {
+    result = result.filter(o => {
+      const price = o.priceUSD;
+      if (!price) return false;
+
+      switch (statsFilters.priceRange) {
+        case "<30000":
+          return price < 30000;
+
+        case "30000-50000":
+          return price >= 30000 && price < 50000;
+
+        case "50000-80000":
+          return price >= 50000 && price < 80000;
+
+        case "80000+":
+          return price >= 80000;
+
+        default:
+          return true;
+      }
+    });
+  } 
 
   return result;
 }
@@ -1373,5 +1422,184 @@ if (sortSelect) {
   sortSelect.addEventListener("change", () => {
     currentSort = sortSelect.value;
     render();
+  });
+}
+
+function formatRoomsLabel(key) {
+  switch (key) {
+    case "1": return "Однокомнатные";
+    case "2": return "Двухкомнатные";
+    case "3": return "Трёхкомнатные";
+    case "4+": return "4+ комнаты";
+    default: return `${key}-комнатные`;
+  }
+}
+
+function formatPriceRangeLabel(key) {
+  switch (key) {
+    case "<30000": return "Меньше 30 тыс. $";
+    case "30000-50000": return "30–50 тыс. $";
+    case "50000-80000": return "50–80 тыс. $";
+    case "80000+": return "Более 80 тыс. $";
+    default: return key;
+  }
+}
+
+
+function renderPortfolioStats(objects) {
+  const stats = PortfolioStatistics.calculate(objects);
+
+  renderStatsCards("statsRooms", stats.rooms, "rooms");
+  renderStatsCards("statsCities", stats.cities, "cities");
+  renderStatsCards("statsPrices", stats.priceRanges, "prices");
+  renderAvgPrice(stats.avgPricePerM2);
+}
+
+function renderStatsGroup(containerId, data) {
+  const container = document.querySelector(`#${containerId} .stats-items`);
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  Object.entries(data).forEach(([key, value]) => {
+    /* ===== HIDE EMPTY PRICE SEGMENTS ===== */
+    if (
+      containerId === "statsPrices" &&
+      statsFilters.priceRange &&
+      value === 0
+    ) {
+      return; // ❗ просто не рендерим
+    }
+
+    let label = key;
+    let isActive = false;
+
+    if (containerId === "statsRooms") {
+      label = formatRoomsLabel(key);
+      isActive = statsFilters.rooms === key;
+    }
+
+    if (containerId === "statsCities") {
+      label = key;
+      isActive = statsFilters.city === key;
+    }
+
+    if (containerId === "statsPrices") {
+      label = formatPriceRangeLabel(key);
+      isActive = statsFilters.priceRange === key;
+    }
+
+    const el = document.createElement("div");
+    el.className = "stats-item";
+    if (isActive) el.classList.add("is-active");
+
+    el.textContent = `${label} — ${value} шт.`;
+
+    el.addEventListener("click", () => {
+      if (containerId === "statsRooms") {
+        statsFilters.rooms =
+          statsFilters.rooms === key ? null : key;
+      }
+
+      if (containerId === "statsCities") {
+        statsFilters.city =
+          statsFilters.city === key ? null : key;
+      }
+
+      if (containerId === "statsPrices") {
+        statsFilters.priceRange =
+          statsFilters.priceRange === key ? null : key;
+      }
+
+      render();
+    });
+
+    container.appendChild(el);
+  });
+}
+
+function renderAvgPrice(data) {
+  const footer = document.getElementById("statsAvgPrice");
+  if (!footer) return;
+
+  const parts = Object.entries(data).map(
+    ([rooms, price]) =>
+      `${formatRoomsLabel(rooms)} — ${price} $/м²`
+  );
+
+  footer.textContent = `Средняя цена за м²: ${parts.join(" | ")}`;
+}
+
+
+function formatRoomsLabel(v) {
+  return {
+    1: "Однокомнатные",
+    2: "Двухкомнатные",
+    3: "Трёхкомнатные",
+    4: "4+ комнатные"
+  }[v] || `${v} комнат`;
+}
+
+function formatPriceRangeLabel(key) {
+  const map = {
+    "<30000": "До 30 тыс. $",
+    "30000-50000": "30–50 тыс. $",
+    "50000-80000": "50–80 тыс. $",
+    ">80000": "От 80 тыс. $"
+  };
+  return map[key] || key;
+}
+
+
+function renderStatsCards(containerId, data, type) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  Object.entries(data).forEach(([key, count]) => {
+    if (count === 0) return;
+
+    let label = key;
+    let active = false;
+
+    if (type === "rooms") {
+      label = formatRoomsLabel(key);
+      active = statsFilters.rooms === key;
+    }
+
+    if (type === "cities") {
+      active = statsFilters.city === key;
+    }
+
+    if (type === "prices") {
+      label = formatPriceRangeLabel(key);
+      active = statsFilters.priceRange === key;
+    }
+
+    const card = document.createElement("div");
+    card.className = `stats-card ${active ? "is-active" : ""}`;
+
+    card.innerHTML = `
+      <div class="stats-card__value">${count}</div>
+      <div class="stats-card__label">${label}</div>
+      <div class="stats-card__meta">шт.</div>
+    `;
+
+    card.addEventListener("click", () => {
+      if (type === "rooms") {
+        statsFilters.rooms = statsFilters.rooms === key ? null : key;
+      }
+      if (type === "cities") {
+        statsFilters.city = statsFilters.city === key ? null : key;
+      }
+      if (type === "prices") {
+        statsFilters.priceRange =
+          statsFilters.priceRange === key ? null : key;
+      }
+      render();
+    });
+
+    container.appendChild(card);
   });
 }
