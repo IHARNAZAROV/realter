@@ -16,7 +16,6 @@ let isAppendMode = false;
 const loadMoreBtn = document.getElementById("loadMoreBtn");
 let loadMoreAppearedOnce = false;
 
-
 /* =========================================================
    DOM ELEMENTS
 ========================================================= */
@@ -54,14 +53,15 @@ const previewImages = {
   "kvartira-lida-ul-kosmonavtov": "images/objects/pic17.webp",
   "kvartira-lida-ul-zarechnaya-7": "images/objects/pic18.webp",
   "dom-lidskiy-rayon-ostrovlya-novoselov": "images/objects/pic19.webp",
-  "kvartira-laykovshchina-lidskiy-rayon":"images/objects/pic20.webp",
+  "kvartira-laykovshchina-lidskiy-rayon": "images/objects/pic20.webp",
   "kvartira-lida-ul-prolygina-4": "images/objects/pic21.webp",
-  "dom-shchuchinskiy-rayon-skribovtsy":"images/objects/pic22.webp",
-  "dom-shchuchinskiy-rayon-boyary-zheludokskie":"images/objects/pic23.webp",
+  "dom-shchuchinskiy-rayon-skribovtsy": "images/objects/pic22.webp",
+  "dom-shchuchinskiy-rayon-boyary-zheludokskie": "images/objects/pic23.webp",
   "kvartira-volkovysk-centr": "images/objects/pic24.webp",
-  "kvartira-lida-knyazya-gedimina-7":"images/objects/pic25.webp",
-  "sto-lida-ignatova-42-veras-avto":"images/objects/pic26.webp",
-  "kvartira-volkovysk-socialisticheskaya": "images/objects/pic27.webp"
+  "kvartira-lida-knyazya-gedimina-7": "images/objects/pic25.webp",
+  "sto-lida-ignatova-42-veras-avto": "images/objects/pic26.webp",
+  "kvartira-volkovysk-socialisticheskaya": "images/objects/pic27.webp",
+  "dom-lida-ul-shchedrina": "images/objects/pic28.webp",
 };
 
 /* =========================================================
@@ -82,7 +82,6 @@ function debounce(fn, delay = 400) {
     t = setTimeout(() => fn(...args), delay);
   };
 }
-
 
 /* =========================================================
    FAVORITES
@@ -112,7 +111,6 @@ function toggleFavorite(slug) {
 
   localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
 }
-
 
 function isFavoritesMode() {
   return localStorage.getItem(FAVORITES_VIEW_KEY) === "on";
@@ -156,12 +154,11 @@ document.addEventListener("DOMContentLoaded", () => {
   bindEvents();
   initViewSwitcher();
 
-if (isFavoritesMode()) {
-  document
-    .getElementById("favoritesFilterCounter")
-    ?.classList.add("is-active");
-}
-
+  if (isFavoritesMode()) {
+    document
+      .getElementById("favoritesFilterCounter")
+      ?.classList.add("is-active");
+  }
 });
 /* =========================================================
    EVENTS
@@ -230,7 +227,7 @@ function handlePriceInput() {
 ========================================================= */
 function applyFiltersAndSort() {
   let result = [...allObjects];
-result = result.filter(obj => !shouldHideSold(obj, 7));
+  result = result.filter((obj) => !shouldHideSold(obj, 7));
   /* =========================================
      ONLY FAVORITES MODE
   ========================================= */
@@ -253,7 +250,7 @@ result = result.filter(obj => !shouldHideSold(obj, 7));
     result = result.filter((o) =>
       roomsSelect.value === "4"
         ? o.rooms >= 4
-        : o.rooms === Number(roomsSelect.value)
+        : o.rooms === Number(roomsSelect.value),
     );
   }
 
@@ -294,9 +291,7 @@ result = result.filter(obj => !shouldHideSold(obj, 7));
       break;
 
     case "new":
-      result.sort(
-        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-      );
+      result.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
       break;
 
     case "pricePerMeter":
@@ -312,9 +307,7 @@ result = result.filter(obj => !shouldHideSold(obj, 7));
       break;
 
     default:
-      result.sort(
-        (a, b) => (b.recommended || 0) - (a.recommended || 0)
-      );
+      result.sort((a, b) => (b.recommended || 0) - (a.recommended || 0));
   }
 
   /* =========================================
@@ -325,9 +318,9 @@ result = result.filter(obj => !shouldHideSold(obj, 7));
   /* =========================================
      LOAD MORE RESET (ВАЖНО)
   ========================================= */
-isAppendMode = false;
-visibleCount = OBJECTS_STEP;
-lastRenderedList = result;
+  isAppendMode = false;
+  visibleCount = OBJECTS_STEP;
+  lastRenderedList = result;
 
   /* =========================================
      RENDER
@@ -376,8 +369,7 @@ function renderObjects(list) {
     const li = document.createElement("li");
     li.className = "object-item";
 
-    const imgSrc =
-      previewImages[obj.slug] || "images/objects/placeholder.webp";
+    const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
 
     const area = getObjectArea(obj);
     const pricePerMeter = area ? Math.round(obj.priceBYN / area) : null;
@@ -454,38 +446,31 @@ function renderObjects(list) {
        APPEAR ANIMATION (ONLY FOR NEW ITEMS)
     ========================================= */
     requestAnimationFrame(() => {
- requestAnimationFrame(() => {
-    li.classList.add("is-visible");
-  });
+      requestAnimationFrame(() => {
+        li.classList.add("is-visible");
+      });
     });
   });
 
   /* =========================================
      COUNTERS & LOAD MORE STATE
   ========================================= */
-  updateShownCounter(
-    Math.min(visibleCount, list.length),
-    list.length
-  );
+  updateShownCounter(Math.min(visibleCount, list.length), list.length);
 
   toggleLoadMore(visibleCount < list.length);
 }
 
-
-
-
 function toggleLoadMore(canLoadMore, isLoading = false) {
-
   if (!loadMoreAppearedOnce && canLoadMore) {
-  loadMoreBtn.classList.add("is-appear");
-  loadMoreAppearedOnce = true;
+    loadMoreBtn.classList.add("is-appear");
+    loadMoreAppearedOnce = true;
 
-  loadMoreBtn.addEventListener(
-    "animationend",
-    () => loadMoreBtn.classList.remove("is-appear"),
-    { once: true }
-  );
-}
+    loadMoreBtn.addEventListener(
+      "animationend",
+      () => loadMoreBtn.classList.remove("is-appear"),
+      { once: true },
+    );
+  }
   if (!loadMoreBtn) return;
 
   const total = lastRenderedList.length;
@@ -517,8 +502,6 @@ function toggleLoadMore(canLoadMore, isLoading = false) {
   loadMoreBtn.classList.toggle("is-loading", isLoading);
 }
 
-
-
 function renderBadges(obj) {
   let html = "";
 
@@ -538,7 +521,6 @@ function renderBadges(obj) {
 
   return `<div class="object-badges">${html}</div>`;
 }
-
 
 function isNewObject(obj, days = 7) {
   if (!obj.publishedAt) return false;
@@ -563,22 +545,20 @@ objectsList.addEventListener("click", (e) => {
   toggleFavorite(slug);
 
   btn.classList.toggle("is-active");
-btn.setAttribute(
-  "aria-label",
-  btn.classList.contains("is-active")
-    ? "Убрать из избранного"
-    : "Добавить в избранное"
-);
+  btn.setAttribute(
+    "aria-label",
+    btn.classList.contains("is-active")
+      ? "Убрать из избранного"
+      : "Добавить в избранное",
+  );
   const icon = btn.querySelector("i");
   icon.classList.toggle("fa-solid");
   icon.classList.toggle("fa-regular");
   btn.classList.remove("is-pulse");
-void btn.offsetWidth; 
-btn.classList.add("is-pulse");
-updateFavoritesFilterCounter(true);
+  void btn.offsetWidth;
+  btn.classList.add("is-pulse");
+  updateFavoritesFilterCounter(true);
 });
-
-
 
 const favoritesCounter = document.getElementById("favoritesFilterCounter");
 
@@ -797,7 +777,6 @@ if (loadMoreBtn) {
     }
   });
 })();
-
 
 function isSold(obj) {
   return obj.status?.type === "sold";
