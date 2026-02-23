@@ -44,7 +44,7 @@
 
 /* === КАРТОЧКА === */
 .stats-card {
-  width: 110px;
+width: 90px;
   min-height: 96px;
   background: radial-gradient(circle at top, #232930, #171b20);
   border-radius: 14px;
@@ -257,3 +257,4 @@
 .stats-footer b {
   color: #4fc3f7;
 }
+
