@@ -258,3 +258,27 @@ width: 90px;
   color: #4fc3f7;
 }
 
+.liquidity-explain,
+.liquidity-advice {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 16px;
+}
+
+.liquidity-explain li {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.liquidity-explain .value {
+  min-width: 36px;
+  font-weight: 600;
+}
+
+.plus .value { color: #22c55e; }
+.minus .value { color: #ef4444; }
+
+.liquidity-advice li {
+  margin-bottom: 6px;
+}

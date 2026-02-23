@@ -1331,35 +1331,267 @@ function calculateMetrics(obj) {
 
   if (!area || !price) return null;
 
+  /* ===== MARKET BASE ===== */
   const typeKey = obj.type === "Дом" ? "house" : "flat";
   const cityKey = MARKET[obj.city] ? obj.city : "default";
   const marketPrice = MARKET[cityKey][typeKey];
 
-  /* 1. Цена за м² */
+  /* ===== BASIC CALCULATIONS ===== */
   const pricePerM2 = Math.round(price / area);
 
-  /* 2. Отклонение от рынка */
   const deviation = Math.round(
     ((pricePerM2 - marketPrice) / marketPrice) * 100
   );
 
-  /* 3. Полезная площадь */
   const usefulRatio =
     living && area ? Number((living / area).toFixed(2)) : null;
 
-  /* 4. Ликвидность */
+  /* ===== LIQUIDITY CORE ===== */
   let liquidity = 0;
 
-  if (obj.rooms && obj.rooms <= 2) liquidity += 20;
-  if (obj.floor >= 3 && obj.floor <= 7) liquidity += 15;
-  if (obj.yearBuilt && new Date().getFullYear() - obj.yearBuilt <= 20)
+  const explain = {
+    total: 0,
+    groups: {
+      price: [],
+      object: [],
+      location: []
+    },
+    advice: []
+  };
+
+  /* =====================================================
+     PRICE (для всех)
+  ===================================================== */
+
+  if (deviation <= -10) {
+    liquidity += 30;
+    explain.groups.price.push({ value: +30, label: "Цена значительно ниже рынка" });
+  } 
+  else if (deviation <= 0) {
+    liquidity += 25;
+    explain.groups.price.push({ value: +25, label: "Цена в рынке или ниже" });
+  } 
+  else if (deviation <= 5) {
+    liquidity += 10;
+    explain.groups.price.push({ value: +10, label: "Цена немного выше рынка" });
+    explain.advice.push({
+      label: "Снижение цены на 5% повысит ликвидность",
+      delta: +12
+    });
+  } 
+  else {
+    liquidity -= 15;
+    explain.groups.price.push({ value: -15, label: "Цена заметно выше рынка" });
+    explain.advice.push({
+      label: "Снижение цены на 5–7% резко повысит спрос",
+      delta: +20
+    });
+  }
+
+  /* =====================================================
+     OBJECT — ОБЩИЕ ФАКТОРЫ
+  ===================================================== */
+
+  // --- Возраст постройки ---
+  if (obj.yearBuilt) {
+    const age = new Date().getFullYear() - obj.yearBuilt;
+    if (age <= 20) {
+      liquidity += 15;
+      explain.groups.object.push({ value: +15, label: "Современная постройка" });
+    } else {
+      liquidity -= 10;
+      explain.groups.object.push({ value: -10, label: "Старая постройка" });
+    }
+  }
+
+  // --- Ремонт ---
+  if (obj.repair === "Хороший") {
+    liquidity += 10;
+    explain.groups.object.push({ value: +10, label: "Можно заехать и жить" });
+  }
+
+  if (obj.repair === "Требует ремонта") {
+    liquidity -= 15;
+    explain.groups.object.push({
+      value: -15,
+      label: "Требуется ремонт — снижает спрос"
+    });
+    explain.advice.push({
+      label: "Косметический ремонт или дисконт ускорят продажу",
+      delta: +15
+    });
+  }
+
+  /* =====================================================
+     КВАРТИРЫ
+  ===================================================== */
+
+  if (obj.type === "Квартира") {
+
+    // Комнаты
+    if (obj.rooms && obj.rooms <= 2) {
+      liquidity += 20;
+      explain.groups.object.push({
+        value: +20,
+        label: "Самый востребованный формат (1–2 комнаты)"
+      });
+    } else if (obj.rooms) {
+      liquidity -= 5;
+      explain.groups.object.push({
+        value: -5,
+        label: "Многокомнатная квартира — спрос уже"
+      });
+    }
+
+    // Этаж
+    if (obj.floor) {
+      if (obj.floor >= 3 && obj.floor <= 7) {
+        liquidity += 15;
+        explain.groups.object.push({ value: +15, label: "Удобный этаж (3–7)" });
+      } else {
+        liquidity -= 5;
+        explain.groups.object.push({ value: -5, label: "Не самый востребованный этаж" });
+      }
+    }
+
+    // Балкон
+    if (obj.balcony) {
+      liquidity += 5;
+      explain.groups.object.push({ value: +5, label: "Есть балкон / лоджия" });
+    } else {
+      liquidity -= 5;
+      explain.groups.object.push({ value: -5, label: "Отсутствие балкона" });
+    }
+
+    // Планировка
+    if (usefulRatio !== null) {
+      if (usefulRatio >= 0.55) {
+        liquidity += 10;
+        explain.groups.object.push({
+          value: +10,
+          label: "Удачная планировка"
+        });
+      } else if (usefulRatio < 0.45) {
+        liquidity -= 10;
+        explain.groups.object.push({
+          value: -10,
+          label: "Неудачная планировка"
+        });
+      }
+    }
+  }
+
+  /* =====================================================
+     ДОМА
+  ===================================================== */
+
+  if (obj.type === "Дом") {
+
+    // Площадь участка
+    if (obj.areaPlot) {
+      if (obj.areaPlot >= 10) {
+        liquidity += 15;
+        explain.groups.object.push({
+          value: +15,
+          label: "Большой участок"
+        });
+      } else if (obj.areaPlot < 6) {
+        liquidity -= 10;
+        explain.groups.object.push({
+          value: -10,
+          label: "Маленький участок"
+        });
+      }
+    }
+
+    // Готовность (%)
+    if (obj.readyPercent !== undefined) {
+      if (obj.readyPercent >= 90) {
+        liquidity += 15;
+        explain.groups.object.push({
+          value: +15,
+          label: "Дом практически готов к проживанию"
+        });
+      } else if (obj.readyPercent < 70) {
+        liquidity -= 15;
+        explain.groups.object.push({
+          value: -15,
+          label: "Низкая степень готовности"
+        });
+        explain.advice.push({
+          label: "Доведение готовности до 90% повысит ликвидность",
+          delta: +15
+        });
+      }
+    }
+
+    // Коммуникации
+    const comms = ["water", "electricity", "heating", "sewerage"];
+    const connected = comms.filter(k => obj[k]).length;
+
+    if (connected >= 3) {
+      liquidity += 15;
+      explain.groups.object.push({
+        value: +15,
+        label: "Подключены основные коммуникации"
+      });
+    } else if (connected <= 1) {
+      liquidity -= 20;
+      explain.groups.object.push({
+        value: -20,
+        label: "Отсутствуют ключевые коммуникации"
+      });
+      explain.advice.push({
+        label: "Подведение коммуникаций резко повысит спрос",
+        delta: +20
+      });
+    }
+  }
+
+  /* =====================================================
+     LOCATION
+  ===================================================== */
+
+  if (obj.city === "Лида") {
     liquidity += 15;
-  if (deviation <= 0) liquidity += 25;
-  if (obj.city === "Лида") liquidity += 15;
+    explain.groups.location.push({
+      value: +15,
+      label: "Активный локальный рынок (Лида)"
+    });
+  } else {
+    liquidity -= 5;
+    explain.groups.location.push({
+      value: -5,
+      label: "Менее активный рынок"
+    });
+  }
 
-  liquidity = Math.min(liquidity, 100);
+  const STRONG_DISTRICTS = ["Центр", "Южный", "Северный"];
+  const WEAK_DISTRICTS = ["Окраина", "Промзона"];
 
-  /* 5. Перепродажа */
+  if (obj.district && STRONG_DISTRICTS.includes(obj.district)) {
+    liquidity += 10;
+    explain.groups.location.push({
+      value: +10,
+      label: `Сильный район (${obj.district})`
+    });
+  }
+
+  if (obj.district && WEAK_DISTRICTS.includes(obj.district)) {
+    liquidity -= 10;
+    explain.groups.location.push({
+      value: -10,
+      label: `Слабый район (${obj.district})`
+    });
+  }
+
+  /* =====================================================
+     FINAL
+  ===================================================== */
+
+  liquidity = Math.max(0, Math.min(liquidity, 100));
+  explain.total = liquidity;
+
   let resale = "Ограниченный";
   if (liquidity >= 70 && deviation <= 0) resale = "Высокий";
   else if (liquidity >= 55) resale = "Средний";
@@ -1369,23 +1601,57 @@ function calculateMetrics(obj) {
     deviation,
     usefulRatio,
     liquidity,
-    resale
+    resale,
+    liquidityExplain: explain
   };
 }
-
 const metricsInfoModal = document.getElementById("metricsModal");
 const metricsInfoTitle = metricsInfoModal.querySelector(".metrics-modal__title");
 const metricsInfoContent = metricsInfoModal.querySelector(".metrics-modal__content");
 
 document.addEventListener("click", (e) => {
   const metricEl = e.target.closest(".metric");
-  if (!metricEl || !metricEl.dataset.metric) return;
+  if (!metricEl || metricEl.dataset.metric !== "liquidity") return;
 
-  const info = METRICS_INFO[metricEl.dataset.metric];
-  if (!info) return;
+  const objectEl = metricEl.closest(".object");
+  const index = Number(objectEl.dataset.index);
+  const obj = objects[index];
+  const metrics = calculateMetrics(obj);
+  const ex = metrics.liquidityExplain;
 
-  metricsInfoTitle.textContent = info.title;
-  metricsInfoContent.innerHTML = info.html;
+  metricsInfoTitle.textContent = "Индекс ликвидности — разбор";
+
+  const renderGroup = (title, items) => `
+    <h4>${title}</h4>
+    <ul class="liquidity-explain">
+      ${items.map(i => `
+        <li class="${i.value > 0 ? "plus" : "minus"}">
+          <span class="value">${i.value > 0 ? "+" : ""}${i.value}</span>
+          <span>${i.label}</span>
+        </li>
+      `).join("")}
+    </ul>
+  `;
+
+  metricsInfoContent.innerHTML = `
+    <p><strong>Итог:</strong> ${ex.total} / 100</p>
+
+    ${renderGroup("Цена", ex.groups.price)}
+    ${renderGroup("Объект", ex.groups.object)}
+    ${renderGroup("Локация", ex.groups.location)}
+
+    ${
+      ex.advice.length
+        ? `<h4>Как повысить ликвидность</h4>
+           <ul class="liquidity-advice">
+             ${ex.advice.map(a => `
+               <li>💡 ${a.label}
+               <strong>(≈ +${a.delta} баллов)</strong></li>
+             `).join("")}
+           </ul>`
+        : ""
+    }
+  `;
 
   metricsInfoModal.hidden = false;
 });
