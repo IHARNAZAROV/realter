@@ -1611,48 +1611,68 @@ const metricsInfoContent = metricsInfoModal.querySelector(".metrics-modal__conte
 
 document.addEventListener("click", (e) => {
   const metricEl = e.target.closest(".metric");
-  if (!metricEl || metricEl.dataset.metric !== "liquidity") return;
+  if (!metricEl) return;
+
+  const metricKey = metricEl.dataset.metric;
+  if (!metricKey) return;
 
   const objectEl = metricEl.closest(".object");
-  const index = Number(objectEl.dataset.index);
+  const index = Number(objectEl?.dataset.index);
   const obj = objects[index];
   const metrics = calculateMetrics(obj);
-  const ex = metrics.liquidityExplain;
 
-  metricsInfoTitle.textContent = "Индекс ликвидности — разбор";
+  /* =========================================
+     1️⃣ ЛИКВИДНОСТЬ — кастомный разбор
+  ========================================= */
+  if (metricKey === "liquidity" && metrics?.liquidityExplain) {
+    const ex = metrics.liquidityExplain;
 
-  const renderGroup = (title, items) => `
-    <h4>${title}</h4>
-    <ul class="liquidity-explain">
-      ${items.map(i => `
-        <li class="${i.value > 0 ? "plus" : "minus"}">
-          <span class="value">${i.value > 0 ? "+" : ""}${i.value}</span>
-          <span>${i.label}</span>
-        </li>
-      `).join("")}
-    </ul>
-  `;
+    metricsInfoTitle.textContent = "Индекс ликвидности — разбор";
 
-  metricsInfoContent.innerHTML = `
-    <p><strong>Итог:</strong> ${ex.total} / 100</p>
+    const renderGroup = (title, items) => `
+      <h4>${title}</h4>
+      <ul class="liquidity-explain">
+        ${items.map(i => `
+          <li class="${i.value > 0 ? "plus" : "minus"}">
+            <span class="value">${i.value > 0 ? "+" : ""}${i.value}</span>
+            <span>${i.label}</span>
+          </li>
+        `).join("")}
+      </ul>
+    `;
 
-    ${renderGroup("Цена", ex.groups.price)}
-    ${renderGroup("Объект", ex.groups.object)}
-    ${renderGroup("Локация", ex.groups.location)}
+    metricsInfoContent.innerHTML = `
+      <p><strong>Итог:</strong> ${ex.total} / 100</p>
 
-    ${
-      ex.advice.length
-        ? `<h4>Как повысить ликвидность</h4>
-           <ul class="liquidity-advice">
-             ${ex.advice.map(a => `
-               <li>💡 ${a.label}
-               <strong>(≈ +${a.delta} баллов)</strong></li>
-             `).join("")}
-           </ul>`
-        : ""
-    }
-  `;
+      ${renderGroup("Цена", ex.groups.price)}
+      ${renderGroup("Объект", ex.groups.object)}
+      ${renderGroup("Локация", ex.groups.location)}
 
+      ${
+        ex.advice.length
+          ? `<h4>Как повысить ликвидность</h4>
+             <ul class="liquidity-advice">
+               ${ex.advice.map(a => `
+                 <li>💡 ${a.label}
+                 <strong>(≈ +${a.delta} баллов)</strong></li>
+               `).join("")}
+             </ul>`
+          : ""
+      }
+    `;
+
+    metricsInfoModal.hidden = false;
+    return;
+  }
+
+  /* =========================================
+     2️⃣ ВСЕ ОСТАЛЬНЫЕ МЕТРИКИ — METRICS_INFO
+  ========================================= */
+  const info = METRICS_INFO[metricKey];
+  if (!info) return;
+
+  metricsInfoTitle.textContent = info.title;
+  metricsInfoContent.innerHTML = info.html;
   metricsInfoModal.hidden = false;
 });
 
