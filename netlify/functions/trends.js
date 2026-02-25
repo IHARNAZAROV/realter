@@ -10,8 +10,8 @@ export async function handler() {
     const time = "today 1-m";
 
     const exploreReq = {
-      comparisonItem: keywords.map(k => ({
-        keyword: k,
+      comparisonItem: keywords.map(keyword => ({
+        keyword,
         geo,
         time
       })),
@@ -25,29 +25,62 @@ export async function handler() {
       "&tz=-180" +
       "&req=" + encodeURIComponent(JSON.stringify(exploreReq));
 
-    const r = await fetch(exploreUrl);
-    const text = await r.text();
-    const json = JSON.parse(text.replace(/^\)\]\}',?/, ""));
+    const exploreRes = await fetch(exploreUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json"
+      }
+    });
 
-    const widget = json.widgets.find(w => w.id === "TIMESERIES");
-    const widgetReq = widget.request;
-    const token = widget.token;
+    if (!exploreRes.ok) {
+      throw new Error("Explore request failed");
+    }
+
+    const exploreText = await exploreRes.text();
+    const exploreJson = JSON.parse(
+      exploreText.replace(/^\)\]\}',?/, "")
+    );
+
+    const widget = exploreJson.widgets?.find(
+      w => w.id === "TIMESERIES"
+    );
+
+    if (!widget) {
+      throw new Error("TIMESERIES widget not found");
+    }
 
     const dataUrl =
       "https://trends.google.com/trends/api/widgetdata/multiline" +
       "?hl=" + hl +
       "&tz=-180" +
-      "&req=" + encodeURIComponent(JSON.stringify(widgetReq)) +
-      "&token=" + token;
+      "&req=" + encodeURIComponent(JSON.stringify(widget.request)) +
+      "&token=" + widget.token;
 
-    const r2 = await fetch(dataUrl);
-    const text2 = await r2.text();
-    const json2 = JSON.parse(text2.replace(/^\)\]\}',?/, ""));
+    const dataRes = await fetch(dataUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "application/json"
+      }
+    });
 
-    const timeline = json2.default.timelineData;
+    if (!dataRes.ok) {
+      throw new Error("Timeline request failed");
+    }
+
+    const dataText = await dataRes.text();
+    const dataJson = JSON.parse(
+      dataText.replace(/^\)\]\}',?/, "")
+    );
+
+    const timeline = dataJson.default?.timelineData;
+
+    if (!timeline || !timeline.length) {
+      throw new Error("No timeline data");
+    }
 
     const avg =
-      timeline.reduce((s, p) => s + p.value[0], 0) / timeline.length;
+      timeline.reduce((sum, p) => sum + (p.value?.[0] || 0), 0) /
+      timeline.length;
 
     return {
       statusCode: 200,
@@ -58,10 +91,15 @@ export async function handler() {
       })
     };
 
-  } catch (e) {
+  } catch (err) {
+    console.error("Trends error:", err.message);
+
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Trends fetch failed" })
+      body: JSON.stringify({
+        error: "Trends fetch failed",
+        details: err.message
+      })
     };
   }
 }
