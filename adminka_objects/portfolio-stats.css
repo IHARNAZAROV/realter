@@ -296,3 +296,38 @@ width: 90px;
   color: #f44336;
   font-weight: 600;
 }
+
+/* ===============================
+   INTERACTIVE METRICS (HOVER)
+   =============================== */
+
+.object-metrics .metric {
+  position: relative;
+  cursor: help;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Hover effect */
+.object-metrics .metric:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Subtle border glow */
+.object-metrics .metric:hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Optional: slightly brighten label */
+.object-metrics .metric:hover .metric-label {
+  opacity: 1;
+}
