@@ -14,101 +14,188 @@ let statsFilters = {
 let selectedDate = null;
 let objectsListEl;
 let currentSort = "new";
-/* ===== MARKET SETTINGS ===== */
-const MARKET = {
-  Lida: {
-    flat: 850,   // $/м²
-    house: 420
-  },
-  default: {
-    flat: 800,
-    house: 400
-  }
-};
+
+// ===============================
+// NUMERIC HELPERS
+// ===============================
+function num(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
 
 const METRICS_INFO = {
   price: {
     title: "Цена за м²",
     html: `
-      <p><strong>Что это:</strong><br>
-      Стоимость одного квадратного метра объекта.</p>
+   <p><strong>Что это:</strong><br>
+Стоимость одного квадратного метра конкретного объекта недвижимости.</p>
 
-      <p><strong>Как считается:</strong></p>
-      <ul>
-        <li>Цена объекта / Общая площадь</li>
-      </ul>
+<p><strong>Базовая формула:</strong></p>
+<ul>
+  <li>Цена объекта / Общая площадь</li>
+</ul>
 
-      <p><strong>Как интерпретировать:</strong></p>
-      <ul>
-        <li>Ниже рынка — выгодная цена</li>
-        <li>В рынке — адекватная стоимость</li>
-        <li>Выше рынка — возможен торг</li>
-      </ul>
+<p><strong>Как определяется “рынок”:</strong></p>
+<ul>
+  <li>Берутся <b>аналогичные объекты</b> из текущего портфеля</li>
+  <li>Учитываются:
+    <ul>
+      <li>тип объекта (квартира / дом)</li>
+      <li>город</li>
+      <li>количество комнат (для квартир)</li>
+    </ul>
+  </li>
+  <li>Проданные объекты не участвуют в расчёте</li>
+</ul>
+
+<p><strong>Очистка данных:</strong></p>
+<ul>
+  <li>Из расчёта убираются аномально дешёвые и дорогие варианты</li>
+  <li>Используется усреднённая рыночная цена, а не фиксированная цифра</li>
+</ul>
+
+<p><strong>Корректировки:</strong></p>
+<ul>
+  <li>Цена рынка автоматически корректируется по площади</li>
+  <li>Небольшие квартиры допускают более высокую цену за м²</li>
+  <li>Большие объекты — более низкую</li>
+</ul>
+
+<p><strong>Как интерпретировать отклонение:</strong></p>
+<ul>
+  <li><b>−7% и ниже</b> — цена заметно ниже рынка, выгодное предложение</li>
+  <li><b>−7% … +7%</b> — объект в рыночном диапазоне</li>
+  <li><b>+7% и выше</b> — цена выше рынка, возможен торг</li>
+</ul>
+
+<p class="metric-note">
+Значение рассчитывается автоматически и обновляется при изменении портфеля.
+</p>
     `
   },
 
   liquidity: {
     title: "Индекс ликвидности",
     html: `
-      <p><strong>Что это:</strong><br>
-      Оценка того, насколько легко объект продаётся на рынке.</p>
+     <p><strong>Что это:</strong><br>
+Индекс ликвидности показывает, насколько быстро и без существенного торга объект может быть продан на текущем рынке.</p>
 
-      <p><strong>На что влияет:</strong></p>
-      <ul>
-        <li>Этаж</li>
-        <li>Количество комнат</li>
-        <li>Цена относительно рынка</li>
-        <li>Район</li>
-      </ul>
+<p><strong>Как формируется индекс:</strong></p>
+<ul>
+  <li>Ликвидность рассчитывается по нескольким независимым факторам</li>
+  <li>Каждый фактор оценивается отдельно и вносит вклад в итоговый балл</li>
+</ul>
 
-      <p><strong>Интерпретация:</strong></p>
-      <ul>
-        <li>0–40 — низкая</li>
-        <li>40–70 — средняя</li>
-        <li>70+ — высокая</li>
-      </ul>
+<p><strong>Основные факторы:</strong></p>
+<ul>
+  <li><b>Цена относительно рынка</b> — главный фактор спроса</li>
+  <li><b>Характеристики объекта</b> — планировка, этаж, состояние</li>
+  <li><b>Локация</b> — город и район</li>
+  <li><b>Ситуация на рынке</b> — количество конкурирующих предложений</li>
+</ul>
+
+<p><strong>Принцип расчёта:</strong></p>
+<ul>
+  <li>Каждый блок получает собственную оценку</li>
+  <li>Цена влияет сильнее остальных факторов</li>
+  <li>Итоговый индекс — это взвешенная сумма всех оценок</li>
+</ul>
+
+<p><strong>Диапазоны значений:</strong></p>
+<ul>
+  <li><b>0–40</b> — низкая ликвидность, продажа может занять длительное время</li>
+  <li><b>40–70</b> — средняя ликвидность, стандартный срок экспозиции</li>
+  <li><b>70+</b> — высокая ликвидность, объект продаётся быстро</li>
+</ul>
+
+<p><strong>Что важно понимать:</strong></p>
+<ul>
+  <li>Высокая ликвидность не всегда означает самую низкую цену</li>
+  <li>Низкая ликвидность часто указывает на завышенную цену или слабую планировку</li>
+  <li>Индекс помогает оценить <b>реалистичный срок продажи</b></li>
+</ul>
+
+<p class="metric-note">
+Индекс пересчитывается автоматически при изменении цены и состава портфеля.
+</p>
     `
   },
 
   layout: {
     title: "Коэффициент планировки",
     html: `
-      <p><strong>Что это:</strong><br>
-      Соотношение жилой площади к общей.</p>
+<p><strong>Что это:</strong><br>
+Показатель планировки отражает, насколько рационально используется общая площадь объекта.</p>
 
-      <p><strong>Формула:</strong></p>
-      <ul>
-        <li>Жилая / Общая площадь</li>
-      </ul>
+<p><strong>Базовый принцип:</strong></p>
+<ul>
+  <li>Оценивается соотношение полезной площади к общей</li>
+  <li>Учитывается не только жилая площадь, но и кухня</li>
+</ul>
 
-      <p><strong>Интерпретация:</strong></p>
-      <ul>
-        <li>&lt; 0.45 — слабая</li>
-        <li>0.45–0.55 — хорошая</li>
-        <li>&gt; 0.55 — отличная</li>
-      </ul>
+<p><strong>Как считается:</strong></p>
+<ul>
+  <li>Жилая площадь берётся полностью</li>
+  <li>Площадь кухни учитывается частично, как функциональное пространство</li>
+  <li>Полученное значение делится на общую площадь</li>
+</ul>
+
+<p><strong>Дополнительные корректировки:</strong></p>
+<ul>
+  <li>Количество комнат влияет на ожидания по пропорциям</li>
+  <li>Для многокомнатных квартир требования к планировке выше</li>
+</ul>
+
+<p><strong>Интерпретация показателя:</strong></p>
+<ul>
+  <li><b>&lt; 0.48</b> — слабая планировка, много неэффективных зон</li>
+  <li><b>0.48–0.58</b> — хорошая, сбалансированная планировка</li>
+  <li><b>&gt; 0.58</b> — отличная, максимально полезная площадь</li>
+</ul>
+
+<p><strong>Почему это важно:</strong></p>
+<ul>
+  <li>Планировка напрямую влияет на удобство проживания</li>
+  <li>Объекты с хорошей планировкой продаются быстрее</li>
+</ul>
+
+<p class="metric-note">
+Показатель используется при расчёте ликвидности и потенциала перепродажи.
+</p>
     `
   },
 
   resale: {
     title: "Потенциал перепродажи",
     html: `
-      <p><strong>Что это:</strong><br>
-      Прогноз возможности выгодной перепродажи.</p>
+    <p><strong>Что это:</strong><br>
+Показатель перепродажи оценивает потенциал выгодного выхода из объекта
+с учётом цены, качества объекта и рыночного спроса.</p>
 
-      <p><strong>Учитывается:</strong></p>
-      <ul>
-        <li>Ликвидность</li>
-        <li>Цена</li>
-        <li>Планировка</li>
-      </ul>
+<p><strong>Как формируется:</strong></p>
+<ul>
+  <li>Анализируется запас цены относительно рынка</li>
+  <li>Учитывается качество планировки</li>
+  <li>Оценивается риск выхода через ликвидность</li>
+</ul>
 
-      <p><strong>Значения:</strong></p>
-      <ul>
-        <li>Высокий — можно продать без дисконта</li>
-        <li>Средний — возможен небольшой торг</li>
-        <li>Ограниченный — сложная перепродажа</li>
-      </ul>
+<p><strong>Принцип:</strong></p>
+<ul>
+  <li>Дешёвый объект без спроса — рискован</li>
+  <li>Ликвидный, но дорогой — без потенциала роста</li>
+  <li>Лучшие объекты сочетают оба фактора</li>
+</ul>
+
+<p><strong>Интерпретация:</strong></p>
+<ul>
+  <li><b>Высокий</b> — возможна выгодная перепродажа</li>
+  <li><b>Средний</b> — ограниченный потенциал роста</li>
+  <li><b>Ограниченный</b> — объект больше для жизни, чем для инвестиций</li>
+</ul>
+
+<p class="metric-note">
+Показатель не гарантирует прибыль, но помогает оценить инвестиционный риск.
+</p>
     `
   }
 };
@@ -401,7 +488,9 @@ function renderObject(obj, index) {
 
         <div class="metric" data-metric="layout" data-tooltip="Соотношение жилой площади">
           <span class="metric-label">Планировка</span>
-          <span class="metric-value">${metrics.usefulRatio ?? "—"}</span>
+         <span class="metric-value">
+  ${metrics.layoutIndex !== null ? metrics.layoutIndex : "—"}
+</span>
         </div>
 
         <div class="metric" data-metric="resale" data-tooltip="Потенциал перепродажи">
@@ -1325,284 +1414,47 @@ document.addEventListener("click", (e) => {
 });
 
 function calculateMetrics(obj) {
-  const area = Number(obj.areaTotal);
-  const living = Number(obj.areaLiving);
-  const price = Number(obj.priceUSD);
+  // 1️⃣ Цена относительно рынка
+  const market = calculateMarketDeviation(obj, objects);
+  if (!market) return null;
 
-  if (!area || !price) return null;
+  // 2️⃣ Планировка
+  const layoutIndex = calculateLayoutIndex(obj);
 
-  /* ===== MARKET BASE ===== */
-  const typeKey = obj.type === "Дом" ? "house" : "flat";
-  const cityKey = MARKET[obj.city] ? obj.city : "default";
-  const marketPrice = MARKET[cityKey][typeKey];
+  // 3️⃣ Ликвидность
+  let liquidityBase = calculateLiquidity({
+    price: scorePrice(market.deviation),
+    object: scoreObject(obj, layoutIndex),
+    location: scoreLocation(obj),
+    market: scoreMarket(objects, obj)
+  });
 
-  /* ===== BASIC CALCULATIONS ===== */
-  const pricePerM2 = Math.round(price / area);
-
-  const deviation = Math.round(
-    ((pricePerM2 - marketPrice) / marketPrice) * 100
-  );
-
-  const usefulRatio =
-    living && area ? Number((living / area).toFixed(2)) : null;
-
-  /* ===== LIQUIDITY CORE ===== */
-  let liquidity = 0;
-
-  const explain = {
-    total: 0,
-    groups: {
-      price: [],
-      object: [],
-      location: []
-    },
-    advice: []
-  };
-
-  /* =====================================================
-     PRICE (для всех)
-  ===================================================== */
-
-  if (deviation <= -10) {
-    liquidity += 30;
-    explain.groups.price.push({ value: +30, label: "Цена значительно ниже рынка" });
-  } 
-  else if (deviation <= 0) {
-    liquidity += 25;
-    explain.groups.price.push({ value: +25, label: "Цена в рынке или ниже" });
-  } 
-  else if (deviation <= 5) {
-    liquidity += 10;
-    explain.groups.price.push({ value: +10, label: "Цена немного выше рынка" });
-    explain.advice.push({
-      label: "Снижение цены на 5% повысит ликвидность",
-      delta: +12
-    });
-  } 
-  else {
-    liquidity -= 15;
-    explain.groups.price.push({ value: -15, label: "Цена заметно выше рынка" });
-    explain.advice.push({
-      label: "Снижение цены на 5–7% резко повысит спрос",
-      delta: +20
-    });
+  let layoutImpact = 0;
+  if (layoutIndex !== null) {
+    if (layoutIndex >= 0.60) layoutImpact = +10;
+    else if (layoutIndex >= 0.55) layoutImpact = +5;
+    else if (layoutIndex >= 0.48) layoutImpact = 0;
+    else if (layoutIndex >= 0.42) layoutImpact = -5;
+    else layoutImpact = -10;
   }
 
-  /* =====================================================
-     OBJECT — ОБЩИЕ ФАКТОРЫ
-  ===================================================== */
+  const liquidity = clamp(liquidityBase + layoutImpact);
 
-  // --- Возраст постройки ---
-  if (obj.yearBuilt) {
-    const age = new Date().getFullYear() - obj.yearBuilt;
-    if (age <= 20) {
-      liquidity += 15;
-      explain.groups.object.push({ value: +15, label: "Современная постройка" });
-    } else {
-      liquidity -= 10;
-      explain.groups.object.push({ value: -10, label: "Старая постройка" });
-    }
-  }
+  // 4️⃣ Перепродажа — НОВАЯ МОДЕЛЬ
+  const resale = calculateResale(obj, {
+    deviation: market.deviation,
+    layoutIndex,
+    liquidity
+  });
 
-  // --- Ремонт ---
-  if (obj.repair === "Хороший") {
-    liquidity += 10;
-    explain.groups.object.push({ value: +10, label: "Можно заехать и жить" });
-  }
-
-  if (obj.repair === "Требует ремонта") {
-    liquidity -= 15;
-    explain.groups.object.push({
-      value: -15,
-      label: "Требуется ремонт — снижает спрос"
-    });
-    explain.advice.push({
-      label: "Косметический ремонт или дисконт ускорят продажу",
-      delta: +15
-    });
-  }
-
-  /* =====================================================
-     КВАРТИРЫ
-  ===================================================== */
-
-  if (obj.type === "Квартира") {
-
-    // Комнаты
-    if (obj.rooms && obj.rooms <= 2) {
-      liquidity += 20;
-      explain.groups.object.push({
-        value: +20,
-        label: "Самый востребованный формат (1–2 комнаты)"
-      });
-    } else if (obj.rooms) {
-      liquidity -= 5;
-      explain.groups.object.push({
-        value: -5,
-        label: "Многокомнатная квартира — спрос уже"
-      });
-    }
-
-    // Этаж
-    if (obj.floor) {
-      if (obj.floor >= 3 && obj.floor <= 7) {
-        liquidity += 15;
-        explain.groups.object.push({ value: +15, label: "Удобный этаж (3–7)" });
-      } else {
-        liquidity -= 5;
-        explain.groups.object.push({ value: -5, label: "Не самый востребованный этаж" });
-      }
-    }
-
-    // Балкон
-    if (obj.balcony) {
-      liquidity += 5;
-      explain.groups.object.push({ value: +5, label: "Есть балкон / лоджия" });
-    } else {
-      liquidity -= 5;
-      explain.groups.object.push({ value: -5, label: "Отсутствие балкона" });
-    }
-
-    // Планировка
-    if (usefulRatio !== null) {
-      if (usefulRatio >= 0.55) {
-        liquidity += 10;
-        explain.groups.object.push({
-          value: +10,
-          label: "Удачная планировка"
-        });
-      } else if (usefulRatio < 0.45) {
-        liquidity -= 10;
-        explain.groups.object.push({
-          value: -10,
-          label: "Неудачная планировка"
-        });
-      }
-    }
-  }
-
-  /* =====================================================
-     ДОМА
-  ===================================================== */
-
-  if (obj.type === "Дом") {
-
-    // Площадь участка
-    if (obj.areaPlot) {
-      if (obj.areaPlot >= 10) {
-        liquidity += 15;
-        explain.groups.object.push({
-          value: +15,
-          label: "Большой участок"
-        });
-      } else if (obj.areaPlot < 6) {
-        liquidity -= 10;
-        explain.groups.object.push({
-          value: -10,
-          label: "Маленький участок"
-        });
-      }
-    }
-
-    // Готовность (%)
-    if (obj.readyPercent !== undefined) {
-      if (obj.readyPercent >= 90) {
-        liquidity += 15;
-        explain.groups.object.push({
-          value: +15,
-          label: "Дом практически готов к проживанию"
-        });
-      } else if (obj.readyPercent < 70) {
-        liquidity -= 15;
-        explain.groups.object.push({
-          value: -15,
-          label: "Низкая степень готовности"
-        });
-        explain.advice.push({
-          label: "Доведение готовности до 90% повысит ликвидность",
-          delta: +15
-        });
-      }
-    }
-
-    // Коммуникации
-    const comms = ["water", "electricity", "heating", "sewerage"];
-    const connected = comms.filter(k => obj[k]).length;
-
-    if (connected >= 3) {
-      liquidity += 15;
-      explain.groups.object.push({
-        value: +15,
-        label: "Подключены основные коммуникации"
-      });
-    } else if (connected <= 1) {
-      liquidity -= 20;
-      explain.groups.object.push({
-        value: -20,
-        label: "Отсутствуют ключевые коммуникации"
-      });
-      explain.advice.push({
-        label: "Подведение коммуникаций резко повысит спрос",
-        delta: +20
-      });
-    }
-  }
-
-  /* =====================================================
-     LOCATION
-  ===================================================== */
-
-  if (obj.city === "Лида") {
-    liquidity += 15;
-    explain.groups.location.push({
-      value: +15,
-      label: "Активный локальный рынок (Лида)"
-    });
-  } else {
-    liquidity -= 5;
-    explain.groups.location.push({
-      value: -5,
-      label: "Менее активный рынок"
-    });
-  }
-
-  const STRONG_DISTRICTS = ["Центр", "Южный", "Северный"];
-  const WEAK_DISTRICTS = ["Окраина", "Промзона"];
-
-  if (obj.district && STRONG_DISTRICTS.includes(obj.district)) {
-    liquidity += 10;
-    explain.groups.location.push({
-      value: +10,
-      label: `Сильный район (${obj.district})`
-    });
-  }
-
-  if (obj.district && WEAK_DISTRICTS.includes(obj.district)) {
-    liquidity -= 10;
-    explain.groups.location.push({
-      value: -10,
-      label: `Слабый район (${obj.district})`
-    });
-  }
-
-  /* =====================================================
-     FINAL
-  ===================================================== */
-
-  liquidity = Math.max(0, Math.min(liquidity, 100));
-  explain.total = liquidity;
-
-  let resale = "Ограниченный";
-  if (liquidity >= 70 && deviation <= 0) resale = "Высокий";
-  else if (liquidity >= 55) resale = "Средний";
-
+  // 5️⃣ Возврат метрик
   return {
-    pricePerM2,
-    deviation,
-    usefulRatio,
+    pricePerM2: market.pricePerM2,
+    deviation: market.deviation,
+    layoutIndex,
     liquidity,
-    resale,
-    liquidityExplain: explain
+    resale: resale.label,
+    resaleScore: resale.score
   };
 }
 const metricsInfoModal = document.getElementById("metricsModal");
@@ -1675,6 +1527,7 @@ document.addEventListener("click", (e) => {
   metricsInfoContent.innerHTML = info.html;
   metricsInfoModal.hidden = false;
 });
+
 
 metricsInfoModal.addEventListener("click", (e) => {
   if (
@@ -1777,6 +1630,13 @@ function renderStatsGroup(containerId, data) {
       label = formatPriceRangeLabel(key);
       isActive = statsFilters.priceRange === key;
     }
+
+const resale = calculateResale(obj, {
+  deviation: market.deviation,
+  layoutIndex,
+  liquidity
+});
+
 
     const el = document.createElement("div");
     el.className = "stats-item";
@@ -1891,4 +1751,238 @@ function renderStatsCards(containerId, data, type) {
 
     container.appendChild(card);
   });
+}
+
+function clamp(v) {
+  return Math.max(0, Math.min(100, Math.round(v)));
+}
+
+function average(arr) {
+  return arr.reduce((s, v) => s + v, 0) / arr.length;
+}
+
+function trimmedMean(arr, trim = 0.1) {
+  if (arr.length < 3) return average(arr);
+
+  const sorted = [...arr].sort((a, b) => a - b);
+  const cut = Math.floor(sorted.length * trim);
+
+  return average(sorted.slice(cut, sorted.length - cut));
+}
+
+function getAreaCoef(area) {
+  if (!area) return 1;
+
+  if (area < 35) return 1.08;
+  if (area < 55) return 1.00;
+  if (area < 80) return 0.95;
+  return 0.90;
+}
+
+function calculateMarketDeviation(obj, objects) {
+  const priceUSD = num(obj.priceUSD);
+  const areaTotal = num(obj.areaTotal);
+
+  if (!priceUSD || !areaTotal) return null;
+
+  const pricePerM2 = priceUSD / areaTotal;
+
+  const analogs = objects.filter(o => {
+    if (o === obj) return false;
+    if (o.status?.type === "sold") return false;
+    if (o.type !== obj.type) return false;
+    if (o.city !== obj.city) return false;
+
+    const p = num(o.priceUSD);
+    const a = num(o.areaTotal);
+    if (!p || !a) return false;
+
+    if (obj.type === "Квартира" && String(o.rooms) !== String(obj.rooms)) {
+      return false;
+    }
+
+    return true;
+  });
+
+  let marketPricePerM2;
+
+  if (analogs.length >= 3) {
+    const prices = analogs.map(o => num(o.priceUSD) / num(o.areaTotal));
+    marketPricePerM2 = trimmedMean(prices, 0.1);
+
+  } else if (analogs.length > 0) {
+    const prices = analogs.map(o => num(o.priceUSD) / num(o.areaTotal));
+    marketPricePerM2 = average(prices);
+
+  } else {
+    // 🔥 FALLBACK — СТАТИСТИКА ПОРТФЕЛЯ
+    const stats = PortfolioStatistics.calculate(objects);
+    const roomKey =
+      obj.rooms >= 4 ? "4+" : String(obj.rooms);
+
+    marketPricePerM2 =
+      stats?.avgPricePerM2?.[roomKey] ||
+      (obj.type === "Квартира" ? 800 : 400);
+  }
+
+  marketPricePerM2 *= getAreaCoef(areaTotal);
+
+  const deviation =
+    ((pricePerM2 - marketPricePerM2) / marketPricePerM2) * 100;
+
+  return {
+    pricePerM2: Math.round(pricePerM2),
+    marketPricePerM2: Math.round(marketPricePerM2),
+    deviation: Math.round(deviation)
+  };
+}
+
+function scorePrice(deviation) {
+  if (deviation <= -15) return 100;
+  if (deviation <= -7)  return 85;
+  if (deviation <= 0)   return 70;
+  if (deviation <= 5)   return 55;
+  if (deviation <= 10)  return 35;
+  return 15;
+}
+
+function scoreObject(obj, usefulRatio) {
+  let score = 50;
+
+  if (obj.yearBuilt) {
+    const age = new Date().getFullYear() - obj.yearBuilt;
+    score += age <= 20 ? 15 : -10;
+  }
+
+  if (obj.repair === "Хороший") score += 10;
+  if (obj.repair === "Требует ремонта") score -= 15;
+
+  if (obj.type === "Квартира") {
+    if (obj.rooms <= 2) score += 15;
+    else score -= 5;
+
+    if (obj.floor >= 3 && obj.floor <= 7) score += 10;
+    else score -= 5;
+
+    if (usefulRatio >= 0.55) score += 10;
+    if (usefulRatio < 0.45) score -= 10;
+  }
+
+  if (obj.type === "Дом") {
+    if (obj.areaPlot >= 10) score += 15;
+    if (obj.areaPlot < 6) score -= 10;
+
+    if (obj.readyPercent >= 90) score += 15;
+    if (obj.readyPercent < 70) score -= 15;
+  }
+
+  return clamp(score);
+}
+
+function scoreLocation(obj) {
+  let score = 50;
+
+  if (obj.city === "Лида") score += 20;
+  else score -= 5;
+
+  const STRONG = ["Центр", "Южный", "Северный"];
+  const WEAK = ["Окраина", "Промзона"];
+
+  if (STRONG.includes(obj.district)) score += 15;
+  if (WEAK.includes(obj.district)) score -= 15;
+
+  return clamp(score);
+}
+
+function scoreMarket(objects, obj) {
+  const active = objects.filter(o =>
+    !o.status &&
+    o.type === obj.type &&
+    o.city === obj.city
+  ).length;
+
+  if (active < 5) return 75;
+  if (active < 15) return 60;
+  return 45;
+}
+
+function calculateLiquidity(scores) {
+  return Math.round(
+    scores.price * 0.4 +
+    scores.object * 0.3 +
+    scores.location * 0.2 +
+    scores.market * 0.1
+  );
+}
+
+function calculateLayoutIndex(obj) {
+  const total = Number(obj.areaTotal);
+  const living = Number(obj.areaLiving);
+  const kitchen = Number(obj.areaKitchen);
+
+  if (!total || !living) return null;
+
+  // 1. Полезная площадь
+  const useful =
+    living +
+    (Number.isFinite(kitchen) ? kitchen * 0.6 : 0);
+
+  let ratio = useful / total;
+
+  // 2. Корректировка по комнатам (для квартир)
+  if (obj.type === "Квартира") {
+    const rooms = Number(obj.rooms);
+
+    if (rooms >= 4) ratio *= 0.94;
+    else if (rooms === 3) ratio *= 0.97;
+  }
+
+  return Number(ratio.toFixed(2));
+}
+
+function calculateResale(obj, metrics) {
+  if (!metrics) return { score: 0, label: "Ограниченный" };
+
+  const deviation = metrics.deviation;
+  const layoutIndex = metrics.layoutIndex;
+  const liquidity = metrics.liquidity;
+
+  // 1️⃣ Ценовой потенциал
+  let priceScore = 0;
+  if (deviation <= -15) priceScore = 100;
+  else if (deviation <= -10) priceScore = 85;
+  else if (deviation <= -5) priceScore = 65;
+  else if (deviation <= 0) priceScore = 45;
+  else if (deviation <= 5) priceScore = 20;
+  else priceScore = 0;
+
+  // 2️⃣ Планировка
+  let layoutScore = 50;
+  if (layoutIndex !== null) {
+    if (layoutIndex >= 0.60) layoutScore = 100;
+    else if (layoutIndex >= 0.55) layoutScore = 80;
+    else if (layoutIndex >= 0.50) layoutScore = 60;
+    else if (layoutIndex >= 0.45) layoutScore = 40;
+    else layoutScore = 20;
+  }
+
+  // 3️⃣ Ликвидность
+  const liquidityScore = liquidity ?? 0;
+
+  // 4️⃣ Итоговый resaleScore
+  const resaleScore = Math.round(
+    priceScore * 0.5 +
+    layoutScore * 0.3 +
+    liquidityScore * 0.2
+  );
+
+  // 5️⃣ Категория
+  let label = "Ограниченный";
+  if (resaleScore >= 70) label = "Высокий";
+  else if (resaleScore >= 45) label = "Средний";
+
+  return {
+    score: resaleScore,
+    label
+  };
 }
