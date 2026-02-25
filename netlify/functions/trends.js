@@ -15,7 +15,7 @@ export async function handler() {
 
     const text = await r.text();
 
-    const items = [...text.matchAll(/<title><!\[CDATA\[(.*?)\]\]><\/title>/g)]
+    const titles = [...text.matchAll(/<title><!\[CDATA\[(.*?)\]\]><\/title>/g)]
       .map(m => m[1])
       .slice(1); // первый title — служебный
 
@@ -27,21 +27,21 @@ export async function handler() {
       "жиль"
     ];
 
-    const estateHits = items.filter(title =>
+    const estateHits = titles.filter(title =>
       realEstateKeywords.some(k =>
         title.toLowerCase().includes(k)
       )
     ).length;
 
-    const index = Math.round(
-      (estateHits / items.length) * 100
+    const demandIndex = Math.round(
+      (estateHits / titles.length) * 100
     );
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        demandIndex: index,
-        totalTrends: items.length,
+        demandIndex,
+        totalTrends: titles.length,
         estateTrends: estateHits,
         source: "Google Trending Searches"
       })
