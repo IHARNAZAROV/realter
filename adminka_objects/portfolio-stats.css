@@ -282,3 +282,17 @@ width: 90px;
 .liquidity-advice li {
   margin-bottom: 6px;
 }
+
+/* ===== STAGNATION ===== */
+.metric--stagnation.stagnation-none {
+  color: #8bc34a;
+}
+
+.metric--stagnation.stagnation-medium {
+  color: #ff9800;
+}
+
+.metric--stagnation.stagnation-high {
+  color: #f44336;
+  font-weight: 600;
+}

@@ -200,6 +200,42 @@ const METRICS_INFO = {
   }
 };
 
+METRICS_INFO.exposure = {
+  title: "Возраст экспозиции",
+  html: `
+    <p><strong>Что это:</strong><br>
+    Количество дней, прошедших с момента публикации объекта.</p>
+
+    <p><strong>Зачем важно:</strong></p>
+    <ul>
+      <li>Помогает понять, продаётся ли объект в нормальном режиме</li>
+      <li>Долгая экспозиция часто указывает на завышенную цену</li>
+    </ul>
+  `
+};
+
+METRICS_INFO.stagnation = {
+  title: "Стагнация объекта",
+  html: `
+    <p><strong>Что это:</strong><br>
+    Показатель того, «завис» ли объект в продаже.</p>
+
+    <p><strong>Как определяется:</strong></p>
+    <ul>
+      <li>Учитывается срок экспозиции</li>
+      <li>Сравнивается цена с рынком</li>
+      <li>Анализируется ликвидность</li>
+    </ul>
+
+    <p><strong>Интерпретация:</strong></p>
+    <ul>
+      <li><b>Нет</b> — объект продаётся нормально</li>
+      <li><b>Средняя</b> — стоит пересмотреть стратегию</li>
+      <li><b>Высокая</b> — объект «завис», рекомендуется корректировка цены</li>
+    </ul>
+  `
+};
+
 const SCHEMA = {
   common: {
     title: { label: "Заголовок", type: "text" },
@@ -421,6 +457,17 @@ function renderObject(obj, index) {
   div.className = `object ${obj.recommended ? "is-recommended" : ""} ${status === "sold" ? "is-sold" : ""}`;
   div.dataset.index = index;
 
+  // 🆕 Возраст экспозиции
+  const exposureHtml =
+    metrics?.exposureDays !== null
+      ? `${metrics.exposureDays} дн.`
+      : "—";
+
+  // 🆕 Стагнация — цвет
+  let stagnationClass = "";
+  if (metrics?.stagnation?.label === "Средняя") stagnationClass = "stagnation-medium";
+  if (metrics?.stagnation?.label === "Высокая") stagnationClass = "stagnation-high";
+
   div.innerHTML = `
     <!-- ФОТО -->
     <div class="object-preview">
@@ -429,31 +476,27 @@ function renderObject(obj, index) {
 
     <!-- ИНФОРМАЦИЯ -->
     <div class="object-info">
-<div class="object-header">
-  <div class="object-title">${obj.title}</div>
+      <div class="object-header">
+        <div class="object-title">${obj.title}</div>
 
-  <div class="object-badges">
-    <span
-      class="badge badge-star recommend-toggle ${obj.recommended ? "" : "is-muted"}"
-      data-index="${index}"
-      title="Рекомендованный объект"
-    >
-      ⭐
-    </span>
+        <div class="object-badges">
+          <span
+            class="badge badge-star recommend-toggle ${obj.recommended ? "" : "is-muted"}"
+            data-index="${index}"
+            title="Рекомендованный объект"
+          >
+            ⭐
+          </span>
 
-<span
-  class="badge status-badge ${status === "sold" ? "badge--sold" : "badge--active"}"
-  data-index="${index}"
-  title="Изменить статус объекта"
->
-  ${
-    status === "sold"
-      ? `Продано${date ? " • " + date : ""}`
-      : "В продаже"
-  }
-</span>
-  </div>
-</div>
+          <span
+            class="badge status-badge ${status === "sold" ? "badge--sold" : "badge--active"}"
+            data-index="${index}"
+            title="Изменить статус объекта"
+          >
+            ${status === "sold" ? `Продано${date ? " • " + date : ""}` : "В продаже"}
+          </span>
+        </div>
+      </div>
 
       <div class="object-price">
         ${obj.priceBYN?.toLocaleString()} BYN
@@ -467,10 +510,12 @@ function renderObject(obj, index) {
 
     <!-- МЕТРИКИ -->
     ${
-      metrics ? `
+      metrics
+        ? `
       <div class="object-metrics">
 
-        <div class="metric"  data-metric="price" data-tooltip="Цена одного квадратного метра">
+        <!-- Цена -->
+        <div class="metric" data-metric="price">
           <span class="metric-label">Цена / м²</span>
           <span class="metric-value">${metrics.pricePerM2} $</span>
           <span class="${metrics.deviation <= -7 ? "good" : metrics.deviation >= 7 ? "bad" : "neutral"}">
@@ -478,7 +523,8 @@ function renderObject(obj, index) {
           </span>
         </div>
 
-        <div class="metric" data-metric="liquidity" data-tooltip="Насколько легко объект продаётся">
+        <!-- Ликвидность -->
+        <div class="metric" data-metric="liquidity">
           <span class="metric-label">Ликвидность</span>
           <div class="liquidity-bar">
             <span style="--value:${metrics.liquidity}"></span>
@@ -486,19 +532,37 @@ function renderObject(obj, index) {
           <span class="metric-sub">${metrics.liquidity} / 100</span>
         </div>
 
-        <div class="metric" data-metric="layout" data-tooltip="Соотношение жилой площади">
+        <!-- Планировка -->
+        <div class="metric" data-metric="layout">
           <span class="metric-label">Планировка</span>
-         <span class="metric-value">
-  ${metrics.layoutIndex !== null ? metrics.layoutIndex : "—"}
-</span>
+          <span class="metric-value">
+            ${metrics.layoutIndex !== null ? metrics.layoutIndex : "—"}
+          </span>
         </div>
 
-        <div class="metric" data-metric="resale" data-tooltip="Потенциал перепродажи">
+        <!-- Перепродажа -->
+        <div class="metric" data-metric="resale">
           <span class="metric-label">Перепродажа</span>
           <span class="metric-value">${metrics.resale}</span>
         </div>
 
-      </div>` : ""
+        <!-- 🆕 Экспозиция -->
+        <div class="metric" data-metric="exposure">
+          <span class="metric-label">Экспозиция</span>
+          <span class="metric-value">${exposureHtml}</span>
+        </div>
+
+        <!-- 🆕 Стагнация -->
+        <div class="metric ${stagnationClass}" data-metric="stagnation">
+          <span class="metric-label">Стагнация</span>
+          <span class="metric-value">
+            ${metrics.stagnation?.label ?? "—"}
+          </span>
+        </div>
+
+      </div>
+      `
+        : ""
     }
 
     <!-- КНОПКИ -->
@@ -1414,14 +1478,11 @@ document.addEventListener("click", (e) => {
 });
 
 function calculateMetrics(obj) {
-  // 1️⃣ Цена относительно рынка
   const market = calculateMarketDeviation(obj, objects);
   if (!market) return null;
 
-  // 2️⃣ Планировка
   const layoutIndex = calculateLayoutIndex(obj);
 
-  // 3️⃣ Ликвидность
   let liquidityBase = calculateLiquidity({
     price: scorePrice(market.deviation),
     object: scoreObject(obj, layoutIndex),
@@ -1440,21 +1501,30 @@ function calculateMetrics(obj) {
 
   const liquidity = clamp(liquidityBase + layoutImpact);
 
-  // 4️⃣ Перепродажа — НОВАЯ МОДЕЛЬ
   const resale = calculateResale(obj, {
     deviation: market.deviation,
     layoutIndex,
     liquidity
   });
 
-  // 5️⃣ Возврат метрик
+  // 🆕 Возраст и стагнация
+  const exposureDays = calculateExposureDays(obj);
+  const stagnation = calculateStagnation(obj, {
+    deviation: market.deviation,
+    liquidity
+  });
+
   return {
     pricePerM2: market.pricePerM2,
     deviation: market.deviation,
     layoutIndex,
     liquidity,
     resale: resale.label,
-    resaleScore: resale.score
+    resaleScore: resale.score,
+
+    // 🆕 новые метрики
+    exposureDays,
+    stagnation
   };
 }
 const metricsInfoModal = document.getElementById("metricsModal");
@@ -1631,11 +1701,6 @@ function renderStatsGroup(containerId, data) {
       isActive = statsFilters.priceRange === key;
     }
 
-const resale = calculateResale(obj, {
-  deviation: market.deviation,
-  layoutIndex,
-  liquidity
-});
 
 
     const el = document.createElement("div");
@@ -1983,6 +2048,53 @@ function calculateResale(obj, metrics) {
 
   return {
     score: resaleScore,
+    label
+  };
+}
+
+function calculateExposureDays(obj) {
+  if (!obj.publishedAt) return null;
+
+  const published = new Date(obj.publishedAt);
+  if (isNaN(published)) return null;
+
+  const now = new Date();
+  const diffMs = now - published;
+
+  return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+}
+
+function calculateStagnation(obj, metrics) {
+  const days = calculateExposureDays(obj);
+  if (days === null || !metrics) return null;
+
+  let score = 0;
+
+  // 1️⃣ Время в продаже
+  if (days > 120) score += 40;
+  else if (days > 90) score += 30;
+  else if (days > 60) score += 20;
+  else if (days > 30) score += 10;
+
+  // 2️⃣ Цена относительно рынка
+  if (metrics.deviation > 5) score += 25;
+  else if (metrics.deviation > 0) score += 10;
+
+  // 3️⃣ Ликвидность
+  if (metrics.liquidity < 40) score += 25;
+  else if (metrics.liquidity < 55) score += 10;
+
+  // нормализация 0–100
+  score = Math.min(100, score);
+
+  // текстовая интерпретация
+  let label = "Нет";
+  if (score >= 60) label = "Высокая";
+  else if (score >= 35) label = "Средняя";
+
+  return {
+    days,
+    score,
     label
   };
 }
