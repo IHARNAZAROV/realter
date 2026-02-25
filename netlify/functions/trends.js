@@ -1,104 +1,58 @@
 export async function handler() {
   try {
-    const keywords = [
-      "купить квартиру Лида",
-      "продажа дома Лидский район"
+    const geo = "BY";
+    const url = `https://trends.google.com/trends/trendingsearches/daily/rss?geo=${geo}`;
+
+    const r = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0"
+      }
+    });
+
+    if (!r.ok) {
+      throw new Error("RSS fetch failed");
+    }
+
+    const text = await r.text();
+
+    const items = [...text.matchAll(/<title><!\[CDATA\[(.*?)\]\]><\/title>/g)]
+      .map(m => m[1])
+      .slice(1); // первый title — служебный
+
+    const realEstateKeywords = [
+      "квартира",
+      "дом",
+      "недвиж",
+      "ипотек",
+      "жиль"
     ];
 
-    const hl = "ru";
-    const geo = "BY";
-    const time = "today 1-m";
+    const estateHits = items.filter(title =>
+      realEstateKeywords.some(k =>
+        title.toLowerCase().includes(k)
+      )
+    ).length;
 
-    const exploreReq = {
-      comparisonItem: keywords.map(keyword => ({
-        keyword,
-        geo,
-        time
-      })),
-      category: 0,
-      property: ""
-    };
-
-    const exploreUrl =
-      "https://trends.google.com/trends/api/explore" +
-      "?hl=" + hl +
-      "&tz=-180" +
-      "&req=" + encodeURIComponent(JSON.stringify(exploreReq));
-
-    const exploreRes = await fetch(exploreUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json"
-      }
-    });
-
-    if (!exploreRes.ok) {
-      throw new Error("Explore request failed");
-    }
-
-    const exploreText = await exploreRes.text();
-    const exploreJson = JSON.parse(
-      exploreText.replace(/^\)\]\}',?/, "")
+    const index = Math.round(
+      (estateHits / items.length) * 100
     );
-
-    const widget = exploreJson.widgets?.find(
-      w => w.id === "TIMESERIES"
-    );
-
-    if (!widget) {
-      throw new Error("TIMESERIES widget not found");
-    }
-
-    const dataUrl =
-      "https://trends.google.com/trends/api/widgetdata/multiline" +
-      "?hl=" + hl +
-      "&tz=-180" +
-      "&req=" + encodeURIComponent(JSON.stringify(widget.request)) +
-      "&token=" + widget.token;
-
-    const dataRes = await fetch(dataUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        "Accept": "application/json"
-      }
-    });
-
-    if (!dataRes.ok) {
-      throw new Error("Timeline request failed");
-    }
-
-    const dataText = await dataRes.text();
-    const dataJson = JSON.parse(
-      dataText.replace(/^\)\]\}',?/, "")
-    );
-
-    const timeline = dataJson.default?.timelineData;
-
-    if (!timeline || !timeline.length) {
-      throw new Error("No timeline data");
-    }
-
-    const avg =
-      timeline.reduce((sum, p) => sum + (p.value?.[0] || 0), 0) /
-      timeline.length;
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        demandIndex: Math.round(avg),
-        keywords,
-        period: "30 days"
+        demandIndex: index,
+        totalTrends: items.length,
+        estateTrends: estateHits,
+        source: "Google Trending Searches"
       })
     };
 
-  } catch (err) {
-    console.error("Trends error:", err.message);
-
+  } catch (e) {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        error: "Trends fetch failed",
-        details: err.message
+        error: "Trending RSS failed",
+        details: e.message
       })
     };
   }
