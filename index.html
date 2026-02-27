@@ -85,7 +85,6 @@
          CSS STYLES
     =============================================== -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
     <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
     <link rel="stylesheet" href="/css/swiper-bundle.css" />
     <link rel="stylesheet" href="/css/swiper.css" />
@@ -653,10 +652,11 @@
               <div class="col-lg-7 col-md-12 col-sm-12">
                 <div class="about-home-right">
                   <div
-                    class="owl-carousel about-home number-slider owl-btn-vertical-center"
+                    class="about-home about-home-swiper number-slider owl-btn-vertical-center swiper" data-slider="swiper"
                   >
+                    <div class="swiper-wrapper">
                     <!-- About Slides -->
-                    <div class="item">
+                    <div class="swiper-slide">
                       <div class="sx-img-effect zoom-slow">
                         <a href="javascript:void(0);"
                           ><img
@@ -668,7 +668,7 @@
                         /></a>
                       </div>
                     </div>
-                    <div class="item">
+                    <div class="swiper-slide">
                       <div class="sx-img-effect zoom-slow">
                         <a href="javascript:void(0);"
                           ><img
@@ -680,7 +680,7 @@
                         /></a>
                       </div>
                     </div>
-                    <div class="item">
+                    <div class="swiper-slide">
                       <div class="sx-img-effect zoom-slow">
                         <a href="javascript:void(0);"
                           ><img
@@ -692,7 +692,7 @@
                         /></a>
                       </div>
                     </div>
-                    <div class="item">
+                    <div class="swiper-slide">
                       <div class="sx-img-effect zoom-slow">
                         <a href="javascript:void(0);"
                           ><img
@@ -704,7 +704,7 @@
                         /></a>
                       </div>
                     </div>
-                    <div class="item">
+                    <div class="swiper-slide">
                       <div class="sx-img-effect zoom-slow">
                         <a href="javascript:void(0);"
                           ><img
@@ -716,6 +716,21 @@
                         /></a>
                       </div>
                     </div>
+                  
+                    </div>
+                    <div class="owl-nav">
+                      <button class="owl-prev" type="button" aria-label="Предыдущий слайд">
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                      <button class="owl-next" type="button" aria-label="Следующий слайд">
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="owl-dots"></div>
                   </div>
                   <div class="about-home-before">
                     <img
@@ -918,9 +933,10 @@
                 <header class="section-head section-head--bracket">
                   <h2 class="section-title">Отзывы</h2>
                 </header>
-                <div class="owl-carousel testimonial-home number-slider">
+                <div class="testimonial-home testimonial-home-swiper number-slider swiper" data-slider="swiper">
+                    <div class="swiper-wrapper">
                   <!-- Review 1 -->
-                  <div class="item">
+                  <div class="swiper-slide">
                     <div class="testimonial-2 hover-animation-1">
                       <div class="testimonial-detail clearfix">
                         <div class="testimonial-pic shadow scale-in-center">
@@ -955,7 +971,7 @@
                     </div>
                   </div>
                   <!-- Review 2 -->
-                  <div class="item">
+                  <div class="swiper-slide">
                     <div class="testimonial-2 hover-animation-1">
                       <div class="testimonial-detail clearfix">
                         <div class="testimonial-pic shadow scale-in-center">
@@ -993,7 +1009,7 @@
                     </div>
                   </div>
                   <!-- Review 3 -->
-                  <div class="item">
+                  <div class="swiper-slide">
                     <div class="testimonial-2 hover-animation-1">
                       <div class="testimonial-detail clearfix">
                         <div class="testimonial-pic shadow scale-in-center">
@@ -1034,7 +1050,7 @@
                     </div>
                   </div>
                   <!-- Review 4 -->
-                  <div class="item">
+                  <div class="swiper-slide">
                     <div class="testimonial-2 hover-animation-1">
                       <div class="testimonial-detail clearfix">
                         <div class="testimonial-pic shadow scale-in-center">
@@ -1071,7 +1087,7 @@
                     </div>
                   </div>
                   <!-- Review 5 -->
-                  <div class="item">
+                  <div class="swiper-slide">
                     <div class="testimonial-2 hover-animation-1">
                       <div class="testimonial-detail clearfix">
                         <div class="testimonial-pic shadow scale-in-center">
@@ -1105,7 +1121,7 @@
                     </div>
                   </div>
                   <!-- Review 6 -->
-                  <div class="item">
+                  <div class="swiper-slide">
                     <div class="testimonial-2 hover-animation-1">
                       <div class="testimonial-detail clearfix">
                         <div class="testimonial-pic shadow scale-in-center">
@@ -1135,7 +1151,10 @@
                     </div>
                   </div>
 
-                </div>
+                
+                    </div>
+                    <div class="owl-dots"></div>
+                  </div>
               </div>
             </div>
           </div>
@@ -1153,8 +1172,9 @@
           </header>
           <!-- TITLE END -->
           <div class="section-content">
-            <div class="owl-carousel service-slider owl-btn-vertical-center">
-              <div class="item">
+            <div class="service-slider service-slider-swiper owl-btn-vertical-center swiper" data-slider="swiper">
+                    <div class="swiper-wrapper">
+              <div class="swiper-slide">
                 <a
                   href="/object-detail?slug=kvartira-lida-yuzhnyy-gorodok"
                   class="service-card-link"
@@ -1193,7 +1213,7 @@
                   </div>
                 </a>
               </div>
-              <div class="item">
+              <div class="swiper-slide">
                 <a
                   href="https://realt.by/grodno-region/sale-flats/object/3867894/"
                   class="service-card-link"
@@ -1232,7 +1252,7 @@
                   </div>
                 </a>
               </div>
-              <div class="item">
+              <div class="swiper-slide">
                 <a
                   href="/object-detail?slug=kvartira-lida-ul-masherova"
                   class="service-card-link"
@@ -1271,7 +1291,7 @@
                   </div>
                 </a>
               </div>
-              <div class="item">
+              <div class="swiper-slide">
                 <a
                   href="/object-detail?slug=kvartira-lida-yuzhnyy-gorodok-d-19"
                   class="service-card-link"
@@ -1310,7 +1330,7 @@
                   </div>
                 </a>
               </div>
-              <div class="item">
+              <div class="swiper-slide">
                 <a
                   href="https://realt.by/grodno-region/sale-cottages/object/3882881/"
                   class="service-card-link"
@@ -1347,7 +1367,7 @@
                   </div>
                 </a>
               </div>
-              <div class="item">
+              <div class="swiper-slide">
                 <a
                   href="https://realt.by/grodno-region/sale-cottages/object/3864700/"
                   class="service-card-link"
@@ -1384,7 +1404,17 @@
                   </div>
                 </a>
               </div>
-            </div>
+            
+                    </div>
+                    <div class="owl-nav">
+                      <button class="owl-prev" type="button" aria-label="Предыдущий слайд">
+                        <i class="fa fa-angle-left"></i>
+                      </button>
+                      <button class="owl-next" type="button" aria-label="Следующий слайд">
+                        <i class="fa fa-angle-right"></i>
+                      </button>
+                    </div>
+                  </div>
           </div>
           <div class="btn-center">
             <a href="/objects" class="site-button-secondry btn-half"
@@ -2121,10 +2151,9 @@
     <!-- 1. jQuery (Required first) -->
     <script src="js/jquery-3.7.1.min.js"></script>
     <!-- 2. Plugins (Deferred) -->
-    <script src="js/owl.carousel.min.js" defer></script>
-    <script src="js/jquery.owl-filter.js" defer></script>
     <script src="/js/swiper-bundle.js"></script>
     <script src="/js/swiper.js"></script>
+    <script src="/js/index-swiper-migration.js" defer></script>
     <!-- 3. Custom Script (Dependent on plugins) -->
     <script src="js/customgpt.js" defer></script>
     <script src="js/bgscroll.js" defer></script>

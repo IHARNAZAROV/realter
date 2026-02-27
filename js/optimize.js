@@ -174,7 +174,7 @@ function initCarousels() {
     },
   ];
 
-  const $about = jQuery(".about-home");
+  const $about = jQuery('.about-home:not([data-slider="swiper"])');
   const autoplayTimeout = 5000;
 
   function startProgress() {
@@ -204,7 +204,7 @@ function initCarousels() {
   }
 
   carousels.forEach((cfg) => {
-    const $el = jQuery(cfg.selector);
+    const $el = jQuery(`${cfg.selector}:not([data-slider="swiper"])`);
     if (!$el.length) return;
     $el.owlCarousel({
       ...cfg,
