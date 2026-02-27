@@ -4701,10 +4701,6 @@ body.is-locked {
   transition: all 0.5s linear;
 }
 
-.sep-line-one {
-  position: relative;
-}
-
 .sep-line-one:after,
 .sep-line-one:before {
   transition: width 0.3s ease-in-out;
@@ -4747,10 +4743,6 @@ body.is-locked {
 
 .sx-separator-outer.separator-right {
   text-align: right;
-}
-
-.sx-separator-outer.separator-center {
-  text-align: center;
 }
 
 .sx-separator-outer.separator-left .sep-line-one {
@@ -5828,9 +5820,7 @@ blockquote.author-quote .fa-quote-left {
 .side-bar .widget:last-child {
   margin-bottom: 0px;
 }
-.widget .widget-post img {
-  width: 100%;
-}
+
 .side-bar {
   padding: 20px;
 }
@@ -5849,10 +5839,6 @@ blockquote.author-quote .fa-quote-left {
   margin-bottom: 13px;
 }
 
-.recent-posts-entry-date .sx-post-date {
-  width: 50px;
-  float: left;
-}
 .recent-posts-entry-date .sx-post-date strong {
   display: block;
   font-size: 24px;
@@ -5864,9 +5850,7 @@ blockquote.author-quote .fa-quote-left {
   text-transform: uppercase;
   font-weight: 600;
 }
-.recent-posts-entry-date .sx-post-info {
-  margin-left: 70px;
-}
+
 .recent-posts-entry-date .sx-post-info .post-title {
   margin-bottom: 8px;
   font-weight: 500;
@@ -5926,11 +5910,6 @@ blockquote.author-quote .fa-quote-left {
   color: #000;
   display: block;
 }
-.widget_services ul li a span {
-  text-align: right;
-  display: block;
-  float: right;
-}
 
 .widget_services ul li a:hover {
   color: #d7b39a;
@@ -5946,10 +5925,6 @@ blockquote.author-quote .fa-quote-left {
   left: 1px;
 }
 
-.widget_services.inline-links li {
-  display: block;
-  border-bottom: none;
-}
 .sticky_column {
   position: sticky;
   top: 30px;
@@ -6260,7 +6235,7 @@ blockquote.author-quote .fa-quote-left {
 }
 
 .service-detail-content {
-  background: red;
+  background: var(--color-white);
   padding: 44px 48px;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
@@ -6301,10 +6276,6 @@ blockquote.author-quote .fa-quote-left {
   );
   border-left: 4px solid #155945;
   border-radius: 10px;
-}
-
-.service-highlight-block h3 {
-  margin-top: 0;
 }
 
 /* ======================================
