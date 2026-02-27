@@ -236,6 +236,59 @@ METRICS_INFO.stagnation = {
   `
 };
 
+METRICS_INFO.medianSale = {
+  title: "Медианное время продажи",
+  html: `
+    <p><strong>Что это:</strong><br>
+    Медиана числа дней от публикации до продажи по закрытым сделкам.</p>
+
+    <p><strong>Как читать:</strong></p>
+    <ul>
+      <li>Ниже значение — быстрее продаётся портфель</li>
+      <li>Метрика устойчива к выбросам (в отличие от среднего)</li>
+    </ul>
+  `
+};
+
+METRICS_INFO.agingDistribution = {
+  title: "Распределение активных по возрасту",
+  html: `
+    <p><strong>Что это:</strong><br>
+    Доля активных объектов в корзинах экспозиции: 0–30, 31–60, 61–90 и 90+ дней.</p>
+
+    <p><strong>Как читать:</strong></p>
+    <ul>
+      <li>Рост доли 90+ означает накопление “зависших” объектов</li>
+      <li>Полезно вместе с метрикой стагнации и отклонением цены от рынка</li>
+    </ul>
+  `
+};
+
+METRICS_INFO.sellThrough = {
+  title: "Sell-through Rate 30d",
+  html: `
+    <p><strong>Что это:</strong><br>
+    Коэффициент реализации за 30 дней.</p>
+
+    <p><strong>Формула:</strong><br>
+    Продано за 30 дней / Активных на начало периода.</p>
+  `
+};
+
+METRICS_INFO.overpricingShare = {
+  title: "Доля переоценённых",
+  html: `
+    <p><strong>Что это:</strong><br>
+    Доля активных объектов с ценой за м² выше рыночной более чем на порог (по умолчанию +7%).</p>
+
+    <p><strong>Как определяется рынок:</strong></p>
+    <ul>
+      <li>Сегмент: тип × город × группы комнат</li>
+      <li>Сравнение с усреднённой ценой за м² внутри сегмента</li>
+    </ul>
+  `
+};
+
 const SCHEMA = {
   common: {
     title: { label: "Заголовок", type: "text" },
@@ -374,13 +427,15 @@ let list = applyFilter(objects);
 // 2. применяем сортировку из хедера
 list = sortObjects(list);
 
+const portfolioKpis = PortfolioStatistics.calculate(list);
+
 // 🔥 2.1 РЕНДЕРИМ СТАТИСТИКУ ПОРТФЕЛЯ (НАД СПИСКОМ)
   renderPortfolioStats(list); 
 
 // 3. рендерим
 list.forEach(obj => {
   const index = objects.indexOf(obj);
-  container.appendChild(renderObject(obj, index));
+  container.appendChild(renderObject(obj, index, portfolioKpis));
 });
 
   bind();
@@ -447,7 +502,7 @@ function enableDragAndDrop(container, dataArray) {
   });
 }
 
-function renderObject(obj, index) {
+function renderObject(obj, index, portfolioKpis = null) {
   const status = obj.status?.type || "active";
   const date = obj.status?.date || "";
   const previewSrc = resolvePreviewImage(obj);
@@ -467,6 +522,29 @@ function renderObject(obj, index) {
   let stagnationClass = "";
   if (metrics?.stagnation?.label === "Средняя") stagnationClass = "stagnation-medium";
   if (metrics?.stagnation?.label === "Высокая") stagnationClass = "stagnation-high";
+
+  const medianSaleText = portfolioKpis?.medianTimeToSaleDays !== null && portfolioKpis?.medianTimeToSaleDays !== undefined
+    ? `${portfolioKpis.medianTimeToSaleDays} дн.`
+    : "—";
+
+  const sellThrough = portfolioKpis?.sellThroughRate30d;
+  const sellThroughText = sellThrough
+    ? `${sellThrough.ratePct}%`
+    : "—";
+
+  const overpricing = portfolioKpis?.overpricingShare;
+  const overpricingText = overpricing
+    ? `${overpricing.sharePct}%`
+    : "—";
+
+  const ageBucket = getObjectAgingBucket(obj);
+  const ageBucketData = ageBucket
+    ? portfolioKpis?.agingDistribution?.buckets?.[ageBucket]
+    : null;
+  const ageBucketText = ageBucket || "—";
+  const ageBucketSub = ageBucketData
+    ? `${ageBucketData.sharePct}% активных`
+    : "";
 
   div.innerHTML = `
     <!-- ФОТО -->
@@ -558,6 +636,34 @@ function renderObject(obj, index) {
           <span class="metric-value">
             ${metrics.stagnation?.label ?? "—"}
           </span>
+        </div>
+
+        <!-- ПОРТФЕЛЬ: Median Time to Sale -->
+        <div class="metric metric-portfolio" data-metric="medianSale">
+          <span class="metric-label">Median Sale</span>
+          <span class="metric-value">${medianSaleText}</span>
+          <span class="metric-sub">по проданным</span>
+        </div>
+
+        <!-- ПОРТФЕЛЬ: Aging Distribution -->
+        <div class="metric metric-portfolio" data-metric="agingDistribution">
+          <span class="metric-label">Aging bucket</span>
+          <span class="metric-value">${ageBucketText}</span>
+          <span class="metric-sub">${ageBucketSub}</span>
+        </div>
+
+        <!-- ПОРТФЕЛЬ: Sell-through 30d -->
+        <div class="metric metric-portfolio" data-metric="sellThrough">
+          <span class="metric-label">Sell-through 30d</span>
+          <span class="metric-value">${sellThroughText}</span>
+          <span class="metric-sub">${sellThrough?.soldInPeriod ?? 0} продано</span>
+        </div>
+
+        <!-- ПОРТФЕЛЬ: Overpricing Share -->
+        <div class="metric metric-portfolio" data-metric="overpricingShare">
+          <span class="metric-label">Overpricing</span>
+          <span class="metric-value">${overpricingText}</span>
+          <span class="metric-sub">порог +${overpricing?.thresholdPct ?? 7}%</span>
         </div>
 
       </div>
@@ -2062,6 +2168,18 @@ function calculateExposureDays(obj) {
   const diffMs = now - published;
 
   return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+}
+
+function getObjectAgingBucket(obj) {
+  if (obj.status?.type === "sold") return "Продан";
+
+  const days = calculateExposureDays(obj);
+  if (days === null) return null;
+
+  if (days <= 30) return "0-30";
+  if (days <= 60) return "31-60";
+  if (days <= 90) return "61-90";
+  return "90+";
 }
 
 function calculateStagnation(obj, metrics) {
