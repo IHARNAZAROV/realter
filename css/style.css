@@ -1243,49 +1243,6 @@ ul li {
   }
 }
 
-.site-logo {
-  width: clamp(11.25rem, 20vw, 16.25rem);
-  height: auto;
-  transform-origin: left center;
-  transition: transform 0.35s ease, filter 0.35s ease, opacity 0.35s ease;
-  animation: logo-float 6s ease-in-out infinite;
-}
-
-.site-logo--dark {
-  filter: drop-shadow(0 0.25rem 0.5rem rgba(25, 25, 25, 0.18));
-}
-
-.site-logo--light {
-  filter: drop-shadow(0 0.5rem 1rem rgba(0, 0, 0, 0.35));
-}
-
-.logo-header:hover .site-logo,
-.logo-footer:hover .site-logo {
-  transform: translateY(-0.125rem) scale(1.03);
-}
-
-.logo-header:hover .site-logo--dark,
-.logo-footer:hover .site-logo--dark {
-  filter: drop-shadow(0 0.5rem 1.125rem rgba(206, 164, 94, 0.35));
-}
-
-.logo-header:hover .site-logo--light,
-.logo-footer:hover .site-logo--light {
-  filter: drop-shadow(0 0.625rem 1.375rem rgba(249, 223, 160, 0.45));
-}
-
-@keyframes logo-float {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.98;
-  }
-  50% {
-    transform: translateY(-0.125rem);
-    opacity: 1;
-  }
-}
-
 .extra-nav {
   display: table;
   float: right;
