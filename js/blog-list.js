@@ -132,7 +132,19 @@ function renderDate(dateString) {
 }
 
 function reinitMasonry() {
-  if (window.jQuery && jQuery.fn.masonry) {
-    jQuery(".news-masonry").masonry("reloadItems").masonry();
+  const container = document.querySelector(".news-masonry");
+  if (!container || !window.Masonry) return;
+
+  const existingMasonry = Masonry.data(container);
+
+  if (existingMasonry) {
+    existingMasonry.reloadItems();
+    existingMasonry.layout();
+    return;
   }
+
+  new Masonry(container, {
+    itemSelector: ".masonry-item",
+    percentPosition: true,
+  });
 }
