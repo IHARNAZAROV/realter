@@ -65,7 +65,7 @@
       }
 
       // Service slider
-      const $serviceSlider = $('.service-slider:not([data-slider="swiper"])');
+      const $serviceSlider = $(".service-slider");
       if ($serviceSlider.length) {
         $serviceSlider.owlCarousel({
           loop: true,

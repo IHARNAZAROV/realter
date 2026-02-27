@@ -61,64 +61,9 @@
     });
   }
 
-  function initTestimonialSwiper() {
-    const el = document.querySelector(".testimonial-home-swiper");
-    if (!el) return;
-
-    new Swiper(el, {
-      loop: true,
-      speed: 600,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: el.querySelector(".owl-dots"),
-        clickable: true,
-        renderBullet(index, className) {
-          return `<button class="owl-dot ${className}" type="button" aria-label="Отзыв ${index + 1}"><span></span></button>`;
-        },
-      },
-      slidesPerView: 1,
-      spaceBetween: 30,
-    });
-  }
-
-  function initServiceSwiper() {
-    const el = document.querySelector(".service-slider-swiper");
-    if (!el) return;
-
-    new Swiper(el, {
-      loop: true,
-      speed: 700,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
-      navigation: {
-        nextEl: el.querySelector(".owl-next"),
-        prevEl: el.querySelector(".owl-prev"),
-      },
-      slidesPerView: 1,
-      spaceBetween: 15,
-      breakpoints: {
-        768: { slidesPerView: 2 },
-        991: { slidesPerView: 3 },
-        1200: { slidesPerView: 3 },
-      },
-    });
-  }
-
-  function init() {
-    initAboutSwiper();
-    initTestimonialSwiper();
-    initServiceSwiper();
-  }
-
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", initAboutSwiper);
   } else {
-    init();
+    initAboutSwiper();
   }
 })();

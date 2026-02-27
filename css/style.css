@@ -5005,8 +5005,7 @@ body.is-locked {
   text-align: center;
 }
 
-.service-slider .owl-nav button,
-.service-slider-swiper .owl-nav button {
+.service-slider .owl-nav button {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -5017,13 +5016,11 @@ body.is-locked {
   justify-content: center;
 }
 
-.service-slider .owl-nav button svg,
-.service-slider-swiper .owl-nav button svg {
+.service-slider .owl-nav button svg {
   display: block;
 }
 
-.service-slider .owl-nav button,
-.service-slider-swiper .owl-nav button {
+.service-slider .owl-nav button {
   width: 54px;
   height: 40px;
   border-radius: 999px;
@@ -9777,8 +9774,7 @@ recent-posts-entry-date .sx-post-info .post-title {
    ========================================================= */
 
 /* Карточка */
-.section-full.mobile-page-padding .about-home.owl-carousel .item,
-.section-full.mobile-page-padding .about-home.about-home-swiper .swiper-slide {
+.section-full.mobile-page-padding .about-home.owl-carousel .item {
   height: 520px;
   background: #ffffff;
   border-radius: 18px;
@@ -9788,8 +9784,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* Контейнер изображения */
-.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect,
-.section-full.mobile-page-padding .about-home.about-home-swiper .sx-img-effect {
+.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect {
   height: 100%;
   background: #ffffff;
   border-radius: 18px;
@@ -9798,8 +9793,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* Картинка */
-.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect img,
-.section-full.mobile-page-padding .about-home.about-home-swiper .sx-img-effect img {
+.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -9820,8 +9814,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* ---------- PROGRESS LINE ---------- */
-.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots,
-.section-full.mobile-page-padding .about-home.about-home-swiper .owl-dots {
+.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots {
   position: relative;
   height: 2px;
   margin-top: 28px;
@@ -9830,14 +9823,12 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* убираем точки */
-.section-full.mobile-page-padding .about-home.owl-carousel .owl-dot,
-.section-full.mobile-page-padding .about-home.about-home-swiper .owl-dot {
+.section-full.mobile-page-padding .about-home.owl-carousel .owl-dot {
   display: none;
 }
 
 /* линия прогресса */
-.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots::after,
-.section-full.mobile-page-padding .about-home.about-home-swiper .owl-dots::after {
+.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -9849,8 +9840,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 /* Mobile */
 @media (max-width: 768px) {
-  .section-full.mobile-page-padding .about-home.owl-carousel .item,
-.section-full.mobile-page-padding .about-home.about-home-swiper .swiper-slide {
+  .section-full.mobile-page-padding .about-home.owl-carousel .item {
     height: 420px;
   }
 }
@@ -12234,51 +12224,5 @@ recent-posts-entry-date .sx-post-info .post-title {
   backdrop-filter: blur(2px);
 }
 
-/* Swiper migration compatibility (index) */
-.swiper[data-slider="swiper"] .owl-nav {
-  margin-top: 1.875rem;
-  text-align: left;
-}
+.about-home-swiper.owl-carousel { display: block; }
 
-.swiper[data-slider="swiper"] .owl-dots {
-  text-align: center;
-  margin-top: 1.25rem;
-}
-
-.swiper[data-slider="swiper"] .owl-dots .owl-dot {
-  display: inline-block;
-}
-
-.swiper[data-slider="swiper"] .owl-dots .owl-dot span {
-  width: 10px;
-  height: 10px;
-  margin: 5px;
-  background: #444;
-  display: block;
-  backface-visibility: visible;
-  transition: all 0.5s linear;
-}
-
-.swiper[data-slider="swiper"] .owl-dots .owl-dot.active span,
-.swiper[data-slider="swiper"] .owl-dots .owl-dot:hover span {
-  background: var(--color-primary);
-}
-
-.swiper[data-slider="swiper"].owl-btn-vertical-center .owl-nav {
-  margin: 0;
-}
-
-.swiper[data-slider="swiper"].owl-btn-vertical-center .owl-nav .owl-next,
-.swiper[data-slider="swiper"].owl-btn-vertical-center .owl-nav .owl-prev {
-  position: absolute;
-  top: 50%;
-  margin: -15px 0;
-}
-
-.swiper[data-slider="swiper"].owl-btn-vertical-center .owl-nav .owl-prev {
-  left: 0;
-}
-
-.swiper[data-slider="swiper"].owl-btn-vertical-center .owl-nav .owl-next {
-  right: 0;
-}
