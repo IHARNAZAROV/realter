@@ -653,69 +653,88 @@
               <div class="col-lg-7 col-md-12 col-sm-12">
                 <div class="about-home-right">
                   <div
-                    class="owl-carousel about-home number-slider owl-btn-vertical-center"
+                    class="owl-carousel about-home about-home-swiper number-slider owl-btn-vertical-center swiper" data-slider="swiper"
                   >
-                    <!-- About Slides -->
-                    <div class="item">
-                      <div class="sx-img-effect zoom-slow">
-                        <a href="javascript:void(0);"
-                          ><img
-                            width="360"
-                            height="477"
-                            loading="lazy"
-                            src="images/about-slider/1.webp"
-                            alt="Консультация по продаже недвижимости в офисе"
-                        /></a>
+                    <div class="swiper-wrapper">
+                      <!-- About Slides -->
+                      <div class="swiper-slide">
+                        <div class="sx-img-effect zoom-slow">
+                          <a href="javascript:void(0);"
+                            ><img
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/1.webp"
+                              alt="Консультация по продаже недвижимости в офисе"
+                          /></a>
+                        </div>
+                      </div>
+                      <div class="swiper-slide">
+                        <div class="sx-img-effect zoom-slow">
+                          <a href="javascript:void(0);"
+                            ><img
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/2.webp"
+                              alt="Подготовка документов для сделки купли-продажи"
+                          /></a>
+                        </div>
+                      </div>
+                      <div class="swiper-slide">
+                        <div class="sx-img-effect zoom-slow">
+                          <a href="javascript:void(0);"
+                            ><img
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/3.webp"
+                              alt="Риэлтер Ольга Турко за работой с клиентами"
+                          /></a>
+                        </div>
+                      </div>
+                      <div class="swiper-slide">
+                        <div class="sx-img-effect zoom-slow">
+                          <a href="javascript:void(0);"
+                            ><img
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/4.webp"
+                              alt="Процесс оформления покупки квартиры в Лиде"
+                          /></a>
+                        </div>
+                      </div>
+                      <div class="swiper-slide">
+                        <div class="sx-img-effect zoom-slow">
+                          <a href="javascript:void(0);"
+                            ><img
+                              width="360"
+                              height="477"
+                              loading="lazy"
+                              src="images/about-slider/5.webp"
+                              alt="Успешная сделка с недвижимостью"
+                          /></a>
+                        </div>
                       </div>
                     </div>
-                    <div class="item">
-                      <div class="sx-img-effect zoom-slow">
-                        <a href="javascript:void(0);"
-                          ><img
-                            width="360"
-                            height="477"
-                            loading="lazy"
-                            src="images/about-slider/2.webp"
-                            alt="Подготовка документов для сделки купли-продажи"
-                        /></a>
-                      </div>
+                    <div class="owl-nav">
+                      <button
+                        class="owl-prev"
+                        type="button"
+                        aria-label="Предыдущий слайд"
+                      >
+                        <i class="fa fa-angle-left"></i>
+                      </button>
+                      <button
+                        class="owl-next"
+                        type="button"
+                        aria-label="Следующий слайд"
+                      >
+                        <i class="fa fa-angle-right"></i>
+                      </button>
                     </div>
-                    <div class="item">
-                      <div class="sx-img-effect zoom-slow">
-                        <a href="javascript:void(0);"
-                          ><img
-                            width="360"
-                            height="477"
-                            loading="lazy"
-                            src="images/about-slider/3.webp"
-                            alt="Риэлтер Ольга Турко за работой с клиентами"
-                        /></a>
-                      </div>
-                    </div>
-                    <div class="item">
-                      <div class="sx-img-effect zoom-slow">
-                        <a href="javascript:void(0);"
-                          ><img
-                            width="360"
-                            height="477"
-                            loading="lazy"
-                            src="images/about-slider/4.webp"
-                            alt="Процесс оформления покупки квартиры в Лиде"
-                        /></a>
-                      </div>
-                    </div>
-                    <div class="item">
-                      <div class="sx-img-effect zoom-slow">
-                        <a href="javascript:void(0);"
-                          ><img
-                            width="360"
-                            height="477"
-                            loading="lazy"
-                            src="images/about-slider/5.webp"
-                            alt="Успешная сделка с недвижимостью"
-                        /></a>
-                      </div>
-                    </div>
+                    <div class="owl-dots"></div>
                   </div>
                   <div class="about-home-before">
                     <img
@@ -2125,6 +2144,7 @@
     <script src="js/jquery.owl-filter.js" defer></script>
     <script src="/js/swiper-bundle.js"></script>
     <script src="/js/swiper.js"></script>
+    <script src="/js/index-swiper-migration.js" defer></script>
     <!-- 3. Custom Script (Dependent on plugins) -->
     <script src="js/customgpt.js" defer></script>
     <script src="js/bgscroll.js" defer></script>

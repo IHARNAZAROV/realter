@@ -12563,3 +12563,6 @@ recent-posts-entry-date .sx-post-info .post-title {
 .badge-sold {
   backdrop-filter: blur(2px);
 }
+
+.about-home-swiper.owl-carousel { display: block; }
+
