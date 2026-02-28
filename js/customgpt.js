@@ -12,32 +12,42 @@
 
   /**
    * =====================================================
-   * Isotope + OwlCarousel (filters, fade slider, service slider)
+   * Masonry + OwlCarousel (filters, fade slider, service slider)
    * =====================================================
    */
   function initOnLoadFunctions() {
     // =========================
-    // ISOTOPE
+    // MASONRY (VANILLA)
     // =========================
-    if ($.fn.isotope) {
-      const $container = $(".masonry-outer");
+    const container = document.querySelector(".masonry-outer");
 
-      if ($container.length) {
-        $container.isotope({
-          itemSelector: ".masonry-item",
-          transitionDuration: "1s",
-          originLeft: true,
-          stamp: ".stamp",
+    if (container && window.Masonry) {
+      const items = Array.from(container.querySelectorAll(".masonry-item"));
+      const masonry = new Masonry(container, {
+        itemSelector: ".masonry-item",
+        percentPosition: true,
+      });
+
+      document.addEventListener("click", (e) => {
+        const link = e.target.closest(".masonry-filter a");
+        if (!link) return;
+
+        e.preventDefault();
+        const filter = link.dataset.filter || "*";
+
+        document
+          .querySelectorAll(".masonry-filter li")
+          .forEach((li) => li.classList.remove("active"));
+        link.parentElement?.classList.add("active");
+
+        items.forEach((item) => {
+          item.style.display =
+            filter === "*" || item.matches(filter) ? "" : "none";
         });
 
-        $(".masonry-filter li").on("click", function () {
-          const selector = $(this).find("a").attr("data-filter");
-          $(".masonry-filter li").removeClass("active");
-          $(this).addClass("active");
-          $container.isotope({ filter: selector });
-          return false;
-        });
-      }
+        masonry.reloadItems();
+        masonry.layout();
+      });
     }
 
     // =========================
