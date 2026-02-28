@@ -10117,9 +10117,10 @@ recent-posts-entry-date .sx-post-info .post-title {
 .section-full.mobile-page-padding .about-home.owl-carousel .item {
   height: 520px;
   background: #ffffff;
-  border: 1px solid rgba(21, 89, 69, 0.14);
+  border: 1px solid rgba(21, 89, 69, 0.16);
   border-left: 4px solid var(--color-primary);
   border-radius: 14px;
+  padding: 12px 12px 12px 16px;
   overflow: hidden;
   display: flex;
   align-items: stretch;
@@ -10130,7 +10131,9 @@ recent-posts-entry-date .sx-post-info .post-title {
 /* Контейнер изображения */
 .section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect {
   height: 100%;
+  width: 100%;
   background: #ffffff;
+  border: 1px solid rgba(21, 89, 69, 0.1);
   border-radius: 10px;
   overflow: hidden;
 }
@@ -10146,7 +10149,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .section-full.mobile-page-padding .about-home.owl-carousel .item:hover {
-  border-color: rgba(21, 89, 69, 0.24);
+  border-color: rgba(21, 89, 69, 0.28);
   box-shadow: 0 30px 56px rgba(0, 0, 0, 0.1);
 }
 
@@ -10190,6 +10193,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 @media (max-width: 768px) {
   .section-full.mobile-page-padding .about-home.owl-carousel .item {
     height: 420px;
+    padding: 10px 10px 10px 14px;
   }
 }
 
