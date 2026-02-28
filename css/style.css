@@ -4682,7 +4682,13 @@ button.scroltop span {
 .contact-slide-overlay {
   position: absolute;
   inset: 0;
-  background: transparent;
+  background: linear-gradient(
+    132deg,
+    rgb(8 24 20 / 76%) 0%,
+    rgb(21 64 52 / 64%) 48%,
+    rgb(31 37 45 / 54%) 100%
+  );
+  backdrop-filter: blur(4px);
   z-index: 1;
 
   opacity: 0;
@@ -4701,16 +4707,350 @@ button.scroltop span {
   width: 100%;
   height: 100%;
   touch-action: pan-y;
-  will-change: transform;
+  will-change: transform, opacity, filter;
   z-index: 2;
+  background: radial-gradient(
+      circle at 100% 0%,
+      rgb(249 252 250 / 98%) 0%,
+      rgb(239 246 243 / 98%) 45%,
+      rgb(231 239 236 / 98%) 100%
+    ),
+    var(--color-white);
   background-size: cover;
   background-position: center;
-  transform: translateX(100%);
-  transition: transform 0.45s ease-in-out;
+  transform: translateX(110%) scale(0.98);
+  opacity: 0;
+  filter: blur(8px);
+  transition:
+    transform 0.55s cubic-bezier(0.2, 0.72, 0.1, 1),
+    opacity 0.35s ease,
+    filter 0.45s ease;
+}
+
+.contact-slide-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 15%, rgb(21 89 69 / 14%) 0, transparent 42%),
+    radial-gradient(circle at 88% 82%, rgb(35 37 45 / 10%) 0, transparent 45%);
+  pointer-events: none;
+}
+
+.contact-slide-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    110deg,
+    rgb(255 255 255 / 0%) 0%,
+    rgb(255 255 255 / 26%) 50%,
+    rgb(255 255 255 / 0%) 100%
+  );
+  transform: skewX(-16deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.contact-slide-content .contact-nav {
+  padding: clamp(4.5rem, 6vw, 6rem) clamp(1rem, 4vw, 2.25rem) clamp(2rem, 3vw, 2.75rem);
+}
+
+.contact-slide-content .contact-nav-form {
+  max-width: 1080px;
+  width: 100%;
+}
+
+.contact-slide-content .contact-nav-info,
+.contact-slide-content .contact-nav-field {
+  border: 1px solid rgb(21 89 69 / 12%);
+  border-radius: 1.25rem;
+  box-shadow: 0 22px 55px rgb(18 44 37 / 14%);
+  backdrop-filter: blur(2px);
+}
+
+.contact-slide-content .contact-nav-info {
+  padding: clamp(1.5rem, 2.2vw, 2.3rem);
+  background: linear-gradient(180deg, #fff 0%, #f4f9f6 100%);
+}
+
+.contact-slide-content .contact-nav-info .sx-icon-box-wraper {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding-bottom: 1rem !important;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgb(21 89 69 / 12%);
+}
+
+.contact-slide-content .contact-nav-info .sx-icon-box-wraper:last-of-type {
+  border-bottom: none;
+  margin-bottom: 1.2rem;
+}
+
+.contact-slide-content .contact-nav-info .icon-xs {
+  width: 2.625rem;
+  height: 2.625rem;
+  margin: 0 !important;
+  border-radius: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #155945 0%, #1f7258 100%);
+  color: var(--color-white);
+  box-shadow: 0 12px 22px rgb(21 89 69 / 28%);
+}
+
+.contact-slide-content .contact-nav-info h6 {
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgb(67 96 85);
+  margin-bottom: 0.32rem;
+}
+
+.contact-slide-content .contact-nav-info p {
+  font-size: 1rem;
+  color: #233a32;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.contact-slide-content .contact-nav .contact_close {
+  width: 2.625rem;
+  height: 2.625rem;
+  right: clamp(1rem, 3vw, 2.25rem);
+  top: 1.05rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgb(21 89 69 / 16%);
+  background: rgb(255 255 255 / 94%);
+  color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  line-height: 1;
+  box-shadow: 0 10px 28px rgb(18 44 37 / 16%);
+  transition: all 0.25s ease;
+}
+
+.contact-slide-content .contact-nav .contact_close:hover {
+  transform: translateY(-2px);
+  background: #eef6f2;
+}
+
+.contact-slide-content .contact-nav-field {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.8rem, 2.6vw, 2.6rem) !important;
+  min-height: 100%;
+  background: linear-gradient(150deg, #155945 0%, #1f7258 56%, #23252d 100%) !important;
+  color: var(--color-white);
+}
+
+.contact-slide-content .contact-nav-field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 8% 10%, rgb(255 255 255 / 20%) 0, transparent 48%),
+    radial-gradient(circle at 92% 85%, rgb(255 255 255 / 14%) 0, transparent 44%);
+  pointer-events: none;
+}
+
+.contact-slide-content .contact-nav-field .cons-contact-info {
+  position: relative;
+  z-index: 1;
+}
+
+.contact-slide-content .contact-nav-field .cons-contact-info::before {
+  content: "Консультация";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  padding: 0.32rem 0.78rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 45%);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: rgb(255 255 255 / 16%);
+}
+
+.contact-slide-content .cons-contact-info .spin {
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: rgb(238 246 242);
+}
+
+.contact-slide-content .contact-nav-field .site-button-secondry.btn-half {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.02rem 1.2rem;
+  border: 1px solid rgb(255 255 255 / 46%);
+  border-radius: 0.9rem;
+  background: rgb(255 255 255 / 14%);
+  backdrop-filter: blur(4px);
+  color: var(--color-white);
+  box-shadow: 0 14px 30px rgb(12 32 26 / 26%);
+  transition: all 0.25s ease;
+}
+
+.contact-slide-content .contact-nav-field .site-button-secondry.btn-half::before,
+.contact-slide-content .contact-nav-field .site-button-secondry.btn-half::after {
+  display: none;
+}
+
+.contact-slide-content .contact-nav-field .site-button-secondry.btn-half span {
+  color: inherit;
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-weight: 800;
+  font-size: clamp(1.08rem, 2.4vw, 1.34rem);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.contact-slide-content .contact-nav-field .site-button-secondry.btn-half:hover {
+  transform: translateY(-2px);
+  background: rgb(255 255 255 / 24%);
+  border-color: rgb(255 255 255 / 70%);
+}
+
+.contact-slide-content .full-social-bg ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.contact-slide-content .full-social-bg li {
+  margin: 0;
+}
+
+.contact-slide-content .full-social-bg li a {
+  width: 2.48rem;
+  height: 2.48rem;
+  border-radius: 999px;
+  border: 1px solid rgb(21 89 69 / 24%);
+  background: linear-gradient(145deg, #f6fbf9 0%, #ecf5f2 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #1d5c49;
+  box-shadow: 0 8px 20px rgb(18 44 37 / 12%);
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease,
+    background-color 0.28s ease,
+    color 0.28s ease;
+}
+
+.contact-slide-content .full-social-bg li a i {
+  font-size: 0.98rem;
+  transition: transform 0.32s ease, color 0.28s ease;
+}
+
+.contact-slide-content .full-social-bg li a:hover,
+.contact-slide-content .full-social-bg li a:focus-visible {
+  background: linear-gradient(145deg, #155945 0%, #1f7258 100%) !important;
+  border-color: rgb(16 67 52 / 60%);
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgb(18 44 37 / 28%);
+  animation: contact-social-hover 0.48s ease;
+}
+
+.contact-slide-content .full-social-bg li a:hover i,
+.contact-slide-content .full-social-bg li a:focus-visible i {
+  color: #ffffff;
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.contact-slide-content .full-social-bg li a.facebook:hover,
+.contact-slide-content .full-social-bg li a.google:hover,
+.contact-slide-content .full-social-bg li a.instagram:hover,
+.contact-slide-content .full-social-bg li a.tumblr:hover,
+.contact-slide-content .full-social-bg li a.twitter:hover,
+.contact-slide-content .full-social-bg li a.youtube:hover {
+  background: linear-gradient(145deg, #155945 0%, #1f7258 100%) !important;
 }
 
 .contact-slide-hide.is-open .contact-slide-content {
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
+  opacity: 1;
+  filter: blur(0);
+}
+
+.contact-slide-hide.is-open .contact-slide-content::after {
+  opacity: 1;
+  animation: contact-sweep 0.85s ease-out 0.18s both;
+}
+
+.contact-slide-hide.is-open .contact-nav-info,
+.contact-slide-hide.is-open .contact-nav-field {
+  animation: contact-card-rise 0.55s ease-out both;
+}
+
+.contact-slide-hide.is-open .contact-nav-field {
+  animation-delay: 0.08s;
+}
+
+@keyframes contact-social-hover {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    transform: translateY(-3px) scale(1.05);
+  }
+  100% {
+    transform: translateY(-3px) scale(1);
+  }
+}
+
+@keyframes contact-sweep {
+  from {
+    transform: translateX(0) skewX(-16deg);
+  }
+  to {
+    transform: translateX(420%) skewX(-16deg);
+  }
+}
+
+@keyframes contact-card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .contact-slide-content .contact-nav {
+    padding-top: 4rem;
+  }
+
+  .contact-slide-content .contact-nav-info,
+  .contact-slide-content .contact-nav-field {
+    margin-bottom: 1rem;
+  }
 }
 
 body.is-locked {
