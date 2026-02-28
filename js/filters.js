@@ -62,6 +62,7 @@ const previewImages = {
   "sto-lida-ignatova-42-veras-avto": "images/objects/pic26.webp",
   "kvartira-volkovysk-socialisticheskaya": "images/objects/pic27.webp",
   "dom-lida-ul-shchedrina": "images/objects/pic28.webp",
+  "kvartira-lida-ul-tavlaya-25a":"images/objects/pic29.webp"
 };
 
 /* =========================================================
