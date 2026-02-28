@@ -10011,28 +10011,17 @@ recent-posts-entry-date .sx-post-info .post-title {
 /* Контейнер */
 .section-full.mobile-page-padding .about-home-left {
   position: relative;
-  padding-left: 32px;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.96),
-    rgba(255, 255, 255, 0.98)
-  );
-  border-color: rgba(21, 89, 69, 0.18);
+  padding: 34px 32px;
+  background: #ffffff;
+  border: 1px solid rgba(21, 89, 69, 0.14);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 14px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
 }
 
 /* Вертикальный акцент */
 .section-full.mobile-page-padding .about-home-left::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 6px;
-  width: 2px;
-  height: calc(100% - 6px);
-  background: linear-gradient(
-    180deg,
-    #d7b39a 0%,
-    rgba(215, 179, 154, 0.35) 100%
-  );
+  content: none;
 }
 
 /* Заголовок */
@@ -10095,7 +10084,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 /* Mobile */
 @media (max-width: 768px) {
   .section-full.mobile-page-padding .about-home-left {
-    padding-left: 0;
+    padding: 26px 22px;
   }
 
   .section-full.mobile-page-padding .about-home-left::before {
@@ -10113,23 +10102,29 @@ recent-posts-entry-date .sx-post-info .post-title {
    ABOUT SLIDER — FINAL PREMIUM
    ========================================================= */
 
-/* Карточка */
+/* Карточка в стиле блока «Я на связи» */
 .section-full.mobile-page-padding .about-home.owl-carousel .item {
   height: 520px;
   background: #ffffff;
-  border-radius: 18px;
+  border: 1px solid rgba(21, 89, 69, 0.16);
+  border-left: 4px solid var(--color-primary);
+  border-radius: 14px;
+  padding: 12px 12px 12px 16px;
   overflow: hidden;
   display: flex;
   align-items: stretch;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 /* Контейнер изображения */
 .section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect {
   height: 100%;
+  width: 100%;
   background: #ffffff;
-  border-radius: 18px;
+  border: 1px solid rgba(21, 89, 69, 0.1);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
 }
 
 /* Картинка */
@@ -10142,9 +10137,14 @@ recent-posts-entry-date .sx-post-info .post-title {
   transition: transform 0.6s ease;
 }
 
+.section-full.mobile-page-padding .about-home.owl-carousel .item:hover {
+  border-color: rgba(21, 89, 69, 0.28);
+  box-shadow: 0 30px 56px rgba(0, 0, 0, 0.1);
+}
+
 /* Очень мягкий zoom */
 .section-full.mobile-page-padding .sx-img-effect.zoom-slow:hover img {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 /* Фоновое статичное фото */
@@ -10182,6 +10182,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 @media (max-width: 768px) {
   .section-full.mobile-page-padding .about-home.owl-carousel .item {
     height: 420px;
+    padding: 10px 10px 10px 14px;
   }
 }
 
