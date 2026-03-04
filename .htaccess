@@ -2,6 +2,7 @@ AddDefaultCharset UTF-8
 Options -Indexes
 
 RewriteEngine On
+RewriteBase /
 
 # -------------------------------------------------
 # HTTPS + CANONICAL
@@ -50,9 +51,9 @@ RewriteRule ^([a-z0-9][a-z0-9-]*)/?$ /objects/$1 [R=301,L,NC]
 # -------------------------------------------------
 # CANONICAL DETAIL ROUTES
 # -------------------------------------------------
-RewriteRule ^blog/([^/]+)/?$ blog-detail.html?slug=$1 [L,QSA,NC]
-RewriteRule ^services/([^/]+)/?$ services-detail.html?slug=$1 [L,QSA,NC]
-RewriteRule ^objects/([^/]+)/?$ object-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^blog/([^/]+)/?$ blog-detail?slug=$1 [L,QSA,NC]
+RewriteRule ^services/([^/]+)/?$ services-detail?slug=$1 [L,QSA,NC]
+RewriteRule ^objects/([^/]+)/?$ object-detail?slug=$1 [L,QSA,NC]
 
 # Pretty URLs
 RewriteCond %{REQUEST_FILENAME} !-d
