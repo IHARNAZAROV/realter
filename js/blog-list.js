@@ -84,7 +84,7 @@ function renderBlogCards(articles) {
     item.innerHTML = `
       <div class="blog-post blog-grid date-style-2 blog-card">
         <div class="sx-post-media sx-img-effect img-reflection">
-          <a href="/blog-detail?slug=${article.slug}">
+          <a href="/blog/${article.slug}">
             <img src="${article.image}" alt="${article.imageAlt || article.title}" loading="lazy">
           </a>
         </div>
@@ -99,11 +99,11 @@ function renderBlogCards(articles) {
 
           <div class="sx-post-title">
             <h4 class="post-title">
-              <a href="/blog-detail?slug=${article.slug}">${article.title}</a>
+              <a href="/blog/${article.slug}">${article.title}</a>
             </h4>
           </div>
 
-          <a href="/blog-detail?slug=${article.slug}" class="blog-read-more">
+          <a href="/blog/${article.slug}" class="blog-read-more">
             Узнать подробнее <i class="fa-solid fa-arrow-right"></i>
           </a>
         </div>
