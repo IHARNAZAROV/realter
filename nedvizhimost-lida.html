@@ -7,19 +7,17 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Полезные статьи о рынке жилья в Лиде — Ольга Турко</title>
+    <title>Квартиры и дома в Лиде — объекты от риэлтера Ольги Турко</title>
     <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
     <meta
       name="description"
-      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
+      content="Каталог недвижимости в Лиде и районе: квартиры, дома, участки. Проверенные объекты с полным юридическим сопровождением."
     />
     <meta name="robots" content="index, follow" />
-    <!-- Canonical Link (SEO) -->
-    <link rel="canonical" href="https://turko.by/blog" />
+    <link rel="canonical" href="https://turko.by/nedvizhimost-lida.html" />
     <!-- =========================================
        3. ICONS & FONTS
        ========================================= -->
-    <!-- Favicons -->
     <link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
     <link rel="manifest" href="https://turko.by/site.webmanifest" />
@@ -37,29 +35,27 @@
       sizes="192x192"
       href="https://turko.by/web-app-manifest-192x192.png"
     />
-
          <!-- ==============================================
          SITE VERSION (AUTO CACHE BUSTING)
     =============================================== -->
     <script src="/site-version.php"></script>
     <!-- =========================================
-       4. STYLESHEETS (CSS)
+       4. STYLESHEETS
        ========================================= -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/owl.carousel.min.css" />
     <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned />
-    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
-    <!-- Theme Skin -->
     <link
       rel="stylesheet"
       class="skin"
       type="text/css"
       href="css/skin/skin-1.css"
     />
+    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
+    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
   </head>
   <body>
     <div class="page-wraper">
@@ -109,7 +105,6 @@
     </div>
   </div>
 </header>
-
 
 
        <!-- MOBILE MENU (NEW, ISOLATED) -->
@@ -176,62 +171,147 @@
          CONTENT START
          ========================================= -->
       <div class="page-content">
-        <!-- Inner Page Banner -->
+        <!-- Inner Banner -->
+        <section class="page-intro">
+          <div class="container">
+            <div class="page-intro-inner">
+              <span class="page-intro-eyebrow"> Объекты недвижимости </span>
 
+              <h1 class="page-intro-title">
+                Недвижимость, которую выбирают сердцем
+              </h1>
 
-<section class="page-intro">
-  <div class="container">
+              <p class="page-intro-description">
+                Здесь собраны уникальные предложения недвижимости, каждое из
+                которых готово обрести новых владельцев. <br />Я помогу вам
+                найти место, где вы будете чувствовать себя по-настоящему дома.
+              </p>
 
-    <div class="page-intro-inner">
+              <div class="page-intro-divider"></div>
 
-      <span class="page-intro-eyebrow">
-       Мой блог
-      </span>
+              <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
+                <ul>
+                  <li><a href="/">Главная</a></li>
+                  <li>Объекты</li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </section>
 
-      <h1 class="page-intro-title">
-        На одной волне с Лидой
-      </h1>
+        <!-- Section Content -->
+        <div class="section-full p-tb80 bg-white inner-page-padding">
+          <div class="container">
+            <!-- SORT -->
+            <div class="objects-filters">
+              <div class="filters-row">
+                <!-- SORT -->
+                <div class="filter-item">
+                  <label>Сортировка</label>
+                  <select id="sortSelect">
+                    <option value="recommended">Рекомендуем</option>
+                    <option value="cheap">Сначала дешевле</option>
+                    <option value="expensive">Сначала дороже</option>
+                    <option value="new">Самые новые</option>
+                    <option value="pricePerMeter">По цене за м²</option>
+                  </select>
+                </div>
 
-      <p class="page-intro-description">
- Здесь я делюсь опытом, историями, советами и мыслями о
-                    недвижимости, Лиде и жизни. <br>Всё по-честному, по-простому и
-                    по делу — так, как говорю с друзьями.<br> Если хотите понимать
-                    рынок без сложных слов и сухих графиков — добро пожаловать.
-      </p>
+                <!-- TYPE -->
+                <div class="filter-item">
+                  <label>Тип недвижимости</label>
+                  <select id="typeSelect">
+                    <option value="all">Все типы</option>
+                    <option value="Дом">Дом</option>
+                    <option value="Квартира">Квартира</option>
+                  </select>
+                </div>
 
-      <div class="page-intro-divider"></div>
+                <!-- ROOMS -->
+                <div class="filter-item">
+                  <label>Комнаты</label>
+                  <select id="roomsSelect">
+                    <option value="all">Любое</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4+</option>
+                  </select>
+                </div>
 
-      <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
-        <ul>
-          <li><a href="/">Главная</a></li>
-          <li>Блог</li>
-        </ul>
-      </nav>
+                <!-- PRICE -->
+                <div class="filter-item filter-price">
+                  <label>Цена, BYN</label>
+                  <div class="price-fields">
+                    <input type="text" id="priceFrom" placeholder="от" />
+                    <span>—</span>
+                    <input type="text" id="priceTo" placeholder="до" />
+                  </div>
+                </div>
 
-    </div>
+                <!-- LOCATION -->
+                <div class="filter-item">
+                  <label>Локация</label>
+                  <select id="locationSelect">
+                    <option value="all">Все</option>
+                    <option value="lida">Лида</option>
 
-  </div>
-</section>
+                    <option value="district">Лидский район</option>
+                    <option value="other">Другие</option>
+                  </select>
+                </div>
+                <div class="filters-reset-row">
+                  <button
+                    type="button"
+                    id="resetFilters"
+                    class="reset-filters-btn"
+                  >
+                    Сбросить фильтры
+                  </button>
 
-        <!-- Blog Grid Section -->
-<div class="section-full bg-white p-tb80 inner-page-padding">
-  <div class="container clearfix">
-    <div class="masonry-outer mfp-gallery news-masonry">
-      <!-- BLOG ITEMS FROM JSON -->
-    </div>
-  </div>
-</div>
+                  <div class="objects-counter" id="objectsCounter">
+                    Найдено объектов: 0
+                  </div>
+
+                  <div
+                    class="favorites-filter-counter"
+                    id="favoritesFilterCounter"
+                  >
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="count">0</span>
+                    <span class="label">в избранном</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- OBJECTS -->
+            <ul
+              class="masonry-outer mfp-gallery work-grid clearfix list-unstyled"
+              id="objectsList"
+            ></ul>
+            <div class="objects-load-more-wrap">
+              <button
+                type="button"
+                id="loadMoreBtn"
+                class="objects-load-more-btn"
+              >
+                Показать ещё
+              </button>
+            </div>
+           </div>
+        </div>
+        <!-- CONTENT END -->
       </div>
-      <!-- CONTENT END -->
       <!-- =========================================
-         FOOTER START
-         ========================================= -->
+           FOOTER START
+           ========================================= -->
       <footer class="site-footer footer-large footer-dark footer-wide">
         <div class="footer-top overlay-wraper">
           <div class="overlay-main"></div>
           <div class="container">
             <div class="row">
-              <!-- 1. ABOUT & SOCIAL -->
+              <!-- About -->
               <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="widget widget_about">
                   <div class="logo-footer clearfix p-b15">
@@ -281,7 +361,7 @@
                   </ul>
                 </div>
               </div>
-              <!-- 2. RECENT POSTS (Footer) -->
+              <!-- Recent Posts -->
               <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="widget recent-posts-entry-date">
                   <h5 class="widget-title">Посты в блоге</h5>
@@ -289,7 +369,7 @@
                   <div class="widget-post-bx" id="footer-recent-posts"></div>
                 </div>
               </div>
-              <!-- 3. USEFUL LINKS -->
+              <!-- Useful Links -->
               <div class="col-lg-3 col-md-6 col-sm-6 footer-col-3">
                 <div class="widget widget_services inline-links">
                   <h5 class="widget-title">Полезные ссылки</h5>
@@ -317,7 +397,7 @@
                   </ul>
                 </div>
               </div>
-              <!-- 4. CONTACTS -->
+              <!-- Contacts -->
               <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="widget widget_address_outer">
                   <h5 class="widget-title">Пора поговорить о вашем доме</h5>
@@ -339,7 +419,6 @@
               </div>
             </div>
           </div>
-          <!-- Call to Action -->
           <div class="container">
             <div class="call-to-action-wrap">
               <div class="row">
@@ -358,7 +437,7 @@
             </div>
           </div>
         </div>
-        <!-- COPYRIGHT -->
+        <!-- Copyright -->
         <div class="footer-bottom overlay-wraper">
           <div class="overlay-main"></div>
           <div class="container">
@@ -380,21 +459,17 @@
       <!-- FOOTER END -->
     </div>
     <!-- =========================================
-       JAVASCRIPT FILES
-       ========================================= -->
-    <!-- 1. Core jQuery -->
+         JAVASCRIPT FILES
+         ========================================= -->
     <script src="js/jquery-3.7.1.min.js"></script>
-    <!-- 2. Plugins -->
     <script src="js/owl.carousel.min.js" defer></script>
     <script src="js/jquery.owl-filter.js" defer></script>
-    <!-- 3. Custom Scripts -->
     <script src="js/customgpt.js" defer></script>
-    <!-- 4. Page Specific Init -->
-    <script src="/js/blog-list.js" defer></script>
-    <script src="/js/optimize.js" defer data-versioned></script>
     <script src="js/bgscroll.js" defer></script>
+    <script src="/js/optimize.js" defer data-versioned></script>
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
+    <script src="/js/filters.js" defer></script>
   </body>
 </html>
