@@ -1,0 +1,15 @@
+# Netlify routing for detail pages
+# NOTE: Netlify does not use Apache .htaccess rules.
+
+# Legacy query URLs -> pretty URLs
+/object-detail    /objects/:slug      301!   slug=:slug
+/object-detail.html    /objects/:slug      301!   slug=:slug
+/blog-detail      /blog/:slug         301!   slug=:slug
+/blog-detail.html      /blog/:slug         301!   slug=:slug
+/services-detail  /services/:slug     301!   slug=:slug
+/services-detail.html  /services/:slug     301!   slug=:slug
+
+# Pretty URLs -> existing templates (internal rewrites)
+/objects/:slug    /object-detail.html?slug=:slug      200
+/blog/:slug       /blog-detail.html?slug=:slug        200
+/services/:slug   /services-detail.html?slug=:slug    200
