@@ -1473,7 +1473,7 @@ document.addEventListener("click", (e) => {
   if (!slug) return;
 
   window.open(
-    `https://turko.by/object-detail?slug=${encodeURIComponent(slug)}`,
+    `https://turko.by/objects/${encodeURIComponent(slug)}`,
     "_blank",
     "noopener"
   );
