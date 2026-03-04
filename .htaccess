@@ -16,6 +16,21 @@ RewriteRule ^ https://turko.by%{REQUEST_URI} [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
 RewriteRule ^(.*/)?index\.html$ https://turko.by/$1 [R=301,L]
 
+# Legacy detail URLs with ?slug=... -> pretty URLs
+RewriteCond %{THE_REQUEST} \s/+object-detail(?:\.html)?\?slug=([^\s&]+) [NC]
+RewriteRule ^object-detail(?:\.html)?$ https://turko.by/objects/%1? [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+blog-detail(?:\.html)?\?slug=([^\s&]+) [NC]
+RewriteRule ^blog-detail(?:\.html)?$ https://turko.by/blog/%1? [R=301,L,NE]
+
+RewriteCond %{THE_REQUEST} \s/+services-detail(?:\.html)?\?slug=([^\s&]+) [NC]
+RewriteRule ^services-detail(?:\.html)?$ https://turko.by/services/%1? [R=301,L,NE]
+
+# Pretty detail routes -> existing templates
+RewriteRule ^objects/([^/]+)/?$ /object-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^blog/([^/]+)/?$ /blog-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^services/([^/]+)/?$ /services-detail.html?slug=$1 [L,QSA,NC]
+
 # -------------------------------------------------
 # EXCLUDE JSON FROM REWRITE
 # -------------------------------------------------

@@ -10,6 +10,20 @@ document.addEventListener("DOMContentLoaded", () => {
   loadArticleData();
 });
 
+function getSlugFromUrl() {
+  const url = new URL(window.location.href);
+  const qsSlug = url.searchParams.get("slug");
+
+  if (qsSlug) return qsSlug;
+
+  const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
+  if (parts.length === 2 && parts[0] === "blog") {
+    return decodeURIComponent(parts[1]);
+  }
+
+  return "";
+}
+
 /* =========================================================
    2. LOAD JSON
    ========================================================= */
@@ -34,8 +48,7 @@ function loadArticleData() {
         return;
       }
 
-      const params = new URLSearchParams(window.location.search);
-      const currentSlug = params.get("slug") || article.slug;
+      const currentSlug = getSlugFromUrl() || article.slug;
 
       renderArticle(article);
       renderRandomPosts(articles, currentSlug);
@@ -49,8 +62,7 @@ function loadArticleData() {
    3. GET ARTICLE BY SLUG
    ========================================================= */
 function getArticleBySlug(articles) {
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get("slug");
+  const slug = getSlugFromUrl();
 
   if (!slug) {
     return articles[0]; // fallback — первая статья
@@ -229,7 +241,7 @@ function renderRandomPosts(articles, currentSlug) {
       return `
         <div class="widget-post clearfix">
           <div class="sx-post-media">
-            <a href="/blog-detail?slug=${article.slug}">
+            <a href="/blog/${article.slug}">
               <img
                 src="${article.image}"
                 alt="${article.imageAlt || article.title}"
@@ -240,7 +252,7 @@ function renderRandomPosts(articles, currentSlug) {
           <div class="sx-post-info">
             <div class="sx-post-header">
               <h6 class="post-title">
-                <a href="/blog-detail?slug=${article.slug}">
+                <a href="/blog/${article.slug}">
                   ${article.title}
                 </a>
               </h6>
