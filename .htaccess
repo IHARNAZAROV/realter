@@ -21,6 +21,16 @@ RewriteRule ^(.*/)?index\.html$ https://turko.by/$1 [R=301,L]
 # -------------------------------------------------
 RewriteRule \.json$ - [L]
 
+# Detail routes
+RewriteRule ^blog/([^/]+)/?$ blog-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^services/([^/]+)/?$ services-detail.html?slug=$1 [L,QSA,NC]
+
+# Object details on root: /<slug>
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/(|blog|services|contact|faq|rieltor-lida|nedvizhimost-lida|cookies-policy|privacy|404|object-detail|services-detail|blog-detail)/?$ [NC]
+RewriteRule ^([a-z0-9][a-z0-9-]*)/?$ object-detail.html?slug=$1 [L,QSA,NC]
+
 # Pretty URLs
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f

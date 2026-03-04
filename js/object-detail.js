@@ -24,7 +24,16 @@
     if (isFilled(qsSlug)) return qsSlug.trim();
 
     const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
-    if (parts.length === 2 && parts[0] === "object") return parts[1];
+    if (
+      parts.length === 2 &&
+      ["object", "object-detail"].includes(parts[0])
+    ) {
+      return decodeURIComponent(parts[1]);
+    }
+
+    if (parts.length === 1 && isFilled(parts[0])) {
+      return decodeURIComponent(parts[0]);
+    }
 
     return "";
   }
@@ -533,7 +542,7 @@ function renderSidebarFooter(obj) {
         : "/images/objects/pic1.webp";
 
     const title = obj.title || "Объект недвижимости";
-    const link = `/object-detail?slug=${encodeURIComponent(obj.slug)}`;
+    const link = `/${encodeURIComponent(obj.slug)}`;
 
     return `
     <div class="item">
@@ -704,7 +713,7 @@ function initSidebarSlider(currentObj, allObjects) {
             : "";
 
         return `
-          <a href="/object-detail?slug=${obj.slug}" class="sidebar-slide">
+          <a href="/${encodeURIComponent(obj.slug)}" class="sidebar-slide">
             <div class="sidebar-slide-image">
               <img src="${img}" alt="${obj.title}">
             </div>

@@ -27,6 +27,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
+  const getSlugFromLocation = () => {
+    const url = new URL(window.location.href);
+    const qsSlug = url.searchParams.get("slug");
+    if (qsSlug) return qsSlug;
+
+    const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
+    if (parts.length === 2 && ["services-detail", "services"].includes(parts[0])) {
+      return decodeURIComponent(parts[1]);
+    }
+
+    return "";
+  };
+
   /* ================= RENDER FUNCTIONS ================= */
 
   const renderText = (section) => {
@@ -103,8 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     log("Init");
 
-    const params = new URLSearchParams(window.location.search);
-    let slug = params.get("slug");
+    let slug = getSlugFromLocation();
 
     const response = await fetch("/data/services.json");
     if (!response.ok) throw new Error("services.json not found");
@@ -212,7 +224,7 @@ canonical.setAttribute(
       data.services.forEach(item => {
         listEl.innerHTML += `
           <li class="${item.slug === slug ? "active" : ""}">
-            <a href="/services-detail?slug=${item.slug}">
+            <a href="/services/${encodeURIComponent(item.slug)}">
               ${item.title}
             </a>
           </li>

@@ -382,7 +382,7 @@ function renderObjects(list) {
       <div class="project-mas hover-shadow">
 
         <a
-          href="/object-detail?slug=${obj.slug}"
+          href="/${encodeURIComponent(obj.slug)}"
           class="card-link-overlay"
           aria-label="Открыть объект ${obj.title}"
         ></a>
@@ -410,7 +410,7 @@ function renderObjects(list) {
 
         <div class="project-info p-a20 bg-gray">
           <h4 class="sx-tilte m-t0">
-            <a href="/object-detail?slug=${obj.slug}">
+            <a href="/${encodeURIComponent(obj.slug)}">
               ${obj.title}
             </a>
           </h4>
@@ -435,7 +435,7 @@ function renderObjects(list) {
             }
           </div>
 
-          <a href="/object-detail?slug=${obj.slug}">
+          <a href="/${encodeURIComponent(obj.slug)}">
             <i class="link-plus bg-primary"></i>
           </a>
         </div>

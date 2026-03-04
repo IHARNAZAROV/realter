@@ -8,17 +8,17 @@ const SOURCES = [
   {
     file: path.join(__dirname, "data", "objects.json"),
     buildUrl: (slug) =>
-      `${SITE_URL}/object-detail?slug=${encodeURIComponent(slug)}`,
+      `${SITE_URL}/${encodeURIComponent(slug)}`,
   },
   {
     file: path.join(__dirname, "data", "services.json"),
     buildUrl: (slug) =>
-      `${SITE_URL}/services-detail?slug=${encodeURIComponent(slug)}`,
+      `${SITE_URL}/services/${encodeURIComponent(slug)}`,
   },
   {
     file: path.join(__dirname, "data", "blog-articles.json"),
     buildUrl: (slug) =>
-      `${SITE_URL}/blog-detail?slug=${encodeURIComponent(slug)}`,
+      `${SITE_URL}/blog/${encodeURIComponent(slug)}`,
   },
 ];
 
