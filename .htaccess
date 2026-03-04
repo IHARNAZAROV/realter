@@ -21,15 +21,38 @@ RewriteRule ^(.*/)?index\.html$ https://turko.by/$1 [R=301,L]
 # -------------------------------------------------
 RewriteRule \.json$ - [L]
 
-# Detail routes
-RewriteRule ^blog/([^/]+)/?$ blog-detail.html?slug=$1 [L,QSA,NC]
-RewriteRule ^services/([^/]+)/?$ services-detail.html?slug=$1 [L,QSA,NC]
+# -------------------------------------------------
+# 301 REDIRECTS TO CANONICAL DETAIL URLS
+# -------------------------------------------------
+# Legacy query URLs
+RewriteCond %{REQUEST_URI} ^/object-detail/?$ [NC]
+RewriteCond %{QUERY_STRING} (^|&)slug=([^&]+) [NC]
+RewriteRule ^object-detail/?$ /objects/%2 [R=301,L,NE]
 
-# Object details on root: /<slug>
+RewriteCond %{REQUEST_URI} ^/blog-detail/?$ [NC]
+RewriteCond %{QUERY_STRING} (^|&)slug=([^&]+) [NC]
+RewriteRule ^blog-detail/?$ /blog/%2 [R=301,L,NE]
+
+RewriteCond %{REQUEST_URI} ^/services-detail/?$ [NC]
+RewriteCond %{QUERY_STRING} (^|&)slug=([^&]+) [NC]
+RewriteRule ^services-detail/?$ /services/%2 [R=301,L,NE]
+
+# Legacy path URLs
+RewriteRule ^object-detail/([^/]+)/?$ /objects/$1 [R=301,L,NC]
+RewriteRule ^object/([^/]+)/?$ /objects/$1 [R=301,L,NC]
+
+# Previously used root-level object URL: /<slug> -> /objects/<slug>
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !^/(|blog|services|contact|faq|rieltor-lida|nedvizhimost-lida|cookies-policy|privacy|404|object-detail|services-detail|blog-detail)/?$ [NC]
-RewriteRule ^([a-z0-9][a-z0-9-]*)/?$ object-detail.html?slug=$1 [L,QSA,NC]
+RewriteCond %{REQUEST_URI} !^/(|blog|services|objects|contact|faq|rieltor-lida|nedvizhimost-lida|cookies-policy|privacy|404|object-detail|services-detail|blog-detail)/?$ [NC]
+RewriteRule ^([a-z0-9][a-z0-9-]*)/?$ /objects/$1 [R=301,L,NC]
+
+# -------------------------------------------------
+# CANONICAL DETAIL ROUTES
+# -------------------------------------------------
+RewriteRule ^blog/([^/]+)/?$ blog-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^services/([^/]+)/?$ services-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^objects/([^/]+)/?$ object-detail.html?slug=$1 [L,QSA,NC]
 
 # Pretty URLs
 RewriteCond %{REQUEST_FILENAME} !-d

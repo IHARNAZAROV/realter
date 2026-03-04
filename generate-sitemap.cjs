@@ -8,7 +8,7 @@ const SOURCES = [
   {
     file: path.join(__dirname, "data", "objects.json"),
     buildUrl: (slug) =>
-      `${SITE_URL}/${encodeURIComponent(slug)}`,
+      `${SITE_URL}/objects/${encodeURIComponent(slug)}`,
   },
   {
     file: path.join(__dirname, "data", "services.json"),

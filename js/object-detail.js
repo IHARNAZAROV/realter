@@ -26,7 +26,7 @@
     const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
     if (
       parts.length === 2 &&
-      ["object", "object-detail"].includes(parts[0])
+      ["object", "object-detail", "objects"].includes(parts[0])
     ) {
       return decodeURIComponent(parts[1]);
     }
@@ -542,7 +542,7 @@ function renderSidebarFooter(obj) {
         : "/images/objects/pic1.webp";
 
     const title = obj.title || "Объект недвижимости";
-    const link = `/${encodeURIComponent(obj.slug)}`;
+    const link = `/objects/${encodeURIComponent(obj.slug)}`;
 
     return `
     <div class="item">
@@ -713,7 +713,7 @@ function initSidebarSlider(currentObj, allObjects) {
             : "";
 
         return `
-          <a href="/${encodeURIComponent(obj.slug)}" class="sidebar-slide">
+          <a href="/objects/${encodeURIComponent(obj.slug)}" class="sidebar-slide">
             <div class="sidebar-slide-image">
               <img src="${img}" alt="${obj.title}">
             </div>
