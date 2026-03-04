@@ -146,7 +146,7 @@
           "@type": "ListItem",
           position: 2,
           name: "Объекты недвижимости",
-          item: "https://turko.by/objects",
+          item: "https://turko.by/nedvizhimost-lida",
         },
         {
           "@type": "ListItem",
