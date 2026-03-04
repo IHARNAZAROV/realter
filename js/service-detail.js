@@ -237,7 +237,7 @@ breadcrumbScript.textContent = JSON.stringify({
       "@type": "ListItem",
       "position": 2,
       "name": "Услуги риэлтера",
-      "item": "https://turko.by/rieltor-lida.html"
+      "item": "https://turko.by/rieltor-lida"
     },
     {
       "@type": "ListItem",
