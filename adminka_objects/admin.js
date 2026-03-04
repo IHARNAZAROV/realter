@@ -305,7 +305,8 @@ const previewImages = {
   "kvartira-volkovysk-socialisticheskaya":"/images/objects/pic27.webp",
   "dom-lida-ul-shchedrina":"/images/objects/pic28.webp",
   "kvartira-lida-ul-tavlaya-25a":"/images/objects/pic29.webp",
-  "kvartira-shchuchin-ul-ostrovskogo-5":"/images/objects/pic30.webp"
+  "kvartira-shchuchin-ul-ostrovskogo-5":"/images/objects/pic30.webp",
+  "kvartira-lida-ul-nevskogo-20a":"/images/objects/pic31.webp"
 };
 
 /* ======================================================
