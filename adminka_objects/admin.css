@@ -687,3 +687,72 @@ select:focus {
   cursor: pointer;
 }
 
+
+/* ======================================================
+   CORPORATE ADMIN ALIGNMENT
+====================================================== */
+.dashboard-theme {
+  --admin-primary: #155945;
+  --admin-primary-strong: #104334;
+  --admin-primary-soft: rgba(21, 89, 69, 0.16);
+  --admin-text: #e5e7eb;
+  --admin-muted: #9ca3af;
+  --admin-border: rgba(166, 205, 190, 0.22);
+  --admin-surface: rgba(255, 255, 255, 0.04);
+  --admin-radius-sm: 10px;
+  --admin-radius-md: 12px;
+  --admin-radius-lg: 14px;
+  --admin-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-theme .btn-primary,
+.dashboard-theme .btn-secondary,
+.dashboard-theme button {
+  border-radius: var(--admin-radius-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+
+.dashboard-theme .btn-primary,
+.dashboard-theme button.btn-primary {
+  background: linear-gradient(145deg, var(--admin-primary) 0%, #1f7258 100%);
+  border: 1px solid rgba(118, 178, 155, 0.4);
+  color: #fff;
+}
+
+.dashboard-theme .btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+}
+
+.dashboard-theme .btn-primary:hover,
+.dashboard-theme .btn-secondary:hover,
+.dashboard-theme button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--admin-shadow);
+}
+
+.dashboard-theme :is(input, select, textarea) {
+  border-radius: var(--admin-radius-sm);
+  border: 1px solid var(--admin-border);
+  background: rgba(14, 18, 25, 0.72);
+  color: var(--admin-text);
+}
+
+.dashboard-theme :is(input, select, textarea):focus {
+  border-color: rgba(110, 184, 157, 0.9);
+  box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.22);
+}
+
+.dashboard-theme .object,
+.dashboard-theme .modal,
+.dashboard-theme .add-object,
+.dashboard-theme .stat,
+.dashboard-theme .portfolio-stats,
+.dashboard-theme .stats-block {
+  border-radius: var(--admin-radius-lg);
+  border: 1px solid var(--admin-border);
+  box-shadow: var(--admin-shadow);
+}

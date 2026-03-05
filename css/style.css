@@ -12563,3 +12563,111 @@ recent-posts-entry-date .sx-post-info .post-title {
 .badge-sold {
   backdrop-filter: blur(2px);
 }
+
+/* ======================================================
+   CORPORATE UI SYSTEM (TOKENS + BUTTONS/FORMS/CARDS)
+====================================================== */
+:root {
+  --corp-primary: #155945;
+  --corp-primary-strong: #104334;
+  --corp-primary-soft: #eef6f2;
+  --corp-accent: #d7b39a;
+  --corp-text: #1f2937;
+  --corp-muted: #6b7280;
+  --corp-surface: #ffffff;
+  --corp-surface-alt: #f7faf8;
+  --corp-border: #dbe7e1;
+  --corp-radius-sm: 0.65rem;
+  --corp-radius-md: 0.9rem;
+  --corp-radius-lg: 1.2rem;
+  --corp-shadow-sm: 0 6px 14px rgb(16 67 52 / 8%);
+  --corp-shadow-md: 0 12px 28px rgb(16 67 52 / 14%);
+  --corp-focus: 0 0 0 3px rgb(21 89 69 / 18%);
+}
+
+:is(.site-button, .site-button-secondry, .btn-primary, .btn-secondary) {
+  border-radius: var(--corp-radius-md);
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  padding: 0.82rem 1.2rem;
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.site-button,
+.btn-primary {
+  background: linear-gradient(145deg, var(--corp-primary) 0%, #1f7258 100%);
+  color: #fff;
+  border: 1px solid rgb(16 67 52 / 28%);
+  box-shadow: var(--corp-shadow-sm);
+}
+
+.site-button-secondry,
+.btn-secondary {
+  background: var(--corp-surface);
+  color: var(--corp-primary);
+  border: 1px solid var(--corp-border);
+}
+
+:is(.site-button, .site-button-secondry, .btn-primary, .btn-secondary):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--corp-shadow-md);
+}
+
+:is(.site-button, .site-button-secondry, .btn-primary, .btn-secondary):focus-visible {
+  outline: none;
+  box-shadow: var(--corp-focus);
+}
+
+:is(input, select, textarea, .form-control) {
+  border-radius: var(--corp-radius-sm);
+  border: 1px solid var(--corp-border);
+  background: var(--corp-surface);
+  color: var(--corp-text);
+  min-height: 44px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+:is(input, select, textarea, .form-control)::placeholder {
+  color: color-mix(in srgb, var(--corp-muted) 84%, white);
+}
+
+:is(input, select, textarea, .form-control):focus {
+  border-color: var(--corp-primary);
+  box-shadow: var(--corp-focus);
+  background-color: #fff;
+}
+
+:is(
+  .service-hover-card,
+  .sx-icon-box-wraper.icon-count-2-outer,
+  .object-sidebar,
+  .agent-card,
+  .object-amenities,
+  .blog-post,
+  .contact-form
+) {
+  background: var(--corp-surface);
+  border: 1px solid rgb(21 89 69 / 10%);
+  border-radius: var(--corp-radius-lg);
+  box-shadow: var(--corp-shadow-sm);
+}
+
+:is(
+  .service-hover-card,
+  .sx-icon-box-wraper.icon-count-2-outer,
+  .object-sidebar,
+  .agent-card,
+  .object-amenities,
+  .blog-post
+):hover {
+  box-shadow: var(--corp-shadow-md);
+  border-color: rgb(21 89 69 / 20%);
+}

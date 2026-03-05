@@ -318,3 +318,26 @@
   background: #0f141a;
   color: #e5e7eb;
 }
+/* ======================================================
+   CORPORATE HEADER OVERRIDES
+====================================================== */
+.dashboard-header {
+  border-bottom: 1px solid rgba(118, 178, 155, 0.22);
+}
+
+.dashboard-header .breadcrumbs .home {
+  color: #e9f5ef;
+}
+
+.dashboard-header .breadcrumbs .project {
+  color: #a6b0bd;
+}
+
+.dashboard-header .stat {
+  border: 1px solid rgba(118, 178, 155, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(22, 27, 34, 0.92) 100%);
+}
+
+.dashboard-header .stat.is-active {
+  box-shadow: 0 0 0 2px rgba(21, 89, 69, 0.7) inset;
+}
