@@ -7407,6 +7407,85 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 .news-masonry .blog-hover-row .sx-post-media {
   overflow: hidden;
+  position: relative;
+}
+
+.news-masonry .blog-hover-row .sx-post-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.72),
+    rgba(0, 0, 0, 0.08) 45%,
+    transparent 72%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.news-masonry .blog-hover-row .masonry-item:hover .sx-post-media::after {
+  opacity: 1;
+}
+
+.news-masonry .blog-hover-row .sx-post-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  min-height: 0;
+  padding: 0 14px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.news-masonry .blog-hover-row .sx-post-title,
+.news-masonry .blog-hover-row .post-title {
+  margin: 0;
+}
+
+.news-masonry .blog-hover-row .post-title a {
+  color: #fff;
+  font-size: 34px;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.news-masonry .blog-hover-row .blog-read-more {
+  margin-top: 14px;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: auto;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.9);
+  background: transparent;
+}
+
+.news-masonry .blog-hover-row .blog-read-more:hover {
+  background: #fff;
+  color: #0f0f0f;
+  border-color: #fff;
+  box-shadow: none;
+}
+
+.news-masonry .blog-hover-row .masonry-item:hover .sx-post-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.news-masonry .blog-hover-row .masonry-item:hover .blog-read-more {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.news-masonry .blog-hover-row .sx-post-meta {
+  display: none;
 }
 
 .news-masonry .blog-hover-row .sx-post-media img {
@@ -7429,6 +7508,21 @@ recent-posts-entry-date .sx-post-info .post-title {
   .news-masonry .blog-hover-row:hover .masonry-item,
   .news-masonry .blog-hover-row:hover .masonry-item:hover {
     flex-grow: 1;
+  }
+
+  .news-masonry .blog-hover-row .sx-post-media::after,
+  .news-masonry .blog-hover-row .sx-post-info,
+  .news-masonry .blog-hover-row .blog-read-more {
+    opacity: 1;
+    transform: none;
+  }
+
+  .news-masonry .blog-hover-row .sx-post-info {
+    bottom: 14px;
+  }
+
+  .news-masonry .blog-hover-row .post-title a {
+    font-size: 24px;
   }
 }
 

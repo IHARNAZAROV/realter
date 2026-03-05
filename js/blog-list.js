@@ -90,13 +90,6 @@ function renderBlogCards(articles) {
         </div>
 
         <div class="sx-post-info p-t30">
-          <div class="sx-post-meta">
-            <ul>
-              <li class="post-date">${renderDate(article.date)}</li>
-              <li class="post-author"><span>${article.author}</span></li>
-            </ul>
-          </div>
-
           <div class="sx-post-title">
             <h4 class="post-title">
               <a href="/blog/${article.slug}">${article.title}</a>
@@ -146,10 +139,4 @@ function parseDate(str) {
     return new Date(y, m - 1, d);
   }
   return new Date(str);
-}
-
-function renderDate(dateString) {
-  const d = parseDate(dateString);
-  return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
-          <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
 }
