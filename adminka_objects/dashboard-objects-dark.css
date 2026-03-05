@@ -351,3 +351,24 @@
     height: 56px;
   }
 }
+/* ======================================================
+   CORPORATE OBJECT CARD REFINEMENT
+====================================================== */
+.dashboard-theme .object {
+  border-left: 3px solid rgba(21, 89, 69, 0.55);
+}
+
+.dashboard-theme .object .status-badge,
+.dashboard-theme .object .badge {
+  border-radius: 999px;
+  min-height: 26px;
+  padding: 4px 10px;
+}
+
+.dashboard-theme .object.is-sold {
+  border-left-color: rgba(239, 68, 68, 0.55);
+}
+
+.dashboard-theme .object.is-recommended {
+  border-left-color: rgba(245, 158, 11, 0.8);
+}

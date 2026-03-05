@@ -12671,3 +12671,102 @@ recent-posts-entry-date .sx-post-info .post-title {
   box-shadow: var(--corp-shadow-md);
   border-color: rgb(21 89 69 / 20%);
 }
+
+/* ======================================================
+   CORPORATE REFINEMENTS — NAV / HEADINGS / CARDS / SOCIAL
+====================================================== */
+.top-bar__contacts .top-bar__link {
+  color: var(--color-primary);
+  font-weight: 600;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.top-bar__contacts .top-bar__link:hover,
+.top-bar__contacts .top-bar__link:focus-visible {
+  color: #104334;
+  opacity: 0.9;
+}
+
+.top-bar__contacts li span {
+  color: #42554f;
+}
+
+.section-head--corporate {
+  margin-bottom: 2rem;
+}
+
+.section-head--corporate .section-eyebrow {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgb(21 89 69 / 20%);
+  background: #eef6f2;
+  color: #104334;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.section-head--corporate .section-title {
+  margin-bottom: 0.65rem;
+}
+
+.section-head--corporate .section-subtitle {
+  max-width: 720px;
+  margin-bottom: 0;
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.section-head--center.section-head--corporate .section-subtitle {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.project-mas {
+  position: relative;
+}
+
+.project-mas::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #1f7258 0%, #155945 100%);
+  opacity: 0.72;
+  z-index: 1;
+}
+
+.object-badges .badge {
+  min-height: 28px;
+  border: 1px solid rgb(255 255 255 / 28%);
+}
+
+:is(input, select, textarea, .form-control) {
+  min-height: 44px;
+  border-radius: 10px;
+}
+
+:is(input, select, textarea, .form-control):focus {
+  border-color: #155945;
+  box-shadow: 0 0 0 3px rgb(21 89 69 / 18%);
+}
+
+.full-social-bg li a {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid rgb(21 89 69 / 24%);
+  transition: transform 0.24s ease, box-shadow 0.24s ease, background-color 0.24s ease;
+}
+
+.full-social-bg li a:hover,
+.full-social-bg li a:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgb(18 44 37 / 20%);
+}
