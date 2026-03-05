@@ -7441,8 +7441,8 @@ recent-posts-entry-date .sx-post-info .post-title {
   opacity: 0;
   transform: translateY(10px);
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+    opacity 0.28s ease,
+    transform 0.28s ease;
 }
 
 .news-masonry .blog-hover-row .sx-post-title,
@@ -7462,26 +7462,18 @@ recent-posts-entry-date .sx-post-info .post-title {
   opacity: 0;
   transform: translateY(10px);
   pointer-events: auto;
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.9);
-  background: transparent;
-}
-
-.news-masonry .blog-hover-row .blog-read-more:hover {
-  background: #fff;
-  color: #0f0f0f;
-  border-color: #fff;
-  box-shadow: none;
 }
 
 .news-masonry .blog-hover-row .masonry-item:hover .sx-post-info {
   opacity: 1;
   transform: translateY(0);
+  transition-delay: 0.34s;
 }
 
 .news-masonry .blog-hover-row .masonry-item:hover .blog-read-more {
   opacity: 1;
   transform: translateY(0);
+  transition-delay: 0.4s;
 }
 
 .news-masonry .blog-hover-row .sx-post-meta {
