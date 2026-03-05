@@ -7376,6 +7376,62 @@ recent-posts-entry-date .sx-post-info .post-title {
   position: relative !important;
 }
 
+.news-masonry {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.news-masonry .blog-hover-row {
+  display: flex;
+  gap: 8px;
+}
+
+.news-masonry .blog-hover-row .masonry-item {
+  flex: 1 1 0;
+  min-width: 0;
+  transition: flex-grow 0.45s ease;
+}
+
+.news-masonry .blog-hover-row:hover .masonry-item {
+  flex-grow: 0.82;
+}
+
+.news-masonry .blog-hover-row:hover .masonry-item:hover {
+  flex-grow: 1.7;
+}
+
+.news-masonry .blog-hover-row .blog-card {
+  height: 100%;
+}
+
+.news-masonry .blog-hover-row .sx-post-media {
+  overflow: hidden;
+}
+
+.news-masonry .blog-hover-row .sx-post-media img {
+  width: 100%;
+  height: clamp(220px, 24vw, 360px);
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.news-masonry .blog-hover-row .masonry-item:hover .sx-post-media img {
+  transform: scale(1.12);
+}
+
+@media (max-width: 992px) {
+  .news-masonry .blog-hover-row {
+    flex-direction: column;
+  }
+
+  .news-masonry .blog-hover-row .masonry-item,
+  .news-masonry .blog-hover-row:hover .masonry-item,
+  .news-masonry .blog-hover-row:hover .masonry-item:hover {
+    flex-grow: 1;
+  }
+}
+
 /* обычная сетка */
 .objects-list.grid-mode {
   display: grid;

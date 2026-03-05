@@ -51,7 +51,7 @@ function loadBlogArticles() {
 
       fadeOutSkeletons(() => {
         renderBlogCards(articles);
-        reinitMasonry();
+        applyBlogHoverRows();
       });
     })
     .catch(console.error);
@@ -114,6 +114,29 @@ function renderBlogCards(articles) {
   });
 }
 
+function applyBlogHoverRows() {
+  const container = document.querySelector(".news-masonry");
+  if (!container) return;
+
+  const items = Array.from(container.children).filter((child) =>
+    child.classList.contains("masonry-item")
+  );
+
+  if (!items.length) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = 0; i < items.length; i += 3) {
+    const row = document.createElement("div");
+    row.className = "blog-hover-row";
+    items.slice(i, i + 3).forEach((item) => row.appendChild(item));
+    fragment.appendChild(row);
+  }
+
+  container.innerHTML = "";
+  container.appendChild(fragment);
+}
+
 /* =========================================================
    HELPERS
    ========================================================= */
@@ -129,10 +152,4 @@ function renderDate(dateString) {
   const d = parseDate(dateString);
   return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
           <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
-}
-
-function reinitMasonry() {
-  if (window.jQuery && jQuery.fn.masonry) {
-    jQuery(".news-masonry").masonry("reloadItems").masonry();
-  }
 }
