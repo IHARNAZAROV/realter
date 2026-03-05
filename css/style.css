@@ -12567,7 +12567,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 /* =========================
    SCROLL REVEAL
 ========================= */
-.reveal-on-scroll {
+.scroll-reveal-enabled .reveal-on-scroll {
   opacity: 0;
   transform: translate3d(0, 20px, 0);
   transition: opacity 0.6s ease, transform 0.6s ease;
@@ -12575,13 +12575,13 @@ recent-posts-entry-date .sx-post-info .post-title {
   will-change: opacity, transform;
 }
 
-.reveal-on-scroll.is-visible {
+.scroll-reveal-enabled .reveal-on-scroll.is-visible {
   opacity: 1;
   transform: translate3d(0, 0, 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal-on-scroll {
+  .scroll-reveal-enabled .reveal-on-scroll {
     opacity: 1;
     transform: none;
     transition: none;

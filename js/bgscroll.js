@@ -208,39 +208,37 @@ const BGScroll = (() => {
 /**
  * ScrollReveal — аккуратное появление секций при скролле
  *
- * По умолчанию помечает основные контейнеры секций и плавно
- * поднимает их при попадании во viewport.
+ * Логика:
+ * - анимируем только верхнеуровневые блоки в .page-content,
+ *   чтобы эффект был заметным и без конфликтов с вложенными элементами;
+ * - первый экран (hero) показываем сразу, без анимации;
+ * - при reduced-motion / отсутствии IntersectionObserver всё показывается сразу.
  */
 (function initScrollReveal() {
-  const revealSelector = [
-    "section",
-    ".section-full",
-    ".section__slider",
-    ".section-content",
-    ".section-head",
-    ".blog-post",
-    ".site-footer",
-  ].join(",");
+  const pageContent = document.querySelector(".page-content");
+  if (!pageContent) return;
 
   const reduceMotion =
     typeof window.matchMedia === "function" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const elements = Array.from(document.querySelectorAll(revealSelector)).filter(
-    (el) => !el.closest(".owl-carousel")
+  const elements = Array.from(pageContent.children).filter(
+    (el) => el instanceof HTMLElement && !el.matches("script, style, link")
   );
 
   if (!elements.length) return;
 
-  elements.forEach((el) => el.classList.add("reveal-on-scroll"));
+  document.documentElement.classList.add("scroll-reveal-enabled");
 
-  if (reduceMotion) {
-    elements.forEach((el) => el.classList.add("is-visible"));
-    return;
-  }
+  const [firstScreen, ...revealBlocks] = elements;
+  firstScreen.classList.add("is-visible");
 
-  if (!("IntersectionObserver" in window)) {
-    elements.forEach((el) => el.classList.add("is-visible"));
+  if (!revealBlocks.length) return;
+
+  revealBlocks.forEach((el) => el.classList.add("reveal-on-scroll"));
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    revealBlocks.forEach((el) => el.classList.add("is-visible"));
     return;
   }
 
@@ -254,13 +252,13 @@ const BGScroll = (() => {
       });
     },
     {
-      threshold: 0.18,
-      rootMargin: "0px 0px -8% 0px",
+      threshold: 0.12,
+      rootMargin: "0px 0px -10% 0px",
     }
   );
 
-  elements.forEach((el, index) => {
-    el.style.setProperty("--reveal-delay", `${Math.min(index * 30, 240)}ms`);
+  revealBlocks.forEach((el, index) => {
+    el.style.setProperty("--reveal-delay", `${Math.min(index * 60, 180)}ms`);
     observer.observe(el);
   });
 })();
