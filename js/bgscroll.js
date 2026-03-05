@@ -204,3 +204,63 @@ const BGScroll = (() => {
     },
   };
 })();
+
+/**
+ * ScrollReveal — аккуратное появление секций при скролле
+ *
+ * По умолчанию помечает основные контейнеры секций и плавно
+ * поднимает их при попадании во viewport.
+ */
+(function initScrollReveal() {
+  const revealSelector = [
+    "section",
+    ".section-full",
+    ".section__slider",
+    ".section-content",
+    ".section-head",
+    ".blog-post",
+    ".site-footer",
+  ].join(",");
+
+  const reduceMotion =
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const elements = Array.from(document.querySelectorAll(revealSelector)).filter(
+    (el) => !el.closest(".owl-carousel")
+  );
+
+  if (!elements.length) return;
+
+  elements.forEach((el) => el.classList.add("reveal-on-scroll"));
+
+  if (reduceMotion) {
+    elements.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    elements.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        entry.target.classList.add("is-visible");
+        obs.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.18,
+      rootMargin: "0px 0px -8% 0px",
+    }
+  );
+
+  elements.forEach((el, index) => {
+    el.style.setProperty("--reveal-delay", `${Math.min(index * 30, 240)}ms`);
+    observer.observe(el);
+  });
+})();
