@@ -6,7 +6,12 @@
   position: relative;
 
   background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(8px);
+  /*
+    В админке при длинном списке карточек backdrop-filter заметно тормозил
+    перетаскивание системного скроллбара (ползунок визуально отставал от
+    курсора). Убираем blur ради стабильного скролла.
+  */
+  backdrop-filter: none;
 
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
