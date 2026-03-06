@@ -317,6 +317,7 @@ const previewImages = {
 const container = document.getElementById("objects");
 const saveBtn = document.getElementById("saveBtn");
 const downloadBtn = document.getElementById("downloadBtn");
+const setTokenBtn = document.getElementById("setTokenBtn");
 const dirtyIndicator = document.getElementById("dirtyIndicator");
 const errorsBox = document.getElementById("errors");
 
@@ -767,6 +768,37 @@ function downloadJSON(filename) {
   URL.revokeObjectURL(a.href);
 }
 
+function updateTokenButtonText() {
+  if (!setTokenBtn) return;
+
+  const hasToken = !!(localStorage.getItem("adminSaveToken") || "").trim();
+  setTokenBtn.textContent = hasToken ? "🔐 Токен задан" : "🔐 Ввести токен";
+}
+
+function askAndStoreAdminToken() {
+  const currentToken = (localStorage.getItem("adminSaveToken") || "").trim();
+  const typed = prompt(
+    "Введите токен для сохранения на сервере.\nОставьте пустым, чтобы удалить токен.",
+    currentToken
+  );
+
+  if (typed === null) {
+    return;
+  }
+
+  const nextToken = typed.trim();
+  if (!nextToken) {
+    localStorage.removeItem("adminSaveToken");
+    errorsBox.style.display = "none";
+    updateTokenButtonText();
+    return;
+  }
+
+  localStorage.setItem("adminSaveToken", nextToken);
+  errorsBox.style.display = "none";
+  updateTokenButtonText();
+}
+
 async function saveObjectsToServer() {
   const adminToken = localStorage.getItem("adminSaveToken") || "";
   const headers = {
@@ -794,6 +826,12 @@ async function saveObjectsToServer() {
   if (!response.ok || payload?.status !== "ok") {
     throw new Error(payload?.error || "Не удалось сохранить данные на сервере");
   }
+}
+
+updateTokenButtonText();
+
+if (setTokenBtn) {
+  setTokenBtn.addEventListener("click", askAndStoreAdminToken);
 }
 
 downloadBtn.addEventListener("click", () => {

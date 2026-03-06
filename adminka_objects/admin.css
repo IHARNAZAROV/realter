@@ -272,6 +272,20 @@ select:focus {
   align-items: center;
 }
 
+.save-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+@media (max-width: 680px) {
+  .save-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
 /* ===== FORM GRID ===== */
 .form-grid {
   display: grid;
