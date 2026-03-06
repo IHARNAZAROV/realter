@@ -730,3 +730,50 @@ select:focus {
 .btn-danger:hover {
   filter: brightness(1.05);
 }
+
+#deleteConfirmModal {
+  background: rgba(2, 6, 23, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+#deleteConfirmModal .modal {
+  background: linear-gradient(180deg, #111827 0%, #0b1220 100%);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+#deleteConfirmModal .modal-header,
+#deleteConfirmModal .modal-footer {
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+#deleteConfirmModal .modal-header h2 {
+  margin: 0;
+  color: #f3f4f6;
+}
+
+#deleteConfirmModal .modal-close {
+  color: #9ca3af;
+}
+
+#deleteConfirmModal .modal-close:hover {
+  color: #e5e7eb;
+}
+
+#deleteConfirmModal .confirm-text {
+  color: #e5e7eb;
+}
+
+#deleteConfirmModal .confirm-subtext {
+  color: #94a3b8;
+}
+
+#deleteConfirmModal .btn-secondary {
+  background: rgba(148, 163, 184, 0.14);
+  color: #e5e7eb;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+#deleteConfirmModal .btn-secondary:hover {
+  background: rgba(148, 163, 184, 0.24);
+}
