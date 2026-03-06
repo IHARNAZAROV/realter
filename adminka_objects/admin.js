@@ -1134,6 +1134,15 @@ editModal.addEventListener("click", e => {
   if (e.target === editModal) closeEdit();
 });
 
+saveEdit.addEventListener("click", () => {
+  const errors = validateJSON(objects);
+  showErrors(errors);
+  if (errors.length) return;
+
+  render();
+  closeEdit();
+});
+
 function renderSection(title) {
   const wrap = document.createElement("div");
   wrap.className = "form-section";
