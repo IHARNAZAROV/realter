@@ -308,7 +308,8 @@ const previewImages = {
   "kvartira-shchuchin-ul-ostrovskogo-5":"/images/objects/pic30.webp",
   "kvartira-lida-ul-nevskogo-20a":"/images/objects/pic31.webp",
   "kvartira-lida-ul-sovetskaya-36": "/images/objects/pic32.webp",
-  "kvartira-lida-ul-respublikanskaya-7": "/images/objects/pic33.webp"
+  "kvartira-lida-ul-respublikanskaya-7": "/images/objects/pic33.webp",
+  "kvartira-lida-ul-kosmonavtov-12-k1": "images/objects/pic34.webp"
 };
 
 /* ======================================================
