@@ -747,13 +747,35 @@ select:focus {
   border-color: rgba(148, 163, 184, 0.2);
 }
 
+#deleteConfirmModal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#deleteConfirmModal .modal-footer {
+  background: rgba(15, 23, 42, 0.92);
+}
+
 #deleteConfirmModal .modal-header h2 {
   margin: 0;
   color: #f3f4f6;
 }
 
 #deleteConfirmModal .modal-close {
+  margin-left: auto;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
   color: #9ca3af;
+  font-size: 24px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #deleteConfirmModal .modal-close:hover {
@@ -769,9 +791,9 @@ select:focus {
 }
 
 #deleteConfirmModal .btn-secondary {
-  background: rgba(148, 163, 184, 0.14);
-  color: #e5e7eb;
-  border-color: rgba(148, 163, 184, 0.35);
+  background: rgba(71, 85, 105, 0.45);
+  color: #f8fafc;
+  border-color: rgba(148, 163, 184, 0.4);
 }
 
 #deleteConfirmModal .btn-secondary:hover {
