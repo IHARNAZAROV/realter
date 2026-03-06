@@ -28,10 +28,7 @@ function authorizeRequest(): void {
     if (function_exists('realterAuthorizeSaveRequest')) {
       $ok = (bool) realterAuthorizeSaveRequest();
       if (!$ok) {
-        $msg = function_exists('realterGetAuthErrorMessage')
-          ? (realterGetAuthErrorMessage() ?: 'Unauthorized')
-          : 'Unauthorized';
-        respond(401, ['error' => $msg]);
+        respond(401, ['error' => 'Unauthorized']);
       }
       return;
     }

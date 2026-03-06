@@ -12,9 +12,7 @@
  */
 
 // 1) File-based token (change this value on production).
-const REALTER_ADMIN_SAVE_TOKEN = 'change-this-token-to-a-long-random-string';
-
-$realterAuthError = null;
+const REALTER_ADMIN_SAVE_TOKEN = 'aygUcRRst1iJcXr1zHBQ4F5orgVZMgiR5XUJ1Ua0B46p9ctvyeu6BjkaAYFR26jk';
 
 function realterReadBearerToken(): ?string {
   $header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['Authorization'] ?? '';
@@ -30,41 +28,25 @@ function realterReadBearerToken(): ?string {
 }
 
 function realterAuthorizeSaveRequest(): bool {
-  global $realterAuthError;
   // 3) Optional session-based allow.
   if (session_status() !== PHP_SESSION_ACTIVE) {
     @session_start();
   }
   if (!empty($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
-    $realterAuthError = null;
     return true;
   }
 
   // 1/2) Token-based allow.
   $expected = getenv('REALTER_ADMIN_TOKEN') ?: REALTER_ADMIN_SAVE_TOKEN;
-  if (!$expected || $expected === 'change-this-token-to-a-long-random-string') {
+  if (!$expected || $expected === 'aygUcRRst1iJcXr1zHBQ4F5orgVZMgiR5XUJ1Ua0B46p9ctvyeu6BjkaAYFR26jk') {
     // Default token is intentionally invalid: must be configured.
-    $realterAuthError = 'Auth is not configured: set REALTER_ADMIN_TOKEN or REALTER_ADMIN_SAVE_TOKEN in adminka_objects/auth.php';
     return false;
   }
 
   $provided = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? realterReadBearerToken() ?? '';
   if (!$provided) {
-    $realterAuthError = 'Missing admin token. Set localStorage.adminSaveToken in browser.';
     return false;
   }
 
-  $ok = hash_equals($expected, trim($provided));
-  if (!$ok) {
-    $realterAuthError = 'Invalid admin token. Check token in localStorage.adminSaveToken and server config.';
-  } else {
-    $realterAuthError = null;
-  }
-
-  return $ok;
-}
-
-function realterGetAuthErrorMessage(): ?string {
-  global $realterAuthError;
-  return $realterAuthError;
+  return hash_equals($expected, $provided);
 }

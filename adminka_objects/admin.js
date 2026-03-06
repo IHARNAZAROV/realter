@@ -822,12 +822,7 @@ saveBtn.addEventListener("click", async () => {
       saveBtn.disabled = false;
     }, 1200);
   } catch (error) {
-    const isAuthError = /Unauthorized|token|Auth is not configured/i.test(error.message || "");
-    const hint = isAuthError
-      ? `<div style="margin-top:8px; font-size:12px; opacity:.9">Проверьте токен: <code>localStorage.setItem("adminSaveToken", "ВАШ_ТОКЕН")</code> и совпадение с токеном в <code>adminka_objects/auth.php</code> или <code>REALTER_ADMIN_TOKEN</code>.</div>`
-      : "";
-
-    errorsBox.innerHTML = `<strong>Ошибка сохранения:</strong> ${error.message}${hint}`;
+    errorsBox.innerHTML = `<strong>Ошибка сохранения:</strong> ${error.message}`;
     errorsBox.style.display = "block";
     saveBtn.textContent = "❌ Ошибка";
     setTimeout(() => {
