@@ -37,13 +37,12 @@ function realterAuthorizeSaveRequest(): bool {
   }
 
   // 1/2) Token-based allow.
-  $expected = getenv('REALTER_ADMIN_TOKEN') ?: REALTER_ADMIN_SAVE_TOKEN;
-  if (!$expected || $expected === 'aygUcRRst1iJcXr1zHBQ4F5orgVZMgiR5XUJ1Ua0B46p9ctvyeu6BjkaAYFR26jk') {
-    // Default token is intentionally invalid: must be configured.
+  $expected = trim((string) (getenv('REALTER_ADMIN_TOKEN') ?: REALTER_ADMIN_SAVE_TOKEN));
+  if ($expected === '') {
     return false;
   }
 
-  $provided = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? realterReadBearerToken() ?? '';
+  $provided = trim((string) ($_SERVER['HTTP_X_ADMIN_TOKEN'] ?? realterReadBearerToken() ?? ''));
   if (!$provided) {
     return false;
   }
