@@ -768,11 +768,19 @@ function downloadJSON(filename) {
 }
 
 async function saveObjectsToServer() {
+  const adminToken = localStorage.getItem("adminSaveToken") || "";
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest"
+  };
+
+  if (adminToken) {
+    headers["X-Admin-Token"] = adminToken;
+  }
+
   const response = await fetch("/adminka_objects/save.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers,
     body: JSON.stringify(objects)
   });
 
