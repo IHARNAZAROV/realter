@@ -12,7 +12,7 @@
  */
 
 // 1) File-based token (change this value on production).
-const REALTER_ADMIN_SAVE_TOKEN = 'change-this-token-to-a-long-random-string';
+const REALTER_ADMIN_SAVE_TOKEN = 'aygUcRRst1iJcXr1zHBQ4F5orgVZMgiR5XUJ1Ua0B46p9ctvyeu6BjkaAYFR26jk';
 
 function realterReadBearerToken(): ?string {
   $header = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['Authorization'] ?? '';
@@ -38,7 +38,7 @@ function realterAuthorizeSaveRequest(): bool {
 
   // 1/2) Token-based allow.
   $expected = getenv('REALTER_ADMIN_TOKEN') ?: REALTER_ADMIN_SAVE_TOKEN;
-  if (!$expected || $expected === 'change-this-token-to-a-long-random-string') {
+  if (!$expected || $expected === 'aygUcRRst1iJcXr1zHBQ4F5orgVZMgiR5XUJ1Ua0B46p9ctvyeu6BjkaAYFR26jk') {
     // Default token is intentionally invalid: must be configured.
     return false;
   }
