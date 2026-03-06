@@ -339,6 +339,14 @@ const closeEditModal = document.getElementById("closeEditModal");
 const cancelEdit = document.getElementById("cancelEdit");
 const saveEdit = document.getElementById("saveEdit");
 
+/* ===== DELETE CONFIRM MODAL ===== */
+const deleteConfirmModal = document.getElementById("deleteConfirmModal");
+const deleteConfirmText = document.getElementById("deleteConfirmText");
+const closeDeleteConfirm = document.getElementById("closeDeleteConfirm");
+const cancelDeleteConfirm = document.getElementById("cancelDeleteConfirm");
+const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+let pendingDeleteIndex = null;
+
 
 /* ======================================================
    LOAD DATA
@@ -1111,21 +1119,32 @@ function bindEditButtons() {
   });
 }
 
+function openDeleteConfirm(index) {
+  const obj = objects[index];
+  if (!obj || !deleteConfirmModal || !deleteConfirmText) return;
+
+  pendingDeleteIndex = index;
+  deleteConfirmText.textContent = `Вы действительно хотите удалить объект «${obj.title}»?`;
+  deleteConfirmModal.classList.add("is-open");
+  deleteConfirmModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeDeleteConfirmModal() {
+  if (!deleteConfirmModal) return;
+
+  pendingDeleteIndex = null;
+  deleteConfirmModal.classList.remove("is-open");
+  deleteConfirmModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
 function bindDeleteButtons() {
   document.querySelectorAll(".delete-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const index = Number(btn.dataset.index);
-      const obj = objects[index];
-      if (!obj) return;
-
-      const confirmed = window.confirm(
-        `Удалить объект «${obj.title}»? Это действие нельзя отменить.`
-      );
-      if (!confirmed) return;
-
-      objects.splice(index, 1);
-      setDirty(true);
-      render();
+      if (Number.isNaN(index)) return;
+      openDeleteConfirm(index);
     });
   });
 }
@@ -1152,6 +1171,28 @@ cancelEdit.addEventListener("click", closeEdit);
 
 editModal.addEventListener("click", e => {
   if (e.target === editModal) closeEdit();
+});
+
+closeDeleteConfirm?.addEventListener("click", closeDeleteConfirmModal);
+cancelDeleteConfirm?.addEventListener("click", closeDeleteConfirmModal);
+
+deleteConfirmModal?.addEventListener("click", e => {
+  if (e.target === deleteConfirmModal) closeDeleteConfirmModal();
+});
+
+confirmDeleteBtn?.addEventListener("click", () => {
+  if (pendingDeleteIndex === null) return;
+
+  const obj = objects[pendingDeleteIndex];
+  if (!obj) {
+    closeDeleteConfirmModal();
+    return;
+  }
+
+  objects.splice(pendingDeleteIndex, 1);
+  setDirty(true);
+  closeDeleteConfirmModal();
+  render();
 });
 
 saveEdit.addEventListener("click", () => {

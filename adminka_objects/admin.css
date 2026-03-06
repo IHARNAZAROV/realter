@@ -703,3 +703,30 @@ select:focus {
   background: rgba(239, 68, 68, 0.2);
   transform: translateY(-1px);
 }
+
+.modal-confirm {
+  max-width: 460px;
+}
+
+.confirm-text {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.confirm-subtext {
+  margin: 12px 0 0;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.btn-danger {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  filter: brightness(1.05);
+}
