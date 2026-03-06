@@ -732,7 +732,12 @@ addForm.addEventListener("submit", e => {
     });
   }
 
-  downloadSingleObject(obj);
+  objects.unshift(obj);
+  setDirty(true);
+  render();
+  addForm.reset();
+  addFlat.hidden = true;
+  addHouse.hidden = true;
   closeModal();
 });
 
@@ -753,6 +758,27 @@ function downloadJSON(filename) {
   URL.revokeObjectURL(a.href);
 }
 
+async function saveObjectsToServer() {
+  const response = await fetch("/adminka_objects/save.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(objects)
+  });
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch (_) {
+    // fallback: сервер мог вернуть не-JSON
+  }
+
+  if (!response.ok || payload?.status !== "ok") {
+    throw new Error(payload?.error || "Не удалось сохранить данные на сервере");
+  }
+}
+
 downloadBtn.addEventListener("click", () => {
   const errors = validateJSON(objects);
   showErrors(errors);
@@ -761,12 +787,32 @@ downloadBtn.addEventListener("click", () => {
   setDirty(false);
 });
 
-saveBtn.addEventListener("click", () => {
+saveBtn.addEventListener("click", async () => {
   const errors = validateJSON(objects);
   showErrors(errors);
   if (errors.length) return;
-  downloadJSON("objects.modified.json");
-  setDirty(false);
+
+  saveBtn.disabled = true;
+  const originalText = saveBtn.textContent;
+  saveBtn.textContent = "⏳ Сохраняем...";
+
+  try {
+    await saveObjectsToServer();
+    setDirty(false);
+    saveBtn.textContent = "✅ Сохранено";
+    setTimeout(() => {
+      saveBtn.textContent = originalText;
+      saveBtn.disabled = false;
+    }, 1200);
+  } catch (error) {
+    errorsBox.innerHTML = `<strong>Ошибка сохранения:</strong> ${error.message}`;
+    errorsBox.style.display = "block";
+    saveBtn.textContent = "❌ Ошибка";
+    setTimeout(() => {
+      saveBtn.textContent = originalText;
+      saveBtn.disabled = false;
+    }, 1400);
+  }
 });
 
 /* ======================================================
