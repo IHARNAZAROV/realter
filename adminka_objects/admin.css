@@ -687,3 +687,19 @@ select:focus {
   cursor: pointer;
 }
 
+
+
+.dashboard-theme .delete-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  cursor: pointer;
+}
+
+.dashboard-theme .delete-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: translateY(-1px);
+}

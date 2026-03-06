@@ -390,6 +390,7 @@ list.forEach(obj => {
 
   bind();
   bindEditButtons();
+  bindDeleteButtons();
   bindInlinePriceEdit();
   bindQuickActions();
   updateStats();
@@ -574,6 +575,7 @@ function renderObject(obj, index) {
     <div class="object-actions">
       <button class="edit-btn" data-index="${index}">✏️</button>
       <button class="view-btn" data-slug="${obj.slug}">👁</button>
+      <button class="delete-btn" data-index="${index}" title="Удалить объект">🗑</button>
     </div>
   `;
 
@@ -1105,6 +1107,25 @@ function bindEditButtons() {
     btn.addEventListener("click", () => {
       const index = Number(btn.dataset.index);
       openEditModal(index);
+    });
+  });
+}
+
+function bindDeleteButtons() {
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const index = Number(btn.dataset.index);
+      const obj = objects[index];
+      if (!obj) return;
+
+      const confirmed = window.confirm(
+        `Удалить объект «${obj.title}»? Это действие нельзя отменить.`
+      );
+      if (!confirmed) return;
+
+      objects.splice(index, 1);
+      setDirty(true);
+      render();
     });
   });
 }
