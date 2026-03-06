@@ -464,7 +464,7 @@ function renderObject(obj, index) {
 
   // 🆕 Возраст экспозиции
   const exposureHtml =
-    metrics?.exposureDays !== null
+    metrics?.exposureDays != null
       ? `${metrics.exposureDays} дн.`
       : "—";
 
@@ -638,25 +638,24 @@ function bind() {
 /* ======================================================
    MODAL LOGIC
 ====================================================== */
-if (openAddModal && addModal) {
-
-openAddModal.addEventListener("click", () => {
-  addModal.classList.add("is-open");
-  document.body.style.overflow = "hidden";
-});
-
 function closeModal() {
+  if (!addModal) return;
   addModal.classList.remove("is-open");
   document.body.style.overflow = "";
 }
 
-closeAddModal.addEventListener("click", closeModal);
-cancelAdd.addEventListener("click", closeModal);
+if (openAddModal && addModal) {
+  openAddModal.addEventListener("click", () => {
+    addModal.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  });
 
-addModal.addEventListener("click", e => {
-  if (e.target === addModal) closeModal();
-});
+  closeAddModal?.addEventListener("click", closeModal);
+  cancelAdd?.addEventListener("click", closeModal);
 
+  addModal.addEventListener("click", e => {
+    if (e.target === addModal) closeModal();
+  });
 }
 
 /* ======================================================
