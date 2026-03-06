@@ -339,6 +339,14 @@ const closeEditModal = document.getElementById("closeEditModal");
 const cancelEdit = document.getElementById("cancelEdit");
 const saveEdit = document.getElementById("saveEdit");
 
+/* ===== DELETE CONFIRM MODAL ===== */
+const deleteConfirmModal = document.getElementById("deleteConfirmModal");
+const deleteConfirmText = document.getElementById("deleteConfirmText");
+const closeDeleteConfirm = document.getElementById("closeDeleteConfirm");
+const cancelDeleteConfirm = document.getElementById("cancelDeleteConfirm");
+const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+let pendingDeleteIndex = null;
+
 
 /* ======================================================
    LOAD DATA
@@ -390,6 +398,7 @@ list.forEach(obj => {
 
   bind();
   bindEditButtons();
+  bindDeleteButtons();
   bindInlinePriceEdit();
   bindQuickActions();
   updateStats();
@@ -464,7 +473,7 @@ function renderObject(obj, index) {
 
   // 🆕 Возраст экспозиции
   const exposureHtml =
-    metrics?.exposureDays !== null
+    metrics?.exposureDays != null
       ? `${metrics.exposureDays} дн.`
       : "—";
 
@@ -574,6 +583,7 @@ function renderObject(obj, index) {
     <div class="object-actions">
       <button class="edit-btn" data-index="${index}">✏️</button>
       <button class="view-btn" data-slug="${obj.slug}">👁</button>
+      <button class="delete-btn" data-index="${index}" title="Удалить объект">🗑</button>
     </div>
   `;
 
@@ -638,25 +648,24 @@ function bind() {
 /* ======================================================
    MODAL LOGIC
 ====================================================== */
-if (openAddModal && addModal) {
-
-openAddModal.addEventListener("click", () => {
-  addModal.classList.add("is-open");
-  document.body.style.overflow = "hidden";
-});
-
 function closeModal() {
+  if (!addModal) return;
   addModal.classList.remove("is-open");
   document.body.style.overflow = "";
 }
 
-closeAddModal.addEventListener("click", closeModal);
-cancelAdd.addEventListener("click", closeModal);
+if (openAddModal && addModal) {
+  openAddModal.addEventListener("click", () => {
+    addModal.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  });
 
-addModal.addEventListener("click", e => {
-  if (e.target === addModal) closeModal();
-});
+  closeAddModal?.addEventListener("click", closeModal);
+  cancelAdd?.addEventListener("click", closeModal);
 
+  addModal.addEventListener("click", e => {
+    if (e.target === addModal) closeModal();
+  });
 }
 
 /* ======================================================
@@ -732,7 +741,12 @@ addForm.addEventListener("submit", e => {
     });
   }
 
-  downloadSingleObject(obj);
+  objects.unshift(obj);
+  setDirty(true);
+  render();
+  addForm.reset();
+  addFlat.hidden = true;
+  addHouse.hidden = true;
   closeModal();
 });
 
@@ -753,6 +767,35 @@ function downloadJSON(filename) {
   URL.revokeObjectURL(a.href);
 }
 
+async function saveObjectsToServer() {
+  const adminToken = localStorage.getItem("adminSaveToken") || "";
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest"
+  };
+
+  if (adminToken) {
+    headers["X-Admin-Token"] = adminToken;
+  }
+
+  const response = await fetch("/adminka_objects/save.php", {
+    method: "POST",
+    headers,
+    body: JSON.stringify(objects)
+  });
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch (_) {
+    // fallback: сервер мог вернуть не-JSON
+  }
+
+  if (!response.ok || payload?.status !== "ok") {
+    throw new Error(payload?.error || "Не удалось сохранить данные на сервере");
+  }
+}
+
 downloadBtn.addEventListener("click", () => {
   const errors = validateJSON(objects);
   showErrors(errors);
@@ -761,12 +804,32 @@ downloadBtn.addEventListener("click", () => {
   setDirty(false);
 });
 
-saveBtn.addEventListener("click", () => {
+saveBtn.addEventListener("click", async () => {
   const errors = validateJSON(objects);
   showErrors(errors);
   if (errors.length) return;
-  downloadJSON("objects.modified.json");
-  setDirty(false);
+
+  saveBtn.disabled = true;
+  const originalText = saveBtn.textContent;
+  saveBtn.textContent = "⏳ Сохраняем...";
+
+  try {
+    await saveObjectsToServer();
+    setDirty(false);
+    saveBtn.textContent = "✅ Сохранено";
+    setTimeout(() => {
+      saveBtn.textContent = originalText;
+      saveBtn.disabled = false;
+    }, 1200);
+  } catch (error) {
+    errorsBox.innerHTML = `<strong>Ошибка сохранения:</strong> ${error.message}`;
+    errorsBox.style.display = "block";
+    saveBtn.textContent = "❌ Ошибка";
+    setTimeout(() => {
+      saveBtn.textContent = originalText;
+      saveBtn.disabled = false;
+    }, 1400);
+  }
 });
 
 /* ======================================================
@@ -1064,6 +1127,36 @@ function bindEditButtons() {
   });
 }
 
+function openDeleteConfirm(index) {
+  const obj = objects[index];
+  if (!obj || !deleteConfirmModal || !deleteConfirmText) return;
+
+  pendingDeleteIndex = index;
+  deleteConfirmText.textContent = `Вы действительно хотите удалить объект «${obj.title}»?`;
+  deleteConfirmModal.classList.add("is-open");
+  deleteConfirmModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeDeleteConfirmModal() {
+  if (!deleteConfirmModal) return;
+
+  pendingDeleteIndex = null;
+  deleteConfirmModal.classList.remove("is-open");
+  deleteConfirmModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+function bindDeleteButtons() {
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const index = Number(btn.dataset.index);
+      if (Number.isNaN(index)) return;
+      openDeleteConfirm(index);
+    });
+  });
+}
+
 function openEditModal(index) {
   const obj = objects[index];
 
@@ -1086,6 +1179,37 @@ cancelEdit.addEventListener("click", closeEdit);
 
 editModal.addEventListener("click", e => {
   if (e.target === editModal) closeEdit();
+});
+
+closeDeleteConfirm?.addEventListener("click", closeDeleteConfirmModal);
+cancelDeleteConfirm?.addEventListener("click", closeDeleteConfirmModal);
+
+deleteConfirmModal?.addEventListener("click", e => {
+  if (e.target === deleteConfirmModal) closeDeleteConfirmModal();
+});
+
+confirmDeleteBtn?.addEventListener("click", () => {
+  if (pendingDeleteIndex === null) return;
+
+  const obj = objects[pendingDeleteIndex];
+  if (!obj) {
+    closeDeleteConfirmModal();
+    return;
+  }
+
+  objects.splice(pendingDeleteIndex, 1);
+  setDirty(true);
+  closeDeleteConfirmModal();
+  render();
+});
+
+saveEdit.addEventListener("click", () => {
+  const errors = validateJSON(objects);
+  showErrors(errors);
+  if (errors.length) return;
+
+  render();
+  closeEdit();
 });
 
 function renderSection(title) {
