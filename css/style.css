@@ -7367,6 +7367,8 @@ recent-posts-entry-date .sx-post-info .post-title {
   font-weight: 500;
   text-align: left;
   cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
   transition:
     border-color 0.25s ease,
     box-shadow 0.25s ease,
@@ -7388,6 +7390,13 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 .filter-select-trigger:hover {
   border-color: rgba(21, 89, 69, 0.35);
+}
+
+
+.filter-select-trigger:focus,
+.filter-select-trigger:focus-visible,
+.filter-select-trigger:active {
+  outline: none;
 }
 
 .filter-select-ui.is-open .filter-select-trigger {
