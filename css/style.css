@@ -7351,6 +7351,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   background-image: none;
 }
 
+.custom-select-ready .objects-filters .filter-item > select,
 .objects-filters select.is-customized {
   display: none !important;
 }

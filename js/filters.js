@@ -159,6 +159,9 @@ function syncCustomSelect(select) {
 
 function initCustomSelects() {
   const selects = document.querySelectorAll(".objects-filters select");
+  if (!selects.length) return;
+
+  document.documentElement.classList.add("custom-select-ready");
 
   selects.forEach((select) => {
     const filterItem = select.closest(".filter-item");
