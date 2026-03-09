@@ -7352,11 +7352,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .objects-filters select.is-customized {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-  width: 1px;
-  height: 1px;
+  display: none !important;
 }
 
 .custom-select {
