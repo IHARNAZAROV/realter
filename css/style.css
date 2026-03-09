@@ -7302,16 +7302,20 @@ recent-posts-entry-date .sx-post-info .post-title {
   padding: 0 12px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
-  background: #ffffff;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbfc 100%);
   font-size: 14px;
   font-weight: 500;
   color: #1c1c1c;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .objects-filters input:focus,
 .objects-filters select:focus {
   outline: none;
-  box-shadow: none;
+  box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.12);
   border-color: #155945;
 }
 
@@ -7323,6 +7327,28 @@ recent-posts-entry-date .sx-post-info .post-title {
   background-position: right 12px center;
   background-size: 14px;
   padding-right: 38px;
+  cursor: pointer;
+}
+
+.objects-filters select:hover {
+  border-color: #c9d4d0;
+  background-color: #ffffff;
+}
+
+.objects-filters select option {
+  color: #1f2937;
+  background-color: #ffffff;
+  font-weight: 500;
+}
+
+.objects-filters select option:checked {
+  background: linear-gradient(180deg, #e8f3ef 0%, #deede8 100%);
+  color: #155945;
+}
+
+.objects-filters select:disabled {
+  cursor: not-allowed;
+  background-image: none;
 }
 
 /* PRICE */
