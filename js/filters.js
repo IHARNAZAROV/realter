@@ -168,6 +168,12 @@ function initCustomSelects() {
     if (!filterItem || customSelectRegistry.has(select)) return;
 
     select.classList.add("is-customized");
+    select.hidden = true;
+    select.setAttribute("aria-hidden", "true");
+    select.setAttribute("tabindex", "-1");
+    select.style.display = "none";
+    select.style.visibility = "hidden";
+    select.style.pointerEvents = "none";
 
     const custom = document.createElement("div");
     custom.className = "custom-select";
