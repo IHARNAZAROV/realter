@@ -69,7 +69,7 @@ const previewImages = {
   "kvartira-lida-ul-respublikanskaya-7": "images/objects/pic33.webp",
   "kvartira-lida-ul-kosmonavtov-12-k1": "images/objects/pic34.webp",
   "dom-yodki-ul-sadovaya": "images/objects/pic35.webp",
-  "kvartira-lida-ul-urickogo-60": "images/objects/pic36.webp",
+  "kvartira-lida-ul-urickogo-60": "images/objects/pic36.webp"
 };
 
 /* =========================================================
