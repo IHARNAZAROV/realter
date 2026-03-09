@@ -30,6 +30,8 @@ const resetBtn = document.getElementById("resetFilters");
 const VIEW_STORAGE_KEY = "objectsViewMode";
 const FAVORITES_VIEW_KEY = "favoritesViewMode";
 
+const customSelectRegistry = new Map();
+
 /* =========================================================
    PREVIEW IMAGES (static mapping)
 ========================================================= */
@@ -144,6 +146,110 @@ function getObjectArea(obj) {
   return area > 0 ? area : null;
 }
 
+function closeCustomSelects(except = null) {
+  customSelectRegistry.forEach((api) => {
+    if (api.select !== except) api.close();
+  });
+}
+
+function syncCustomSelect(select) {
+  const api = customSelectRegistry.get(select);
+  if (api) api.syncFromNative();
+}
+
+function initCustomSelects() {
+  const selects = document.querySelectorAll(".objects-filters select");
+
+  selects.forEach((select) => {
+    const filterItem = select.closest(".filter-item");
+    if (!filterItem || customSelectRegistry.has(select)) return;
+
+    select.classList.add("is-customized");
+
+    const custom = document.createElement("div");
+    custom.className = "custom-select";
+
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "custom-select__trigger";
+    trigger.setAttribute("aria-haspopup", "listbox");
+
+    const label = document.createElement("span");
+    label.className = "custom-select__label";
+
+    const icon = document.createElement("span");
+    icon.className = "custom-select__icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.innerHTML =
+      "<svg viewBox='0 0 24 24' focusable='false'><polyline points='6 9 12 15 18 9'></polyline></svg>";
+
+    trigger.append(label, icon);
+
+    const menu = document.createElement("div");
+    menu.className = "custom-select__menu";
+    menu.setAttribute("role", "listbox");
+
+    custom.append(trigger, menu);
+    select.insertAdjacentElement("afterend", custom);
+
+    const syncFromNative = () => {
+      const current = select.options[select.selectedIndex];
+      label.textContent = current ? current.textContent : "";
+      custom.classList.toggle("is-disabled", select.disabled);
+      trigger.disabled = select.disabled;
+
+      menu.querySelectorAll("button").forEach((btn) => {
+        btn.classList.toggle("is-selected", btn.dataset.value === select.value);
+      });
+    };
+
+    const close = () => custom.classList.remove("is-open");
+
+    Array.from(select.options).forEach((option) => {
+      const optionBtn = document.createElement("button");
+      optionBtn.type = "button";
+      optionBtn.className = "custom-select__option";
+      optionBtn.dataset.value = option.value;
+      optionBtn.textContent = option.textContent || "";
+      optionBtn.setAttribute("role", "option");
+
+      optionBtn.addEventListener("click", () => {
+        if (select.value === option.value) {
+          close();
+          return;
+        }
+
+        select.value = option.value;
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+        close();
+      });
+
+      menu.appendChild(optionBtn);
+    });
+
+    trigger.addEventListener("click", () => {
+      if (select.disabled) return;
+      const willOpen = !custom.classList.contains("is-open");
+      closeCustomSelects(select);
+      custom.classList.toggle("is-open", willOpen);
+    });
+
+    select.addEventListener("change", syncFromNative);
+
+    customSelectRegistry.set(select, { select, close, syncFromNative });
+    syncFromNative();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".custom-select")) return;
+    closeCustomSelects();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeCustomSelects();
+  });
+}
+
 /* =========================================================
    INIT
 ========================================================= */
@@ -160,6 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   bindEvents();
+  initCustomSelects();
   initViewSwitcher();
 
   if (isFavoritesMode()) {
@@ -202,6 +309,11 @@ function resetFilters() {
   priceToInput.value = "";
   locationSelect.value = "all";
 
+  syncCustomSelect(sortSelect);
+  syncCustomSelect(typeSelect);
+  syncCustomSelect(roomsSelect);
+  syncCustomSelect(locationSelect);
+
   localStorage.removeItem(FILTERS_STORAGE_KEY);
   applyFiltersAndSort();
 }
@@ -213,6 +325,7 @@ function updateRoomsState() {
   const isFlat = typeSelect.value === "Квартира";
   roomsSelect.disabled = !isFlat;
   if (!isFlat) roomsSelect.value = "all";
+  syncCustomSelect(roomsSelect);
 }
 
 /* =========================================================
@@ -701,6 +814,10 @@ function loadFiltersFromStorage() {
     locationSelect.value = data.location ?? "all";
 
     updateRoomsState();
+    syncCustomSelect(sortSelect);
+    syncCustomSelect(typeSelect);
+    syncCustomSelect(roomsSelect);
+    syncCustomSelect(locationSelect);
   } catch (e) {
     localStorage.removeItem(FILTERS_STORAGE_KEY);
   }

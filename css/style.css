@@ -7351,6 +7351,105 @@ recent-posts-entry-date .sx-post-info .post-title {
   background-image: none;
 }
 
+.objects-filters select.is-customized {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+}
+
+.custom-select {
+  position: relative;
+}
+
+.custom-select__trigger {
+  width: 100%;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #d7ddd9;
+  background: linear-gradient(180deg, #ffffff 0%, #f5f8f7 100%);
+  color: #1c1c1c;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.custom-select__trigger:hover {
+  border-color: #8ea49c;
+  background-color: #fff;
+}
+
+.custom-select.is-open .custom-select__trigger {
+  border-color: #155945;
+  box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.15);
+}
+
+.custom-select__icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: #155945;
+  stroke-width: 2;
+  fill: none;
+  transition: transform 0.2s ease;
+}
+
+.custom-select.is-open .custom-select__icon svg {
+  transform: rotate(180deg);
+}
+
+.custom-select__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  border: 1px solid #cad5d0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(17, 24, 39, 0.14);
+  padding: 6px;
+  display: none;
+}
+
+.custom-select.is-open .custom-select__menu {
+  display: block;
+}
+
+.custom-select__option {
+  width: 100%;
+  border: 0;
+  background: #fff;
+  color: #1f2937;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 10px;
+  line-height: 1.2;
+}
+
+.custom-select__option:hover {
+  background: #edf4f1;
+}
+
+.custom-select__option.is-selected {
+  background: #155945;
+  color: #fff;
+}
+
+.custom-select.is-disabled .custom-select__trigger {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 /* PRICE */
 .filter-price .price-fields {
   display: flex;
