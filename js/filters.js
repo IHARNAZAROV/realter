@@ -171,9 +171,13 @@ function initCustomSelects() {
     select.hidden = true;
     select.setAttribute("aria-hidden", "true");
     select.setAttribute("tabindex", "-1");
-    select.style.display = "none";
-    select.style.visibility = "hidden";
-    select.style.pointerEvents = "none";
+    select.style.setProperty("display", "none", "important");
+    select.style.setProperty("visibility", "hidden", "important");
+    select.style.setProperty("pointer-events", "none", "important");
+    select.style.setProperty("position", "absolute", "important");
+    select.style.setProperty("width", "0", "important");
+    select.style.setProperty("height", "0", "important");
+    select.style.setProperty("opacity", "0", "important");
 
     const custom = document.createElement("div");
     custom.className = "custom-select";
