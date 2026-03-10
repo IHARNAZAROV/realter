@@ -13248,3 +13248,8 @@ recent-posts-entry-date .sx-post-info .post-title {
     border-radius: 14px 14px 0 0;
   }
 }
+
+
+body.booking-modal-open {
+  overflow: hidden;
+}

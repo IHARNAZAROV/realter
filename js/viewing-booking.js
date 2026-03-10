@@ -28,14 +28,20 @@
   let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
   function openModal() {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    document.body.classList.add('booking-modal-open');
     modal.hidden = false;
-    document.body.style.overflow = 'hidden';
   }
 
   function closeModal() {
     modal.hidden = true;
     closeCalendar();
-    document.body.style.overflow = '';
+    document.body.classList.remove('booking-modal-open');
+    document.body.style.paddingRight = '';
   }
 
   function formatISO(date) {
