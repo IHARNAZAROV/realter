@@ -81,6 +81,7 @@ const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE";
 const LIDA_CENTER = [25.299, 53.8835];
 const LIDA_ZOOM = 12;
 const MAP_LANGUAGE = "ru";
+const MAP_STYLE_URL = `https://api.maptiler.com/maps/streets-v2/style.json?key=${MAPTILER_KEY}&language=${MAP_LANGUAGE}`;
 
 let objectsMap = null;
 let mapIsReady = false;
@@ -123,6 +124,36 @@ function createPopupCard(obj) {
   `;
 }
 
+function keepPopupInsideMap(popup) {
+  if (!popup || !objectsMap) return;
+
+  const mapRect = objectsMap.getContainer().getBoundingClientRect();
+  const popupEl = popup.getElement();
+  if (!popupEl) return;
+
+  const popupRect = popupEl.getBoundingClientRect();
+  const margin = 14;
+
+  let shiftX = 0;
+  let shiftY = 0;
+
+  if (popupRect.left < mapRect.left + margin) {
+    shiftX = popupRect.left - (mapRect.left + margin);
+  } else if (popupRect.right > mapRect.right - margin) {
+    shiftX = popupRect.right - (mapRect.right - margin);
+  }
+
+  if (popupRect.top < mapRect.top + margin) {
+    shiftY = popupRect.top - (mapRect.top + margin);
+  } else if (popupRect.bottom > mapRect.bottom - margin) {
+    shiftY = popupRect.bottom - (mapRect.bottom - margin);
+  }
+
+  if (shiftX !== 0 || shiftY !== 0) {
+    objectsMap.panBy([shiftX, shiftY], { duration: 350, easing: (t) => t });
+  }
+}
+
 function initObjectsMap(objects) {
   const mapContainer = document.getElementById("objectsMap");
   if (!mapContainer || !window.maptilersdk || objectsMap) return;
@@ -131,7 +162,7 @@ function initObjectsMap(objects) {
 
   objectsMap = new maptilersdk.Map({
     container: "objectsMap",
-    style: maptilersdk.MapStyle.STREETS,
+    style: MAP_STYLE_URL,
     center: LIDA_CENTER,
     zoom: LIDA_ZOOM,
     language: MAP_LANGUAGE,
@@ -301,12 +332,15 @@ function renderMapObjects(objects) {
     activeMapPopup = new maptilersdk.Popup({
       offset: 20,
       closeButton: true,
-      anchor: "bottom",
       maxWidth: "320px",
     })
       .setLngLat(coordinates)
       .setHTML(createPopupCard(objectData))
       .addTo(objectsMap);
+
+    activeMapPopup.once("open", () => {
+      requestAnimationFrame(() => keepPopupInsideMap(activeMapPopup));
+    });
   });
 
   const bounds = new maptilersdk.LngLatBounds();
