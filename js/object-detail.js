@@ -852,6 +852,112 @@ document.addEventListener("DOMContentLoaded", initRevealBlocks);
 
 
 
+
+function initCustomSelectUI(nativeSelect) {
+  if (!nativeSelect || nativeSelect.dataset.customReady === "1") return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "filter-select-ui";
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "filter-select-trigger";
+  trigger.setAttribute("aria-haspopup", "listbox");
+  trigger.setAttribute("aria-expanded", "false");
+
+  const triggerText = document.createElement("span");
+  triggerText.className = "filter-select-trigger-text";
+
+  const menu = document.createElement("div");
+  menu.className = "filter-select-menu";
+  menu.setAttribute("role", "listbox");
+
+  wrapper.appendChild(trigger);
+  trigger.appendChild(triggerText);
+  wrapper.appendChild(menu);
+
+  nativeSelect.classList.add("is-customized-select");
+  nativeSelect.dataset.customReady = "1";
+  nativeSelect.insertAdjacentElement("afterend", wrapper);
+
+  const closeAll = () => {
+    document.querySelectorAll(".filter-select-ui.is-open").forEach((el) => {
+      if (el !== wrapper) {
+        el.classList.remove("is-open");
+        el
+          .querySelector(".filter-select-trigger")
+          ?.setAttribute("aria-expanded", "false");
+      }
+    });
+  };
+
+  function buildOptions() {
+    menu.innerHTML = "";
+
+    Array.from(nativeSelect.options).forEach((option) => {
+      const optionBtn = document.createElement("button");
+      optionBtn.type = "button";
+      optionBtn.className = "filter-select-option";
+      optionBtn.textContent = option.textContent;
+      optionBtn.dataset.value = option.value;
+      optionBtn.disabled = option.disabled;
+
+      optionBtn.addEventListener("click", () => {
+        if (nativeSelect.disabled || optionBtn.disabled) return;
+
+        nativeSelect.value = optionBtn.dataset.value;
+        nativeSelect.dispatchEvent(new Event("change", { bubbles: true }));
+
+        syncFromNative();
+        wrapper.classList.remove("is-open");
+        trigger.setAttribute("aria-expanded", "false");
+      });
+
+      menu.appendChild(optionBtn);
+    });
+  }
+
+  function syncFromNative() {
+    const selected = nativeSelect.options[nativeSelect.selectedIndex];
+    triggerText.textContent = selected ? selected.textContent : "";
+
+    menu.querySelectorAll(".filter-select-option").forEach((btn) => {
+      btn.classList.toggle("is-selected", btn.dataset.value === nativeSelect.value);
+    });
+
+    wrapper.classList.toggle("is-disabled", nativeSelect.disabled);
+    trigger.disabled = nativeSelect.disabled;
+  }
+
+  trigger.addEventListener("click", () => {
+    if (nativeSelect.disabled) return;
+
+    const willOpen = !wrapper.classList.contains("is-open");
+    closeAll();
+    wrapper.classList.toggle("is-open", willOpen);
+    trigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".filter-select-ui")) {
+      wrapper.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      wrapper.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  nativeSelect.addEventListener("change", syncFromNative);
+
+  buildOptions();
+  syncFromNative();
+}
+
 function initMortgageCalculator(obj) {
   const root = document.querySelector("[data-mortgage-calculator]");
   if (!root) return;
@@ -898,6 +1004,8 @@ function initMortgageCalculator(obj) {
   programSelect.innerHTML = programs
     .map((p) => `<option value="${p.id}">${p.title} · ${p.rate}%</option>`)
     .join("");
+
+  initCustomSelectUI(programSelect);
 
   const defaultPrice =
     typeof obj?.priceBYN === "number" && obj.priceBYN > 0 ? obj.priceBYN : 90000;
