@@ -25,8 +25,8 @@ if ($date === '' || $time === '' || mb_strlen($name) < 2 || !preg_match($phonePa
 }
 
 $botToken = getenv('TELEGRAM_BOT_TOKEN') ?: '8603985787:AAFvGsv7-wlUQBQVXBc3deckmUK1RcT1_UM';
-$chatIdsEnv = getenv('TELEGRAM_CHAT_IDS') ?: '281486249';
-$usernamesEnv = getenv('TELEGRAM_USERNAMES') ?: '@y_tery';
+$chatIdsEnv = getenv('TELEGRAM_CHAT_IDS') ?: '281486249,920099484';
+$usernamesEnv = getenv('TELEGRAM_USERNAMES') ?: '@y_tery,@TurkoOlga';
 
 if ($botToken === '') {
     http_response_code(500);
