@@ -321,6 +321,11 @@
                   <div class="object-details-groups" data-object-details></div>
                 </div>
 
+<div class="booking-section booking-section--object">
+  <button type="button" class="booking-open-btn" data-open-booking-modal>
+    Записаться на просмотр
+  </button>
+</div>
 
               </div>
 
@@ -520,18 +525,82 @@
             </div>
 
 
+
+
 <div class="object-map">
   <h4 class="object-map-title">Расположение на карте</h4>
   <div id="objectMap"></div>
 </div>
 
-
+</div>
 
           </div>
         </div>
         <!-- SECTION CONTENT END  -->
       </div>
       <!-- CONTENT END -->
+
+
+<div class="booking-modal" data-booking-modal hidden>
+  <div class="booking-modal__backdrop" data-close-booking-modal></div>
+  <div class="booking-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="booking-title">
+    <button type="button" class="booking-modal__close" data-close-booking-modal aria-label="Закрыть">×</button>
+
+    <div class="booking-card booking-card--compact" data-booking-card>
+      <header class="booking-card__header">
+        <h3 id="booking-title">Записаться на просмотр</h3>
+        <p>Выберите удобную дату и время</p>
+      </header>
+
+      <form id="viewing-booking-form" class="booking-form" novalidate data-api-endpoint="api/book-viewing.php">
+        <input type="hidden" id="booking-object-title" name="objectTitle" />
+
+        <label class="booking-label" for="booking-date-trigger">Дата просмотра</label>
+        <div class="booking-date-picker" data-date-picker>
+          <input type="hidden" id="booking-date" name="date" required />
+          <button type="button" id="booking-date-trigger" class="booking-date-trigger" aria-expanded="false" aria-controls="booking-calendar-popover">
+            <span data-date-label>Выберите дату</span>
+            <i class="fa-regular fa-calendar"></i>
+          </button>
+          <div id="booking-calendar-popover" class="booking-calendar" hidden>
+            <div class="booking-calendar__header">
+              <button type="button" class="booking-calendar__nav" data-cal-prev aria-label="Предыдущий месяц">‹</button>
+              <strong data-cal-month></strong>
+              <button type="button" class="booking-calendar__nav" data-cal-next aria-label="Следующий месяц">›</button>
+            </div>
+            <div class="booking-calendar__weekdays">
+              <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+            </div>
+            <div class="booking-calendar__grid" data-cal-grid></div>
+          </div>
+        </div>
+
+        <fieldset class="booking-times" aria-label="Выберите время">
+          <legend class="booking-label">Удобное время</legend>
+          <div class="booking-times__grid" role="radiogroup" aria-label="Доступное время">
+            <button type="button" class="booking-time-btn" data-time="10:00">10:00</button>
+            <button type="button" class="booking-time-btn" data-time="12:00">12:00</button>
+            <button type="button" class="booking-time-btn" data-time="14:00">14:00</button>
+            <button type="button" class="booking-time-btn" data-time="17:00">17:00</button>
+            <button type="button" class="booking-time-btn" data-time="19:00">19:00</button>
+          </div>
+        </fieldset>
+
+        <input type="hidden" name="time" id="booking-time" required />
+
+        <label class="booking-label" for="booking-name">Ваше имя</label>
+        <input type="text" id="booking-name" name="name" placeholder="Например, Анна" required />
+
+        <label class="booking-label" for="booking-phone">Телефон</label>
+        <input type="tel" id="booking-phone" name="phone" placeholder="+375 (__) ___-__-__" required />
+
+        <button type="submit" class="booking-submit-btn">Записаться на просмотр</button>
+        <p id="booking-feedback" class="booking-feedback" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</div>
+
       <footer class="site-footer footer-large footer-dark footer-wide">
         <div class="footer-top overlay-wraper">
           <div class="overlay-main"></div>
@@ -685,6 +754,7 @@
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
+    <script src="/js/viewing-booking.js" defer></script>
    <script src="/libs/maplibre/maplibre-gl.js"></script>
   </body>
 </html>
