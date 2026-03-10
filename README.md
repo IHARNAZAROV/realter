@@ -94,14 +94,15 @@ Example: Deploy to GitHub Pages
 
 
 ## Booking form + Telegram setup
-The booking form on `contact.html` sends data to `api/book-viewing.php`.
+The booking form on `object-detail.html` sends data to `api/book-viewing.php`.
 
 Important: this feature requires PHP hosting. On purely static hosting (`.html` only), the API endpoint returns `404`.
 
 ### Required environment variables
+- `TELEGRAM_BOT_TOKEN` default configured: `8603985787:AAFvGsv7-wlUQBQVXBc3deckmUK1RcT1_UM`.
 - `TELEGRAM_BOT_TOKEN` — token from `@BotFather`.
-- `TELEGRAM_CHAT_IDS` — comma-separated numeric chat IDs (recommended), for example: `123456789,987654321`.
-- `TELEGRAM_USERNAMES` — optional fallback if `TELEGRAM_CHAT_IDS` is not set. Default: `@TurkoOlga,@y_tery`.
+- `TELEGRAM_CHAT_IDS` — comma-separated numeric chat IDs (recommended). Current target: `281486249` (`@y_tery`).
+- `TELEGRAM_USERNAMES` — optional fallback if `TELEGRAM_CHAT_IDS` is not set. Default: `@y_tery`.
 
 ### How to get chat_id
 1. Create bot via `@BotFather` and get token.

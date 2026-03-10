@@ -12,6 +12,7 @@ $data = json_decode($raw, true);
 
 $date = trim($data['date'] ?? '');
 $time = trim($data['time'] ?? '');
+$objectTitle = trim($data['objectTitle'] ?? '');
 $name = trim($data['name'] ?? '');
 $phone = trim($data['phone'] ?? '');
 
@@ -23,9 +24,9 @@ if ($date === '' || $time === '' || mb_strlen($name) < 2 || !preg_match($phonePa
     exit;
 }
 
-$botToken = getenv('TELEGRAM_BOT_TOKEN') ?: '';
-$chatIdsEnv = getenv('TELEGRAM_CHAT_IDS') ?: '';
-$usernamesEnv = getenv('TELEGRAM_USERNAMES') ?: '@TurkoOlga,@y_tery';
+$botToken = getenv('TELEGRAM_BOT_TOKEN') ?: '8603985787:AAFvGsv7-wlUQBQVXBc3deckmUK1RcT1_UM';
+$chatIdsEnv = getenv('TELEGRAM_CHAT_IDS') ?: '281486249';
+$usernamesEnv = getenv('TELEGRAM_USERNAMES') ?: '@y_tery';
 
 if ($botToken === '') {
     http_response_code(500);
@@ -48,10 +49,17 @@ if (empty($recipients)) {
     exit;
 }
 
-$text = "Новая заявка на просмотр недвижимости:\n"
-    . "Имя: {$name}\n"
-    . "Телефон: {$phone}\n"
-    . "Дата: {$date}\n"
+$titleLine = $objectTitle !== '' ? $objectTitle : 'Не указано';
+$text = "Новая заявка на просмотр недвижимости:
+"
+    . "Объект: {$titleLine}
+"
+    . "Имя: {$name}
+"
+    . "Телефон: {$phone}
+"
+    . "Дата: {$date}
+"
     . "Время: {$time}";
 
 $errors = [];
@@ -66,7 +74,8 @@ foreach ($recipients as $chatId) {
     $context = stream_context_create([
         'http' => [
             'method' => 'POST',
-            'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+            'header' => "Content-Type: application/x-www-form-urlencoded
+",
             'content' => $payload,
             'timeout' => 15,
             'ignore_errors' => true,

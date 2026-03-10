@@ -4,6 +4,7 @@
 
   const dateInput = document.getElementById('booking-date');
   const timeInput = document.getElementById('booking-time');
+  const objectTitleInput = document.getElementById('booking-object-title');
   const nameInput = document.getElementById('booking-name');
   const phoneInput = document.getElementById('booking-phone');
   const submitBtn = form.querySelector('.booking-submit-btn');
@@ -18,6 +19,18 @@
   dateInput.min = localISODate;
 
   const phoneRegex = /^\+?[\d\s()\-]{9,20}$/;
+
+  function syncObjectTitle() {
+    if (!objectTitleInput) return;
+    const titleEl = document.querySelector('[data-hero-title]');
+    const fallback = document.querySelector('[data-page-title]');
+    const title = (titleEl && titleEl.textContent.trim()) || (fallback && fallback.textContent.trim()) || document.title;
+    objectTitleInput.value = title;
+  }
+
+  syncObjectTitle();
+  setTimeout(syncObjectTitle, 400);
+  setTimeout(syncObjectTitle, 1200);
 
   function setFeedback(message, type) {
     feedback.textContent = message;
@@ -57,6 +70,7 @@
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    syncObjectTitle();
 
     if (!isFormValid()) {
       setFeedback('Пожалуйста, заполните все поля и проверьте телефон.', 'error');
@@ -71,6 +85,7 @@
       const payload = {
         date: dateInput.value,
         time: timeInput.value,
+        objectTitle: objectTitleInput ? objectTitleInput.value : '',
         name: nameInput.value.trim(),
         phone: phoneInput.value.trim(),
       };
@@ -99,6 +114,7 @@
       setFeedback('Спасибо! Мы свяжемся с вами для подтверждения просмотра.', 'success');
       form.reset();
       timeInput.value = '';
+      syncObjectTitle();
       timeButtons.forEach((btn) => btn.classList.remove('is-active'));
     } catch (error) {
       if (error.message === 'ENDPOINT_NOT_FOUND') {

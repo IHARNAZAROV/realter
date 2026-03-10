@@ -272,42 +272,7 @@
                   </div>
 
 
-                  <section class="booking-section" aria-labelledby="booking-title">
-                    <div class="booking-card" data-booking-card>
-                      <header class="booking-card__header">
-                        <h3 id="booking-title">Записаться на просмотр</h3>
-                        <p>Выберите удобную дату и время</p>
-                      </header>
-
-                      <form id="viewing-booking-form" class="booking-form" novalidate data-api-endpoint="api/book-viewing.php">
-                        <label class="booking-label" for="booking-date">Дата просмотра</label>
-                        <input type="date" id="booking-date" name="date" required />
-
-                        <fieldset class="booking-times" aria-label="Выберите время">
-                          <legend class="booking-label">Удобное время</legend>
-                          <div class="booking-times__grid" role="radiogroup" aria-label="Доступное время">
-                            <button type="button" class="booking-time-btn" data-time="10:00">10:00</button>
-                            <button type="button" class="booking-time-btn" data-time="12:00">12:00</button>
-                            <button type="button" class="booking-time-btn" data-time="14:00">14:00</button>
-                            <button type="button" class="booking-time-btn" data-time="17:00">17:00</button>
-                            <button type="button" class="booking-time-btn" data-time="19:00">19:00</button>
-                          </div>
-                        </fieldset>
-
-                        <input type="hidden" name="time" id="booking-time" required />
-
-                        <label class="booking-label" for="booking-name">Ваше имя</label>
-                        <input type="text" id="booking-name" name="name" placeholder="Например, Анна" required />
-
-                        <label class="booking-label" for="booking-phone">Телефон</label>
-                        <input type="tel" id="booking-phone" name="phone" placeholder="+375 (__) ___-__-__" required />
-
-                        <button type="submit" class="booking-submit-btn">Записаться на просмотр</button>
-                        <p id="booking-feedback" class="booking-feedback" aria-live="polite"></p>
-                        <p class="booking-help-text">Если форма не отправляется, проверьте настройки Telegram-бота на сервере.</p>
-                      </form>
-                    </div>
-                  </section>
+                  
                 </div>
               </div>
 
@@ -529,6 +494,5 @@
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
-    <script src="js/viewing-booking.js" defer></script>
   </body>
 </html>
