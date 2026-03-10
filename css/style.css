@@ -13007,6 +13007,13 @@ recent-posts-entry-date .sx-post-info .post-title {
   color: #b91c1c;
 }
 
+.booking-help-text {
+  margin: -8px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+
 @keyframes bookingCardReveal {
   to {
     opacity: 1;

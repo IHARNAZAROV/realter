@@ -24,6 +24,8 @@ if ($date === '' || $time === '' || mb_strlen($name) < 2 || !preg_match($phonePa
 }
 
 $botToken = getenv('TELEGRAM_BOT_TOKEN') ?: '';
+$chatIdsEnv = getenv('TELEGRAM_CHAT_IDS') ?: '';
+$usernamesEnv = getenv('TELEGRAM_USERNAMES') ?: '@TurkoOlga,@y_tery';
 
 if ($botToken === '') {
     http_response_code(500);
@@ -31,24 +33,59 @@ if ($botToken === '') {
     exit;
 }
 
-$recipients = ['@TurkoOlga', '@y_tery'];
-$message = "Новая заявка на просмотр недвижимости:%0A"
-    . "Имя: " . rawurlencode($name) . "%0A"
-    . "Телефон: " . rawurlencode($phone) . "%0A"
-    . "Дата: " . rawurlencode($date) . "%0A"
-    . "Время: " . rawurlencode($time);
+$recipients = [];
+if ($chatIdsEnv !== '') {
+    $recipients = array_map('trim', explode(',', $chatIdsEnv));
+} else {
+    $recipients = array_map('trim', explode(',', $usernamesEnv));
+}
+
+$recipients = array_values(array_filter($recipients, static fn($value) => $value !== ''));
+
+if (empty($recipients)) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'Telegram recipients are not configured'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+$text = "Новая заявка на просмотр недвижимости:\n"
+    . "Имя: {$name}\n"
+    . "Телефон: {$phone}\n"
+    . "Дата: {$date}\n"
+    . "Время: {$time}";
 
 $errors = [];
 
 foreach ($recipients as $chatId) {
-    $url = "https://api.telegram.org/bot{$botToken}/sendMessage?chat_id="
-        . rawurlencode($chatId)
-        . "&text=" . $message;
+    $endpoint = "https://api.telegram.org/bot{$botToken}/sendMessage";
+    $payload = http_build_query([
+        'chat_id' => $chatId,
+        'text' => $text,
+    ]);
 
-    $result = @file_get_contents($url);
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+            'content' => $payload,
+            'timeout' => 15,
+            'ignore_errors' => true,
+        ],
+    ]);
+
+    $result = @file_get_contents($endpoint, false, $context);
 
     if ($result === false) {
-        $errors[] = $chatId;
+        $errors[] = ['recipient' => $chatId, 'reason' => 'network_error'];
+        continue;
+    }
+
+    $decoded = json_decode($result, true);
+    if (!is_array($decoded) || !($decoded['ok'] ?? false)) {
+        $errors[] = [
+            'recipient' => $chatId,
+            'reason' => $decoded['description'] ?? 'telegram_error',
+        ];
     }
 }
 
@@ -57,7 +94,7 @@ if (!empty($errors)) {
     echo json_encode([
         'ok' => false,
         'error' => 'Failed to deliver to Telegram recipients',
-        'failed' => $errors,
+        'details' => $errors,
     ], JSON_UNESCAPED_UNICODE);
     exit;
 }

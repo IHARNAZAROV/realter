@@ -9,6 +9,7 @@
   const submitBtn = form.querySelector('.booking-submit-btn');
   const feedback = document.getElementById('booking-feedback');
   const timeButtons = Array.from(form.querySelectorAll('.booking-time-btn'));
+  const endpoint = form.dataset.apiEndpoint || 'api/book-viewing.php';
 
   const today = new Date();
   const localISODate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
@@ -74,14 +75,25 @@
         phone: phoneInput.value.trim(),
       };
 
-      const response = await fetch('/api/book-viewing.php', {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error('Server error');
+      if (response.status === 404) {
+        throw new Error('ENDPOINT_NOT_FOUND');
+      }
+
+      let result = null;
+      try {
+        result = await response.json();
+      } catch (_) {
+        result = null;
+      }
+
+      if (!response.ok || (result && result.ok === false)) {
+        throw new Error((result && result.error) || 'REQUEST_FAILED');
       }
 
       setFeedback('Спасибо! Мы свяжемся с вами для подтверждения просмотра.', 'success');
@@ -89,7 +101,13 @@
       timeInput.value = '';
       timeButtons.forEach((btn) => btn.classList.remove('is-active'));
     } catch (error) {
-      setFeedback('Не удалось отправить заявку. Попробуйте позже или свяжитесь по телефону.', 'error');
+      if (error.message === 'ENDPOINT_NOT_FOUND') {
+        setFeedback('Ошибка 404: обработчик формы не найден. Проверьте путь к API и PHP на сервере.', 'error');
+      } else if (error.message && error.message.toLowerCase().includes('telegram')) {
+        setFeedback('Заявка не отправлена: Telegram не настроен на сервере. Проверьте токен и chat_id.', 'error');
+      } else {
+        setFeedback('Не удалось отправить заявку. Попробуйте позже или свяжитесь по телефону.', 'error');
+      }
     } finally {
       submitBtn.textContent = 'Записаться на просмотр';
       refreshSubmitState();

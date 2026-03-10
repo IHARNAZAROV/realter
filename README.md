@@ -92,6 +92,29 @@ Example: Deploy to GitHub Pages
 - Adjust styles in the CSS files (variables and layout) to match branding.
 - Extend JavaScript code to integrate real backend APIs (for forms or listings).
 
+
+## Booking form + Telegram setup
+The booking form on `contact.html` sends data to `api/book-viewing.php`.
+
+Important: this feature requires PHP hosting. On purely static hosting (`.html` only), the API endpoint returns `404`.
+
+### Required environment variables
+- `TELEGRAM_BOT_TOKEN` — token from `@BotFather`.
+- `TELEGRAM_CHAT_IDS` — comma-separated numeric chat IDs (recommended), for example: `123456789,987654321`.
+- `TELEGRAM_USERNAMES` — optional fallback if `TELEGRAM_CHAT_IDS` is not set. Default: `@TurkoOlga,@y_tery`.
+
+### How to get chat_id
+1. Create bot via `@BotFather` and get token.
+2. Ask recipient to start a chat with this bot (`/start`).
+3. Open in browser:
+   `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
+4. Find `message.chat.id` for each recipient and add to `TELEGRAM_CHAT_IDS`.
+
+### Troubleshooting
+- `404` in browser console on submit: backend path is unavailable (no PHP routing/hosting).
+- `Telegram token is not configured`: missing `TELEGRAM_BOT_TOKEN` on server.
+- Delivery errors: recipient did not start bot, invalid chat ID, or bot has no permission to message target.
+
 ## Contributing
 Contributions are welcome — especially for:
 - Accessibility improvements

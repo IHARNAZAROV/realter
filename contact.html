@@ -279,7 +279,7 @@
                         <p>Выберите удобную дату и время</p>
                       </header>
 
-                      <form id="viewing-booking-form" class="booking-form" novalidate>
+                      <form id="viewing-booking-form" class="booking-form" novalidate data-api-endpoint="api/book-viewing.php">
                         <label class="booking-label" for="booking-date">Дата просмотра</label>
                         <input type="date" id="booking-date" name="date" required />
 
@@ -304,6 +304,7 @@
 
                         <button type="submit" class="booking-submit-btn">Записаться на просмотр</button>
                         <p id="booking-feedback" class="booking-feedback" aria-live="polite"></p>
+                        <p class="booking-help-text">Если форма не отправляется, проверьте настройки Telegram-бота на сервере.</p>
                       </form>
                     </div>
                   </section>
