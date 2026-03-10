@@ -851,6 +851,236 @@ document.addEventListener("DOMContentLoaded", initRevealBlocks);
 
 
 
+
+
+function initCustomSelectUI(nativeSelect) {
+  if (!nativeSelect || nativeSelect.dataset.customReady === "1") return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "filter-select-ui";
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "filter-select-trigger";
+  trigger.setAttribute("aria-haspopup", "listbox");
+  trigger.setAttribute("aria-expanded", "false");
+
+  const triggerText = document.createElement("span");
+  triggerText.className = "filter-select-trigger-text";
+
+  const menu = document.createElement("div");
+  menu.className = "filter-select-menu";
+  menu.setAttribute("role", "listbox");
+
+  wrapper.appendChild(trigger);
+  trigger.appendChild(triggerText);
+  wrapper.appendChild(menu);
+
+  nativeSelect.classList.add("is-customized-select");
+  nativeSelect.dataset.customReady = "1";
+  nativeSelect.insertAdjacentElement("afterend", wrapper);
+
+  const closeAll = () => {
+    document.querySelectorAll(".filter-select-ui.is-open").forEach((el) => {
+      if (el !== wrapper) {
+        el.classList.remove("is-open");
+        el
+          .querySelector(".filter-select-trigger")
+          ?.setAttribute("aria-expanded", "false");
+      }
+    });
+  };
+
+  function buildOptions() {
+    menu.innerHTML = "";
+
+    Array.from(nativeSelect.options).forEach((option) => {
+      const optionBtn = document.createElement("button");
+      optionBtn.type = "button";
+      optionBtn.className = "filter-select-option";
+      optionBtn.textContent = option.textContent;
+      optionBtn.dataset.value = option.value;
+      optionBtn.disabled = option.disabled;
+
+      optionBtn.addEventListener("click", () => {
+        if (nativeSelect.disabled || optionBtn.disabled) return;
+
+        nativeSelect.value = optionBtn.dataset.value;
+        nativeSelect.dispatchEvent(new Event("change", { bubbles: true }));
+
+        syncFromNative();
+        wrapper.classList.remove("is-open");
+        trigger.setAttribute("aria-expanded", "false");
+      });
+
+      menu.appendChild(optionBtn);
+    });
+  }
+
+  function syncFromNative() {
+    const selected = nativeSelect.options[nativeSelect.selectedIndex];
+    triggerText.textContent = selected ? selected.textContent : "";
+
+    menu.querySelectorAll(".filter-select-option").forEach((btn) => {
+      btn.classList.toggle("is-selected", btn.dataset.value === nativeSelect.value);
+    });
+
+    wrapper.classList.toggle("is-disabled", nativeSelect.disabled);
+    trigger.disabled = nativeSelect.disabled;
+  }
+
+  trigger.addEventListener("click", () => {
+    if (nativeSelect.disabled) return;
+
+    const willOpen = !wrapper.classList.contains("is-open");
+    closeAll();
+    wrapper.classList.toggle("is-open", willOpen);
+    trigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".filter-select-ui")) {
+      wrapper.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      wrapper.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  nativeSelect.addEventListener("change", syncFromNative);
+
+  buildOptions();
+  syncFromNative();
+}
+
+function initMortgageCalculator(obj) {
+  const root = document.querySelector("[data-mortgage-calculator]");
+  if (!root) return;
+
+  const programSelect = root.querySelector("[data-mortgage-program]");
+  const priceInput = root.querySelector("[data-mortgage-price]");
+  const downPaymentInput = root.querySelector("[data-mortgage-down-payment]");
+  const termInput = root.querySelector("[data-mortgage-term]");
+  const rateInput = root.querySelector("[data-mortgage-rate]");
+
+  const loanEl = root.querySelector("[data-mortgage-loan]");
+  const paymentEl = root.querySelector("[data-mortgage-payment]");
+  const overpayEl = root.querySelector("[data-mortgage-overpay]");
+  const totalEl = root.querySelector("[data-mortgage-total]");
+
+  if (!programSelect || !priceInput || !downPaymentInput || !termInput || !rateInput) {
+    return;
+  }
+
+  const programs = [
+    {
+      id: "ready-home",
+      title: "Готовое жильё (аннуитет)",
+      rate: 17.5,
+      maxYears: 20,
+      minDownPercent: 10,
+    },
+    {
+      id: "new-building",
+      title: "Новостройка от партнёров (аннуитет)",
+      rate: 16.2,
+      maxYears: 25,
+      minDownPercent: 15,
+    },
+    {
+      id: "family",
+      title: "Семейный капитал / льготные категории",
+      rate: 14.5,
+      maxYears: 30,
+      minDownPercent: 5,
+    },
+  ];
+
+  programSelect.innerHTML = programs
+    .map((p) => `<option value="${p.id}">${p.title} · ${p.rate}%</option>`)
+    .join("");
+
+  initCustomSelectUI(programSelect);
+
+  const defaultPrice =
+    typeof obj?.priceBYN === "number" && obj.priceBYN > 0 ? obj.priceBYN : 90000;
+
+  priceInput.value = String(defaultPrice);
+
+  function formatByn(value) {
+    return `${Math.round(value).toLocaleString("ru-RU")} BYN`;
+  }
+
+  function recalc() {
+    const selected =
+      programs.find((p) => p.id === programSelect.value) || programs[0];
+
+    const price = Math.max(Number(priceInput.value) || 0, 0);
+
+    const minDownPayment = Math.round((price * selected.minDownPercent) / 100);
+    downPaymentInput.min = String(minDownPayment);
+
+    if (!downPaymentInput.value || Number(downPaymentInput.value) < minDownPayment) {
+      downPaymentInput.value = String(minDownPayment);
+    }
+
+    const downPayment = Math.min(Math.max(Number(downPaymentInput.value) || 0, 0), price);
+
+    termInput.max = String(selected.maxYears);
+    if (!termInput.value || Number(termInput.value) > selected.maxYears) {
+      termInput.value = String(Math.min(20, selected.maxYears));
+    }
+
+    if (Number(termInput.value) < 1) {
+      termInput.value = "1";
+    }
+
+    rateInput.value = String(selected.rate);
+
+    const years = Number(termInput.value) || 1;
+    const annualRate = Number(rateInput.value) || 0;
+
+    const loanAmount = Math.max(price - downPayment, 0);
+    const months = years * 12;
+    const monthlyRate = annualRate / 100 / 12;
+
+    let monthlyPayment = 0;
+
+    if (loanAmount <= 0 || months <= 0) {
+      monthlyPayment = 0;
+    } else if (monthlyRate === 0) {
+      monthlyPayment = loanAmount / months;
+    } else {
+      monthlyPayment =
+        loanAmount *
+        ((monthlyRate * (1 + monthlyRate) ** months) /
+          ((1 + monthlyRate) ** months - 1));
+    }
+
+    const totalPayment = monthlyPayment * months;
+    const overpayment = Math.max(totalPayment - loanAmount, 0);
+
+    if (loanEl) loanEl.textContent = formatByn(loanAmount);
+    if (paymentEl) paymentEl.textContent = formatByn(monthlyPayment);
+    if (overpayEl) overpayEl.textContent = formatByn(overpayment);
+    if (totalEl) totalEl.textContent = formatByn(totalPayment);
+  }
+
+  programSelect.addEventListener("change", recalc);
+  [priceInput, downPaymentInput, termInput, rateInput].forEach((el) => {
+    el.addEventListener("input", recalc);
+    el.addEventListener("change", recalc);
+  });
+
+  programSelect.value = programs[0].id;
+  recalc();
+}
+
 function initObjectMap(obj) {
   if (!obj || !obj.location || !obj.location.lat || !obj.location.lng) {
     console.warn("Координаты объекта не найдены");
@@ -958,6 +1188,7 @@ async function init() {
     renderAmenities(obj);
     generateObjectSchema(obj);
     initObjectMap(obj);
+    initMortgageCalculator(obj);
 
   } catch (e) {
     console.error("INIT ERROR:", e);
