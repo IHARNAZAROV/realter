@@ -80,9 +80,11 @@ const previewImages = {
 const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE";
 const LIDA_CENTER = [25.299, 53.8835];
 const LIDA_ZOOM = 12;
+const MAP_LANGUAGE = "ru";
 
 let objectsMap = null;
 let mapIsReady = false;
+let activeMapPopup = null;
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -132,12 +134,18 @@ function initObjectsMap(objects) {
     style: maptilersdk.MapStyle.STREETS,
     center: LIDA_CENTER,
     zoom: LIDA_ZOOM,
+    language: MAP_LANGUAGE,
   });
 
   objectsMap.addControl(new maptilersdk.NavigationControl(), "top-right");
 
   objectsMap.on("load", () => {
     mapIsReady = true;
+
+    if (typeof objectsMap.setLanguage === "function") {
+      objectsMap.setLanguage(MAP_LANGUAGE);
+    }
+
     renderMapObjects(objects);
   });
 }
@@ -277,8 +285,26 @@ function renderMapObjects(objects) {
     const objectData = objects.find((obj) => obj.slug === slug);
     if (!objectData) return;
 
-    new maptilersdk.Popup({ offset: 16, closeButton: true })
-      .setLngLat(feature.geometry.coordinates)
+    const coordinates = feature.geometry.coordinates.slice();
+
+    if (activeMapPopup) {
+      activeMapPopup.remove();
+      activeMapPopup = null;
+    }
+
+    objectsMap.easeTo({
+      center: coordinates,
+      duration: 700,
+      zoom: Math.max(objectsMap.getZoom(), 12),
+    });
+
+    activeMapPopup = new maptilersdk.Popup({
+      offset: 20,
+      closeButton: true,
+      anchor: "bottom",
+      maxWidth: "320px",
+    })
+      .setLngLat(coordinates)
       .setHTML(createPopupCard(objectData))
       .addTo(objectsMap);
   });

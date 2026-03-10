@@ -13331,10 +13331,26 @@ recent-posts-entry-date .sx-post-info .post-title {
   background: #12632f;
 }
 
+
+.maplibregl-popup {
+  max-width: 320px !important;
+}
+
 .maplibregl-popup-content {
   padding: 0;
   border-radius: 10px;
   overflow: hidden;
+}
+
+.maplibregl-popup-close-button {
+  right: 6px;
+  top: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 20px;
+  line-height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 @media (max-width: 991px) {
