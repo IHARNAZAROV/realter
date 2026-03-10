@@ -8875,6 +8875,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  align-items: end;
 }
 
 .mortgage-calculator__field {
@@ -8886,7 +8887,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 .mortgage-calculator__field label {
   display: block;
   margin-bottom: 6px;
-  min-height: 16px;
+  min-height: 34px;
   font-size: 12px;
   font-weight: 700;
   color: #155945;
@@ -8905,11 +8906,21 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .mortgage-calculator .filter-select-trigger {
-  height: 42px;
+  min-height: 64px;
+  height: auto;
+  padding: 10px 40px 10px 14px;
   border-radius: 10px;
   border: 1px solid rgba(21, 89, 69, 0.25);
   color: #0f3f32;
   font-size: 14px;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+}
+
+.mortgage-calculator .filter-select-trigger .filter-select-trigger-text {
+  display: block;
+  white-space: normal;
 }
 
 .mortgage-calculator .filter-select-ui.is-open .filter-select-trigger {
@@ -8967,6 +8978,10 @@ recent-posts-entry-date .sx-post-info .post-title {
 
   .mortgage-calculator__field label {
     min-height: auto;
+  }
+
+  .mortgage-calculator .filter-select-trigger {
+    min-height: 56px;
   }
 }
 
