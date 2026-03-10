@@ -3,6 +3,13 @@
   if (!form) return;
 
   const dateInput = document.getElementById('booking-date');
+  const dateTrigger = document.getElementById('booking-date-trigger');
+  const dateLabel = form.querySelector('[data-date-label]');
+  const calendar = document.getElementById('booking-calendar-popover');
+  const calMonth = form.querySelector('[data-cal-month]');
+  const calGrid = form.querySelector('[data-cal-grid]');
+  const calPrev = form.querySelector('[data-cal-prev]');
+  const calNext = form.querySelector('[data-cal-next]');
   const timeInput = document.getElementById('booking-time');
   const objectTitleInput = document.getElementById('booking-object-title');
   const nameInput = document.getElementById('booking-name');
@@ -12,13 +19,107 @@
   const timeButtons = Array.from(form.querySelectorAll('.booking-time-btn'));
   const endpoint = form.dataset.apiEndpoint || 'api/book-viewing.php';
 
-  const today = new Date();
-  const localISODate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
-    .toISOString()
-    .split('T')[0];
-  dateInput.min = localISODate;
-
   const phoneRegex = /^\+?[\d\s()\-]{9,20}$/;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  function formatISO(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  function formatRU(date) {
+    return date.toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
+  }
+
+  function openCalendar() {
+    calendar.hidden = false;
+    dateTrigger.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeCalendar() {
+    calendar.hidden = true;
+    dateTrigger.setAttribute('aria-expanded', 'false');
+  }
+
+  function renderCalendar() {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    calMonth.textContent = currentMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+
+    const firstDay = new Date(year, month, 1);
+    const startOffset = (firstDay.getDay() + 6) % 7;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    calGrid.innerHTML = '';
+
+    for (let i = 0; i < startOffset; i += 1) {
+      const empty = document.createElement('button');
+      empty.type = 'button';
+      empty.className = 'booking-calendar__day is-empty';
+      empty.textContent = ' ';
+      calGrid.appendChild(empty);
+    }
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'booking-calendar__day';
+      btn.textContent = String(day);
+      const d = new Date(year, month, day);
+      const iso = formatISO(d);
+      btn.dataset.date = iso;
+
+      if (d < today) {
+        btn.classList.add('is-disabled');
+      } else {
+        btn.addEventListener('click', () => {
+          dateInput.value = iso;
+          dateLabel.textContent = formatRU(d);
+          calGrid.querySelectorAll('.booking-calendar__day').forEach((el) => el.classList.remove('is-selected'));
+          btn.classList.add('is-selected');
+          closeCalendar();
+          refreshSubmitState();
+          setFeedback('');
+        });
+      }
+
+      if (dateInput.value === iso) {
+        btn.classList.add('is-selected');
+      }
+
+      calGrid.appendChild(btn);
+    }
+  }
+
+  dateTrigger.addEventListener('click', () => {
+    if (calendar.hidden) openCalendar();
+    else closeCalendar();
+  });
+
+  calPrev.addEventListener('click', () => {
+    const candidate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+    if (candidate >= new Date(today.getFullYear(), today.getMonth(), 1)) {
+      currentMonth = candidate;
+      renderCalendar();
+    }
+  });
+
+  calNext.addEventListener('click', () => {
+    currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    renderCalendar();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!form.contains(event.target)) closeCalendar();
+  });
 
   function syncObjectTitle() {
     if (!objectTitleInput) return;
@@ -61,7 +162,7 @@
     });
   });
 
-  [dateInput, nameInput, phoneInput].forEach((field) => {
+  [nameInput, phoneInput].forEach((field) => {
     field.addEventListener('input', () => {
       refreshSubmitState();
       setFeedback('');
@@ -96,10 +197,6 @@
         body: JSON.stringify(payload),
       });
 
-      if (response.status === 404) {
-        throw new Error('ENDPOINT_NOT_FOUND');
-      }
-
       let result = null;
       try {
         result = await response.json();
@@ -113,22 +210,19 @@
 
       setFeedback('Спасибо! Мы свяжемся с вами для подтверждения просмотра.', 'success');
       form.reset();
+      dateLabel.textContent = 'Выберите дату';
       timeInput.value = '';
       syncObjectTitle();
       timeButtons.forEach((btn) => btn.classList.remove('is-active'));
+      renderCalendar();
     } catch (error) {
-      if (error.message === 'ENDPOINT_NOT_FOUND') {
-        setFeedback('Ошибка 404: обработчик формы не найден. Проверьте путь к API и PHP на сервере.', 'error');
-      } else if (error.message && error.message.toLowerCase().includes('telegram')) {
-        setFeedback('Заявка не отправлена: Telegram не настроен на сервере. Проверьте токен и chat_id.', 'error');
-      } else {
-        setFeedback('Не удалось отправить заявку. Попробуйте позже или свяжитесь по телефону.', 'error');
-      }
+      setFeedback('Не удалось отправить заявку. Попробуйте позже или свяжитесь по телефону.', 'error');
     } finally {
       submitBtn.textContent = 'Записаться на просмотр';
       refreshSubmitState();
     }
   });
 
+  renderCalendar();
   refreshSubmitState();
 })();
