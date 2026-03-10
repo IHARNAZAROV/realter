@@ -1,6 +1,9 @@
 (function () {
   const form = document.getElementById('viewing-booking-form');
-  if (!form) return;
+  const modal = document.querySelector('[data-booking-modal]');
+  const openBtn = document.querySelector('[data-open-booking-modal]');
+  const closeBtns = Array.from(document.querySelectorAll('[data-close-booking-modal]'));
+  if (!form || !modal || !openBtn) return;
 
   const dateInput = document.getElementById('booking-date');
   const dateTrigger = document.getElementById('booking-date-trigger');
@@ -23,6 +26,17 @@
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   let currentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  function openModal() {
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+    closeCalendar();
+    document.body.style.overflow = '';
+  }
 
   function formatISO(date) {
     const y = date.getFullYear();
@@ -75,7 +89,6 @@
       btn.textContent = String(day);
       const d = new Date(year, month, day);
       const iso = formatISO(d);
-      btn.dataset.date = iso;
 
       if (d < today) {
         btn.classList.add('is-disabled');
@@ -99,28 +112,6 @@
     }
   }
 
-  dateTrigger.addEventListener('click', () => {
-    if (calendar.hidden) openCalendar();
-    else closeCalendar();
-  });
-
-  calPrev.addEventListener('click', () => {
-    const candidate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
-    if (candidate >= new Date(today.getFullYear(), today.getMonth(), 1)) {
-      currentMonth = candidate;
-      renderCalendar();
-    }
-  });
-
-  calNext.addEventListener('click', () => {
-    currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
-    renderCalendar();
-  });
-
-  document.addEventListener('click', (event) => {
-    if (!form.contains(event.target)) closeCalendar();
-  });
-
   function syncObjectTitle() {
     if (!objectTitleInput) return;
     const titleEl = document.querySelector('[data-hero-title]');
@@ -128,10 +119,6 @@
     const title = (titleEl && titleEl.textContent.trim()) || (fallback && fallback.textContent.trim()) || document.title;
     objectTitleInput.value = title;
   }
-
-  syncObjectTitle();
-  setTimeout(syncObjectTitle, 400);
-  setTimeout(syncObjectTitle, 1200);
 
   function setFeedback(message, type) {
     feedback.textContent = message;
@@ -151,6 +138,36 @@
   function refreshSubmitState() {
     submitBtn.disabled = !isFormValid();
   }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtns.forEach((btn) => btn.addEventListener('click', closeModal));
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !modal.hidden) closeModal();
+  });
+
+  dateTrigger.addEventListener('click', () => {
+    if (calendar.hidden) openCalendar();
+    else closeCalendar();
+  });
+
+  calPrev.addEventListener('click', () => {
+    const candidate = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+    if (candidate >= new Date(today.getFullYear(), today.getMonth(), 1)) {
+      currentMonth = candidate;
+      renderCalendar();
+    }
+  });
+
+  calNext.addEventListener('click', () => {
+    currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    renderCalendar();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (modal.hidden) return;
+    if (!form.contains(event.target) && !openBtn.contains(event.target)) closeCalendar();
+  });
 
   timeButtons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -215,6 +232,7 @@
       syncObjectTitle();
       timeButtons.forEach((btn) => btn.classList.remove('is-active'));
       renderCalendar();
+      closeModal();
     } catch (error) {
       setFeedback('Не удалось отправить заявку. Попробуйте позже или свяжитесь по телефону.', 'error');
     } finally {
@@ -223,6 +241,9 @@
     }
   });
 
+  syncObjectTitle();
+  setTimeout(syncObjectTitle, 400);
+  setTimeout(syncObjectTitle, 1200);
   renderCalendar();
   refreshSubmitState();
 })();

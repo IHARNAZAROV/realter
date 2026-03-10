@@ -13159,3 +13159,92 @@ recent-posts-entry-date .sx-post-info .post-title {
     font-size: 21px;
   }
 }
+
+.booking-open-btn {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #2e7d32 0%, #256629 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 12px 28px rgba(46, 125, 50, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.booking-open-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(46, 125, 50, 0.3);
+}
+
+.booking-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.booking-modal[hidden] {
+  display: none;
+}
+
+.booking-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(2px);
+}
+
+.booking-modal__dialog {
+  position: relative;
+  width: min(640px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  border-radius: 16px;
+  z-index: 1;
+}
+
+.booking-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #0f172a;
+  z-index: 2;
+}
+
+.booking-modal .booking-card--compact {
+  max-width: none;
+  padding: 20px;
+}
+
+@media (max-width: 767px) {
+  .booking-section--object {
+    margin-top: 14px;
+    margin-bottom: 16px;
+  }
+
+  .booking-open-btn {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+
+  .booking-modal {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .booking-modal__dialog {
+    width: 100%;
+    max-height: 90vh;
+    border-radius: 14px 14px 0 0;
+  }
+}
