@@ -72,6 +72,228 @@ const previewImages = {
   "kvartira-lida-ul-urickogo-60": "images/objects/pic36.webp"
 };
 
+
+
+/* =========================================================
+   MAP
+========================================================= */
+const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE";
+const LIDA_CENTER = [25.299, 53.8835];
+const LIDA_ZOOM = 12;
+
+let objectsMap = null;
+let mapIsReady = false;
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function getObjectCoordinates(obj) {
+  const lat = Number(obj?.location?.lat);
+  const lng = Number(obj?.location?.lng);
+
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+
+  return [lng, lat];
+}
+
+function createPopupCard(obj) {
+  const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
+  const title = escapeHtml(obj.title || "Объект недвижимости");
+  const address = escapeHtml(obj.address || "Адрес уточняйте");
+  const price = formatPrice(obj.priceBYN || 0);
+
+  return `
+    <article class="map-popup-card">
+      <img class="map-popup-image" src="${imgSrc}" alt="${title}" loading="lazy" />
+      <div class="map-popup-content">
+        <h3 class="map-popup-title">${title}</h3>
+        <p class="map-popup-price">${price} BYN</p>
+        <p class="map-popup-address">${address}</p>
+        <a class="map-popup-link" href="/objects/${obj.slug}">Подробнее</a>
+      </div>
+    </article>
+  `;
+}
+
+function initObjectsMap(objects) {
+  const mapContainer = document.getElementById("objectsMap");
+  if (!mapContainer || !window.maptilersdk || objectsMap) return;
+
+  maptilersdk.config.apiKey = MAPTILER_KEY;
+
+  objectsMap = new maptilersdk.Map({
+    container: "objectsMap",
+    style: maptilersdk.MapStyle.STREETS,
+    center: LIDA_CENTER,
+    zoom: LIDA_ZOOM,
+  });
+
+  objectsMap.addControl(new maptilersdk.NavigationControl(), "top-right");
+
+  objectsMap.on("load", () => {
+    mapIsReady = true;
+    renderMapObjects(objects);
+  });
+}
+
+function renderMapObjects(objects) {
+  if (!objectsMap || !mapIsReady) return;
+
+  const features = objects
+    .map((obj) => {
+      const coordinates = getObjectCoordinates(obj);
+      if (!coordinates) return null;
+
+      return {
+        type: "Feature",
+        geometry: { type: "Point", coordinates },
+        properties: {
+          slug: obj.slug,
+          title: obj.title || "",
+          address: obj.address || "",
+          priceBYN: obj.priceBYN || 0,
+        },
+      };
+    })
+    .filter(Boolean);
+
+  if (objectsMap.getLayer("clusters")) {
+    objectsMap.removeLayer("clusters");
+    objectsMap.removeLayer("cluster-count");
+    objectsMap.removeLayer("unclustered-point");
+  }
+  if (objectsMap.getSource("objects")) {
+    objectsMap.removeSource("objects");
+  }
+
+  objectsMap.addSource("objects", {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features,
+    },
+    cluster: true,
+    clusterMaxZoom: 14,
+    clusterRadius: 45,
+    generateId: true,
+  });
+
+  objectsMap.addLayer({
+    id: "clusters",
+    type: "circle",
+    source: "objects",
+    filter: ["has", "point_count"],
+    paint: {
+      "circle-color": "#1f9d55",
+      "circle-radius": ["step", ["get", "point_count"], 18, 10, 22, 30, 28],
+      "circle-opacity": 0.9,
+      "circle-stroke-color": "#ffffff",
+      "circle-stroke-width": 2,
+    },
+  });
+
+  objectsMap.addLayer({
+    id: "cluster-count",
+    type: "symbol",
+    source: "objects",
+    filter: ["has", "point_count"],
+    layout: {
+      "text-field": ["get", "point_count_abbreviated"],
+      "text-font": ["Noto Sans Regular"],
+      "text-size": 13,
+    },
+    paint: {
+      "text-color": "#ffffff",
+    },
+  });
+
+  objectsMap.addLayer({
+    id: "unclustered-point",
+    type: "circle",
+    source: "objects",
+    filter: ["!", ["has", "point_count"]],
+    paint: {
+      "circle-color": "#16a34a",
+      "circle-radius": [
+        "case",
+        ["boolean", ["feature-state", "hover"], false],
+        11,
+        8,
+      ],
+      "circle-stroke-color": "#ffffff",
+      "circle-stroke-width": 2,
+      "circle-opacity": 1,
+    },
+  });
+
+  objectsMap.on("click", "clusters", (e) => {
+    const feature = e.features?.[0];
+    if (!feature) return;
+
+    const clusterId = feature.properties.cluster_id;
+    objectsMap.getSource("objects").getClusterExpansionZoom(clusterId, (err, zoom) => {
+      if (err) return;
+      objectsMap.easeTo({
+        center: feature.geometry.coordinates,
+        zoom,
+      });
+    });
+  });
+
+  let hoveredId = null;
+
+  objectsMap.on("mousemove", "unclustered-point", (e) => {
+    objectsMap.getCanvas().style.cursor = "pointer";
+    const feature = e.features?.[0];
+    if (!feature) return;
+
+    if (hoveredId !== null) {
+      objectsMap.setFeatureState({ source: "objects", id: hoveredId }, { hover: false });
+    }
+
+    hoveredId = feature.id;
+    objectsMap.setFeatureState({ source: "objects", id: hoveredId }, { hover: true });
+  });
+
+  objectsMap.on("mouseleave", "unclustered-point", () => {
+    objectsMap.getCanvas().style.cursor = "";
+    if (hoveredId !== null) {
+      objectsMap.setFeatureState({ source: "objects", id: hoveredId }, { hover: false });
+      hoveredId = null;
+    }
+  });
+
+  objectsMap.on("click", "unclustered-point", (e) => {
+    const feature = e.features?.[0];
+    if (!feature) return;
+
+    const slug = feature.properties.slug;
+    const objectData = objects.find((obj) => obj.slug === slug);
+    if (!objectData) return;
+
+    new maptilersdk.Popup({ offset: 16, closeButton: true })
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML(createPopupCard(objectData))
+      .addTo(objectsMap);
+  });
+
+  const bounds = new maptilersdk.LngLatBounds();
+  features.forEach((feature) => bounds.extend(feature.geometry.coordinates));
+
+  if (!bounds.isEmpty()) {
+    objectsMap.fitBounds(bounds, {
+      padding: { top: 40, right: 40, bottom: 40, left: 40 },
+      maxZoom: 13,
+      duration: 900,
+    });
+  }
+}
 /* =========================================================
    HELPERS
 ========================================================= */
@@ -154,6 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((r) => r.json())
     .then((data) => {
       allObjects = data;
+      initObjectsMap(allObjects);
       updateRoomsState();
       loadFiltersFromStorage();
       applyFiltersAndSort();

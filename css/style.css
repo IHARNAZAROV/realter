@@ -13256,3 +13256,100 @@ recent-posts-entry-date .sx-post-info .post-title {
     border-radius: 14px 14px 0 0;
   }
 }
+
+/* =========================================================
+   OBJECTS MAP
+========================================================= */
+.objects-map-section {
+  margin: 22px 0 34px;
+}
+
+.objects-map {
+  width: 100%;
+  height: 520px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 35px rgba(12, 25, 20, 0.16);
+}
+
+.map-popup-card {
+  width: min(280px, 78vw);
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+}
+
+.map-popup-image {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  display: block;
+}
+
+.map-popup-content {
+  padding: 12px 14px 14px;
+}
+
+.map-popup-title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+
+.map-popup-price {
+  margin: 0 0 6px;
+  color: #17803c;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.map-popup-address {
+  margin: 0 0 12px;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.map-popup-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 14px;
+  background: #17803c;
+  color: #fff !important;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.map-popup-link:hover {
+  background: #12632f;
+}
+
+.maplibregl-popup-content {
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+@media (max-width: 991px) {
+  .objects-map {
+    height: 420px;
+  }
+}
+
+@media (max-width: 640px) {
+  .objects-map-section {
+    margin: 18px 0 26px;
+  }
+
+  .objects-map {
+    height: 340px;
+    border-radius: 10px;
+  }
+}

@@ -56,6 +56,10 @@
     <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.maptiler.com/maptiler-sdk-js/v2.2.0/maptiler-sdk.css"
+    />
   </head>
   <body>
     <div class="page-wraper">
@@ -285,6 +289,10 @@
               </div>
             </div>
 
+            <section class="objects-map-section" aria-label="Карта объектов недвижимости">
+              <div id="objectsMap" class="objects-map"></div>
+            </section>
+
             <!-- OBJECTS -->
             <ul
               class="masonry-outer mfp-gallery work-grid clearfix list-unstyled"
@@ -470,6 +478,10 @@
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
+    <script
+      src="https://cdn.maptiler.com/maptiler-sdk-js/v2.2.0/maptiler-sdk.umd.min.js"
+      defer
+    ></script>
     <script src="/js/filters.js" defer></script>
     <script src="/js/filters-custom-select.js" defer></script>
   </body>
