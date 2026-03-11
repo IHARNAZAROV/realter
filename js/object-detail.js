@@ -958,6 +958,8 @@ function initCustomSelectUI(nativeSelect) {
   syncFromNative();
 }
 
+window.initCustomSelectUI = initCustomSelectUI;
+
 function initMortgageCalculator(obj) {
   if (typeof window.initMultiBankMortgageCalculator === "function") {
     window.initMultiBankMortgageCalculator(obj);
