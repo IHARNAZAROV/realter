@@ -65,8 +65,16 @@
       }
 
       // Service slider
-      const $serviceSlider = $(".service-slider");
-      if ($serviceSlider.length) {
+      const initServiceSlider = () => {
+        const $serviceSlider = $(".service-slider");
+        if (!$serviceSlider.length || !$serviceSlider.children(".item").length) {
+          return;
+        }
+
+        if ($serviceSlider.hasClass("owl-loaded")) {
+          return;
+        }
+
         $serviceSlider.owlCarousel({
           loop: true,
           autoplay: true,
@@ -92,7 +100,10 @@
             1200: { items: 3 },
           },
         });
-      }
+      };
+
+      initServiceSlider();
+      $window.on("recommended-slider-ready", initServiceSlider);
     }
   }
 
