@@ -71,7 +71,6 @@
     if (!root || !programs.length) return;
 
     const bankSelect = root.querySelector("[data-mortgage-bank]");
-    const bankLogo = root.querySelector("[data-mortgage-bank-logo]");
     const bankTitle = root.querySelector("[data-mortgage-bank-title]");
     const programSelect = root.querySelector("[data-mortgage-program]");
     const descriptionEl = root.querySelector("[data-mortgage-description]");
@@ -123,9 +122,6 @@
       programSelect.innerHTML = options;
       refreshCustomSelect(programSelect);
 
-      if (bankLogo) {
-        bankLogo.textContent = bank.bankLogo || bank.bankName.slice(0, 2).toUpperCase();
-      }
 
       if (bankTitle) {
         bankTitle.textContent = `Ипотечный калькулятор — ${bank.bankName}`;

@@ -8865,25 +8865,10 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 
 .mortgage-calculator__bank-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  display: block;
   margin-bottom: 6px;
 }
 
-.mortgage-calculator__bank-logo {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 800;
-  color: #ffffff;
-  background: #155945;
-}
 
 .mortgage-calculator__program-description {
   margin: 4px 0 14px;
@@ -8938,33 +8923,37 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .mortgage-calculator .filter-select-trigger {
-  min-height: 64px;
-  height: auto;
-  padding: 10px 40px 10px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(21, 89, 69, 0.25);
-  color: #0f3f32;
+  border-color: #d9e1df;
+  border-radius: 12px;
+  min-height: 46px;
+  height: 46px;
+  padding: 0 40px 0 14px;
+  color: #1f2937;
   font-size: 14px;
-  line-height: 1.35;
-  display: flex;
-  align-items: center;
+  font-weight: 500;
 }
 
 .mortgage-calculator .filter-select-trigger .filter-select-trigger-text {
   display: block;
-  white-space: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mortgage-calculator .filter-select-ui.is-open .filter-select-trigger {
   border-color: #155945;
-  box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.12);
+  box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.14);
 }
 
 .mortgage-calculator__field input:focus,
-.mortgage-calculator__field select:focus {
-  outline: none;
+.mortgage-calculator__field input:focus-visible,
+.mortgage-calculator__field select:focus,
+.mortgage-calculator__field select:focus-visible,
+.mortgage-calculator .filter-select-trigger:focus,
+.mortgage-calculator .filter-select-trigger:focus-visible {
+  outline: none !important;
   border-color: #155945;
-  box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.12);
+  box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.14);
 }
 
 .mortgage-calculator__results {
@@ -9013,7 +9002,8 @@ recent-posts-entry-date .sx-post-info .post-title {
   }
 
   .mortgage-calculator .filter-select-trigger {
-    min-height: 56px;
+    min-height: 46px;
+    height: 46px;
   }
 }
 
