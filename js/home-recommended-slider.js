@@ -27,6 +27,7 @@
     street = street.replace(/^ул\.?\s*/i, "");
     street = street.replace(/,\s*д\.?\s*\d+[а-яa-z0-9-]*/i, "");
     street = street.replace(/,\s*\d+[а-яa-z0-9-]*(?:\s*корп\.?\s*\d+)?/i, "");
+    street = street.replace(/,\s*корп(?:ус)?\.?\s*\d+[а-яa-z0-9-]*/i, "");
 
     street = street.trim().replace(/[,.\s]+$/g, "");
     return street ? `улица ${street}` : "";
