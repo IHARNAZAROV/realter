@@ -8923,14 +8923,28 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .mortgage-calculator .filter-select-trigger {
-  border-color: #d9e1df;
-  border-radius: 12px;
-  min-height: 46px;
+  width: 100%;
   height: 46px;
   padding: 0 40px 0 14px;
+  border-radius: 12px;
+  border: 1px solid #d9e1df;
+  background: #ffffff;
   color: #1f2937;
   font-size: 14px;
   font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  outline: none !important;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.mortgage-calculator .filter-select-trigger:hover {
+  border-color: rgba(21, 89, 69, 0.35);
 }
 
 .mortgage-calculator .filter-select-trigger .filter-select-trigger-text {
@@ -8940,9 +8954,42 @@ recent-posts-entry-date .sx-post-info .post-title {
   text-overflow: ellipsis;
 }
 
+.mortgage-calculator .filter-select-trigger:focus,
+.mortgage-calculator .filter-select-trigger:focus-visible,
+.mortgage-calculator .filter-select-trigger:active {
+  outline: none !important;
+}
+
 .mortgage-calculator .filter-select-ui.is-open .filter-select-trigger {
   border-color: #155945;
   box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.14);
+}
+
+.mortgage-calculator .filter-select-menu {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(21, 89, 69, 0.18);
+  box-shadow:
+    0 16px 36px rgba(17, 24, 39, 0.14),
+    0 4px 12px rgba(21, 89, 69, 0.08);
+}
+
+.mortgage-calculator .filter-select-option {
+  border: none;
+  background: transparent;
+  border-radius: 9px;
+  color: #1f2937;
+  outline: none !important;
+}
+
+.mortgage-calculator .filter-select-option:hover {
+  background: rgba(21, 89, 69, 0.08);
+}
+
+.mortgage-calculator .filter-select-option.is-selected {
+  background: rgba(21, 89, 69, 0.14);
+  color: #155945;
+  font-weight: 600;
 }
 
 .mortgage-calculator__field input:focus,
