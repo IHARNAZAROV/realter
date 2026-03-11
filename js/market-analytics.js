@@ -2,6 +2,8 @@
   const objectsPath = '/data/objects.json';
   const cityName = 'Лида';
   const roomTypes = [1, 2, 3, 4];
+  const minObjectsForRoom = 3;
+  const minDatasetsForChart = 2;
 
   const formatCurrency = (value) =>
     new Intl.NumberFormat('ru-RU', {
@@ -51,6 +53,11 @@
   const setText = (selector, text) => {
     const el = document.querySelector(selector);
     if (el) el.textContent = text;
+  };
+
+  const setHidden = (selector, hidden) => {
+    const el = document.querySelector(selector);
+    if (el) el.hidden = Boolean(hidden);
   };
 
   const groupByMonth = (items) => {
@@ -160,12 +167,6 @@
         `Средняя цена за м² (${cityName}): ${formatCurrency(calcAveragePerSqm(apartments))}`
       );
 
-      roomTypes.forEach((rooms) => {
-        const roomApartments = apartments.filter((item) => Number(item.rooms) === rooms);
-        setText(`#avg-room-${rooms}-price`, formatCurrency(calcAverage(roomApartments, (item) => item.priceBYN)));
-        setText(`#avg-room-${rooms}-sqm`, `Средняя цена за м²: ${formatCurrency(calcAveragePerSqm(roomApartments))}`);
-      });
-
       const monthlyBuckets = groupByMonth(apartments);
       const labels = monthlyBuckets.map((bucket) => bucket.label);
 
@@ -176,31 +177,61 @@
         4: { border: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.15)' },
       };
 
-      const datasets = roomTypes.map((rooms) => {
+      const datasets = [];
+      const trendSeriesByMonth = labels.map(() => []);
+
+      roomTypes.forEach((rooms) => {
+        const roomApartments = apartments.filter((item) => Number(item.rooms) === rooms);
+        const showRoom = roomApartments.length >= minObjectsForRoom;
+
+        setHidden(`[data-kind="room-${rooms}"]`, !showRoom);
+
+        if (!showRoom) {
+          return;
+        }
+
+        setText(`#avg-room-${rooms}-price`, formatCurrency(calcAverage(roomApartments, (item) => item.priceBYN)));
+        setText(`#avg-room-${rooms}-sqm`, `Средняя цена за м²: ${formatCurrency(calcAveragePerSqm(roomApartments))}`);
+
         const color = palette[rooms];
-        return {
+        const roomData = monthlyBuckets.map((bucket, idx) => {
+          const roomItems = bucket.value.filter((item) => Number(item.rooms) === rooms);
+          const point = roomItems.length ? calcAverage(roomItems, (item) => item.priceBYN) : null;
+          if (Number.isFinite(point)) {
+            trendSeriesByMonth[idx].push(point);
+          }
+          return point;
+        });
+
+        datasets.push({
           label: `${rooms}-комнатные`,
-          data: monthlyBuckets.map((bucket) => {
-            const roomItems = bucket.value.filter((item) => Number(item.rooms) === rooms);
-            return roomItems.length ? calcAverage(roomItems, (item) => item.priceBYN) : null;
-          }),
+          data: roomData,
           borderColor: color.border,
           backgroundColor: color.bg,
           fill: false,
           spanGaps: true,
           tension: 0.35,
-        };
+        });
       });
 
-      const overallSeries = monthlyBuckets.map((bucket) => calcAverage(bucket.value, (item) => item.priceBYN));
-      const trend = buildTrend(overallSeries);
+      const trendSeries = trendSeriesByMonth
+        .map((points) => (points.length ? points.reduce((sum, value) => sum + value, 0) / points.length : null))
+        .filter((value) => Number.isFinite(value));
+
+      const trend = buildTrend(trendSeries);
       setText('#market-trend', trend.text);
       setText('#market-trend-details', trend.details);
 
-      buildChart(labels, datasets);
+      const hasGoodChart = datasets.length >= minDatasetsForChart;
+      setHidden('.market-analytics__chart-wrap', !hasGoodChart);
+
+      if (hasGoodChart) {
+        buildChart(labels, datasets);
+      }
     } catch (error) {
       setText('#market-trend', 'Данные временно недоступны');
       setText('#market-trend-details', 'Не удалось загрузить статистику квартир.');
+      setHidden('.market-analytics__chart-wrap', true);
     }
   };
 
