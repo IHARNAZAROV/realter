@@ -406,17 +406,27 @@
 
                         <div class="mortgage-calculator" data-mortgage-calculator>
                           <div class="mortgage-calculator__head">
-                            <h5>Ипотечный калькулятор Беларусбанка</h5>
+                            <div class="mortgage-calculator__bank-brand">
+                              <h5 data-mortgage-bank-title>Ипотечный калькулятор — Беларусбанк</h5>
+                            </div>
                             <p>
-                              Ориентировочный расчёт ежемесячного платежа по
-                              кредитным программам.
+                              Сравните условия ипотечных программ белорусских банков и получите ориентировочный платёж.
                             </p>
+                          </div>
+
+                          <div class="mortgage-calculator__field">
+                            <label for="bankSelect">Банк</label>
+                            <select id="bankSelect" data-mortgage-bank></select>
                           </div>
 
                           <div class="mortgage-calculator__field">
                             <label for="mortgageProgram">Программа</label>
                             <select id="mortgageProgram" data-mortgage-program></select>
                           </div>
+
+                          <p class="mortgage-calculator__program-description" data-mortgage-description>
+                            —
+                          </p>
 
                           <div class="mortgage-calculator__grid">
                             <div class="mortgage-calculator__field">
@@ -472,27 +482,27 @@
 
                           <div class="mortgage-calculator__results" data-mortgage-results>
                             <div>
-                              <span>Сумма кредита</span>
+                              <span>Сумма кредита, BYN</span>
                               <strong data-mortgage-loan>—</strong>
                             </div>
                             <div>
-                              <span>Ежемесячный платёж</span>
+                              <span>Ежемесячный платёж, BYN</span>
                               <strong data-mortgage-payment>—</strong>
                             </div>
                             <div>
-                              <span>Переплата за весь срок</span>
+                              <span>Переплата за весь срок, BYN</span>
                               <strong data-mortgage-overpay>—</strong>
                             </div>
                             <div>
-                              <span>Общая выплата банку</span>
+                              <span>Общая выплата банку, BYN</span>
                               <strong data-mortgage-total>—</strong>
                             </div>
                           </div>
 
                           <p class="mortgage-calculator__note">
                             * Расчёт носит справочный характер. Перед сделкой
-                            уточняйте актуальные условия в ОАО «АСБ
-                            Беларусбанк».
+                            уточняйте актуальные условия и доступность программ
+                            в выбранном банке.
                           </p>
                         </div>
 
@@ -750,6 +760,8 @@
     <script src="js/customgpt.js" defer></script>
     <script src="js/bgscroll.js" defer></script>
     <script src="/js/optimize.js" defer data-versioned></script>
+    <script src="/js/mortgage-programs.js" defer></script>
+    <script src="/js/mortgage-calculator.js" defer></script>
     <script src="/js/object-detail.js?v=20260304" defer></script>
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
