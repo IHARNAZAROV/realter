@@ -8863,6 +8863,38 @@ recent-posts-entry-date .sx-post-info .post-title {
   text-align: center;
 }
 
+
+.mortgage-calculator__bank-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.mortgage-calculator__bank-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+  background: #155945;
+}
+
+.mortgage-calculator__program-description {
+  margin: 4px 0 14px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(21, 89, 69, 0.06);
+  color: #33584d;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
 .mortgage-calculator__head p {
   margin: 0 0 16px;
   color: #4c6d63;
