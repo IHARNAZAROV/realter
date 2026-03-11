@@ -13330,6 +13330,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 .market-analytics__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -13339,6 +13340,10 @@ recent-posts-entry-date .sx-post-info .post-title {
   border-radius: 12px;
   padding: 18px;
   box-shadow: 0 8px 22px rgba(12, 34, 66, 0.08);
+}
+
+.market-card--wide {
+  grid-column: span 2;
 }
 
 .market-card__label {
@@ -13378,6 +13383,10 @@ recent-posts-entry-date .sx-post-info .post-title {
 @media (max-width: 991px) {
   .market-analytics__stats {
     grid-template-columns: 1fr;
+  }
+
+  .market-card--wide {
+    grid-column: auto;
   }
 
   .market-card__price {

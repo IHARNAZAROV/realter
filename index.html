@@ -1402,16 +1402,34 @@
 
             <div class="market-analytics" id="market-analytics">
               <div class="market-analytics__stats">
-                <article class="market-card" data-kind="apartment">
-                  <p class="market-card__label">Средняя цена квартиры</p>
+                <article class="market-card market-card--wide" data-kind="apartment">
+                  <p class="market-card__label">Средняя стоимость квартир</p>
                   <p class="market-card__price" id="avg-apartment-price">—</p>
                   <p class="market-card__sqm" id="avg-apartment-sqm">—</p>
                 </article>
 
-                <article class="market-card" data-kind="house">
-                  <p class="market-card__label">Средняя цена дома</p>
-                  <p class="market-card__price" id="avg-house-price">—</p>
-                  <p class="market-card__sqm" id="avg-house-sqm">—</p>
+                <article class="market-card" data-kind="room-1">
+                  <p class="market-card__label">1-комнатные квартиры</p>
+                  <p class="market-card__price" id="avg-room-1-price">—</p>
+                  <p class="market-card__sqm" id="avg-room-1-count">—</p>
+                </article>
+
+                <article class="market-card" data-kind="room-2">
+                  <p class="market-card__label">2-комнатные квартиры</p>
+                  <p class="market-card__price" id="avg-room-2-price">—</p>
+                  <p class="market-card__sqm" id="avg-room-2-count">—</p>
+                </article>
+
+                <article class="market-card" data-kind="room-3">
+                  <p class="market-card__label">3-комнатные квартиры</p>
+                  <p class="market-card__price" id="avg-room-3-price">—</p>
+                  <p class="market-card__sqm" id="avg-room-3-count">—</p>
+                </article>
+
+                <article class="market-card" data-kind="room-4">
+                  <p class="market-card__label">4-комнатные квартиры</p>
+                  <p class="market-card__price" id="avg-room-4-price">—</p>
+                  <p class="market-card__sqm" id="avg-room-4-count">—</p>
                 </article>
 
                 <article class="market-card market-card--trend">
@@ -1424,7 +1442,7 @@
               <div class="market-analytics__chart-wrap">
                 <canvas
                   id="market-price-chart"
-                  aria-label="График динамики средней цены недвижимости в Лиде"
+                  aria-label="График динамики средней стоимости квартир в Лиде"
                   role="img"
                 ></canvas>
               </div>

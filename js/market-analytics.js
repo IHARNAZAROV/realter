@@ -1,6 +1,7 @@
 (function () {
   const objectsPath = '/data/objects.json';
   const cityName = 'Лида';
+  const roomTypes = [1, 2, 3, 4];
 
   const formatCurrency = (value) =>
     new Intl.NumberFormat('ru-RU', {
@@ -90,13 +91,13 @@
     }
 
     if (percent > 0) {
-      return { text: `↗ Рост ${formatNumber(percent, 1)}%`, details: 'Средняя цена увеличивается.' };
+      return { text: `↗ Рост ${formatNumber(percent, 1)}%`, details: 'Средняя стоимость квартир растёт.' };
     }
 
-    return { text: `↘ Снижение ${formatNumber(Math.abs(percent), 1)}%`, details: 'Средняя цена снижается.' };
+    return { text: `↘ Снижение ${formatNumber(Math.abs(percent), 1)}%`, details: 'Средняя стоимость квартир снижается.' };
   };
 
-  const buildChart = (labels, apartments, houses) => {
+  const buildChart = (labels, datasets) => {
     const canvas = document.getElementById('market-price-chart');
     if (!canvas || typeof window.Chart === 'undefined') return;
 
@@ -104,24 +105,7 @@
       type: 'line',
       data: {
         labels,
-        datasets: [
-          {
-            label: 'Квартиры (средняя цена)',
-            data: apartments,
-            borderColor: '#0059ff',
-            backgroundColor: 'rgba(0, 89, 255, 0.15)',
-            fill: true,
-            tension: 0.35,
-          },
-          {
-            label: 'Дома (средняя цена)',
-            data: houses,
-            borderColor: '#00a779',
-            backgroundColor: 'rgba(0, 167, 121, 0.15)',
-            fill: true,
-            tension: 0.35,
-          },
-        ],
+        datasets,
       },
       options: {
         responsive: true,
@@ -161,58 +145,62 @@
       if (!response.ok) throw new Error('Failed to load objects');
 
       const allObjects = await response.json();
-      const objects = allObjects.filter(
-        (item) => item && item.dealType === 'Продажа' && item.city && item.city.includes(cityName)
+      const apartments = allObjects.filter(
+        (item) =>
+          item &&
+          item.dealType === 'Продажа' &&
+          item.type === 'Квартира' &&
+          item.city &&
+          item.city.includes(cityName)
       );
 
-      const apartments = objects.filter((item) => item.type === 'Квартира');
-      const houses = objects.filter((item) => item.type === 'Дом');
-
       setText('#avg-apartment-price', formatCurrency(calcAverage(apartments, (item) => item.priceBYN)));
-      setText('#avg-house-price', formatCurrency(calcAverage(houses, (item) => item.priceBYN)));
       setText(
         '#avg-apartment-sqm',
         `Средняя цена за м² (${cityName}): ${formatCurrency(calcAveragePerSqm(apartments))}`
       );
-      setText(
-        '#avg-house-sqm',
-        `Средняя цена за м² (${cityName}): ${formatCurrency(calcAveragePerSqm(houses))}`
-      );
 
-      const apartmentSeries = groupByMonth(apartments).map((bucket) => ({
-        label: bucket.label,
-        value: calcAverage(bucket.value, (item) => item.priceBYN),
-      }));
+      roomTypes.forEach((rooms) => {
+        const roomApartments = apartments.filter((item) => Number(item.rooms) === rooms);
+        setText(`#avg-room-${rooms}-price`, formatCurrency(calcAverage(roomApartments, (item) => item.priceBYN)));
+        setText(`#avg-room-${rooms}-count`, `Объектов: ${roomApartments.length}`);
+      });
 
-      const houseSeries = groupByMonth(houses).map((bucket) => ({
-        label: bucket.label,
-        value: calcAverage(bucket.value, (item) => item.priceBYN),
-      }));
+      const monthlyBuckets = groupByMonth(apartments);
+      const labels = monthlyBuckets.map((bucket) => bucket.label);
 
-      const allLabels = [...new Set([...apartmentSeries.map((item) => item.label), ...houseSeries.map((item) => item.label)])];
+      const palette = {
+        1: { border: '#0059ff', bg: 'rgba(0, 89, 255, 0.15)' },
+        2: { border: '#00a779', bg: 'rgba(0, 167, 121, 0.15)' },
+        3: { border: '#ff7a00', bg: 'rgba(255, 122, 0, 0.15)' },
+        4: { border: '#8b5cf6', bg: 'rgba(139, 92, 246, 0.15)' },
+      };
 
-      const apartmentMap = new Map(apartmentSeries.map((item) => [item.label, item.value]));
-      const houseMap = new Map(houseSeries.map((item) => [item.label, item.value]));
+      const datasets = roomTypes.map((rooms) => {
+        const color = palette[rooms];
+        return {
+          label: `${rooms}-комнатные`,
+          data: monthlyBuckets.map((bucket) => {
+            const roomItems = bucket.value.filter((item) => Number(item.rooms) === rooms);
+            return roomItems.length ? calcAverage(roomItems, (item) => item.priceBYN) : null;
+          }),
+          borderColor: color.border,
+          backgroundColor: color.bg,
+          fill: false,
+          spanGaps: true,
+          tension: 0.35,
+        };
+      });
 
-      const apartmentValues = allLabels.map((label) => apartmentMap.get(label) || null);
-      const houseValues = allLabels.map((label) => houseMap.get(label) || null);
-
-      const mergedForTrend = allLabels
-        .map((_, idx) => {
-          const values = [apartmentValues[idx], houseValues[idx]].filter((v) => Number.isFinite(v));
-          if (!values.length) return null;
-          return values.reduce((a, b) => a + b, 0) / values.length;
-        })
-        .filter((value) => Number.isFinite(value));
-
-      const trend = buildTrend(mergedForTrend);
+      const overallSeries = monthlyBuckets.map((bucket) => calcAverage(bucket.value, (item) => item.priceBYN));
+      const trend = buildTrend(overallSeries);
       setText('#market-trend', trend.text);
       setText('#market-trend-details', trend.details);
 
-      buildChart(allLabels, apartmentValues, houseValues);
+      buildChart(labels, datasets);
     } catch (error) {
       setText('#market-trend', 'Данные временно недоступны');
-      setText('#market-trend-details', 'Не удалось загрузить статистику объектов.');
+      setText('#market-trend-details', 'Не удалось загрузить статистику квартир.');
     }
   };
 
