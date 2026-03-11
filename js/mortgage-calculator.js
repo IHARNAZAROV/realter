@@ -59,7 +59,7 @@
   }
 
   function formatByn(value) {
-    return `${Math.round(value).toLocaleString("ru-RU")} BYN`;
+    return `${Math.round(value).toLocaleString("ru-RU")}`;
   }
 
   function initMultiBankMortgageCalculator(obj) {
