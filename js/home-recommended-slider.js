@@ -20,12 +20,24 @@
     return path.startsWith("/") ? path : `/${path}`;
   }
 
+  function normalizeStreet(address) {
+    if (!address || typeof address !== "string") return "";
+
+    let street = address.trim();
+    street = street.replace(/^ул\.?\s*/i, "");
+    street = street.replace(/,\s*д\.?\s*\d+[а-яa-z0-9-]*/i, "");
+    street = street.replace(/,\s*\d+[а-яa-z0-9-]*(?:\s*корп\.?\s*\d+)?/i, "");
+
+    street = street.trim().replace(/[,.\s]+$/g, "");
+    return street ? `улица ${street}` : "";
+  }
+
   function getLocationLabel(objectItem) {
     const city = objectItem?.city ? `город ${objectItem.city}` : "";
-    const address = objectItem?.address || "";
+    const street = normalizeStreet(objectItem?.address);
 
-    if (city && address) return `${city}, ${address}`;
-    return city || address || "Объект недвижимости";
+    if (city && street) return `${city}, ${street}`;
+    return city || street || "Объект недвижимости";
   }
 
   function getShortTitle(objectItem) {
