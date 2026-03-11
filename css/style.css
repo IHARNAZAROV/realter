@@ -13325,3 +13325,67 @@ recent-posts-entry-date .sx-post-info .post-title {
     border-radius: 14px 14px 0 0;
   }
 }
+
+/* Market analytics block */
+.market-analytics__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.market-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 8px 22px rgba(12, 34, 66, 0.08);
+}
+
+.market-card__label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #6b7280;
+}
+
+.market-card__price {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.market-card__sqm,
+.market-card__trend {
+  margin: 0;
+  color: #1f2937;
+  font-size: 15px;
+}
+
+.market-card--trend .market-card__trend {
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.market-analytics__chart-wrap {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 8px 22px rgba(12, 34, 66, 0.08);
+  min-height: 360px;
+}
+
+@media (max-width: 991px) {
+  .market-analytics__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .market-card__price {
+    font-size: 24px;
+  }
+
+  .market-analytics__chart-wrap {
+    min-height: 300px;
+    padding: 14px;
+  }
+}
