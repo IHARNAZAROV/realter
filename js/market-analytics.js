@@ -163,7 +163,7 @@
       roomTypes.forEach((rooms) => {
         const roomApartments = apartments.filter((item) => Number(item.rooms) === rooms);
         setText(`#avg-room-${rooms}-price`, formatCurrency(calcAverage(roomApartments, (item) => item.priceBYN)));
-        setText(`#avg-room-${rooms}-count`, `Объектов: ${roomApartments.length}`);
+        setText(`#avg-room-${rooms}-sqm`, `Средняя цена за м²: ${formatCurrency(calcAveragePerSqm(roomApartments))}`);
       });
 
       const monthlyBuckets = groupByMonth(apartments);

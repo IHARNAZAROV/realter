@@ -173,7 +173,7 @@ h3 {
 }
 
 h4 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -287,7 +287,7 @@ textarea {
   }
 
   h3 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   h4 {
@@ -5832,7 +5832,7 @@ blockquote.author-quote .fa-quote-left {
   }
 
   blockquote.author-quote .fa-quote-left {
-    font-size: 22px;
+    font-size: 20px;
     top: 20px;
     left: 18px;
   }
@@ -6047,7 +6047,7 @@ blockquote.author-quote .fa-quote-left {
 }
 
 .blog-post h1.post-title {
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1.35;
   font-weight: 600;
   margin-bottom: 20px;
@@ -6638,7 +6638,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .service-detail-content h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   color: #155945;
   margin: 48px 0 18px;
@@ -6847,7 +6847,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 /* Заголовок FAQ */
 .service-faq-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   color: #155945;
   margin-bottom: 24px;
@@ -8160,7 +8160,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 .newsletter-success i {
   color: var(--brand-success);
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .newsletter-success span {
@@ -8529,14 +8529,14 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .object-price-value {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
 
 @media (max-width: 768px) {
   .object-price-value {
-    font-size: 22px;
+    font-size: 20px;
   }
 }
 
@@ -9110,14 +9110,14 @@ recent-posts-entry-date .sx-post-info .post-title {
 .object-hero-title {
   margin: 12px 0 8px;
   font-weight: 800;
-  font-size: 28px;
+  font-size: 24px;
   color: #0f3f32;
   text-align: center;
 }
 
 @media (max-width: 768px) {
   .object-hero-title {
-    font-size: 22px;
+    font-size: 20px;
   }
 }
 
@@ -11119,7 +11119,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 /* question title */
 .faq-list h4 {
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1.3;
   font-weight: 700;
   color: var(--color-primary);
@@ -11670,7 +11670,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 /* Заголовок */
 .about-home-3 h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 1.35;
   margin-bottom: 18px;
@@ -12060,7 +12060,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 /* Font Awesome icon */
 .turko-step-icon i {
-  font-size: 22px;
+  font-size: 20px;
   color: var(--color-primary);
   transition: transform .35s ease, color .3s ease;
 }
@@ -12966,7 +12966,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 .booking-card__header h3 {
   margin: 0 0 8px;
   font-family: "Montserrat", sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1.2;
 }
 
@@ -13342,9 +13342,6 @@ recent-posts-entry-date .sx-post-info .post-title {
   box-shadow: 0 8px 22px rgba(12, 34, 66, 0.08);
 }
 
-.market-card--wide {
-  grid-column: span 2;
-}
 
 .market-card__label {
   font-size: 14px;
@@ -13353,7 +13350,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 .market-card__price {
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1.2;
   font-weight: 700;
   color: #111827;
@@ -13369,7 +13366,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 .market-card--trend .market-card__trend {
   font-weight: 700;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .market-analytics__chart-wrap {
@@ -13385,9 +13382,6 @@ recent-posts-entry-date .sx-post-info .post-title {
     grid-template-columns: 1fr;
   }
 
-  .market-card--wide {
-    grid-column: auto;
-  }
 
   .market-card__price {
     font-size: 24px;
