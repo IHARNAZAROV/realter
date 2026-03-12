@@ -2,34 +2,20 @@
   "use strict";
 
   const OBJECTS_DATA_URL = "/data/objects.json";
-  const BRAND_COLOR_HEX = "#155945";
   const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE";
+  const BRAND_COLOR = "#155945";
   const BRAND_NAME = "Ольга Турко";
-  const FONT_REGULAR_SOURCES = [
-    "/fonts/inter/Inter-Regular.woff2",
-    "/fonts/montserrat/Montserrat-Regular.woff2",
+
+  const PDFMAKE_SOURCES = [
+    {
+      lib: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.15/build/pdfmake.min.js",
+      vfs: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.15/build/vfs_fonts.min.js",
+    },
+    {
+      lib: "https://unpkg.com/pdfmake@0.2.15/build/pdfmake.min.js",
+      vfs: "https://unpkg.com/pdfmake@0.2.15/build/vfs_fonts.js",
+    },
   ];
-  const FONT_BOLD_SOURCES = [
-    "/fonts/inter/Inter-Bold.woff2",
-    "/fonts/montserrat/Montserrat-Bold.woff2",
-    "/fonts/montserrat/Montserrat-ExtraBold.woff2",
-  ];
-  const DEPENDENCY_SOURCES = {
-    pdfLib: [
-      "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js",
-      "https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
-    ],
-    qrCode: [
-      "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
-      "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js",
-      "https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js",
-    ],
-    fontkit: [
-      "https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js",
-      "https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js",
-    ],
-  };
 
   const previewImages = {
     "dom-lidskiy-rayon-krupovo": "images/objects/pic1.webp",
@@ -76,32 +62,14 @@
     "kvartira-lida-ul-hasanovskaya-1-64": "/images/objects/pic42.webp",
   };
 
-  const qrTarget = (slug) => `https://turko.by/objects/${encodeURIComponent(slug)}`;
-
-  const state = {
-    activeObject: null,
-  };
-
-
-  function rgbFromHex(hex) {
-    const value = String(hex).replace("#", "");
-    const r = parseInt(value.slice(0, 2), 16) / 255;
-    const g = parseInt(value.slice(2, 4), 16) / 255;
-    const b = parseInt(value.slice(4, 6), 16) / 255;
-    return { r, g, b };
-  }
-
-  function getBrandColor(rgb) {
-    const c = rgbFromHex(BRAND_COLOR_HEX);
-    return rgb(c.r, c.g, c.b);
-  }
+  const state = { activeObject: null };
 
   const qs = (selector, root = document) => root.querySelector(selector);
 
   function getSlugFromUrl() {
     const url = new URL(window.location.href);
-    const slugFromQuery = url.searchParams.get("slug");
-    if (slugFromQuery) return slugFromQuery;
+    const querySlug = url.searchParams.get("slug");
+    if (querySlug) return querySlug;
 
     const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
     if (parts.length === 2 && (parts[0] === "objects" || parts[0] === "object")) {
@@ -111,85 +79,16 @@
     return "";
   }
 
-  function fitRect(containerWidth, containerHeight, imageWidth, imageHeight) {
-    if (!imageWidth || !imageHeight) {
-      return { x: 0, y: 0, width: containerWidth, height: containerHeight };
-    }
-
-    const imgRatio = imageWidth / imageHeight;
-    const boxRatio = containerWidth / containerHeight;
-
-    let width;
-    let height;
-    if (imgRatio > boxRatio) {
-      height = containerHeight;
-      width = height * imgRatio;
-    } else {
-      width = containerWidth;
-      height = width / imgRatio;
-    }
-
-    return {
-      x: (containerWidth - width) / 2,
-      y: (containerHeight - height) / 2,
-      width,
-      height,
-    };
-  }
-
   async function fetchObjects() {
     const response = await fetch(OBJECTS_DATA_URL, { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error("Не удалось загрузить объекты");
-    }
+    if (!response.ok) throw new Error("Не удалось загрузить объекты");
     return response.json();
-  }
-
-  function toAbsoluteUrl(path) {
-    return new URL(path, window.location.origin).toString();
-  }
-
-  function getCoverImagePath(obj) {
-    return previewImages[obj.slug] || (Array.isArray(obj.images) && obj.images[0]) || "/images/objects/pic1.webp";
-  }
-
-  async function imagePathToJpegDataUrl(path) {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.decoding = "async";
-
-    const imageLoaded = new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = reject;
-    });
-
-    img.src = toAbsoluteUrl(path);
-    await imageLoaded;
-
-    const canvas = document.createElement("canvas");
-    canvas.width = img.naturalWidth || 1600;
-    canvas.height = img.naturalHeight || 1200;
-
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    return {
-      dataUrl: canvas.toDataURL("image/jpeg", 0.9),
-      width: canvas.width,
-      height: canvas.height,
-    };
   }
 
   function loadScript(src) {
     return new Promise((resolve, reject) => {
       const existing = document.querySelector(`script[data-runtime-src="${src}"]`);
-      if (existing && existing.dataset.loaded === "1") {
-        resolve();
-        return;
-      }
-
+      if (existing && existing.dataset.loaded === "1") return resolve();
       if (existing) {
         existing.addEventListener("load", () => resolve(), { once: true });
         existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
@@ -200,518 +99,251 @@
       script.src = src;
       script.async = true;
       script.dataset.runtimeSrc = src;
-
-      script.addEventListener("load", () => {
+      script.onload = () => {
         script.dataset.loaded = "1";
         resolve();
-      });
-
-      script.addEventListener("error", () => {
+      };
+      script.onerror = () => {
         script.remove();
         reject(new Error(`Failed to load ${src}`));
-      });
-
+      };
       document.head.appendChild(script);
     });
   }
 
-  async function loadFromSources(sources, checker) {
-    let lastError = null;
+  async function ensurePdfMake() {
+    if (window.pdfMake && window.pdfMake.vfs) return true;
 
-    for (const src of sources) {
+    let lastError = null;
+    for (const source of PDFMAKE_SOURCES) {
       try {
-        await loadScript(src);
-        if (checker()) return true;
+        await loadScript(source.lib);
+        await loadScript(source.vfs);
+        if (window.pdfMake && window.pdfMake.vfs) return true;
       } catch (error) {
         lastError = error;
       }
     }
 
     if (lastError) throw lastError;
-    return checker();
+    return false;
   }
 
-  async function ensurePdfDependencies() {
-    if (!window.PDFLib) {
-      await loadFromSources(DEPENDENCY_SOURCES.pdfLib, () => Boolean(window.PDFLib));
-    }
+  async function imagePathToDataUrl(path, outputMime = "image/jpeg", quality = 0.9) {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
 
-    if (!window.QRCode) {
-      await loadFromSources(DEPENDENCY_SOURCES.qrCode, () => Boolean(window.QRCode));
-    }
-
-    if (!window.fontkit) {
-      await loadFromSources(DEPENDENCY_SOURCES.fontkit, () => Boolean(window.fontkit));
-    }
-
-    return Boolean(window.PDFLib && window.QRCode && window.fontkit);
-  }
-
-  async function createQrPngDataUrl(slug) {
-    const target = qrTarget(slug);
-
-    if (window.QRCode && typeof window.QRCode.toDataURL === "function") {
-      return window.QRCode.toDataURL(target, {
-        errorCorrectionLevel: "H",
-        margin: 1,
-        width: 400,
-        color: {
-          dark: "#155945",
-          light: "#ffffff",
-        },
-      });
-    }
-
-    if (typeof window.QRCode === "function") {
-      const temp = document.createElement("div");
-      temp.style.position = "fixed";
-      temp.style.left = "-99999px";
-      temp.style.top = "-99999px";
-      document.body.appendChild(temp);
-
-      try {
-        const qr = new window.QRCode(temp, {
-          text: target,
-          width: 400,
-          height: 400,
-          colorDark: "#155945",
-          colorLight: "#ffffff",
-          correctLevel:
-            window.QRCode.CorrectLevel && window.QRCode.CorrectLevel.H
-              ? window.QRCode.CorrectLevel.H
-              : undefined,
-        });
-
-        // библиотеки qrcodejs рисуют синхронно
-        const canvas = temp.querySelector("canvas");
-        if (canvas) return canvas.toDataURL("image/png");
-
-        const img = temp.querySelector("img");
-        if (img && img.src) return img.src;
-
-        throw new Error("QR canvas not generated");
-      } finally {
-        temp.remove();
-      }
-    }
-
-    throw new Error("QRCode library API is not supported");
-  }
-
-  function formatPrice(priceBYN) {
-    if (typeof priceBYN !== "number") return "Цена по запросу";
-    return `${priceBYN.toLocaleString("ru-RU")} BYN`;
-  }
-
-  function wrapText(text, maxCharsPerLine) {
-    if (!text) return [];
-    const words = String(text).trim().split(/\s+/);
-    const lines = [];
-    let current = "";
-
-    words.forEach((word) => {
-      const candidate = current ? `${current} ${word}` : word;
-      if (candidate.length <= maxCharsPerLine) {
-        current = candidate;
-      } else {
-        if (current) lines.push(current);
-        current = word;
-      }
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+      img.src = new URL(path, window.location.origin).toString();
     });
 
-    if (current) lines.push(current);
-    return lines;
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth || 1200;
+    canvas.height = img.naturalHeight || 800;
+
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    return canvas.toDataURL(outputMime, quality);
   }
 
-  async function fetchFontBytesWithFallback(urls) {
-    let lastError = null;
+  async function fetchMapDataUrl(obj) {
+    const lat = obj.location && Number(obj.location.lat);
+    const lng = obj.location && Number(obj.location.lng);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
 
-    for (const url of urls) {
-      try {
-        const response = await fetch(url, { cache: "force-cache" });
-        if (!response.ok) throw new Error(`Font load failed: ${url} (${response.status})`);
-        return {
-          bytes: await response.arrayBuffer(),
-          source: url,
-        };
-      } catch (error) {
-        lastError = error;
-      }
-    }
-
-    throw lastError || new Error("Unable to load any font source");
-  }
-
-  function toWinAnsiSafeText(value) {
-    const translit = {
-      А:"A",а:"a",Б:"B",б:"b",В:"V",в:"v",Г:"G",г:"g",Д:"D",д:"d",Е:"E",е:"e",Ё:"E",ё:"e",
-      Ж:"Zh",ж:"zh",З:"Z",з:"z",И:"I",и:"i",Й:"Y",й:"y",К:"K",к:"k",Л:"L",л:"l",М:"M",м:"m",
-      Н:"N",н:"n",О:"O",о:"o",П:"P",п:"p",Р:"R",р:"r",С:"S",с:"s",Т:"T",т:"t",У:"U",у:"u",
-      Ф:"F",ф:"f",Х:"Kh",х:"kh",Ц:"Ts",ц:"ts",Ч:"Ch",ч:"ch",Ш:"Sh",ш:"sh",Щ:"Shch",щ:"shch",
-      Ъ:"",ъ:"",Ы:"Y",ы:"y",Ь:"",ь:"",Э:"E",э:"e",Ю:"Yu",ю:"yu",Я:"Ya",я:"ya",
-    };
-
-    return Array.from(String(value ?? ""))
-      .map((ch) => {
-        if (translit[ch] !== undefined) return translit[ch];
-        const code = ch.charCodeAt(0);
-        if (code >= 32 && code <= 126) return ch;
-        if (ch === "№") return "No";
-        if (ch === "—" || ch === "–") return "-";
-        if (ch === "²") return "2";
-        return "?";
-      })
-      .join("");
-  }
-
-  function drawSectionTitle(page, fontBold, text, y, brandColor, safeText = String) {
-    page.drawText(safeText(text || ""), {
-      x: 48,
-      y,
-      size: 22,
-      font: fontBold,
-      color: brandColor,
-    });
-
-    page.drawRectangle({
-      x: 48,
-      y: y - 10,
-      width: 160,
-      height: 2,
-      color: brandColor,
-    });
-  }
-
-  async function buildPdfPresentation(obj) {
-    const { PDFDocument, PageSizes, StandardFonts, rgb } = window.PDFLib;
-    const brandColor = getBrandColor(rgb);
-
-    const pdf = await PDFDocument.create();
-
-    let fontRegular;
-    let fontBold;
-    let safeText = toWinAnsiSafeText;
+    const mapUrl = `https://api.maptiler.com/maps/streets-v2/static/${lng},${lat},14/1200x700.png?markers=${lng},${lat},lightred&key=${MAPTILER_KEY}`;
 
     try {
-      pdf.registerFontkit(window.fontkit);
-
-      const [regularFontCandidate, boldFontCandidate] = await Promise.all([
-        fetchFontBytesWithFallback(FONT_REGULAR_SOURCES),
-        fetchFontBytesWithFallback(FONT_BOLD_SOURCES),
-      ]);
-
-      fontRegular = await pdf.embedFont(regularFontCandidate.bytes, { subset: false });
-      fontBold = await pdf.embedFont(boldFontCandidate.bytes, { subset: false });
-      safeText = String;
+      const response = await fetch(mapUrl);
+      if (!response.ok) throw new Error(`Map request failed: ${response.status}`);
+      const blob = await response.blob();
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
     } catch (error) {
-      console.warn("Не удалось встроить Inter/Montserrat, используем стандартные шрифты.", error);
-      fontRegular = await pdf.embedFont(StandardFonts.Helvetica);
-      fontBold = await pdf.embedFont(StandardFonts.HelveticaBold);
+      console.warn("Не удалось загрузить карту для PDF", error);
+      return null;
     }
-
-    const [a4Width, a4Height] = PageSizes.A4;
-
-    const coverImageInfo = await imagePathToJpegDataUrl(getCoverImagePath(obj));
-    const coverImage = await pdf.embedJpg(coverImageInfo.dataUrl);
-
-    const gallerySources = (Array.isArray(obj.images) ? obj.images : []).slice(0, 6);
-    const galleryEmbeds = [];
-    for (const source of gallerySources) {
-      try {
-        const img = await imagePathToJpegDataUrl(source);
-        const embed = await pdf.embedJpg(img.dataUrl);
-        galleryEmbeds.push({ embed, width: img.width, height: img.height });
-      } catch (error) {
-        console.warn("Не удалось добавить фото в PDF:", source, error);
-      }
-    }
-
-    const mapLat = obj.location && Number(obj.location.lat);
-    const mapLng = obj.location && Number(obj.location.lng);
-    const mapSources =
-      Number.isFinite(mapLat) && Number.isFinite(mapLng)
-        ? [
-            `https://api.maptiler.com/maps/streets-v2/static/${mapLng},${mapLat},14/1200x700.png?markers=${mapLng},${mapLat},lightred&key=${MAPTILER_KEY}`,
-          ]
-        : [];
-
-    let mapEmbed = null;
-    for (const mapUrl of mapSources) {
-      try {
-        const mapRes = await fetch(mapUrl);
-        if (!mapRes.ok) throw new Error(`Map request failed: ${mapRes.status}`);
-        const mapBytes = await mapRes.arrayBuffer();
-        try {
-          mapEmbed = await pdf.embedPng(mapBytes);
-        } catch {
-          mapEmbed = await pdf.embedJpg(mapBytes);
-        }
-        break;
-      } catch (error) {
-        console.warn("Не удалось загрузить карту для PDF", mapUrl, error);
-      }
-    }
-
-    const qrDataUrl = await createQrPngDataUrl(obj.slug);
-    const qrEmbed = await pdf.embedPng(qrDataUrl);
-
-    // Page 1 - cover
-    {
-      const page = pdf.addPage([a4Width, a4Height]);
-      const imageRect = fitRect(a4Width, a4Height, coverImage.width, coverImage.height);
-      page.drawImage(coverImage, imageRect);
-
-      page.drawRectangle({
-        x: 0,
-        y: 0,
-        width: a4Width,
-        height: a4Height,
-        color: rgb(0, 0, 0),
-        opacity: 0.35,
-      });
-
-      page.drawText(safeText(BRAND_NAME), {
-        x: 48,
-        y: a4Height - 60,
-        size: 18,
-        font: fontBold,
-        color: rgb(1, 1, 1),
-      });
-
-      const titleLines = wrapText(obj.title || "Объект недвижимости", 33).slice(0, 3);
-      let titleY = a4Height - 250;
-      titleLines.forEach((line) => {
-        page.drawText(safeText(line || ""), {
-          x: 48,
-          y: titleY,
-          size: 36,
-          font: fontBold,
-          color: rgb(1, 1, 1),
-        });
-        titleY -= 42;
-      });
-
-      page.drawText(safeText(formatPrice(obj.priceBYN)), {
-        x: 48,
-        y: 130,
-        size: 28,
-        font: fontBold,
-        color: brandColor,
-      });
-
-      page.drawText(safeText([obj.city, obj.address].filter(Boolean).join(", ")), {
-        x: 48,
-        y: 95,
-        size: 14,
-        font: fontRegular,
-        color: rgb(1, 1, 1),
-      });
-    }
-
-    // Page 2 - specs
-    {
-      const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "ХАРАКТЕРИСТИКИ ОБЪЕКТА", a4Height - 60, brandColor, safeText);
-
-      const rows = [
-        ["Общая площадь", obj.areaTotal ? `${obj.areaTotal} м²` : "—"],
-        ["Жилая площадь", obj.areaLiving ? `${obj.areaLiving} м²` : "—"],
-        ["Площадь кухни", obj.areaKitchen ? `${obj.areaKitchen} м²` : "—"],
-        ["Этаж", obj.floor || "—"],
-        ["Этажей в доме", obj.floorsTotal || "—"],
-        ["Тип недвижимости", obj.type || "—"],
-      ];
-
-      let y = a4Height - 120;
-      rows.forEach((row, index) => {
-        const rowHeight = 36;
-        page.drawRectangle({
-          x: 48,
-          y: y - 8,
-          width: a4Width - 96,
-          height: rowHeight,
-          color: index % 2 === 0 ? rgb(0.97, 0.98, 0.98) : rgb(1, 1, 1),
-          borderColor: rgb(0.88, 0.9, 0.9),
-          borderWidth: 1,
-        });
-
-        page.drawText(safeText(row[0] || ""), {
-          x: 60,
-          y: y + 5,
-          size: 12,
-          font: fontBold,
-          color: rgb(0.18, 0.24, 0.22),
-        });
-
-        page.drawText(safeText(row[1] || ""), {
-          x: 280,
-          y: y + 5,
-          size: 12,
-          font: fontRegular,
-          color: rgb(0.18, 0.24, 0.22),
-        });
-
-        y -= rowHeight;
-      });
-
-      page.drawText(safeText("Описание объекта"), {
-        x: 48,
-        y: y - 22,
-        size: 17,
-        font: fontBold,
-        color: brandColor,
-      });
-
-      const descriptionLines = wrapText(obj.description || "Описание отсутствует.", 95).slice(0, 14);
-      let descY = y - 48;
-      descriptionLines.forEach((line) => {
-        page.drawText(safeText(line || ""), {
-          x: 48,
-          y: descY,
-          size: 11,
-          font: fontRegular,
-          color: rgb(0.2, 0.2, 0.2),
-        });
-        descY -= 16;
-      });
-    }
-
-    // Page 3 - gallery
-    {
-      const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "ФОТОГАЛЕРЕЯ", a4Height - 60, brandColor, safeText);
-
-      const gridTop = a4Height - 110;
-      const gap = 14;
-      const columns = 2;
-      const rows = 3;
-      const cardWidth = (a4Width - 48 * 2 - gap) / columns;
-      const cardHeight = (gridTop - 72 - gap * (rows - 1)) / rows;
-
-      for (let i = 0; i < Math.min(galleryEmbeds.length, columns * rows); i += 1) {
-        const col = i % columns;
-        const row = Math.floor(i / columns);
-        const x = 48 + col * (cardWidth + gap);
-        const y = gridTop - (row + 1) * cardHeight - row * gap;
-
-        page.drawRectangle({
-          x,
-          y,
-          width: cardWidth,
-          height: cardHeight,
-          color: rgb(0.96, 0.96, 0.96),
-          borderColor: rgb(0.88, 0.88, 0.88),
-          borderWidth: 1,
-        });
-
-        const current = galleryEmbeds[i];
-        const rect = fitRect(cardWidth, cardHeight, current.width, current.height);
-        page.drawImage(current.embed, {
-          x: x + rect.x,
-          y: y + rect.y,
-          width: rect.width,
-          height: rect.height,
-        });
-      }
-    }
-
-    // Page 4 - location
-    {
-      const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "РАСПОЛОЖЕНИЕ И КОНТАКТЫ", a4Height - 60, brandColor, safeText);
-
-      const mapX = 48;
-      const mapY = 250;
-      const mapWidth = a4Width - 96;
-      const mapHeight = 300;
-
-      if (mapEmbed) {
-        const rect = fitRect(mapWidth, mapHeight, mapEmbed.width, mapEmbed.height);
-        page.drawImage(mapEmbed, {
-          x: mapX + rect.x,
-          y: mapY + rect.y,
-          width: rect.width,
-          height: rect.height,
-        });
-      } else {
-        page.drawRectangle({
-          x: mapX,
-          y: mapY,
-          width: mapWidth,
-          height: mapHeight,
-          color: rgb(0.95, 0.95, 0.95),
-          borderColor: rgb(0.85, 0.85, 0.85),
-          borderWidth: 1,
-        });
-        page.drawText(safeText("Карта недоступна"), {
-          x: mapX + 20,
-          y: mapY + mapHeight / 2,
-          size: 14,
-          font: fontBold,
-          color: rgb(0.4, 0.4, 0.4),
-        });
-      }
-
-      page.drawRectangle({
-        x: 48,
-        y: 58,
-        width: a4Width - 96,
-        height: 170,
-        color: rgb(0.98, 0.98, 0.98),
-        borderColor: rgb(0.9, 0.9, 0.9),
-        borderWidth: 1,
-      });
-
-      page.drawImage(qrEmbed, {
-        x: 64,
-        y: 74,
-        width: 130,
-        height: 130,
-      });
-
-      const contactLines = [
-        'Агентство недвижимости «ГермесГрупп»',
-        'г. Лида, б-р Князя Гедимина, 12, пом. 9',
-        'Телефон: +375 (29) 180-95-16',
-        'Instagram: @rielter_olga_lida',
-        `Ссылка на объект: turko.by/objects/${obj.slug}`,
-      ];
-
-      let textY = 186;
-      contactLines.forEach((line, index) => {
-        page.drawText(safeText(line || ""), {
-          x: 212,
-          y: textY,
-          size: index === 0 ? 12 : 11,
-          font: index === 0 ? fontBold : fontRegular,
-          color: index === 0 ? brandColor : rgb(0.23, 0.23, 0.23),
-        });
-        textY -= 24;
-      });
-    }
-
-    return pdf.save();
   }
 
-  function downloadBytes(bytes, filename) {
-    const blob = new Blob([bytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
+  function formatPrice(value) {
+    if (typeof value !== "number") return "Цена по запросу";
+    return `${value.toLocaleString("ru-RU")} BYN`;
+  }
+
+  function getCoverImagePath(obj) {
+    return previewImages[obj.slug] || (Array.isArray(obj.images) && obj.images[0]) || "/images/objects/pic1.webp";
   }
 
   function getFilenameForObject(obj) {
     if (obj.slug) return `${obj.slug}.pdf`;
-    const base = (obj.title || "presentation")
-      .toLowerCase()
-      .replace(/[^a-zа-яё0-9]+/gi, "-")
-      .replace(/^-+|-+$/g, "");
-    return `${base || "presentation"}.pdf`;
+    return "object-presentation.pdf";
+  }
+
+  function buildSpecRows(obj) {
+    return [
+      ["Общая площадь", obj.areaTotal ? `${obj.areaTotal} м²` : "—"],
+      ["Жилая площадь", obj.areaLiving ? `${obj.areaLiving} м²` : "—"],
+      ["Площадь кухни", obj.areaKitchen ? `${obj.areaKitchen} м²` : "—"],
+      ["Этаж", obj.floor || "—"],
+      ["Этажей в доме", obj.floorsTotal || "—"],
+      ["Тип недвижимости", obj.type || "—"],
+    ];
+  }
+
+  async function buildDocumentDefinition(obj) {
+    const coverDataUrl = await imagePathToDataUrl(getCoverImagePath(obj), "image/jpeg", 0.9);
+
+    const gallerySources = Array.isArray(obj.images) ? obj.images.slice(0, 6) : [];
+    const galleryDataUrls = [];
+    for (const src of gallerySources) {
+      try {
+        galleryDataUrls.push(await imagePathToDataUrl(src, "image/jpeg", 0.86));
+      } catch (error) {
+        console.warn("Не удалось загрузить фото для PDF", src, error);
+      }
+    }
+
+    const mapDataUrl = await fetchMapDataUrl(obj);
+
+    const galleryRows = [];
+    for (let i = 0; i < 6; i += 2) {
+      galleryRows.push([
+        galleryDataUrls[i]
+          ? { image: galleryDataUrls[i], fit: [240, 160], margin: [0, 0, 0, 10] }
+          : { text: "", margin: [0, 0, 0, 10] },
+        galleryDataUrls[i + 1]
+          ? { image: galleryDataUrls[i + 1], fit: [240, 160], margin: [0, 0, 0, 10] }
+          : { text: "", margin: [0, 0, 0, 10] },
+      ]);
+    }
+
+    const specsTable = {
+      table: {
+        widths: [200, "*"],
+        body: buildSpecRows(obj).map((row, index) => [
+          { text: row[0], bold: true, fillColor: index % 2 === 0 ? "#F6FAF8" : "#FFFFFF", margin: [8, 10, 8, 10] },
+          { text: row[1], fillColor: index % 2 === 0 ? "#F6FAF8" : "#FFFFFF", margin: [8, 10, 8, 10] },
+        ]),
+      },
+      layout: {
+        hLineColor: () => "#D8E4DE",
+        vLineColor: () => "#D8E4DE",
+      },
+      margin: [0, 0, 0, 24],
+    };
+
+    return {
+      pageSize: "A4",
+      pageMargins: [28, 28, 28, 28],
+      info: {
+        title: obj.title || "Презентация объекта",
+        author: BRAND_NAME,
+        subject: "Презентация объекта недвижимости",
+      },
+      styles: {
+        sectionTitle: { fontSize: 26, bold: true, color: BRAND_COLOR, margin: [0, 0, 0, 16] },
+        cardTitle: { fontSize: 18, bold: true, color: BRAND_COLOR },
+        body: { fontSize: 12, lineHeight: 1.35, color: "#202524" },
+      },
+      content: [
+        // Page 1 cover
+        {
+          stack: [
+            {
+              canvas: [{ type: "rect", x: 0, y: 0, w: 539, h: 786, color: "#000000", opacity: 0.34 }],
+              absolutePosition: { x: 28, y: 28 },
+            },
+            { image: coverDataUrl, fit: [539, 786], absolutePosition: { x: 28, y: 28 } },
+            { text: BRAND_NAME, absolutePosition: { x: 46, y: 48 }, color: "#FFFFFF", fontSize: 17, bold: true },
+            {
+              text: obj.title || "Объект недвижимости",
+              absolutePosition: { x: 46, y: 220 },
+              color: "#FFFFFF",
+              fontSize: 34,
+              bold: true,
+              width: 500,
+            },
+            {
+              text: formatPrice(obj.priceBYN),
+              absolutePosition: { x: 46, y: 700 },
+              color: BRAND_COLOR,
+              fontSize: 28,
+              bold: true,
+            },
+            {
+              text: [obj.city, obj.address].filter(Boolean).join(", "),
+              absolutePosition: { x: 46, y: 740 },
+              color: "#FFFFFF",
+              fontSize: 13,
+              width: 500,
+            },
+          ],
+          pageBreak: "after",
+        },
+
+        // Page 2 specs
+        { text: "ХАРАКТЕРИСТИКИ ОБЪЕКТА", style: "sectionTitle" },
+        specsTable,
+        { text: "Описание объекта", style: "cardTitle", margin: [0, 0, 0, 10] },
+        {
+          text: obj.description || "Описание отсутствует.",
+          style: "body",
+          margin: [0, 0, 0, 0],
+          pageBreak: "after",
+        },
+
+        // Page 3 gallery
+        { text: "ФОТОГАЛЕРЕЯ", style: "sectionTitle" },
+        {
+          table: {
+            widths: ["*", "*"],
+            body: galleryRows,
+          },
+          layout: "noBorders",
+          pageBreak: "after",
+        },
+
+        // Page 4 location + contacts
+        { text: "РАСПОЛОЖЕНИЕ И КОНТАКТЫ", style: "sectionTitle" },
+        mapDataUrl
+          ? { image: mapDataUrl, fit: [539, 300], margin: [0, 0, 0, 20] }
+          : {
+              stack: [
+                { canvas: [{ type: "rect", x: 0, y: 0, w: 539, h: 300, color: "#F0F1F0", lineColor: "#D0D0D0" }] },
+                { text: "Карта недоступна", margin: [14, -170, 0, 0], color: "#666", bold: true, fontSize: 17 },
+              ],
+              margin: [0, 0, 0, 20],
+            },
+        {
+          columns: [
+            {
+              qr: `https://turko.by/objects/${encodeURIComponent(obj.slug || "")}`,
+              fit: 120,
+              foreground: BRAND_COLOR,
+              margin: [0, 6, 20, 0],
+            },
+            {
+              stack: [
+                { text: 'Агентство недвижимости «ГермесГрупп»', bold: true, color: BRAND_COLOR, fontSize: 13 },
+                { text: 'г. Лида, б-р Князя Гедимина, 12, пом. 9', margin: [0, 8, 0, 0] },
+                { text: 'Телефон: +375 (29) 180-95-16', margin: [0, 8, 0, 0] },
+                { text: 'Instagram: @rielter_olga_lida', margin: [0, 8, 0, 0] },
+                { text: `Ссылка на объект: turko.by/objects/${obj.slug || ""}`, margin: [0, 8, 0, 0] },
+              ],
+            },
+          ],
+        },
+      ],
+    };
   }
 
   async function loadActiveObject() {
@@ -725,34 +357,27 @@
   }
 
   function setButtonLoading(button, isLoading) {
-    if (!button) return;
     button.disabled = isLoading;
-    button.textContent = isLoading
-      ? "Формируем PDF..."
-      : "Скачать презентацию объекта";
+    button.textContent = isLoading ? "Формируем PDF..." : "Скачать презентацию объекта";
   }
 
   async function handleDownloadClick(button) {
     try {
-      const dependenciesReady = await ensurePdfDependencies();
-      if (!dependenciesReady) {
-        alert("Не удалось загрузить библиотеки PDF. Проверьте блокировку сторонних скриптов и попробуйте снова.");
-        return;
-      }
-
       setButtonLoading(button, true);
+
+      const ready = await ensurePdfMake();
+      if (!ready || !window.pdfMake) throw new Error("pdfmake not available");
 
       if (!state.activeObject) {
         state.activeObject = await loadActiveObject();
       }
-
       if (!state.activeObject) {
         alert("Объект не найден.");
         return;
       }
 
-      const pdfBytes = await buildPdfPresentation(state.activeObject);
-      downloadBytes(pdfBytes, getFilenameForObject(state.activeObject));
+      const dd = await buildDocumentDefinition(state.activeObject);
+      window.pdfMake.createPdf(dd).download(getFilenameForObject(state.activeObject));
     } catch (error) {
       console.error("Ошибка генерации PDF презентации:", error);
       alert("Не удалось сформировать PDF. Попробуйте ещё раз.");
@@ -767,13 +392,10 @@
 
     try {
       state.activeObject = await loadActiveObject();
+      ensurePdfMake().catch((error) => console.warn("Предзагрузка pdfmake не удалась", error));
     } catch (error) {
-      console.warn("Не удалось предварительно загрузить объект для PDF", error);
+      console.warn("Не удалось предварительно загрузить объект", error);
     }
-
-    ensurePdfDependencies().catch((error) => {
-      console.warn("Предзагрузка PDF библиотек не удалась", error);
-    });
 
     button.addEventListener("click", () => handleDownloadClick(button));
   }
