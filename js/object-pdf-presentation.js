@@ -13,9 +13,9 @@
       "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
     ],
     qrCode: [
-      "https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js",
-      "https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js",
       "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
+      "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js",
+      "https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js",
     ],
   };
 
@@ -181,7 +181,6 @@
       const script = document.createElement("script");
       script.src = src;
       script.async = true;
-      script.crossOrigin = "anonymous";
       script.dataset.runtimeSrc = src;
 
       script.addEventListener("load", () => {
@@ -219,23 +218,62 @@
       await loadFromSources(DEPENDENCY_SOURCES.pdfLib, () => Boolean(window.PDFLib));
     }
 
-    if (!window.QRCode || typeof window.QRCode.toDataURL !== "function") {
-      await loadFromSources(DEPENDENCY_SOURCES.qrCode, () => Boolean(window.QRCode && window.QRCode.toDataURL));
+    if (!window.QRCode) {
+      await loadFromSources(DEPENDENCY_SOURCES.qrCode, () => Boolean(window.QRCode));
     }
 
-    return Boolean(window.PDFLib && window.QRCode && window.QRCode.toDataURL);
+    return Boolean(window.PDFLib && window.QRCode);
   }
 
   async function createQrPngDataUrl(slug) {
-    return window.QRCode.toDataURL(qrTarget(slug), {
-      errorCorrectionLevel: "H",
-      margin: 1,
-      width: 400,
-      color: {
-        dark: "#155945",
-        light: "#ffffff",
-      },
-    });
+    const target = qrTarget(slug);
+
+    if (window.QRCode && typeof window.QRCode.toDataURL === "function") {
+      return window.QRCode.toDataURL(target, {
+        errorCorrectionLevel: "H",
+        margin: 1,
+        width: 400,
+        color: {
+          dark: "#155945",
+          light: "#ffffff",
+        },
+      });
+    }
+
+    if (typeof window.QRCode === "function") {
+      const temp = document.createElement("div");
+      temp.style.position = "fixed";
+      temp.style.left = "-99999px";
+      temp.style.top = "-99999px";
+      document.body.appendChild(temp);
+
+      try {
+        const qr = new window.QRCode(temp, {
+          text: target,
+          width: 400,
+          height: 400,
+          colorDark: "#155945",
+          colorLight: "#ffffff",
+          correctLevel:
+            window.QRCode.CorrectLevel && window.QRCode.CorrectLevel.H
+              ? window.QRCode.CorrectLevel.H
+              : undefined,
+        });
+
+        // библиотеки qrcodejs рисуют синхронно
+        const canvas = temp.querySelector("canvas");
+        if (canvas) return canvas.toDataURL("image/png");
+
+        const img = temp.querySelector("img");
+        if (img && img.src) return img.src;
+
+        throw new Error("QR canvas not generated");
+      } finally {
+        temp.remove();
+      }
+    }
+
+    throw new Error("QRCode library API is not supported");
   }
 
   function formatPrice(priceBYN) {
