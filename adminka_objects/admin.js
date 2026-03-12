@@ -314,7 +314,8 @@ const previewImages = {
   "kvartira-lida-ul-urickogo-60": "/images/objects/pic36.webp",
   "kvartira-lida-ul-yuzhnyy-gorodok-24": "/images/objects/pic37.webp",
   "kvartira-lida-ul-tukhachevskogo-65":"/images/objects/pic38.webp",
-  "kvartira-lida-ul-sovetskaya-36-stalinka": "/images/objects/pic39.webp"
+  "kvartira-lida-ul-sovetskaya-36-stalinka": "/images/objects/pic39.webp",
+  "kvartira-lida-ul-nevskogo-20-cheshka":"/images/objects/pic40.webp",
 };
 
 /* ======================================================
