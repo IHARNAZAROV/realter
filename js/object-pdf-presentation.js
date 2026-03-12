@@ -70,6 +70,39 @@
     activeObject: null,
   };
 
+
+  const CYRILLIC_TO_LATIN = {
+    А: "A", а: "a", Б: "B", б: "b", В: "V", в: "v", Г: "G", г: "g",
+    Д: "D", д: "d", Е: "E", е: "e", Ё: "E", ё: "e", Ж: "Zh", ж: "zh",
+    З: "Z", з: "z", И: "I", и: "i", Й: "Y", й: "y", К: "K", к: "k",
+    Л: "L", л: "l", М: "M", м: "m", Н: "N", н: "n", О: "O", о: "o",
+    П: "P", п: "p", Р: "R", р: "r", С: "S", с: "s", Т: "T", т: "t",
+    У: "U", у: "u", Ф: "F", ф: "f", Х: "Kh", х: "kh", Ц: "Ts", ц: "ts",
+    Ч: "Ch", ч: "ch", Ш: "Sh", ш: "sh", Щ: "Shch", щ: "shch", Ъ: "", ъ: "",
+    Ы: "Y", ы: "y", Ь: "", ь: "", Э: "E", э: "e", Ю: "Yu", ю: "yu",
+    Я: "Ya", я: "ya",
+  };
+
+  function toPdfSafeText(value) {
+    const input = String(value ?? "");
+
+    return Array.from(input)
+      .map((char) => {
+        if (CYRILLIC_TO_LATIN[char] !== undefined) return CYRILLIC_TO_LATIN[char];
+
+        const code = char.charCodeAt(0);
+        if (code >= 32 && code <= 126) return char;
+
+        if (char === "№") return "No";
+        if (char === "—" || char === "–") return "-";
+        if (char === "•") return "-";
+        if (char === "²") return "2";
+
+        return "?";
+      })
+      .join("");
+  }
+
   function rgbFromHex(hex) {
     const value = String(hex).replace("#", "");
     const r = parseInt(value.slice(0, 2), 16) / 255;
@@ -302,7 +335,7 @@
   }
 
   function drawSectionTitle(page, fontBold, text, y) {
-    page.drawText(text, {
+    page.drawText(toPdfSafeText(text), {
       x: 48,
       y,
       size: 22,
@@ -353,7 +386,9 @@
     let mapEmbed = null;
     if (mapStaticUrl) {
       try {
-        const mapBytes = await fetch(mapStaticUrl).then((res) => res.arrayBuffer());
+        const mapRes = await fetch(mapStaticUrl);
+        if (!mapRes.ok) throw new Error(`Map request failed: ${mapRes.status}`);
+        const mapBytes = await mapRes.arrayBuffer();
         mapEmbed = await pdf.embedPng(mapBytes);
       } catch (error) {
         console.warn("Не удалось загрузить карту для PDF", error);
@@ -378,7 +413,7 @@
         opacity: 0.35,
       });
 
-      page.drawText(BRAND_NAME, {
+      page.drawText(toPdfSafeText(BRAND_NAME), {
         x: 48,
         y: a4Height - 60,
         size: 18,
@@ -389,7 +424,7 @@
       const titleLines = wrapText(obj.title || "Объект недвижимости", 33).slice(0, 3);
       let titleY = a4Height - 250;
       titleLines.forEach((line) => {
-        page.drawText(line, {
+        page.drawText(toPdfSafeText(line), {
           x: 48,
           y: titleY,
           size: 36,
@@ -399,7 +434,7 @@
         titleY -= 42;
       });
 
-      page.drawText(formatPrice(obj.priceBYN), {
+      page.drawText(toPdfSafeText(formatPrice(obj.priceBYN)), {
         x: 48,
         y: 130,
         size: 28,
@@ -407,7 +442,7 @@
         color: BRAND_COLOR,
       });
 
-      page.drawText([obj.city, obj.address].filter(Boolean).join(", "), {
+      page.drawText(toPdfSafeText([obj.city, obj.address].filter(Boolean).join(", ")), {
         x: 48,
         y: 95,
         size: 14,
@@ -443,7 +478,7 @@
           borderWidth: 1,
         });
 
-        page.drawText(row[0], {
+        page.drawText(toPdfSafeText(row[0]), {
           x: 60,
           y: y + 5,
           size: 12,
@@ -451,7 +486,7 @@
           color: rgb(0.18, 0.24, 0.22),
         });
 
-        page.drawText(String(row[1]), {
+        page.drawText(toPdfSafeText(String(row[1])), {
           x: 280,
           y: y + 5,
           size: 12,
@@ -462,7 +497,7 @@
         y -= rowHeight;
       });
 
-      page.drawText("Описание объекта", {
+      page.drawText(toPdfSafeText("Описание объекта"), {
         x: 48,
         y: y - 22,
         size: 17,
@@ -473,7 +508,7 @@
       const descriptionLines = wrapText(obj.description || "Описание отсутствует.", 95).slice(0, 14);
       let descY = y - 48;
       descriptionLines.forEach((line) => {
-        page.drawText(line, {
+        page.drawText(toPdfSafeText(line), {
           x: 48,
           y: descY,
           size: 11,
@@ -551,7 +586,7 @@
           borderColor: rgb(0.85, 0.85, 0.85),
           borderWidth: 1,
         });
-        page.drawText("Карта недоступна", {
+        page.drawText(toPdfSafeText("Карта недоступна"), {
           x: mapX + 20,
           y: mapY + mapHeight / 2,
           size: 14,
@@ -587,7 +622,7 @@
 
       let textY = 186;
       contactLines.forEach((line, index) => {
-        page.drawText(line, {
+        page.drawText(toPdfSafeText(line), {
           x: 212,
           y: textY,
           size: index === 0 ? 12 : 11,
