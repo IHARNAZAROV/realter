@@ -226,146 +226,212 @@
 
   async function buildDocumentDefinition(obj) {
     const coverDataUrl = await imagePathToDataUrl(getCoverImagePath(obj), "image/jpeg", 0.9);
-
-    const gallerySources = Array.isArray(obj.images) ? obj.images.slice(0, 6) : [];
-    const galleryDataUrls = [];
-    for (const src of gallerySources) {
-      try {
-        galleryDataUrls.push(await imagePathToDataUrl(src, "image/jpeg", 0.86));
-      } catch (error) {
-        console.warn("Не удалось загрузить фото для PDF", src, error);
-      }
-    }
-
     const mapDataUrl = await fetchMapDataUrl(obj);
 
-    const galleryRows = [];
-    for (let i = 0; i < 6; i += 2) {
-      galleryRows.push([
-        galleryDataUrls[i]
-          ? { image: galleryDataUrls[i], fit: [240, 160], margin: [0, 0, 0, 10] }
-          : { text: "", margin: [0, 0, 0, 10] },
-        galleryDataUrls[i + 1]
-          ? { image: galleryDataUrls[i + 1], fit: [240, 160], margin: [0, 0, 0, 10] }
-          : { text: "", margin: [0, 0, 0, 10] },
-      ]);
-    }
+    const locationLine = [obj.city, obj.address].filter(Boolean).join(", ");
+    const dealLine = [obj.dealType || "Продажа", obj.type].filter(Boolean).join(" · ");
 
-    const specsTable = {
-      table: {
-        widths: [200, "*"],
-        body: buildSpecRows(obj).map((row, index) => [
-          { text: row[0], bold: true, fillColor: index % 2 === 0 ? "#F6FAF8" : "#FFFFFF", margin: [8, 10, 8, 10] },
-          { text: row[1], fillColor: index % 2 === 0 ? "#F6FAF8" : "#FFFFFF", margin: [8, 10, 8, 10] },
-        ]),
-      },
-      layout: {
-        hLineColor: () => "#D8E4DE",
-        vLineColor: () => "#D8E4DE",
-      },
-      margin: [0, 0, 0, 24],
-    };
+    const mainFacts = [
+      `Комнат: ${obj.rooms || "—"}`,
+      `Этаж: ${obj.floor || "—"}/${obj.floorsTotal || "—"}`,
+      `Год постройки: ${obj.yearBuilt || "—"}`,
+    ].join("    ");
+
+    const detailRows = [
+      ["Балкон", obj.balcony || "—"],
+      ["Ремонт", obj.renovation || obj.finishing || "—"],
+      ["Высота потолков", obj.ceilingHeight || "—"],
+      ["Полы", obj.flooring || "—"],
+      ["Санузел", obj.bathroom || "—"],
+    ];
 
     return {
       pageSize: "A4",
-      pageMargins: [28, 28, 28, 28],
+      pageMargins: [24, 24, 24, 24],
+      background: (currentPage, pageSize) => {
+        if (currentPage === 1) return null;
+        return {
+          canvas: [
+            {
+              type: "rect",
+              x: 0,
+              y: 0,
+              w: pageSize.width,
+              h: pageSize.height,
+              color: "#0A3B31",
+            },
+          ],
+        };
+      },
       info: {
         title: obj.title || "Презентация объекта",
         author: BRAND_NAME,
         subject: "Презентация объекта недвижимости",
       },
       styles: {
-        sectionTitle: { fontSize: 26, bold: true, color: BRAND_COLOR, margin: [0, 0, 0, 16] },
-        cardTitle: { fontSize: 18, bold: true, color: BRAND_COLOR },
-        body: { fontSize: 12, lineHeight: 1.35, color: "#202524" },
+        sectionTitle: { fontSize: 24, bold: true, color: "#FFFFFF", margin: [0, 0, 0, 14] },
+        body: { fontSize: 11, lineHeight: 1.35, color: "#1D2523" },
+        lightBody: { fontSize: 11, lineHeight: 1.35, color: "#DDE7E3" },
       },
       content: [
-        // Page 1 cover
         {
           stack: [
+            { image: coverDataUrl, fit: [547, 794], absolutePosition: { x: 24, y: 24 } },
             {
-              canvas: [{ type: "rect", x: 0, y: 0, w: 539, h: 786, color: "#000000", opacity: 0.34 }],
-              absolutePosition: { x: 28, y: 28 },
+              canvas: [{ type: "rect", x: 0, y: 0, w: 547, h: 794, color: "#000000", opacity: 0.32 }],
+              absolutePosition: { x: 24, y: 24 },
             },
-            { image: coverDataUrl, fit: [539, 786], absolutePosition: { x: 28, y: 28 } },
-            { text: BRAND_NAME, absolutePosition: { x: 46, y: 48 }, color: "#FFFFFF", fontSize: 17, bold: true },
+            { text: BRAND_NAME, absolutePosition: { x: 44, y: 48 }, color: "#FFFFFF", fontSize: 16, bold: true },
             {
               text: obj.title || "Объект недвижимости",
-              absolutePosition: { x: 46, y: 220 },
+              absolutePosition: { x: 44, y: 225 },
               color: "#FFFFFF",
               fontSize: 34,
               bold: true,
               width: 500,
             },
-            {
-              text: formatPrice(obj.priceBYN),
-              absolutePosition: { x: 46, y: 700 },
-              color: BRAND_COLOR,
-              fontSize: 28,
-              bold: true,
-            },
-            {
-              text: [obj.city, obj.address].filter(Boolean).join(", "),
-              absolutePosition: { x: 46, y: 740 },
-              color: "#FFFFFF",
-              fontSize: 13,
-              width: 500,
-            },
+            { text: formatPrice(obj.priceBYN), absolutePosition: { x: 44, y: 702 }, color: BRAND_COLOR, fontSize: 28, bold: true },
+            { text: locationLine, absolutePosition: { x: 44, y: 742 }, color: "#FFFFFF", fontSize: 13, width: 500 },
           ],
           pageBreak: "after",
         },
 
-        // Page 2 specs
-        { text: "ХАРАКТЕРИСТИКИ ОБЪЕКТА", style: "sectionTitle" },
-        specsTable,
-        { text: "Описание объекта", style: "cardTitle", margin: [0, 0, 0, 10] },
-        {
-          text: obj.description || "Описание отсутствует.",
-          style: "body",
-          margin: [0, 0, 0, 0],
-          pageBreak: "after",
-        },
-
-        // Page 3 gallery
-        { text: "ФОТОГАЛЕРЕЯ", style: "sectionTitle" },
-        {
-          table: {
-            widths: ["*", "*"],
-            body: galleryRows,
-          },
-          layout: "noBorders",
-          pageBreak: "after",
-        },
-
-        // Page 4 location + contacts
-        { text: "РАСПОЛОЖЕНИЕ И КОНТАКТЫ", style: "sectionTitle" },
-        mapDataUrl
-          ? { image: mapDataUrl, fit: [539, 300], margin: [0, 0, 0, 20] }
-          : {
-              stack: [
-                { canvas: [{ type: "rect", x: 0, y: 0, w: 539, h: 300, color: "#F0F1F0", lineColor: "#D0D0D0" }] },
-                { text: "Карта недоступна", margin: [14, -170, 0, 0], color: "#666", bold: true, fontSize: 17 },
-              ],
-              margin: [0, 0, 0, 20],
-            },
         {
           columns: [
             {
-              qr: `https://turko.by/objects/${encodeURIComponent(obj.slug || "")}`,
-              fit: 120,
-              foreground: BRAND_COLOR,
-              margin: [0, 6, 20, 0],
+              stack: [
+                { text: "OLGA TURKO", color: "#FFFFFF", bold: true, fontSize: 20 },
+                { text: "REAL ESTATE", color: "#BFD3CC", fontSize: 10, margin: [0, 2, 0, 0] },
+              ],
             },
             {
+              width: 230,
               stack: [
-                { text: 'Агентство недвижимости «ГермесГрупп»', bold: true, color: BRAND_COLOR, fontSize: 13 },
-                { text: 'г. Лида, б-р Князя Гедимина, 12, пом. 9', margin: [0, 8, 0, 0] },
-                { text: 'Телефон: +375 (29) 180-95-16', margin: [0, 8, 0, 0] },
-                { text: 'Instagram: @rielter_olga_lida', margin: [0, 8, 0, 0] },
-                { text: `Ссылка на объект: turko.by/objects/${obj.slug || ""}`, margin: [0, 8, 0, 0] },
+                { text: "Агент по недвижимости", color: "#BFD3CC", alignment: "right", fontSize: 10 },
+                { text: "Ольга Турко", color: "#FFFFFF", alignment: "right", bold: true, fontSize: 16, margin: [0, 2, 0, 0] },
+                { text: "+375 (29) 180-95-16", color: "#E2F2EC", alignment: "right", margin: [0, 2, 0, 0] },
               ],
             },
           ],
+          margin: [0, 0, 0, 16],
+        },
+
+        {
+          table: {
+            widths: ["*", 110, 165],
+            body: [[
+              {
+                stack: [
+                  { text: obj.title || "Объект недвижимости", bold: true, fontSize: 15, color: "#122321", margin: [0, 0, 0, 8] },
+                  { text: locationLine || "—", color: "#2F3B38", margin: [0, 0, 0, 8] },
+                  { text: dealLine || "—", color: "#6A7572", fontSize: 10, margin: [0, 0, 0, 8] },
+                  { text: mainFacts, color: "#2F3B38", fontSize: 11 },
+                ],
+                fillColor: "#FFFFFF",
+                margin: [12, 12, 12, 12],
+              },
+              {
+                stack: [
+                  { text: "Площадь", bold: true, color: "#2A3533", margin: [0, 0, 0, 16] },
+                  { text: `${obj.areaTotal || "—"} м²`, bold: true, color: "#122321", fontSize: 16 },
+                  { text: "общая", color: "#6B7572", fontSize: 10, margin: [0, 2, 0, 10] },
+                  { text: `${obj.areaLiving || "—"} м²`, bold: true, color: "#122321", fontSize: 14 },
+                  { text: "жилая", color: "#6B7572", fontSize: 10 },
+                ],
+                fillColor: "#FFFFFF",
+                margin: [12, 12, 12, 12],
+              },
+              {
+                stack: [
+                  { text: "Стоимость", bold: true, color: "#2A3533", margin: [0, 0, 0, 16] },
+                  {
+                    text: formatPrice(obj.priceBYN),
+                    color: "#FFFFFF",
+                    bold: true,
+                    fontSize: 15,
+                    background: BRAND_COLOR,
+                    margin: [8, 6, 8, 6],
+                  },
+                  { text: "Цена объекта", color: "#6B7572", fontSize: 10, margin: [0, 10, 0, 0] },
+                ],
+                fillColor: "#FFFFFF",
+                margin: [12, 12, 12, 12],
+              },
+            ]],
+          },
+          layout: {
+            hLineWidth: () => 0,
+            vLineWidth: (i) => (i === 0 || i === 3 ? 0 : 1),
+            vLineColor: () => "#D6E2DD",
+          },
+          margin: [0, 0, 0, 14],
+        },
+
+        {
+          table: {
+            widths: ["*", 180],
+            body: detailRows.map((row, idx) => [
+              { text: row[0], fillColor: idx % 2 ? "#F6F8F7" : "#FFFFFF", margin: [12, 8, 12, 8] },
+              { text: row[1], bold: true, alignment: "right", fillColor: idx % 2 ? "#F6F8F7" : "#FFFFFF", margin: [12, 8, 12, 8] },
+            ]),
+          },
+          layout: {
+            hLineWidth: () => 0,
+            vLineWidth: () => 0,
+          },
+          margin: [0, 0, 0, 14],
+        },
+
+        {
+          stack: [
+            { text: "Описание объекта", color: "#FFFFFF", bold: true, fontSize: 18, margin: [0, 0, 0, 8] },
+            {
+              text: obj.description || "Описание отсутствует.",
+              style: "lightBody",
+            },
+          ],
+          pageBreak: "after",
+        },
+
+        { text: "Расположение и контакты", style: "sectionTitle" },
+        mapDataUrl
+          ? { image: mapDataUrl, fit: [547, 300], margin: [0, 0, 0, 16] }
+          : {
+              stack: [
+                { canvas: [{ type: "rect", x: 0, y: 0, w: 547, h: 300, color: "#EDF2EF", lineColor: "#CED9D3" }] },
+                { text: "Карта недоступна", margin: [16, -170, 0, 0], color: "#5E6966", bold: true, fontSize: 16 },
+              ],
+              margin: [0, 0, 0, 16],
+            },
+        {
+          table: {
+            widths: [140, "*"],
+            body: [[
+              {
+                qr: `https://turko.by/objects/${encodeURIComponent(obj.slug || "")}`,
+                fit: 120,
+                foreground: BRAND_COLOR,
+                alignment: "center",
+                margin: [0, 6, 0, 6],
+                fillColor: "#FFFFFF",
+              },
+              {
+                stack: [
+                  { text: 'Агентство недвижимости «ГермесГрупп»', bold: true, color: BRAND_COLOR, fontSize: 14 },
+                  { text: 'г. Лида, бульвар Князя Гедимина, 12', margin: [0, 8, 0, 0], color: "#26312E" },
+                  { text: 'Телефоны: (+375) 29 180 95 16, (+375) 44 501 90 90', margin: [0, 8, 0, 0], color: "#26312E" },
+                  { text: 'Instagram: @rielter_olga_lida', margin: [0, 8, 0, 0], color: "#26312E" },
+                  { text: `Ссылка на объект: turko.by/objects/${obj.slug || ""}`, margin: [0, 8, 0, 0], color: "#26312E" },
+                ],
+                fillColor: "#FFFFFF",
+                margin: [12, 10, 12, 10],
+              },
+            ]],
+          },
+          layout: {
+            hLineWidth: () => 0,
+            vLineWidth: () => 0,
+          },
         },
       ],
     };
