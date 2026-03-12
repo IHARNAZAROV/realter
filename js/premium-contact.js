@@ -15,7 +15,7 @@
   card.addEventListener("mousemove", (event) => {
     const rect = card.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width;
-    mouseOffset = (x - 0.5) * 26;
+    mouseOffset = (x - 0.5) * 40;
   });
 
   card.addEventListener("mouseleave", () => {
@@ -24,7 +24,7 @@
 
   const animate = (time) => {
     const t = time * 0.001;
-    const autoOffset = Math.sin(t * 1.1) * 28;
+    const autoOffset = Math.sin(t * 1.2) * 42;
     const totalX = autoOffset + mouseOffset;
     card.style.setProperty("--pc-photo-x", `${totalX.toFixed(2)}px`);
     requestAnimationFrame(animate);
