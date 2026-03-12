@@ -9,7 +9,11 @@
   const PDFMAKE_SOURCES = [
     {
       lib: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.15/build/pdfmake.min.js",
-      vfs: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.15/build/vfs_fonts.min.js",
+      vfs: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.15/build/vfs_fonts.js",
+    },
+    {
+      lib: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.15/pdfmake.min.js",
+      vfs: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.15/vfs_fonts.js",
     },
     {
       lib: "https://unpkg.com/pdfmake@0.2.15/build/pdfmake.min.js",
@@ -97,7 +101,7 @@
 
       const script = document.createElement("script");
       script.src = src;
-      script.async = true;
+      script.async = false;
       script.dataset.runtimeSrc = src;
       script.onload = () => {
         script.dataset.loaded = "1";
@@ -112,20 +116,20 @@
   }
 
   async function ensurePdfMake() {
-    if (window.pdfMake && window.pdfMake.vfs) return true;
+    if (window.pdfMake && typeof window.pdfMake.createPdf === "function" && window.pdfMake.vfs) return true;
 
     let lastError = null;
     for (const source of PDFMAKE_SOURCES) {
       try {
         await loadScript(source.lib);
         await loadScript(source.vfs);
-        if (window.pdfMake && window.pdfMake.vfs) return true;
+        if (window.pdfMake && typeof window.pdfMake.createPdf === "function" && window.pdfMake.vfs) return true;
       } catch (error) {
         lastError = error;
       }
     }
 
-    if (lastError) throw lastError;
+    if (lastError) throw new Error(`Не удалось загрузить pdfmake: ${lastError.message}`);
     return false;
   }
 
