@@ -339,13 +339,13 @@
     return lines;
   }
 
-  function drawSectionTitle(page, fontBold, text, y) {
+  function drawSectionTitle(page, fontBold, text, y, brandColor) {
     page.drawText(toPdfSafeText(text), {
       x: 48,
       y,
       size: 22,
       font: fontBold,
-      color: getBrandColor(rgb),
+      color: brandColor,
     });
 
     page.drawRectangle({
@@ -353,12 +353,13 @@
       y: y - 10,
       width: 160,
       height: 2,
-      color: getBrandColor(rgb),
+      color: brandColor,
     });
   }
 
   async function buildPdfPresentation(obj) {
     const { PDFDocument, StandardFonts, PageSizes, rgb } = window.PDFLib;
+    const brandColor = getBrandColor(rgb);
 
     const pdf = await PDFDocument.create();
     const fontRegular = await pdf.embedFont(StandardFonts.Helvetica);
@@ -444,7 +445,7 @@
         y: 130,
         size: 28,
         font: fontBold,
-        color: getBrandColor(rgb),
+        color: brandColor,
       });
 
       page.drawText(toPdfSafeText([obj.city, obj.address].filter(Boolean).join(", ")), {
@@ -459,7 +460,7 @@
     // Page 2 - specs
     {
       const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "ХАРАКТЕРИСТИКИ ОБЪЕКТА", a4Height - 60);
+      drawSectionTitle(page, fontBold, "ХАРАКТЕРИСТИКИ ОБЪЕКТА", a4Height - 60, brandColor);
 
       const rows = [
         ["Общая площадь", obj.areaTotal ? `${obj.areaTotal} м²` : "—"],
@@ -507,7 +508,7 @@
         y: y - 22,
         size: 17,
         font: fontBold,
-        color: getBrandColor(rgb),
+        color: brandColor,
       });
 
       const descriptionLines = wrapText(obj.description || "Описание отсутствует.", 95).slice(0, 14);
@@ -527,7 +528,7 @@
     // Page 3 - gallery
     {
       const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "ФОТОГАЛЕРЕЯ", a4Height - 60);
+      drawSectionTitle(page, fontBold, "ФОТОГАЛЕРЕЯ", a4Height - 60, brandColor);
 
       const gridTop = a4Height - 110;
       const gap = 14;
@@ -566,7 +567,7 @@
     // Page 4 - location
     {
       const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "РАСПОЛОЖЕНИЕ И КОНТАКТЫ", a4Height - 60);
+      drawSectionTitle(page, fontBold, "РАСПОЛОЖЕНИЕ И КОНТАКТЫ", a4Height - 60, brandColor);
 
       const mapX = 48;
       const mapY = 250;
@@ -632,7 +633,7 @@
           y: textY,
           size: index === 0 ? 12 : 11,
           font: index === 0 ? fontBold : fontRegular,
-          color: index === 0 ? getBrandColor(rgb) : rgb(0.23, 0.23, 0.23),
+          color: index === 0 ? brandColor : rgb(0.23, 0.23, 0.23),
         });
         textY -= 24;
       });
