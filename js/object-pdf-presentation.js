@@ -343,8 +343,31 @@
     throw lastError || new Error("Unable to load any font source");
   }
 
-  function drawSectionTitle(page, fontBold, text, y, brandColor) {
-    page.drawText(String(text || ""), {
+
+  function toWinAnsiSafeText(value) {
+    const translit = {
+      А:"A",а:"a",Б:"B",б:"b",В:"V",в:"v",Г:"G",г:"g",Д:"D",д:"d",Е:"E",е:"e",Ё:"E",ё:"e",
+      Ж:"Zh",ж:"zh",З:"Z",з:"z",И:"I",и:"i",Й:"Y",й:"y",К:"K",к:"k",Л:"L",л:"l",М:"M",м:"m",
+      Н:"N",н:"n",О:"O",о:"o",П:"P",п:"p",Р:"R",р:"r",С:"S",с:"s",Т:"T",т:"t",У:"U",у:"u",
+      Ф:"F",ф:"f",Х:"Kh",х:"kh",Ц:"Ts",ц:"ts",Ч:"Ch",ч:"ch",Ш:"Sh",ш:"sh",Щ:"Shch",щ:"shch",
+      Ъ:"",ъ:"",Ы:"Y",ы:"y",Ь:"",ь:"",Э:"E",э:"e",Ю:"Yu",ю:"yu",Я:"Ya",я:"ya",
+    };
+
+    return Array.from(String(value ?? ""))
+      .map((ch) => {
+        if (translit[ch] !== undefined) return translit[ch];
+        const code = ch.charCodeAt(0);
+        if (code >= 32 && code <= 126) return ch;
+        if (ch === "№") return "No";
+        if (ch === "—" || ch === "–") return "-";
+        if (ch === "²") return "2";
+        return "?";
+      })
+      .join("");
+  }
+
+  function drawSectionTitle(page, fontBold, text, y, brandColor, safeText = String) {
+    page.drawText(safeText(text || ""), {
       x: 48,
       y,
       size: 22,
@@ -368,19 +391,24 @@
     const pdf = await PDFDocument.create();
     pdf.registerFontkit(window.fontkit);
 
-    const [regularFontCandidate, boldFontCandidate] = await Promise.all([
-      fetchFontBytesWithFallback(FONT_REGULAR_SOURCES),
-      fetchFontBytesWithFallback(FONT_BOLD_SOURCES),
-    ]);
-
     let fontRegular;
     let fontBold;
+    let safeText = String;
 
     try {
+      const [regularFontCandidate, boldFontCandidate] = await Promise.all([
+        fetchFontBytesWithFallback(FONT_REGULAR_SOURCES),
+        fetchFontBytesWithFallback(FONT_BOLD_SOURCES),
+      ]);
+
       fontRegular = await pdf.embedFont(regularFontCandidate.bytes, { subset: true });
       fontBold = await pdf.embedFont(boldFontCandidate.bytes, { subset: true });
     } catch (error) {
-      throw new Error(`Не удалось встроить шрифты Inter/Montserrat в PDF (${regularFontCandidate.source}, ${boldFontCandidate.source}).`);
+      console.warn("Inter/Montserrat не удалось встроить в PDF, используем стандартные шрифты.", error);
+      const { StandardFonts } = window.PDFLib;
+      fontRegular = await pdf.embedFont(StandardFonts.Helvetica);
+      fontBold = await pdf.embedFont(StandardFonts.HelveticaBold);
+      safeText = toWinAnsiSafeText;
     }
 
     const [a4Width, a4Height] = PageSizes.A4;
@@ -406,7 +434,6 @@
       Number.isFinite(mapLat) && Number.isFinite(mapLng)
         ? [
             `https://api.maptiler.com/maps/streets-v2/static/${mapLng},${mapLat},14/1200x700.png?markers=${mapLng},${mapLat},lightred&key=${MAPTILER_KEY}`,
-            `https://staticmap.openstreetmap.de/staticmap.php?center=${mapLat},${mapLng}&zoom=14&size=1200x700&markers=${mapLat},${mapLng},red-pushpin`,
           ]
         : [];
 
@@ -445,7 +472,7 @@
         opacity: 0.35,
       });
 
-      page.drawText(String(BRAND_NAME), {
+      page.drawText(safeText(BRAND_NAME), {
         x: 48,
         y: a4Height - 60,
         size: 18,
@@ -456,7 +483,7 @@
       const titleLines = wrapText(obj.title || "Объект недвижимости", 33).slice(0, 3);
       let titleY = a4Height - 250;
       titleLines.forEach((line) => {
-        page.drawText(String(line || ""), {
+        page.drawText(safeText(line || ""), {
           x: 48,
           y: titleY,
           size: 36,
@@ -466,7 +493,7 @@
         titleY -= 42;
       });
 
-      page.drawText(String(formatPrice(obj.priceBYN)), {
+      page.drawText(safeText(formatPrice(obj.priceBYN)), {
         x: 48,
         y: 130,
         size: 28,
@@ -474,7 +501,7 @@
         color: brandColor,
       });
 
-      page.drawText(String([obj.city, obj.address].filter(Boolean).join(", ")), {
+      page.drawText(safeText([obj.city, obj.address].filter(Boolean).join(", ")), {
         x: 48,
         y: 95,
         size: 14,
@@ -486,7 +513,7 @@
     // Page 2 - specs
     {
       const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "ХАРАКТЕРИСТИКИ ОБЪЕКТА", a4Height - 60, brandColor);
+      drawSectionTitle(page, fontBold, "ХАРАКТЕРИСТИКИ ОБЪЕКТА", a4Height - 60, brandColor, safeText);
 
       const rows = [
         ["Общая площадь", obj.areaTotal ? `${obj.areaTotal} м²` : "—"],
@@ -510,7 +537,7 @@
           borderWidth: 1,
         });
 
-        page.drawText(String(row[0] || ""), {
+        page.drawText(safeText(row[0] || ""), {
           x: 60,
           y: y + 5,
           size: 12,
@@ -518,7 +545,7 @@
           color: rgb(0.18, 0.24, 0.22),
         });
 
-        page.drawText(String(row[1] || ""), {
+        page.drawText(safeText(row[1] || ""), {
           x: 280,
           y: y + 5,
           size: 12,
@@ -529,7 +556,7 @@
         y -= rowHeight;
       });
 
-      page.drawText("Описание объекта", {
+      page.drawText(safeText("Описание объекта"), {
         x: 48,
         y: y - 22,
         size: 17,
@@ -540,7 +567,7 @@
       const descriptionLines = wrapText(obj.description || "Описание отсутствует.", 95).slice(0, 14);
       let descY = y - 48;
       descriptionLines.forEach((line) => {
-        page.drawText(String(line || ""), {
+        page.drawText(safeText(line || ""), {
           x: 48,
           y: descY,
           size: 11,
@@ -554,7 +581,7 @@
     // Page 3 - gallery
     {
       const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "ФОТОГАЛЕРЕЯ", a4Height - 60, brandColor);
+      drawSectionTitle(page, fontBold, "ФОТОГАЛЕРЕЯ", a4Height - 60, brandColor, safeText);
 
       const gridTop = a4Height - 110;
       const gap = 14;
@@ -593,7 +620,7 @@
     // Page 4 - location
     {
       const page = pdf.addPage([a4Width, a4Height]);
-      drawSectionTitle(page, fontBold, "РАСПОЛОЖЕНИЕ И КОНТАКТЫ", a4Height - 60, brandColor);
+      drawSectionTitle(page, fontBold, "РАСПОЛОЖЕНИЕ И КОНТАКТЫ", a4Height - 60, brandColor, safeText);
 
       const mapX = 48;
       const mapY = 250;
@@ -618,7 +645,7 @@
           borderColor: rgb(0.85, 0.85, 0.85),
           borderWidth: 1,
         });
-        page.drawText("Карта недоступна", {
+        page.drawText(safeText("Карта недоступна"), {
           x: mapX + 20,
           y: mapY + mapHeight / 2,
           size: 14,
@@ -654,7 +681,7 @@
 
       let textY = 186;
       contactLines.forEach((line, index) => {
-        page.drawText(String(line || ""), {
+        page.drawText(safeText(line || ""), {
           x: 212,
           y: textY,
           size: index === 0 ? 12 : 11,
