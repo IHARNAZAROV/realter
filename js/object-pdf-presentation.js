@@ -6,6 +6,19 @@
   const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE";
   const BRAND_NAME = "Ольга Турко";
 
+  const DEPENDENCY_SOURCES = {
+    pdfLib: [
+      "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js",
+      "https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js",
+    ],
+    qrCode: [
+      "https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js",
+      "https://unpkg.com/qrcode@1.5.4/build/qrcode.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
+    ],
+  };
+
   const previewImages = {
     "dom-lidskiy-rayon-krupovo": "images/objects/pic1.webp",
     "dom-lida-severnyy-gorodok-ul-govorova": "images/objects/pic2.webp",
@@ -149,6 +162,68 @@
       width: canvas.width,
       height: canvas.height,
     };
+  }
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const existing = document.querySelector(`script[data-runtime-src="${src}"]`);
+      if (existing && existing.dataset.loaded === "1") {
+        resolve();
+        return;
+      }
+
+      if (existing) {
+        existing.addEventListener("load", () => resolve(), { once: true });
+        existing.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.dataset.runtimeSrc = src;
+
+      script.addEventListener("load", () => {
+        script.dataset.loaded = "1";
+        resolve();
+      });
+
+      script.addEventListener("error", () => {
+        script.remove();
+        reject(new Error(`Failed to load ${src}`));
+      });
+
+      document.head.appendChild(script);
+    });
+  }
+
+  async function loadFromSources(sources, checker) {
+    let lastError = null;
+
+    for (const src of sources) {
+      try {
+        await loadScript(src);
+        if (checker()) return true;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    if (lastError) throw lastError;
+    return checker();
+  }
+
+  async function ensurePdfDependencies() {
+    if (!window.PDFLib) {
+      await loadFromSources(DEPENDENCY_SOURCES.pdfLib, () => Boolean(window.PDFLib));
+    }
+
+    if (!window.QRCode || typeof window.QRCode.toDataURL !== "function") {
+      await loadFromSources(DEPENDENCY_SOURCES.qrCode, () => Boolean(window.QRCode && window.QRCode.toDataURL));
+    }
+
+    return Boolean(window.PDFLib && window.QRCode && window.QRCode.toDataURL);
   }
 
   async function createQrPngDataUrl(slug) {
@@ -528,12 +603,13 @@
   }
 
   async function handleDownloadClick(button) {
-    if (!window.PDFLib || !window.QRCode) {
-      alert("Не удалось загрузить библиотеки PDF. Обновите страницу.");
-      return;
-    }
-
     try {
+      const dependenciesReady = await ensurePdfDependencies();
+      if (!dependenciesReady) {
+        alert("Не удалось загрузить библиотеки PDF. Проверьте блокировку сторонних скриптов и попробуйте снова.");
+        return;
+      }
+
       setButtonLoading(button, true);
 
       if (!state.activeObject) {
@@ -564,6 +640,10 @@
     } catch (error) {
       console.warn("Не удалось предварительно загрузить объект для PDF", error);
     }
+
+    ensurePdfDependencies().catch((error) => {
+      console.warn("Предзагрузка PDF библиотек не удалась", error);
+    });
 
     button.addEventListener("click", () => handleDownloadClick(button));
   }
