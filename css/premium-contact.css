@@ -16,9 +16,9 @@
   border: 1px solid rgb(255 255 255 / 0.7);
   box-shadow: 0 20px 45px rgb(25 40 34 / 0.16);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr);
   align-items: center;
-  column-gap: 2.2rem;
+  column-gap: 1.6rem;
   padding: 1.35rem 2.4rem;
 }
 
@@ -29,11 +29,11 @@
 }
 
 .simple-contact-item--left {
-  justify-self: end;
+  justify-self: center;
 }
 
 .simple-contact-item--right {
-  justify-self: start;
+  justify-self: center;
 }
 
 .simple-contact-link {
@@ -91,11 +91,11 @@
 }
 
 .simple-contact-figure {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 340px;
+  position: relative;
+  grid-column: 2;
+  justify-self: center;
+  align-self: end;
+  width: 320px;
   margin: 0;
   z-index: 3;
   pointer-events: none;
@@ -103,14 +103,15 @@
 
 .simple-contact-figure img {
   display: block;
-  width: 340px;
+  width: 320px;
   max-width: none;
-  transform: translate3d(var(--photo-x), -288px, 0);
+  transform: translate3d(var(--photo-x), -58px, 0);
   filter: drop-shadow(0 16px 24px rgb(20 36 30 / 0.28));
 }
 
 @media (max-width: 1199px) {
   .simple-contact-card {
+    grid-template-columns: minmax(0, 1fr) 260px minmax(0, 1fr);
     min-height: 230px;
     padding: 1.15rem 1.3rem;
   }
@@ -126,11 +127,11 @@
 
   .simple-contact-figure,
   .simple-contact-figure img {
-    width: 280px;
+    width: 260px;
   }
 
   .simple-contact-figure img {
-    transform: translate3d(var(--photo-x), -228px, 0);
+    transform: translate3d(var(--photo-x), -44px, 0);
   }
 }
 
@@ -153,6 +154,7 @@
 
   .simple-contact-figure {
     position: relative;
+    grid-column: auto;
     left: auto;
     bottom: auto;
     transform: none;
