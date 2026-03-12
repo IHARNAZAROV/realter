@@ -13392,3 +13392,14 @@ recent-posts-entry-date .sx-post-info .post-title {
     padding: 14px;
   }
 }
+
+.footer-legal-info{
+margin-top:12px;
+font-size:13px;
+line-height:1.5;
+opacity:0.8;
+}
+
+.footer-legal-info p{
+margin:4px 0;
+}
