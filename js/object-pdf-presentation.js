@@ -2,7 +2,7 @@
   "use strict";
 
   const OBJECTS_DATA_URL = "/data/objects.json";
-  const BRAND_COLOR = rgbFromHex("#155945");
+  const BRAND_COLOR_HEX = "#155945";
   const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE";
   const BRAND_NAME = "Ольга Турко";
 
@@ -109,6 +109,11 @@
     const g = parseInt(value.slice(2, 4), 16) / 255;
     const b = parseInt(value.slice(4, 6), 16) / 255;
     return { r, g, b };
+  }
+
+  function getBrandColor(rgb) {
+    const c = rgbFromHex(BRAND_COLOR_HEX);
+    return rgb(c.r, c.g, c.b);
   }
 
   const qs = (selector, root = document) => root.querySelector(selector);
@@ -340,7 +345,7 @@
       y,
       size: 22,
       font: fontBold,
-      color: BRAND_COLOR,
+      color: getBrandColor(rgb),
     });
 
     page.drawRectangle({
@@ -348,7 +353,7 @@
       y: y - 10,
       width: 160,
       height: 2,
-      color: BRAND_COLOR,
+      color: getBrandColor(rgb),
     });
   }
 
@@ -439,7 +444,7 @@
         y: 130,
         size: 28,
         font: fontBold,
-        color: BRAND_COLOR,
+        color: getBrandColor(rgb),
       });
 
       page.drawText(toPdfSafeText([obj.city, obj.address].filter(Boolean).join(", ")), {
@@ -502,7 +507,7 @@
         y: y - 22,
         size: 17,
         font: fontBold,
-        color: BRAND_COLOR,
+        color: getBrandColor(rgb),
       });
 
       const descriptionLines = wrapText(obj.description || "Описание отсутствует.", 95).slice(0, 14);
@@ -627,7 +632,7 @@
           y: textY,
           size: index === 0 ? 12 : 11,
           font: index === 0 ? fontBold : fontRegular,
-          color: index === 0 ? BRAND_COLOR : rgb(0.23, 0.23, 0.23),
+          color: index === 0 ? getBrandColor(rgb) : rgb(0.23, 0.23, 0.23),
         });
         textY -= 24;
       });
