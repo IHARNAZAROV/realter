@@ -74,8 +74,9 @@ const previewImages = {
   "kvartira-lida-ul-tukhachevskogo-65":"images/objects/pic38.webp",
   "kvartira-lida-ul-sovetskaya-36-stalinka": "images/objects/pic39.webp",
   "kvartira-lida-ul-nevskogo-20-cheshka":"images/objects/pic40.webp",
-  "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero":"/images/objects/pic41.webp",
-  "kvartira-lida-ul-hasanovskaya-1-64":"/images/objects/pic42.webp",
+  "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero":"images/objects/pic41.webp",
+  "kvartira-lida-ul-hasanovskaya-1-64":"images/objects/pic42.webp",
+  "kvartira-lida-ul-sovetskaya-5-center": "images/objects/pic43.webp",
 };
 
 /* =========================================================
