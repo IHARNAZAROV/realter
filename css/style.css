@@ -13408,11 +13408,11 @@ recent-posts-entry-date .sx-post-info .post-title {
   --pc-photo-x: 0px;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 320px 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 1rem;
-  min-height: 280px;
-  padding: 2rem 2.6rem;
+  gap: 1.2rem;
+  min-height: 300px;
+  padding: 2rem 2.8rem;
   border-radius: 28px;
   background: linear-gradient(120deg, #dce3df 0%, #e8efeb 45%, #e0e6e2 100%);
   border: 1px solid rgb(255 255 255 / 0.7);
@@ -13429,16 +13429,18 @@ recent-posts-entry-date .sx-post-info .post-title {
   z-index: 2;
   display: flex;
   width: 100%;
-  max-width: 360px;
-  min-width: 360px;
+  max-width: min(360px, calc(50% - 190px));
+  min-width: 300px;
 }
 
 .premium-contact-item--left {
   justify-self: start;
+  margin-right: 170px;
 }
 
 .premium-contact-item--right {
   justify-self: end;
+  margin-left: 170px;
 }
 
 .premium-contact-link {
@@ -13509,21 +13511,28 @@ recent-posts-entry-date .sx-post-info .post-title {
 
 .premium-contact-figure img {
   display: block;
-  width: 320px;
+  width: 340px;
   max-width: none;
   filter: drop-shadow(0 16px 24px rgb(20 36 30 / 0.28));
-  transform: translate3d(var(--pc-photo-x), -182px, 0);
+  transform: translate3d(var(--pc-photo-x), -222px, 0);
 }
 
 @media (max-width: 1199px) {
   .premium-contact-card {
-    grid-template-columns: 1fr 280px 1fr;
     padding: 1.8rem 1.3rem;
   }
 
   .premium-contact-item {
-    max-width: 320px;
-    min-width: 320px;
+    max-width: min(320px, calc(50% - 150px));
+    min-width: 260px;
+  }
+
+  .premium-contact-item--left {
+    margin-right: 130px;
+  }
+
+  .premium-contact-item--right {
+    margin-left: 130px;
   }
 
   .premium-contact-link {
@@ -13534,6 +13543,10 @@ recent-posts-entry-date .sx-post-info .post-title {
   .premium-contact-figure,
   .premium-contact-figure img {
     width: 280px;
+  }
+
+  .premium-contact-figure img {
+    transform: translate3d(var(--pc-photo-x), -176px, 0);
   }
 }
 
@@ -13548,6 +13561,8 @@ recent-posts-entry-date .sx-post-info .post-title {
   .premium-contact-item {
     max-width: 100%;
     min-width: 0;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .premium-contact-link {
