@@ -2,8 +2,10 @@
   const card = document.getElementById("simpleContactCard");
   if (!card) return;
 
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isMobile = window.matchMedia("(max-width: 991px)").matches;
-  if (isMobile) {
+
+  if (reducedMotion || isMobile) {
     card.style.setProperty("--photo-x", "0px");
     return;
   }
@@ -13,7 +15,7 @@
   card.addEventListener("mousemove", (event) => {
     const rect = card.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width;
-    mouseOffset = (x - 0.5) * 42;
+    mouseOffset = (x - 0.5) * 20;
   });
 
   card.addEventListener("mouseleave", () => {
@@ -22,7 +24,7 @@
 
   const animate = (time) => {
     const t = time * 0.001;
-    const autoOffset = Math.sin(t * 1.15) * 44;
+    const autoOffset = Math.sin(t * 1.15) * 24;
     card.style.setProperty("--photo-x", `${(autoOffset + mouseOffset).toFixed(2)}px`);
     requestAnimationFrame(animate);
   };

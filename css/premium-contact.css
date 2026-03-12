@@ -1,6 +1,5 @@
 .simple-contact-section {
-  padding: 0.5rem 0 4rem;
-  overflow: visible;
+  padding: 0.75rem 0 4rem;
 }
 
 .simple-contact-wrap {
@@ -10,43 +9,35 @@
 .simple-contact-card {
   --photo-x: 0px;
   position: relative;
-  min-height: 250px;
+  overflow: visible;
+  min-height: 300px;
+  padding: 1.75rem 2.4rem;
   border-radius: 28px;
+  border: 1px solid rgb(255 255 255 / 0.72);
   background: linear-gradient(120deg, #dce3df 0%, #e7eeea 45%, #dfe6e2 100%);
-  border: 1px solid rgb(255 255 255 / 0.7);
   box-shadow: 0 20px 45px rgb(25 40 34 / 0.16);
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px minmax(0, 1fr);
+  display: flex;
   align-items: center;
-  column-gap: 1.6rem;
-  padding: 1.35rem 2.4rem;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .simple-contact-item {
-  display: flex;
-  width: min(360px, 100%);
+  width: min(360px, calc(50% - 190px));
+  min-width: 280px;
   z-index: 2;
-}
-
-.simple-contact-item--left {
-  justify-self: center;
-}
-
-.simple-contact-item--right {
-  justify-self: center;
 }
 
 .simple-contact-link {
   width: 100%;
-  min-height: 200px;
-  height: 200px;
+  min-height: 194px;
   border-radius: 20px;
   border: 1px solid rgb(255 255 255 / 0.65);
   background: rgb(255 255 255 / 0.24);
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1.35rem;
+  padding: 1.25rem;
   text-decoration: none;
   color: #152823;
 }
@@ -61,7 +52,7 @@
   justify-content: center;
   color: #17664f;
   background: #f2f5f3;
-  border: 1px solid rgb(255 255 255 / 0.8);
+  border: 1px solid rgb(255 255 255 / 0.82);
 }
 
 .simple-contact-icon svg {
@@ -77,11 +68,12 @@
 }
 
 .simple-contact-title {
-  font-size: clamp(1rem, 1.3vw, 2rem);
+  font-size: clamp(1rem, 1.35vw, 2rem);
   line-height: 1.15;
   font-weight: 700;
   color: #162a24;
   overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .simple-contact-text {
@@ -91,91 +83,85 @@
 }
 
 .simple-contact-figure {
-  position: relative;
-  grid-column: 2;
-  justify-self: center;
-  align-self: end;
-  width: 320px;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 330px;
   margin: 0;
-  z-index: 3;
+  transform: translateX(calc(-50% + var(--photo-x)));
+  z-index: 4;
   pointer-events: none;
 }
 
 .simple-contact-figure img {
   display: block;
-  width: 320px;
+  width: 100%;
   max-width: none;
-  transform: translate3d(var(--photo-x), -58px, 0);
+  transform: translateY(-134px);
   filter: drop-shadow(0 16px 24px rgb(20 36 30 / 0.28));
 }
 
 @media (max-width: 1199px) {
   .simple-contact-card {
-    grid-template-columns: minmax(0, 1fr) 260px minmax(0, 1fr);
-    min-height: 230px;
-    padding: 1.15rem 1.3rem;
+    min-height: 270px;
+    padding: 1.35rem 1.2rem;
   }
 
   .simple-contact-item {
-    width: min(320px, 100%);
+    width: min(320px, calc(50% - 155px));
+    min-width: 240px;
   }
 
   .simple-contact-link {
-    min-height: 190px;
-    height: 190px;
+    min-height: 182px;
   }
 
-  .simple-contact-figure,
-  .simple-contact-figure img {
-    width: 260px;
+  .simple-contact-figure {
+    width: 280px;
   }
 
   .simple-contact-figure img {
-    transform: translate3d(var(--photo-x), -44px, 0);
+    transform: translateY(-112px);
   }
 }
 
 @media (max-width: 991px) {
   .simple-contact-card {
-    grid-template-columns: 1fr;
     min-height: 0;
-    gap: 0.85rem;
-    padding: 1.6rem 1rem;
+    padding: 1.25rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.9rem;
   }
 
   .simple-contact-item {
     width: 100%;
+    min-width: 0;
   }
 
   .simple-contact-link {
     min-height: 0;
-    height: auto;
   }
 
   .simple-contact-figure {
     position: relative;
-    grid-column: auto;
     left: auto;
     bottom: auto;
+    width: min(250px, 70vw);
     transform: none;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    margin: 0 auto;
     order: 2;
   }
 
   .simple-contact-item--left {
     order: 1;
-    justify-self: stretch;
   }
 
   .simple-contact-item--right {
     order: 3;
-    justify-self: stretch;
   }
 
   .simple-contact-figure img {
-    width: min(240px, 68vw);
-    transform: translate3d(0, -12px, 0);
+    transform: translateY(-8px);
   }
 }
