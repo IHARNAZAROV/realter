@@ -8,16 +8,25 @@
 
   const PDFMAKE_SOURCES = [
     {
-      lib: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.15/build/pdfmake.min.js",
-      vfs: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.15/build/vfs_fonts.js",
+      lib: "https://cdn.jsdelivr.net/npm/pdfmake@0.2.7/build/pdfmake.min.js",
+      vfs: [
+        "https://cdn.jsdelivr.net/npm/pdfmake@0.2.7/build/vfs_fonts.js",
+        "https://cdn.jsdelivr.net/npm/pdfmake@0.2.7/build/vfs_fonts.min.js",
+      ],
     },
     {
-      lib: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.15/pdfmake.min.js",
-      vfs: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.15/vfs_fonts.js",
+      lib: "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js",
+      vfs: [
+        "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js",
+      ],
     },
     {
-      lib: "https://unpkg.com/pdfmake@0.2.15/build/pdfmake.min.js",
-      vfs: "https://unpkg.com/pdfmake@0.2.15/build/vfs_fonts.js",
+      lib: "https://unpkg.com/pdfmake@0.2.7/build/pdfmake.min.js",
+      vfs: [
+        "https://unpkg.com/pdfmake@0.2.7/build/vfs_fonts.js",
+        "https://unpkg.com/pdfmake@0.2.7/build/vfs_fonts.min.js",
+      ],
     },
   ];
 
@@ -122,7 +131,19 @@
     for (const source of PDFMAKE_SOURCES) {
       try {
         await loadScript(source.lib);
-        await loadScript(source.vfs);
+
+        let vfsLoaded = false;
+        for (const vfsSrc of source.vfs) {
+          try {
+            await loadScript(vfsSrc);
+            vfsLoaded = true;
+            break;
+          } catch (vfsError) {
+            lastError = vfsError;
+          }
+        }
+
+        if (!vfsLoaded) continue;
         if (window.pdfMake && typeof window.pdfMake.createPdf === "function" && window.pdfMake.vfs) return true;
       } catch (error) {
         lastError = error;
