@@ -5,6 +5,15 @@
   const BRAND_COLOR_HEX = "#155945";
   const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE";
   const BRAND_NAME = "Ольга Турко";
+  const FONT_REGULAR_SOURCES = [
+    "/fonts/inter/Inter-Regular.woff2",
+    "/fonts/montserrat/Montserrat-Regular.woff2",
+  ];
+  const FONT_BOLD_SOURCES = [
+    "/fonts/inter/Inter-Bold.woff2",
+    "/fonts/montserrat/Montserrat-Bold.woff2",
+    "/fonts/montserrat/Montserrat-ExtraBold.woff2",
+  ];
   const DEPENDENCY_SOURCES = {
     pdfLib: [
       "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js",
@@ -15,6 +24,10 @@
       "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
       "https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js",
       "https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js",
+    ],
+    fontkit: [
+      "https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js",
+      "https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js",
     ],
   };
 
@@ -227,7 +240,11 @@
       await loadFromSources(DEPENDENCY_SOURCES.qrCode, () => Boolean(window.QRCode));
     }
 
-    return Boolean(window.PDFLib && window.QRCode);
+    if (!window.fontkit) {
+      await loadFromSources(DEPENDENCY_SOURCES.fontkit, () => Boolean(window.fontkit));
+    }
+
+    return Boolean(window.PDFLib && window.QRCode && window.fontkit);
   }
 
   async function createQrPngDataUrl(slug) {
@@ -306,6 +323,25 @@
     return lines;
   }
 
+  async function fetchFontBytesWithFallback(urls) {
+    let lastError = null;
+
+    for (const url of urls) {
+      try {
+        const response = await fetch(url, { cache: "force-cache" });
+        if (!response.ok) throw new Error(`Font load failed: ${url} (${response.status})`);
+        return {
+          bytes: await response.arrayBuffer(),
+          source: url,
+        };
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError || new Error("Unable to load any font source");
+  }
+
   function toWinAnsiSafeText(value) {
     const translit = {
       А:"A",а:"a",Б:"B",б:"b",В:"V",в:"v",Г:"G",г:"g",Д:"D",д:"d",Е:"E",е:"e",Ё:"E",ё:"e",
@@ -351,9 +387,27 @@
     const brandColor = getBrandColor(rgb);
 
     const pdf = await PDFDocument.create();
-    const fontRegular = await pdf.embedFont(StandardFonts.Helvetica);
-    const fontBold = await pdf.embedFont(StandardFonts.HelveticaBold);
-    const safeText = toWinAnsiSafeText;
+
+    let fontRegular;
+    let fontBold;
+    let safeText = toWinAnsiSafeText;
+
+    try {
+      pdf.registerFontkit(window.fontkit);
+
+      const [regularFontCandidate, boldFontCandidate] = await Promise.all([
+        fetchFontBytesWithFallback(FONT_REGULAR_SOURCES),
+        fetchFontBytesWithFallback(FONT_BOLD_SOURCES),
+      ]);
+
+      fontRegular = await pdf.embedFont(regularFontCandidate.bytes, { subset: false });
+      fontBold = await pdf.embedFont(boldFontCandidate.bytes, { subset: false });
+      safeText = String;
+    } catch (error) {
+      console.warn("Не удалось встроить Inter/Montserrat, используем стандартные шрифты.", error);
+      fontRegular = await pdf.embedFont(StandardFonts.Helvetica);
+      fontBold = await pdf.embedFont(StandardFonts.HelveticaBold);
+    }
 
     const [a4Width, a4Height] = PageSizes.A4;
 
