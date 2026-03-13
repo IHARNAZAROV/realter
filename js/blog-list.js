@@ -94,6 +94,10 @@ function renderBlogCards(articles) {
             <ul>
               <li class="post-date">${renderDate(article.date)}</li>
               <li class="post-author"><span>${article.author}</span></li>
+                                    <li class="post-reading">
+                         <i class="fa-solid fa-clock"></i>
+   ${calculateReadingTime(article)} мин
+</li>
             </ul>
           </div>
 
@@ -135,4 +139,33 @@ function reinitMasonry() {
   if (window.jQuery && jQuery.fn.masonry) {
     jQuery(".news-masonry").masonry("reloadItems").masonry();
   }
+}
+
+/* =========================================================
+   READING TIME
+   ========================================================= */
+
+function calculateReadingTime(article) {
+
+  const wordsPerMinute = 200;
+
+  if (!article.content) return 1;
+
+  let text = "";
+
+  article.content.forEach(block => {
+
+    if (block.type === "paragraph") {
+      text += " " + block.text;
+    }
+
+    if (block.type === "list" && block.items) {
+      text += " " + block.items.join(" ");
+    }
+
+  });
+
+  const words = text.trim().split(/\s+/).length;
+
+  return Math.max(1, Math.ceil(words / wordsPerMinute));
 }

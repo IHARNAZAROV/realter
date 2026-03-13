@@ -446,3 +446,88 @@ function renderInstagram(article) {
 
   container.style.display = "flex";
 }
+
+/* =====================================
+   Reading Progress Bar
+===================================== */
+
+document.addEventListener("scroll", function () {
+
+const progressBar = document.getElementById("readingProgressBar");
+if(!progressBar) return;
+
+const article = document.querySelector(".blog-detail");
+
+if(!article) return;
+
+const articleTop = article.offsetTop;
+const articleHeight = article.offsetHeight;
+
+const scrollTop = window.scrollY;
+const windowHeight = window.innerHeight;
+
+const articleStart = articleTop - windowHeight * 0.2;
+const articleEnd = articleTop + articleHeight;
+
+let progress = (scrollTop - articleStart) / (articleEnd - articleStart);
+
+progress = Math.max(0, Math.min(progress, 1));
+
+progressBar.style.width = (progress * 100) + "%";
+
+});
+
+/* =====================================
+   Dynamic Reading Time
+===================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+const article = document.getElementById("post-content");
+const readingTimeEl = document.getElementById("reading-time");
+
+if (!article || !readingTimeEl) return;
+
+/* средняя скорость чтения */
+const wordsPerMinute = 200;
+
+/* считаем слова */
+const text = article.innerText || article.textContent;
+const words = text.trim().split(/\s+/).length;
+
+/* общее время чтения */
+const totalMinutes = Math.max(1, Math.ceil(words / wordsPerMinute));
+
+/* функция обновления */
+function updateReadingTime(){
+
+const articleTop = article.offsetTop;
+const articleHeight = article.offsetHeight;
+
+const scrollTop = window.scrollY;
+const windowHeight = window.innerHeight;
+
+/* прогресс чтения */
+let progress = (scrollTop + windowHeight - articleTop) / articleHeight;
+
+progress = Math.max(0, Math.min(progress, 1));
+
+/* оставшееся время */
+const remaining = Math.max(1, Math.ceil(totalMinutes * (1 - progress)));
+
+if(progress < 0.1){
+readingTimeEl.textContent = totalMinutes + " мин чтения";
+}else{
+readingTimeEl.textContent =
+totalMinutes + " мин чтения • осталось " + remaining + " мин";
+}
+
+}
+
+/* initial */
+updateReadingTime();
+
+/* scroll */
+window.addEventListener("scroll", updateReadingTime);
+
+});
