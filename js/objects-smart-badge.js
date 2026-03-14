@@ -2,60 +2,49 @@
 
 document.addEventListener("DOMContentLoaded", initObjectsBadge);
 
-async function initObjectsBadge() {
+async function initObjectsBadge(){
 
-const badge = document.getElementById("objectsBadge");
+const badge=document.getElementById("objectsBadge");
 
-if (!badge) return;
+if(!badge) return;
 
-try {
+try{
 
-const res = await fetch("/data/objects.json",{cache:"no-store"});
+const res=await fetch("/data/objects.json",{cache:"no-store"});
 
-if (!res.ok) return;
+if(!res.ok) return;
 
-const objects = await res.json();
+const objects=await res.json();
 
-if (!Array.isArray(objects)) return;
-
-
-/* --------------------------------
-получаем просмотренные объекты
--------------------------------- */
-
-let viewed = JSON.parse(localStorage.getItem("objects_viewed") || "[]");
+if(!Array.isArray(objects)) return;
 
 
-/* --------------------------------
-фиксируем просмотр текущего объекта
--------------------------------- */
+/* просмотренные объекты */
 
-viewed = markObjectViewed(viewed);
+let viewed=JSON.parse(localStorage.getItem("objects_viewed")||"[]");
 
 
-/* --------------------------------
-ограничение 7 дней
--------------------------------- */
+/* фиксируем просмотр */
 
-const now = Date.now();
-const sevenDays = 7 * 24 * 60 * 60 * 1000;
+viewed=detectViewedObject(viewed);
 
 
-/* --------------------------------
-подсчёт новых объектов
--------------------------------- */
+/* период новых объектов */
 
-let newCount = 0;
+const now=Date.now();
+const week=7*24*60*60*1000;
 
-objects.forEach(obj => {
+let newCount=0;
 
-const date = parseDate(obj.publishedAt);
+objects.forEach(obj=>{
 
-if (!date) return;
+const date=parseDate(obj.publishedAt);
 
-const age = now - date;
+if(!date) return;
 
-if (age < sevenDays && !viewed.includes(obj.slug)) {
+const age=now-date;
+
+if(age<week && !viewed.includes(obj.slug)){
 
 newCount++;
 
@@ -64,68 +53,47 @@ newCount++;
 });
 
 
-/* --------------------------------
-показываем badge
--------------------------------- */
+/* badge */
 
-if (newCount > 0) {
+if(newCount>0){
 
-badge.textContent = "+" + newCount;
+badge.textContent="+"+newCount;
 badge.classList.add("active");
 
 }
 
 }
+catch(e){
 
-catch (e) {
-
-console.error("Objects badge error:", e);
-
-}
+console.error("Objects badge error:",e);
 
 }
-
-
-
-/* --------------------------------
-запоминаем просмотр объекта
--------------------------------- */
-
-function markObjectViewed(viewed) {
-
-const path = window.location.pathname;
-
-
-/* проверяем что это страница объекта */
-
-if (!path.startsWith("/object/") && !path.startsWith("/objects/")) {
-
-return viewed;
 
 }
 
 
-/* извлекаем slug */
 
-let slug = path
-.replace("/object/","")
-.replace("/objects/","");
+/* ----------------------------
+определяем просмотр объекта
+---------------------------- */
 
+function detectViewedObject(viewed){
 
-slug = slug.split("?")[0];
-slug = slug.split("#")[0];
-slug = slug.replace(/\/$/,"");
-
-if (!slug) return viewed;
+const url=new URL(window.location.href);
 
 
-/* записываем просмотр */
+/* slug из query */
 
-if (!viewed.includes(slug)) {
+const slug=url.searchParams.get("object");
+
+if(!slug) return viewed;
+
+
+if(!viewed.includes(slug)){
 
 viewed.push(slug);
 
-localStorage.setItem("objects_viewed", JSON.stringify(viewed));
+localStorage.setItem("objects_viewed",JSON.stringify(viewed));
 
 }
 
@@ -135,32 +103,21 @@ return viewed;
 
 
 
-/* --------------------------------
+/* ----------------------------
 парсер даты
--------------------------------- */
+---------------------------- */
 
-function parseDate(str) {
+function parseDate(str){
 
-if (!str) return null;
+if(!str) return null;
 
+const date=new Date(str);
 
-/* формат YYYY-MM-DD */
+if(!isNaN(date)) return date.getTime();
 
-const date = new Date(str);
+if(str.includes(".")){
 
-if (!isNaN(date)) {
-
-return date.getTime();
-
-}
-
-
-/* формат DD.MM.YYYY */
-
-if (str.includes(".")) {
-
-const [d,m,y] = str.split(".");
-
+const [d,m,y]=str.split(".");
 return new Date(y,m-1,d).getTime();
 
 }
