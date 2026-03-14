@@ -56,23 +56,38 @@ async function initBlogBadge() {
 
 function markArticleViewed(viewed){
 
-const path = window.location.pathname;
+const url = new URL(window.location.href);
 
-/* проверяем что это страница статьи */
+let slug = "";
 
-if(!path.startsWith("/blog/")) return;
+/* вариант ?slug= */
 
-/* получаем slug */
+const qsSlug = url.searchParams.get("slug");
 
-let slug = path.replace("/blog/","");
+if(qsSlug){
 
-/* убираем возможный / в конце */
+slug = qsSlug;
 
-slug = slug.replace("/","");
+}
+
+/* вариант /blog/slug */
+
+if(!slug){
+
+const parts = url.pathname.replace(/^\/+|\/+$/g,"").split("/");
+
+if(parts.length===2 && parts[0]==="blog"){
+
+slug = decodeURIComponent(parts[1]);
+
+}
+
+}
 
 if(!slug) return;
 
-/* если статья ещё не отмечена */
+
+/* записываем просмотр */
 
 if(!viewed.includes(slug)){
 
