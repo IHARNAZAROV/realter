@@ -114,22 +114,30 @@ function parseDate(str) {
 
 /* запоминаем просмотр */
 
-function markArticleViewed(viewed) {
-  const path = window.location.pathname;
+function markArticleViewed(viewed){
 
-  if (!path.startsWith("/blog/")) return viewed;
+const path=window.location.pathname;
 
-  let slug = path.replace("/blog/", "");
+if(!path.startsWith("/blog/")) return viewed;
 
-  slug = slug.replace("/", "");
+let slug=path.replace("/blog/","");
 
-  if (!slug) return viewed;
+/* убираем хвосты */
 
-  if (!viewed.includes(slug)) {
-    viewed.push(slug);
+slug=slug.split("#")[0];
+slug=slug.split("?")[0];
+slug=slug.replace(/\/$/,"");
 
-    localStorage.setItem("blog_viewed", JSON.stringify(viewed));
-  }
+if(!slug) return viewed;
 
-  return viewed;
+if(!viewed.includes(slug)){
+
+viewed.push(slug);
+
+localStorage.setItem("blog_viewed",JSON.stringify(viewed));
+
+}
+
+return viewed;
+
 }
