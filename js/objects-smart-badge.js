@@ -1,6 +1,10 @@
 "use strict";
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initObjectsBadge);
+} else {
+  initObjectsBadge();
+}
 
-document.addEventListener("DOMContentLoaded", initObjectsBadge);
 
 async function initObjectsBadge() {
 
