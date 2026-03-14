@@ -2,139 +2,108 @@
 
 document.addEventListener("DOMContentLoaded", initObjectsBadge);
 
-async function initObjectsBadge(){
+async function initObjectsBadge() {
+  const badge = document.getElementById("objectsBadge");
 
-const badge=document.getElementById("objectsBadge");
+  if (!badge) return;
 
-if(!badge) return;
+  try {
+    const res = await fetch("/data/objects.json");
 
-try{
+    if (!res.ok) return;
 
-const res=await fetch("/data/objects.json");
+    const objects = await res.json();
 
-if(!res.ok) return;
+    if (!Array.isArray(objects)) return;
 
-const objects=await res.json();
-
-if(!Array.isArray(objects)) return;
-
-
-/* -----------------------------
+    /* -----------------------------
 получаем просмотренные объекты
 ----------------------------- */
 
-let viewed=JSON.parse(localStorage.getItem("objects_viewed")||"[]");
+    let viewed = JSON.parse(localStorage.getItem("objects_viewed") || "[]");
 
-
-/* -----------------------------
+    /* -----------------------------
 ограничение 7 дней
 ----------------------------- */
 
-const now=Date.now();
+    const now = Date.now();
 
-const sevenDays=7*24*60*60*1000;
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
-
-/* -----------------------------
+    /* -----------------------------
 подсчёт новых объектов
 ----------------------------- */
 
-let newCount=0;
+    let newCount = 0;
 
-objects.forEach(object=>{
+    objects.forEach((object) => {
+      const date = parseDate(object.publishedAt);
 
-const date=parseDate(object.date);
+      if (!date) return;
 
-if(!date) return;
+      const age = now - date;
 
-const age=now-date;
+      if (age < sevenDays && !viewed.includes(object.slug)) {
+        newCount++;
+      }
+    });
 
-if(age<sevenDays && !viewed.includes(object.slug)){
-
-newCount++;
-
-}
-
-});
-
-
-/* -----------------------------
+    /* -----------------------------
 показываем badge
 ----------------------------- */
 
-if(newCount>0){
+    if (newCount > 0) {
+      badge.textContent = "+" + newCount;
 
-badge.textContent="+"+newCount;
+      badge.classList.add("active");
+    }
 
-badge.classList.add("active");
-
-}
-
-
-/* -----------------------------
+    /* -----------------------------
 если пользователь открыл объект
 ----------------------------- */
 
-markObjectViewed(viewed);
-
+    markObjectViewed(viewed);
+  } catch (e) {
+    console.error("Objects badge error:", e);
+  }
 }
-
-catch(e){
-
-console.error("Objects badge error:",e);
-
-}
-
-}
-
-
 
 /* --------------------------------
 запоминаем просмотр объекта
 -------------------------------- */
 
-function markObjectViewed(viewed){
+function markObjectViewed(viewed) {
+  const path = window.location.pathname;
 
-const path=window.location.pathname;
+  if (!path.startsWith("/object/")) return;
 
-if(!path.startsWith("/object/")) return;
+  const slug = path.split("/object/")[1];
 
-const slug=path.split("/object/")[1];
+  if (!slug) return;
 
-if(!slug) return;
+  if (!viewed.includes(slug)) {
+    viewed.push(slug);
 
-if(!viewed.includes(slug)){
-
-viewed.push(slug);
-
-localStorage.setItem("objects_viewed",JSON.stringify(viewed));
-
+    localStorage.setItem("objects_viewed", JSON.stringify(viewed));
+  }
 }
-
-}
-
-
 
 /* --------------------------------
 парсер даты
 -------------------------------- */
 
-function parseDate(str){
+function parseDate(str) {
+  if (!str) return null;
 
-if(!str) return null;
+  if (str.includes(".")) {
+    const [d, m, y] = str.split(".");
 
-if(str.includes(".")){
+    return new Date(y, m - 1, d).getTime();
+  }
 
-const [d,m,y]=str.split(".");
+  const date = new Date(str);
 
-return new Date(y,m-1,d).getTime();
+  if (isNaN(date)) return null;
 
-}
-
-const date=new Date(str);
-
-if(isNaN(date)) return null;
-
-return date.getTime();
-
+  return date.getTime();
 }
