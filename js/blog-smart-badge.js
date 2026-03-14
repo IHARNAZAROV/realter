@@ -2,99 +2,121 @@
 
 document.addEventListener("DOMContentLoaded", initBlogBadge);
 
-async function initBlogBadge(){
+async function initBlogBadge() {
+  const badge = document.getElementById("blogBadge");
 
-const badge = document.getElementById("blogBadge");
+  let viewed = JSON.parse(localStorage.getItem("blog_viewed") || "[]");
 
-/* получаем просмотренные статьи */
+  /* фиксируем просмотр статьи */
 
-let viewed = JSON.parse(localStorage.getItem("blog_viewed") || "[]");
+  viewed = markArticleViewed(viewed);
 
-/* отмечаем просмотр статьи */
+  if (!badge) return;
 
-viewed = markArticleViewed(viewed);
+  try {
+    const res = await fetch("/data/blog-articles.json");
 
-/* если на странице нет badge — дальше не продолжаем */
+    if (!res.ok) return;
 
-if(!badge) return;
+    const articles = await res.json();
 
-try{
+    if (!Array.isArray(articles)) return;
 
-const res = await fetch("/data/blog-articles.json");
+    const now = Date.now();
 
-if(!res.ok) return;
+    const oneDay = 24 * 60 * 60 * 1000;
 
-const articles = await res.json();
+    const week = 7 * oneDay;
 
-if(!Array.isArray(articles)) return;
+    let todayCount = 0;
+    let dayCount = 0;
+    let weekCount = 0;
 
+    articles.forEach((article) => {
+      if (viewed.includes(article.slug)) return;
 
-/* считаем новые статьи */
+      const date = parseDate(article.date);
 
-let newCount = 0;
+      if (!date) return;
 
-articles.forEach(article => {
+      const age = now - date;
 
-if(!viewed.includes(article.slug)){
+      if (age < oneDay) {
+        dayCount++;
+      }
 
-newCount++;
+      if (age < week) {
+        weekCount++;
+      }
 
+      if (isToday(date)) {
+        todayCount++;
+      }
+    });
+
+    /* логика badge */
+
+    if (todayCount > 0) {
+      badge.textContent = "NEW";
+      badge.classList.add("active", "new");
+    } else if (dayCount > 0) {
+      badge.textContent = "+1";
+      badge.classList.add("active");
+    } else if (weekCount > 0) {
+      badge.textContent = "+" + weekCount;
+      badge.classList.add("active");
+    }
+  } catch (e) {
+    console.error("badge error", e);
+  }
 }
 
-});
+/* определяем сегодня ли статья */
 
+function isToday(time) {
+  const d = new Date(time);
 
-/* показываем badge */
+  const now = new Date();
 
-if(newCount > 0){
-
-badge.textContent = "+" + newCount;
-
-badge.classList.add("active");
-
+  return (
+    d.getDate() === now.getDate() &&
+    d.getMonth() === now.getMonth() &&
+    d.getFullYear() === now.getFullYear()
+  );
 }
 
-}
-catch(e){
+/* парсер даты */
 
-console.error("Blog badge error:", e);
+function parseDate(str) {
+  if (!str) return null;
 
-}
+  if (str.includes(".")) {
+    const [d, m, y] = str.split(".");
 
-}
+    return new Date(y, m - 1, d).getTime();
+  }
 
-
-
-/* -----------------------
-запоминаем просмотр статьи
------------------------ */
-
-function markArticleViewed(viewed){
-
-const path = window.location.pathname;
-
-/* проверяем что это страница статьи */
-
-if(!path.startsWith("/blog/")) return viewed;
-
-/* получаем slug */
-
-let slug = path.replace("/blog/","");
-
-slug = slug.replace("/","");
-
-if(!slug) return viewed;
-
-/* записываем */
-
-if(!viewed.includes(slug)){
-
-viewed.push(slug);
-
-localStorage.setItem("blog_viewed", JSON.stringify(viewed));
-
+  return new Date(str).getTime();
 }
 
-return viewed;
+/* запоминаем просмотр */
 
+function markArticleViewed(viewed) {
+  const path = window.location.pathname;
+
+  if (!path.startsWith("/blog/")) return viewed;
+
+  let slug = path.replace("/blog/", "");
+
+  slug = slug.replace("/", "");
+
+  if (!slug) return viewed;
+
+  if (!viewed.includes(slug)) {
+    viewed.push(slug);
+
+    localStorage.setItem("blog_viewed", JSON.stringify(viewed));
+  }
+
+  return viewed;
 }
