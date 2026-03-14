@@ -1,38 +1,75 @@
 "use strict";
 
-document.addEventListener("DOMContentLoaded", initBlogBadge);
+/*
+========================================
+BLOG BADGE SYSTEM
+• считает новые статьи
+• запоминает просмотренные
+• работает на всех страницах
+• не ломается если badge нет
+========================================
+*/
 
-async function initBlogBadge() {
-  const badge = document.getElementById("blogBadge");
+(function initBlogBadge() {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+})();
 
-  let viewed = JSON.parse(localStorage.getItem("blog_viewed") || "[]");
-
-  /* фиксируем просмотр статьи */
-
-  viewed = markArticleViewed(viewed);
-
-  if (!badge) return;
-
+async function run() {
   try {
-    const res = await fetch("/data/blog-articles.json");
+    /* ======================================
+   1. получаем просмотренные статьи
+====================================== */
 
-    if (!res.ok) return;
+    let viewed;
+
+    try {
+      viewed = JSON.parse(localStorage.getItem("blog_viewed") || "[]");
+
+      if (!Array.isArray(viewed)) viewed = [];
+    } catch (e) {
+      viewed = [];
+    }
+
+    /* ======================================
+   2. фиксируем просмотр статьи
+====================================== */
+
+    viewed = markArticleViewed(viewed);
+
+    /* ======================================
+   3. загружаем JSON
+====================================== */
+
+    const res = await fetch("/data/blog-articles.json", { cache: "no-store" });
+
+    if (!res.ok) {
+      console.error("blog json load error");
+
+      return;
+    }
 
     const articles = await res.json();
 
     if (!Array.isArray(articles)) return;
 
+    /* ======================================
+   4. считаем новые статьи
+====================================== */
+
     const now = Date.now();
 
-    const oneDay = 24 * 60 * 60 * 1000;
+    const week = 7 * 24 * 60 * 60 * 1000;
 
-    const week = 7 * oneDay;
-
+    let newCount = 0;
     let todayCount = 0;
-    let dayCount = 0;
-    let weekCount = 0;
 
     articles.forEach((article) => {
+      if (!article.slug) return;
+
       if (viewed.includes(article.slug)) return;
 
       const date = parseDate(article.date);
@@ -41,12 +78,8 @@ async function initBlogBadge() {
 
       const age = now - date;
 
-      if (age < oneDay) {
-        dayCount++;
-      }
-
       if (age < week) {
-        weekCount++;
+        newCount++;
       }
 
       if (isToday(date)) {
@@ -54,41 +87,88 @@ async function initBlogBadge() {
       }
     });
 
-    /* логика badge */
+    /* ======================================
+   5. показываем badge
+====================================== */
 
-if (todayCount > 0) {
+    const badge = document.getElementById("blogBadge");
 
-  badge.textContent = "NEW";
-  badge.classList.add("active", "new");
+    if (!badge) return;
 
-  setTimeout(() => {
+    if (newCount === 0) {
+      badge.classList.remove("active", "new");
 
-    badge.textContent = "+1";
-    badge.classList.remove("new");
+      badge.textContent = "";
 
-  }, 3000);
+      return;
+    }
 
-} else if (dayCount > 0) {
+    /* если сегодня вышла статья */
 
-  badge.textContent = "+1";
-  badge.classList.add("active");
+    if (todayCount > 0) {
+      badge.textContent = "NEW";
 
-} else if (weekCount > 0) {
+      badge.classList.add("active", "new");
 
-  badge.textContent = "+" + weekCount;
-  badge.classList.add("active");
+      setTimeout(() => {
+        badge.textContent = "+" + newCount;
 
-}
+        badge.classList.remove("new");
+      }, 3000);
+
+      return;
+    }
+
+    /* обычный badge */
+
+    badge.textContent = "+" + newCount;
+
+    badge.classList.add("active");
   } catch (e) {
-    console.error("badge error", e);
+    console.error("blog badge error", e);
   }
 }
 
-/* определяем сегодня ли статья */
+/*
+========================================
+запоминаем просмотр статьи
+========================================
+*/
+
+function markArticleViewed(viewed) {
+  try {
+    const path = window.location.pathname;
+
+    if (!path.startsWith("/blog/")) return viewed;
+
+    let slug = path.replace("/blog/", "");
+
+    slug = slug.split("?")[0];
+    slug = slug.split("#")[0];
+    slug = slug.replace(/\/$/, "");
+
+    if (!slug) return viewed;
+
+    if (!viewed.includes(slug)) {
+      viewed.push(slug);
+
+      localStorage.setItem("blog_viewed", JSON.stringify(viewed));
+    }
+  } catch (e) {
+    console.error("view mark error", e);
+  }
+
+  return viewed;
+}
+
+/*
+========================================
+проверяем сегодня ли статья
+========================================
+*/
 
 function isToday(time) {
   const d = new Date(time);
-
   const now = new Date();
 
   return (
@@ -98,46 +178,30 @@ function isToday(time) {
   );
 }
 
-/* парсер даты */
+/*
+========================================
+парсер даты
+========================================
+*/
 
 function parseDate(str) {
   if (!str) return null;
 
   if (str.includes(".")) {
-    const [d, m, y] = str.split(".");
+    const parts = str.split(".");
+
+    if (parts.length !== 3) return null;
+
+    const d = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10);
+    const y = parseInt(parts[2], 10);
 
     return new Date(y, m - 1, d).getTime();
   }
 
-  return new Date(str).getTime();
-}
+  const date = new Date(str);
 
-/* запоминаем просмотр */
+  if (isNaN(date)) return null;
 
-function markArticleViewed(viewed){
-
-const path=window.location.pathname;
-
-if(!path.startsWith("/blog/")) return viewed;
-
-let slug=path.replace("/blog/","");
-
-/* убираем хвосты */
-
-slug=slug.split("#")[0];
-slug=slug.split("?")[0];
-slug=slug.replace(/\/$/,"");
-
-if(!slug) return viewed;
-
-if(!viewed.includes(slug)){
-
-viewed.push(slug);
-
-localStorage.setItem("blog_viewed",JSON.stringify(viewed));
-
-}
-
-return viewed;
-
+  return date.getTime();
 }
