@@ -56,16 +56,29 @@ async function initBlogBadge() {
 
     /* логика badge */
 
-    if (todayCount > 0) {
-      badge.textContent = "NEW";
-      badge.classList.add("active", "new");
-    } else if (dayCount > 0) {
-      badge.textContent = "+1";
-      badge.classList.add("active");
-    } else if (weekCount > 0) {
-      badge.textContent = "+" + weekCount;
-      badge.classList.add("active");
-    }
+if (todayCount > 0) {
+
+  badge.textContent = "NEW";
+  badge.classList.add("active", "new");
+
+  setTimeout(() => {
+
+    badge.textContent = "+1";
+    badge.classList.remove("new");
+
+  }, 3000);
+
+} else if (dayCount > 0) {
+
+  badge.textContent = "+1";
+  badge.classList.add("active");
+
+} else if (weekCount > 0) {
+
+  badge.textContent = "+" + weekCount;
+  badge.classList.add("active");
+
+}
   } catch (e) {
     console.error("badge error", e);
   }
