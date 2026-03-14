@@ -319,6 +319,7 @@ const previewImages = {
   "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero":"/images/objects/pic41.webp",
   "kvartira-lida-ul-hasanovskaya-1-64":"/images/objects/pic42.webp",
   "kvartira-lida-ul-sovetskaya-5-center": "/images/objects/pic43.webp",
+  "kvartira-volkovysk-ul-novye-borki-23": "/images/objects/pic44.webp",
 };
 
 /* ======================================================
