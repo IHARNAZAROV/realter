@@ -3,107 +3,168 @@
 document.addEventListener("DOMContentLoaded", initObjectsBadge);
 
 async function initObjectsBadge() {
-  const badge = document.getElementById("objectsBadge");
 
-  if (!badge) return;
+const badge = document.getElementById("objectsBadge");
 
-  try {
-    const res = await fetch("/data/objects.json");
+if (!badge) return;
 
-    if (!res.ok) return;
+try {
 
-    const objects = await res.json();
+const res = await fetch("/data/objects.json",{cache:"no-store"});
 
-    if (!Array.isArray(objects)) return;
+if (!res.ok) return;
 
-    /* -----------------------------
+const objects = await res.json();
+
+if (!Array.isArray(objects)) return;
+
+
+/* --------------------------------
 получаем просмотренные объекты
------------------------------ */
+-------------------------------- */
 
-    let viewed = JSON.parse(localStorage.getItem("objects_viewed") || "[]");
+let viewed = JSON.parse(localStorage.getItem("objects_viewed") || "[]");
 
-    /* -----------------------------
+
+/* --------------------------------
+фиксируем просмотр текущего объекта
+-------------------------------- */
+
+viewed = markObjectViewed(viewed);
+
+
+/* --------------------------------
 ограничение 7 дней
------------------------------ */
+-------------------------------- */
 
-    const now = Date.now();
+const now = Date.now();
+const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
-    const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
-    /* -----------------------------
+/* --------------------------------
 подсчёт новых объектов
------------------------------ */
+-------------------------------- */
 
-    let newCount = 0;
+let newCount = 0;
 
-    objects.forEach((object) => {
-      const date = parseDate(object.publishedAt);
+objects.forEach(obj => {
 
-      if (!date) return;
+const date = parseDate(obj.publishedAt);
 
-      const age = now - date;
+if (!date) return;
 
-      if (age < sevenDays && !viewed.includes(object.slug)) {
-        newCount++;
-      }
-    });
+const age = now - date;
 
-    /* -----------------------------
-показываем badge
------------------------------ */
+if (age < sevenDays && !viewed.includes(obj.slug)) {
 
-    if (newCount > 0) {
-      badge.textContent = "+" + newCount;
+newCount++;
 
-      badge.classList.add("active");
-    }
-
-    /* -----------------------------
-если пользователь открыл объект
------------------------------ */
-
-    markObjectViewed(viewed);
-  } catch (e) {
-    console.error("Objects badge error:", e);
-  }
 }
+
+});
+
+
+/* --------------------------------
+показываем badge
+-------------------------------- */
+
+if (newCount > 0) {
+
+badge.textContent = "+" + newCount;
+badge.classList.add("active");
+
+}
+
+}
+
+catch (e) {
+
+console.error("Objects badge error:", e);
+
+}
+
+}
+
+
 
 /* --------------------------------
 запоминаем просмотр объекта
 -------------------------------- */
 
 function markObjectViewed(viewed) {
-  const path = window.location.pathname;
 
-  if (!path.startsWith("/object/")) return;
+const path = window.location.pathname;
 
-  const slug = path.split("/object/")[1];
 
-  if (!slug) return;
+/* проверяем что это страница объекта */
 
-  if (!viewed.includes(slug)) {
-    viewed.push(slug);
+if (!path.startsWith("/object/") && !path.startsWith("/objects/")) {
 
-    localStorage.setItem("objects_viewed", JSON.stringify(viewed));
-  }
+return viewed;
+
 }
+
+
+/* извлекаем slug */
+
+let slug = path
+.replace("/object/","")
+.replace("/objects/","");
+
+
+slug = slug.split("?")[0];
+slug = slug.split("#")[0];
+slug = slug.replace(/\/$/,"");
+
+if (!slug) return viewed;
+
+
+/* записываем просмотр */
+
+if (!viewed.includes(slug)) {
+
+viewed.push(slug);
+
+localStorage.setItem("objects_viewed", JSON.stringify(viewed));
+
+}
+
+return viewed;
+
+}
+
+
 
 /* --------------------------------
 парсер даты
 -------------------------------- */
 
 function parseDate(str) {
-  if (!str) return null;
 
-  if (str.includes(".")) {
-    const [d, m, y] = str.split(".");
+if (!str) return null;
 
-    return new Date(y, m - 1, d).getTime();
-  }
 
-  const date = new Date(str);
+/* формат YYYY-MM-DD */
 
-  if (isNaN(date)) return null;
+const date = new Date(str);
 
-  return date.getTime();
+if (!isNaN(date)) {
+
+return date.getTime();
+
+}
+
+
+/* формат DD.MM.YYYY */
+
+if (str.includes(".")) {
+
+const [d,m,y] = str.split(".");
+
+return new Date(y,m-1,d).getTime();
+
+}
+
+return null;
+
 }
