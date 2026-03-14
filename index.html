@@ -99,6 +99,7 @@
       href="css/style.css"
       data-versioned
     />
+    <link rel="stylesheet" href="/css/blog-badge.css">
     <link
       rel="stylesheet"
       class="skin"
@@ -285,8 +286,18 @@
                 <ul class="nav navbar-nav">
                   <li class="active"><a href="/">Главная</a></li>
                   <li><a href="/rieltor-lida">Обо мне</a></li>
-                  <li><a href="/nedvizhimost-lida">Объекты</a></li>
-                  <li><a href="/blog">Блог</a></li>
+                <li class="nav-objects">
+  <a href="/nedvizhimost-lida">
+    Объекты
+    <span id="objectsBadge" class="nav-badge"></span>
+  </a>
+</li>
+ <li class="nav-blog">
+  <a href="/blog">
+    Блог
+    <span id="blogBadge" class="nav-badge"></span>
+  </a>
+</li>
                   <li><a href="/faq">Вопросы</a></li>
                   <li><a href="/contact">Контакты</a></li>
                 </ul>
@@ -1986,5 +1997,8 @@
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
     <script src="/js/market-analytics.js" defer data-versioned></script>
+    <script src="/js/blog-badge.js"></script>
+    <script src="/js/blog-smart-badge.js"></script>
+    <script src="/js/objects-smart-badge.js"></script>
   </body>
 </html>
