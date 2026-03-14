@@ -70,7 +70,7 @@ async function run() {
     articles.forEach((article) => {
       if (!article.slug) return;
 
-      if (viewed.includes(article.slug)) return;
+     if (viewed.includes(article.slug)) return
 
       const date = parseDate(article.date);
 
