@@ -2,52 +2,46 @@
 
 document.addEventListener("DOMContentLoaded", initObjectsBadge);
 
-async function initObjectsBadge(){
+async function initObjectsBadge() {
 
-const badge=document.getElementById("objectsBadge");
+const badge = document.getElementById("objectsBadge");
+if (!badge) return;
 
-if(!badge) return;
+try {
 
-try{
+const res = await fetch("/data/objects.json", { cache: "no-store" });
+if (!res.ok) return;
 
-const res=await fetch("/data/objects.json",{cache:"no-store"});
-
-if(!res.ok) return;
-
-const objects=await res.json();
-
-if(!Array.isArray(objects)) return;
+const objects = await res.json();
+if (!Array.isArray(objects)) return;
 
 
 /* просмотренные объекты */
 
-let viewed=JSON.parse(localStorage.getItem("objects_viewed")||"[]");
+let viewed = JSON.parse(localStorage.getItem("objects_viewed") || "[]");
 
 
 /* фиксируем просмотр */
 
-viewed=detectViewedObject(viewed);
+viewed = detectViewedObject(viewed);
 
 
 /* период новых объектов */
 
-const now=Date.now();
-const week=7*24*60*60*1000;
+const now = Date.now();
+const week = 7 * 24 * 60 * 60 * 1000;
 
-let newCount=0;
+let newCount = 0;
 
-objects.forEach(obj=>{
+objects.forEach(obj => {
 
-const date=parseDate(obj.publishedAt);
+const date = parseDate(obj.publishedAt);
+if (!date) return;
 
-if(!date) return;
+const age = now - date;
 
-const age=now-date;
-
-if(age<week && !viewed.includes(obj.slug)){
-
+if (age < week && !viewed.includes(obj.slug)) {
 newCount++;
-
 }
 
 });
@@ -55,45 +49,47 @@ newCount++;
 
 /* badge */
 
-if(newCount>0){
-
-badge.textContent="+"+newCount;
+if (newCount > 0) {
+badge.textContent = "+" + newCount;
 badge.classList.add("active");
-
-}
-
-}
-catch(e){
-
-console.error("Objects badge error:",e);
-
 }
 
 }
 
+catch (e) {
+console.error("Objects badge error:", e);
+}
+
+}
 
 
-/* ----------------------------
+
+/* ===============================
 определяем просмотр объекта
----------------------------- */
+=============================== */
 
-function detectViewedObject(viewed){
+function detectViewedObject(viewed) {
 
-const url=new URL(window.location.href);
+const parts = window.location.pathname
+.replace(/^\/+|\/+$/g, "")
+.split("/");
 
+/*
+URL твоего сайта:
 
-/* slug из query */
+/objects/slug
+*/
 
-const slug=url.searchParams.get("object");
+if (parts.length === 2 && (parts[0] === "objects" || parts[0] === "object")) {
 
-if(!slug) return viewed;
+const slug = decodeURIComponent(parts[1]);
 
-
-if(!viewed.includes(slug)){
+if (!viewed.includes(slug)) {
 
 viewed.push(slug);
+localStorage.setItem("objects_viewed", JSON.stringify(viewed));
 
-localStorage.setItem("objects_viewed",JSON.stringify(viewed));
+}
 
 }
 
@@ -103,22 +99,22 @@ return viewed;
 
 
 
-/* ----------------------------
+/* ===============================
 парсер даты
----------------------------- */
+=============================== */
 
-function parseDate(str){
+function parseDate(str) {
 
-if(!str) return null;
+if (!str) return null;
 
-const date=new Date(str);
+const date = new Date(str);
 
-if(!isNaN(date)) return date.getTime();
+if (!isNaN(date)) return date.getTime();
 
-if(str.includes(".")){
+if (str.includes(".")) {
 
-const [d,m,y]=str.split(".");
-return new Date(y,m-1,d).getTime();
+const [d, m, y] = str.split(".");
+return new Date(y, m - 1, d).getTime();
 
 }
 
