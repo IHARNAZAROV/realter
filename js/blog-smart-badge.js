@@ -2,47 +2,40 @@
 
 document.addEventListener("DOMContentLoaded", initBlogBadge);
 
-async function initBlogBadge() {
+async function initBlogBadge(){
 
 const badge = document.getElementById("blogBadge");
 
-if (!badge) return;
-
-/* -------------------------
-получаем просмотренные статьи
-------------------------- */
+/* получаем просмотренные статьи */
 
 let viewed = JSON.parse(localStorage.getItem("blog_viewed") || "[]");
 
-/* -------------------------
-сначала отмечаем просмотр статьи
-------------------------- */
+/* отмечаем просмотр статьи */
 
 viewed = markArticleViewed(viewed);
 
-/* -------------------------
-загружаем статьи
-------------------------- */
+/* если на странице нет badge — дальше не продолжаем */
 
-try {
+if(!badge) return;
+
+try{
 
 const res = await fetch("/data/blog-articles.json");
 
-if (!res.ok) return;
+if(!res.ok) return;
 
 const articles = await res.json();
 
-if (!Array.isArray(articles)) return;
+if(!Array.isArray(articles)) return;
 
-/* -------------------------
-считаем новые статьи
-------------------------- */
+
+/* считаем новые статьи */
 
 let newCount = 0;
 
 articles.forEach(article => {
 
-if (!viewed.includes(article.slug)) {
+if(!viewed.includes(article.slug)){
 
 newCount++;
 
@@ -50,11 +43,10 @@ newCount++;
 
 });
 
-/* -------------------------
-показываем badge
-------------------------- */
 
-if (newCount > 0) {
+/* показываем badge */
+
+if(newCount > 0){
 
 badge.textContent = "+" + newCount;
 
@@ -62,7 +54,8 @@ badge.classList.add("active");
 
 }
 
-} catch (e) {
+}
+catch(e){
 
 console.error("Blog badge error:", e);
 
@@ -71,45 +64,30 @@ console.error("Blog badge error:", e);
 }
 
 
-/* -------------------------
-записываем просмотр статьи
-------------------------- */
 
-function markArticleViewed(viewed) {
+/* -----------------------
+запоминаем просмотр статьи
+----------------------- */
 
-const url = new URL(window.location.href);
+function markArticleViewed(viewed){
 
-let slug = "";
+const path = window.location.pathname;
 
-/* вариант ?slug= */
+/* проверяем что это страница статьи */
 
-const qsSlug = url.searchParams.get("slug");
+if(!path.startsWith("/blog/")) return viewed;
 
-if (qsSlug) {
+/* получаем slug */
 
-slug = qsSlug;
+let slug = path.replace("/blog/","");
 
-}
+slug = slug.replace("/","");
 
-/* вариант /blog/slug */
+if(!slug) return viewed;
 
-if (!slug) {
+/* записываем */
 
-const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
-
-if (parts.length === 2 && parts[0] === "blog") {
-
-slug = decodeURIComponent(parts[1]);
-
-}
-
-}
-
-if (!slug) return viewed;
-
-/* записываем просмотр */
-
-if (!viewed.includes(slug)) {
+if(!viewed.includes(slug)){
 
 viewed.push(slug);
 
