@@ -321,6 +321,7 @@ const previewImages = {
   "kvartira-lida-ul-sovetskaya-5-center": "/images/objects/pic43.webp",
   "kvartira-volkovysk-ul-novye-borki-23": "/images/objects/pic44.webp",
   "dom-lida-ul-novoprudskaya-2": "/images/objects/pic45.webp",
+  "kvartira-lida-ul-nevskogo-44-severny":"/images/objects/pic46.webp",
 };
 
 /* ======================================================
