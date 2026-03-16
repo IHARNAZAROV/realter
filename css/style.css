@@ -13446,3 +13446,125 @@ margin-right:6px;
 opacity:0.7;
 }
 
+/* =====================================================
+   ПРЕМИАЛЬНАЯ КАРТОЧКА (ГОРИЗОНТАЛЬНАЯ)
+   ===================================================== */
+.scrolling-section {
+  padding: 50px 0;
+  background-color: var(--color-bg-light);
+}
+
+.scrolling-card {
+  max-width: fit-content; 
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 20px 40px;
+  border-radius: 100px; 
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  
+  border: 1px solid rgba(21, 89, 69, 0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+  animation: cardAppear 0.8s ease-out forwards;
+}
+
+.scrolling-icon {
+  font-size: 24px;
+  color: var(--accent-color);
+  background: rgba(215, 179, 154, 0.1);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.scrolling-content {
+  display: flex;
+  align-items: center;
+  white-space: nowrap; 
+}
+
+.scrolling-static-text {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 500;
+  color: #2c3e50;
+  margin-right: 10px;
+}
+
+.scrolling-words-box {
+  height: 2.5rem; /* Уменьшил высоту для компактности */
+  overflow: hidden;
+  position: relative;
+  min-width: 200px; /* Фиксированная ширина, чтобы текст справа не дергался */
+  
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+}
+
+.scrolling-words-box ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  animation: scrollUpWords 12s infinite cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.scrolling-words-box ul li {
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+@keyframes scrollUpWords {
+  0%, 15%   { transform: translateY(0); }
+  18%, 31%  { transform: translateY(-16.66%); }
+  34%, 47%  { transform: translateY(-33.33%); }
+  50%, 63%  { transform: translateY(-50%); }
+  66%, 81%  { transform: translateY(-66.66%); }
+  84%, 97%  { transform: translateY(-83.33%); }
+  100%      { transform: translateY(-83.33%); }
+}
+
+@keyframes cardAppear {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .scrolling-card {
+    padding: 15px 25px;
+    gap: 15px;
+  }
+  .scrolling-words-box {
+    min-width: 160px; /* Чуть меньше на мобильных */
+  }
+  .scrolling-icon {
+    display: none; /* Скрываем иконку на маленьких экранах, чтобы влезло в одну строку */
+  }
+}
+
+@media (max-width: 480px) {
+  .scrolling-static-text {
+    font-size: 14px;
+  }
+  .scrolling-words-box {
+    min-width: 140px;
+    height: 2rem;
+  }
+  .scrolling-words-box ul li {
+    font-size: 14px;
+    height: 2rem;
+  }
+  .scrolling-card {
+      border-radius: 12px; /* На совсем маленьких экранах лучше прямоугольник */
+  }
+}
