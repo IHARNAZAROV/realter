@@ -174,3 +174,109 @@
     padding: 5px 12px;
   }
 }
+
+.related-posts {
+  margin-top: 60px;
+}
+
+.related-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+/* GRID */
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+/* КАРТОЧКА */
+.related-card {
+  position: relative;
+  display: block;
+  padding: 20px;
+  border-radius: 18px;
+  text-decoration: none;
+
+  background: linear-gradient(135deg, #ffffff, #f7f9f9);
+  border: 1px solid rgba(0,0,0,0.05);
+
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* subtle glow */
+.related-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(0,150,136,0.08), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* hover */
+.related-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+.related-card:hover::before {
+  opacity: 1;
+}
+
+/* контент */
+.related-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+/* категория */
+.related-card-meta {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #7a8a8a;
+}
+
+/* заголовок */
+.related-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #0f3d3e;
+}
+
+/* стрелка */
+.related-card-arrow {
+  margin-top: auto;
+  font-size: 18px;
+  color: #006064;
+  transition: transform 0.3s ease;
+}
+
+/* движение стрелки */
+.related-card:hover .related-card-arrow {
+  transform: translateX(5px);
+}
+
+
+.related-card {
+  padding-left: 18px;
+}
+
+.related-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  border-radius: 2px;
+
+  background: linear-gradient(180deg, #006064, #26a69a);
+}

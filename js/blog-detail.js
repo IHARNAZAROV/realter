@@ -52,6 +52,8 @@ window.currentArticle = article;
 
 renderArticle(article);
 
+renderRelatedPosts(currentArticle, articles);
+
 /* ВАЖНО — рендер тегов */
 if (window.blogTags && article.tags) {
   window.blogTags.renderPostTags(article.tags);
@@ -538,3 +540,55 @@ updateReadingTime();
 window.addEventListener("scroll", updateReadingTime);
 
 });
+
+
+function renderRelatedPosts(currentArticle, allArticles) {
+  const container = document.getElementById("relatedPosts");
+  if (!container) return;
+
+  if (!currentArticle.tags || currentArticle.tags.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const currentTags = currentArticle.tags;
+
+  // считаем релевантность
+  const related = allArticles
+    .filter(article => article.id !== currentArticle.id)
+    .map(article => {
+      const commonTags = article.tags?.filter(tag => currentTags.includes(tag)) || [];
+      return {
+        ...article,
+        relevance: commonTags.length
+      };
+    })
+    .filter(article => article.relevance > 0)
+    .sort((a, b) => b.relevance - a.relevance)
+    .slice(0, 4); // максимум 4 статьи
+
+  if (related.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+container.innerHTML = related.map(article => `
+  <a href="/blog/${article.slug}" class="related-card">
+    <div class="related-card-content">
+      
+      <div class="related-card-meta">
+        ${article.category || "Недвижимость"}
+      </div>
+
+      <div class="related-card-title">
+        ${article.title}
+      </div>
+
+      <div class="related-card-arrow">
+        →
+      </div>
+
+    </div>
+  </a>
+`).join("");
+}
