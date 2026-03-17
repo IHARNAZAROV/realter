@@ -48,6 +48,8 @@ function loadArticleData() {
         return;
       }
 
+window.currentArticle = article;
+
       const currentSlug = getSlugFromUrl() || article.slug;
 
       renderArticle(article);

@@ -50,7 +50,11 @@ function loadBlogArticles() {
       articles.sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
       fadeOutSkeletons(() => {
-        renderBlogCards(articles);
+const activeTag = window.blogTags.getActiveTag();
+const filtered = window.blogTags.filterByTag(articles, activeTag);
+
+window.blogTags.renderTagsFilter(articles);
+renderBlogCards(filtered);
         reinitMasonry();
       });
     })

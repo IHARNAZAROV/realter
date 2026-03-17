@@ -1,0 +1,176 @@
+/* =========================================
+   BASE TAG
+========================================= */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 6px 14px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #0f3d3e;
+  background: rgba(0, 96, 100, 0.08);
+
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+/* hover */
+.tag:hover {
+  background: #006064;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* активный */
+.tag.active {
+  background: #006064;
+  color: #fff;
+}
+
+/* =========================================
+   ARTICLE TAGS BLOCK
+========================================= */
+
+.post-tags-block {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+
+  position: relative;
+}
+
+/* акцентная линия */
+.post-tags-block::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+
+  border-radius: 2px;
+  background: linear-gradient(180deg, #006064, #26a69a);
+}
+
+/* заголовок */
+.post-tags-title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+
+  color: #6b7d7d;
+
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
+/* контейнер тегов */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  padding-left: 10px;
+}
+
+/* спец-эффект для тегов */
+.post-tags .tag {
+  position: relative;
+  overflow: hidden;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  backdrop-filter: blur(6px);
+}
+
+/* glow эффект */
+.post-tags .tag::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(0,150,136,0.15),
+    transparent
+  );
+
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.post-tags .tag:hover::before {
+  opacity: 1;
+}
+
+/* =========================================
+   SIDEBAR TAGS
+========================================= */
+
+.widget-tags {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+
+  margin-bottom: 30px;
+}
+
+/* заголовок */
+.widget-tags .widget-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+
+  color: #0f3d3e;
+}
+
+/* описание */
+.tags-description {
+  font-size: 13px;
+  color: #7a8a8a;
+  margin-bottom: 15px;
+}
+
+
+
+/* тег в sidebar */
+.post-tags-sidebar .tag {
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+/* мобильная версия */
+@media (max-width: 768px) {
+  .post-tags-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .post-tags-block {
+    padding: 14px;
+  }
+
+  .post-tags-title {
+    font-size: 12px;
+  }
+
+  .tag {
+    font-size: 12px;
+    padding: 5px 12px;
+  }
+}
