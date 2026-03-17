@@ -190,16 +190,7 @@ function renderTagsFilter(articles) {
      ⚠️ Автоматически подцепляет article.tags
   =============================== */
 
-  function waitForArticleAndRenderTags() {
-    const interval = setInterval(() => {
 
-      if (window.currentArticle && window.currentArticle.tags) {
-        renderPostTags(window.currentArticle.tags);
-        clearInterval(interval);
-      }
-
-    }, 100);
-  }
 
   /* ===============================
      9. INIT
@@ -209,10 +200,7 @@ function renderTagsFilter(articles) {
 
 
 
-    // Страница статьи
-    if (isBlogDetailPage()) {
-      waitForArticleAndRenderTags();
-    }
+ 
 
   });
 

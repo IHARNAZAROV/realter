@@ -50,10 +50,15 @@ function loadArticleData() {
 
 window.currentArticle = article;
 
-      const currentSlug = getSlugFromUrl() || article.slug;
+renderArticle(article);
 
-      renderArticle(article);
-      renderRandomPosts(articles, currentSlug);
+/* ВАЖНО — рендер тегов */
+if (window.blogTags && article.tags) {
+  window.blogTags.renderPostTags(article.tags);
+}
+
+const currentSlug = getSlugFromUrl() || article.slug;
+renderRandomPosts(articles, currentSlug);
     })
     .catch((error) => {
       console.error("Ошибка загрузки статьи:", error);
