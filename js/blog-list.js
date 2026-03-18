@@ -4,9 +4,51 @@
    BLOG LIST + SKELETON
    ========================================================= */
 
+const BLOG_FILTERS = {
+  all: {
+    key: "all",
+    predicate: () => true,
+  },
+  latest: {
+    key: "latest",
+    predicate: () => true,
+    limit: 6,
+  },
+  legal: {
+    key: "legal",
+    predicate: (article) =>
+      includesText(article.category, "юрид") ||
+      hasTag(article.tags, "юридические риски"),
+  },
+  sale: {
+    key: "sale",
+    predicate: (article) =>
+      hasTag(article.tags, "покупка квартиры") ||
+      hasTag(article.tags, "продажа квартиры"),
+  },
+  psychology: {
+    key: "psychology",
+    predicate: (article) => includesText(article.category, "псих"),
+  },
+};
+
+const FILTER_ANIMATION_DURATION = 260;
+
+let allArticles = [];
+let activeFilterKey = "latest";
+let activeTagSlug = getTagFromQuery();
+
 document.addEventListener("DOMContentLoaded", () => {
+  if (activeTagSlug) {
+    activeFilterKey = null;
+  }
+
   renderSkeletons(8);
   loadBlogArticles();
+  initBlogFilters();
+  initTagResultsReset();
+  updateActiveFilterButton();
+  updateTagResultsState();
 });
 
 /* =========================================================
@@ -47,14 +89,10 @@ function loadBlogArticles() {
       return res.json();
     })
     .then((articles) => {
-      articles.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+      allArticles = [...articles].sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
       fadeOutSkeletons(() => {
-const activeTag = window.blogTags.getActiveTag();
-const filtered = window.blogTags.filterByTag(articles, activeTag);
-
-window.blogTags.renderTagsFilter(articles);
-renderBlogCards(filtered);
+        renderActiveArticles({ skipAnimation: true });
         reinitMasonry();
       });
     })
@@ -80,6 +118,14 @@ function fadeOutSkeletons(callback) {
    ========================================================= */
 function renderBlogCards(articles) {
   const container = document.querySelector(".news-masonry");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!articles.length) {
+    renderEmptyState(container);
+    return;
+  }
 
   articles.forEach((article) => {
     const item = document.createElement("div");
@@ -122,6 +168,141 @@ function renderBlogCards(articles) {
   });
 }
 
+function initBlogFilters() {
+  const buttonsContainer = document.getElementById("blog-filter-buttons");
+  if (!buttonsContainer) return;
+
+  buttonsContainer.addEventListener("click", (event) => {
+    const button = event.target.closest(".blog-filter-button");
+    if (!button) return;
+
+    const nextFilterKey = button.dataset.filter;
+    if (!BLOG_FILTERS[nextFilterKey] || (nextFilterKey === activeFilterKey && !activeTagSlug)) return;
+
+    activeTagSlug = null;
+    activeFilterKey = nextFilterKey;
+    syncTagQueryParam();
+    updateTagResultsState();
+    updateActiveFilterButton();
+    renderActiveArticles();
+  });
+}
+
+function initTagResultsReset() {
+  document.addEventListener("click", (event) => {
+    const resetButton = event.target.closest("[data-clear-tag-filter]");
+    if (!resetButton) return;
+
+    activeTagSlug = null;
+    activeFilterKey = "all";
+    syncTagQueryParam();
+    updateTagResultsState();
+    updateActiveFilterButton();
+    renderActiveArticles();
+  });
+}
+
+function updateActiveFilterButton() {
+  document.querySelectorAll(".blog-filter-button").forEach((button) => {
+    button.classList.toggle(
+      "is-active",
+      !activeTagSlug && button.dataset.filter === activeFilterKey
+    );
+  });
+}
+
+function renderActiveArticles({ skipAnimation = false } = {}) {
+  const container = document.querySelector(".news-masonry");
+  if (!container || !allArticles.length) return;
+
+  const articles = getVisibleArticles();
+  updateTagResultsState(articles.length);
+
+  if (skipAnimation) {
+    container.classList.remove("blog-list-fade-out");
+    container.classList.add("blog-list-fade-in");
+    renderBlogCards(articles);
+    requestAnimationFrame(() => {
+      reinitMasonry();
+      window.setTimeout(() => {
+        container.classList.remove("blog-list-fade-in");
+      }, FILTER_ANIMATION_DURATION);
+    });
+    return;
+  }
+
+  container.classList.remove("blog-list-fade-in");
+  container.classList.add("blog-list-fade-out");
+
+  window.setTimeout(() => {
+    renderBlogCards(articles);
+    container.classList.remove("blog-list-fade-out");
+    container.classList.add("blog-list-fade-in");
+    reinitMasonry();
+
+    window.setTimeout(() => {
+      container.classList.remove("blog-list-fade-in");
+    }, FILTER_ANIMATION_DURATION);
+  }, FILTER_ANIMATION_DURATION);
+}
+
+function getVisibleArticles() {
+  if (activeTagSlug) {
+    return allArticles.filter((article) =>
+      article.tags?.some((tag) => slugify(tag) === activeTagSlug)
+    );
+  }
+
+  const definition = BLOG_FILTERS[activeFilterKey] || BLOG_FILTERS.latest;
+  const filtered = allArticles.filter(definition.predicate);
+
+  return typeof definition.limit === "number"
+    ? filtered.slice(0, definition.limit)
+    : filtered;
+}
+
+function updateTagResultsState(resultCount = 0) {
+  const container = document.getElementById("blog-tag-results");
+  if (!container) return;
+
+  if (!activeTagSlug) {
+    container.hidden = true;
+    container.innerHTML = "";
+    return;
+  }
+
+  const tagLabel = getTagLabel(activeTagSlug);
+  const articleLabel = pluralizeArticles(resultCount);
+
+  container.hidden = false;
+  container.innerHTML = `
+    <div class="blog-tag-results-text">
+      <span>Показаны материалы по тегу</span>
+      <strong>#${tagLabel}</strong>
+      <span>— найдено ${resultCount} ${articleLabel}</span>
+    </div>
+    <button type="button" class="blog-tag-reset" data-clear-tag-filter>
+      Сбросить фильтр
+    </button>
+  `;
+}
+
+function renderEmptyState(container) {
+  const title = activeTagSlug
+    ? "По этому тегу пока нет статей"
+    : "По выбранному фильтру пока нет статей";
+  const description = activeTagSlug
+    ? "Попробуйте сбросить фильтр или выбрать другую тему."
+    : "Попробуйте выбрать другую категорию.";
+
+  container.innerHTML = `
+    <div class="blog-empty-state">
+      <h3>${title}</h3>
+      <p>${description}</p>
+    </div>
+  `;
+}
+
 /* =========================================================
    HELPERS
    ========================================================= */
@@ -131,6 +312,58 @@ function parseDate(str) {
     return new Date(y, m - 1, d);
   }
   return new Date(str);
+}
+
+function includesText(value, needle) {
+  return String(value || "").toLowerCase().includes(String(needle).toLowerCase());
+}
+
+function hasTag(tags, expectedTag) {
+  return Array.isArray(tags)
+    ? tags.some((tag) => String(tag).toLowerCase() === expectedTag.toLowerCase())
+    : false;
+}
+
+function getTagFromQuery() {
+  return new URLSearchParams(window.location.search).get("tag");
+}
+
+function syncTagQueryParam() {
+  const url = new URL(window.location.href);
+
+  if (activeTagSlug) {
+    url.searchParams.set("tag", activeTagSlug);
+  } else {
+    url.searchParams.delete("tag");
+  }
+
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+function slugify(text) {
+  return String(text || "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-а-яё]/gi, "");
+}
+
+function getTagLabel(tagSlug) {
+  for (const article of allArticles) {
+    const matchedTag = article.tags?.find((tag) => slugify(tag) === tagSlug);
+    if (matchedTag) return matchedTag;
+  }
+
+  return tagSlug.replace(/-/g, " ");
+}
+
+function pluralizeArticles(count) {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+
+  if (mod10 === 1 && mod100 !== 11) return "статья";
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "статьи";
+  return "статей";
 }
 
 function renderDate(dateString) {
