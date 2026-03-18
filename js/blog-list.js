@@ -5,6 +5,10 @@
    ========================================================= */
 
 const BLOG_FILTERS = {
+  all: {
+    key: "all",
+    predicate: () => true,
+  },
   latest: {
     key: "latest",
     predicate: () => true,
