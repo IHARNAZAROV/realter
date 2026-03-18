@@ -4,9 +4,39 @@
    BLOG LIST + SKELETON
    ========================================================= */
 
+const BLOG_FILTERS = {
+  latest: {
+    key: "latest",
+    predicate: () => true,
+    limit: 6,
+  },
+  legal: {
+    key: "legal",
+    predicate: (article) =>
+      includesText(article.category, "юрид") ||
+      hasTag(article.tags, "юридические риски"),
+  },
+  sale: {
+    key: "sale",
+    predicate: (article) =>
+      hasTag(article.tags, "покупка квартиры") ||
+      hasTag(article.tags, "продажа квартиры"),
+  },
+  psychology: {
+    key: "psychology",
+    predicate: (article) => includesText(article.category, "псих"),
+  },
+};
+
+const FILTER_ANIMATION_DURATION = 260;
+
+let allArticles = [];
+let activeFilterKey = "latest";
+
 document.addEventListener("DOMContentLoaded", () => {
   renderSkeletons(8);
   loadBlogArticles();
+  initBlogFilters();
 });
 
 /* =========================================================
@@ -47,14 +77,10 @@ function loadBlogArticles() {
       return res.json();
     })
     .then((articles) => {
-      articles.sort((a, b) => parseDate(b.date) - parseDate(a.date));
+      allArticles = [...articles].sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
       fadeOutSkeletons(() => {
-const activeTag = window.blogTags.getActiveTag();
-const filtered = window.blogTags.filterByTag(articles, activeTag);
-
-window.blogTags.renderTagsFilter(articles);
-renderBlogCards(filtered);
+        renderActiveArticles({ skipAnimation: true });
         reinitMasonry();
       });
     })
@@ -80,6 +106,9 @@ function fadeOutSkeletons(callback) {
    ========================================================= */
 function renderBlogCards(articles) {
   const container = document.querySelector(".news-masonry");
+  if (!container) return;
+
+  container.innerHTML = "";
 
   articles.forEach((article) => {
     const item = document.createElement("div");
@@ -122,6 +151,72 @@ function renderBlogCards(articles) {
   });
 }
 
+function initBlogFilters() {
+  const buttonsContainer = document.getElementById("blog-filter-buttons");
+  if (!buttonsContainer) return;
+
+  buttonsContainer.addEventListener("click", (event) => {
+    const button = event.target.closest(".blog-filter-button");
+    if (!button) return;
+
+    const nextFilterKey = button.dataset.filter;
+    if (!BLOG_FILTERS[nextFilterKey] || nextFilterKey === activeFilterKey) return;
+
+    activeFilterKey = nextFilterKey;
+    updateActiveFilterButton();
+    renderActiveArticles();
+  });
+}
+
+function updateActiveFilterButton() {
+  document.querySelectorAll(".blog-filter-button").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.filter === activeFilterKey);
+  });
+}
+
+function renderActiveArticles({ skipAnimation = false } = {}) {
+  const container = document.querySelector(".news-masonry");
+  if (!container || !allArticles.length) return;
+
+  const articles = getFilteredArticles();
+
+  if (skipAnimation) {
+    container.classList.remove("blog-list-fade-out");
+    container.classList.add("blog-list-fade-in");
+    renderBlogCards(articles);
+    requestAnimationFrame(() => {
+      reinitMasonry();
+      window.setTimeout(() => {
+        container.classList.remove("blog-list-fade-in");
+      }, FILTER_ANIMATION_DURATION);
+    });
+    return;
+  }
+
+  container.classList.remove("blog-list-fade-in");
+  container.classList.add("blog-list-fade-out");
+
+  window.setTimeout(() => {
+    renderBlogCards(articles);
+    container.classList.remove("blog-list-fade-out");
+    container.classList.add("blog-list-fade-in");
+    reinitMasonry();
+
+    window.setTimeout(() => {
+      container.classList.remove("blog-list-fade-in");
+    }, FILTER_ANIMATION_DURATION);
+  }, FILTER_ANIMATION_DURATION);
+}
+
+function getFilteredArticles() {
+  const definition = BLOG_FILTERS[activeFilterKey] || BLOG_FILTERS.latest;
+  const filtered = allArticles.filter(definition.predicate);
+
+  return typeof definition.limit === "number"
+    ? filtered.slice(0, definition.limit)
+    : filtered;
+}
+
 /* =========================================================
    HELPERS
    ========================================================= */
@@ -131,6 +226,16 @@ function parseDate(str) {
     return new Date(y, m - 1, d);
   }
   return new Date(str);
+}
+
+function includesText(value, needle) {
+  return String(value || "").toLowerCase().includes(String(needle).toLowerCase());
+}
+
+function hasTag(tags, expectedTag) {
+  return Array.isArray(tags)
+    ? tags.some((tag) => String(tag).toLowerCase() === expectedTag.toLowerCase())
+    : false;
 }
 
 function renderDate(dateString) {
