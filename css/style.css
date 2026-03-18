@@ -3144,11 +3144,18 @@ button.scroltop span {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  max-width: 100%;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: clamp(9px, 0.62vw + 6px, 12px);
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: clamp(0.08em, 0.18vw, 0.18em);
   text-transform: uppercase;
+  white-space: normal;
+  line-height: 1.35;
   color: var(--color-primary);
+  background: rgba(21, 89, 69, 0.1);
+  border: 1px solid rgba(21, 89, 69, 0.16);
 }
 
 .client-trust-wall__eyebrow::before,
@@ -3167,7 +3174,7 @@ button.scroltop span {
   font-family: var(--font-heading);
   font-size: clamp(28px, 3vw, 40px);
   line-height: 1.12;
-  color: var(--color-text-main);
+  color: var(--color-primary);
 }
 
 .client-trust-wall__text {
@@ -3177,7 +3184,7 @@ button.scroltop span {
   margin: 0;
   font-size: 17px;
   line-height: 1.8;
-  color: rgba(31, 42, 68, 0.82);
+  color: rgba(21, 89, 69, 0.86);
 }
 
 .client-trust-wall__stats {
@@ -3224,7 +3231,7 @@ button.scroltop span {
   max-width: 24ch;
   font-size: 15px;
   line-height: 1.65;
-  color: rgba(31, 42, 68, 0.78);
+  color: rgba(21, 89, 69, 0.8);
 }
 
 .client-grid--trust .row {
@@ -3277,11 +3284,18 @@ button.scroltop span {
   background: linear-gradient(180deg, rgba(247, 242, 235, 0.82), rgba(255, 255, 255, 0.96));
 }
 
+.client-logo-pic--trust:hover div {
+  opacity: 1;
+  transform: none;
+}
+
 .client-logo-pic--trust img {
+  display: block;
   width: auto;
   max-width: 100%;
   max-height: 78px;
   object-fit: contain;
+  transition: none;
 }
 
 .client-logo-pic__content {
@@ -3296,39 +3310,44 @@ button.scroltop span {
 .client-logo-pic__content strong {
   font-size: 22px;
   line-height: 1.2;
-  color: var(--color-text-main);
+  color: var(--color-primary);
 }
 
 .client-logo-pic__content p {
   margin: 0;
   font-size: 15px;
   line-height: 1.7;
-  color: rgba(31, 42, 68, 0.78);
+  color: rgba(21, 89, 69, 0.8);
 }
 
 .client-logo-pic__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin-top: auto;
-  padding-top: 8px;
-  font-size: 13px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-primary);
+  color: var(--color-white);
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .client-logo-pic__link::after {
   content: "↗";
-  margin-left: 8px;
 }
 
 .client-logo-pic--trust:hover {
-  transform: translateY(-8px);
-  border-color: rgba(166, 124, 82, 0.32);
-  box-shadow: 0 24px 54px rgba(31, 42, 68, 0.12);
+  transform: none;
+  border-color: rgba(21, 89, 69, 0.3);
+  box-shadow: 0 22px 46px rgba(21, 89, 69, 0.12);
 }
 
 .client-logo-pic--trust:hover .client-logo-pic__media {
-  background: linear-gradient(180deg, rgba(248, 239, 228, 0.96), rgba(255, 255, 255, 1));
+  background: linear-gradient(180deg, rgba(226, 241, 236, 0.96), rgba(255, 255, 255, 1));
 }
 
 .slider-block {
