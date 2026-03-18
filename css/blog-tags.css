@@ -265,6 +265,7 @@
 
 .blog-filter-panel {
   margin-bottom: 32px;
+  padding-top: 6px;
 }
 
 .blog-filter-buttons {
@@ -272,14 +273,18 @@
   align-items: center;
   gap: 12px;
   flex-wrap: nowrap;
-  overflow-x: auto;
-  padding-bottom: 4px;
+  overflow: visible;
+  padding: 4px 0 6px;
 }
 
 .blog-filter-button {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
   border: 1px solid rgba(15, 61, 62, 0.14);
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #f6fbfb 100%);
   color: #0f3d3e;
   border-radius: 999px;
   padding: 12px 20px;
@@ -287,6 +292,8 @@
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
+  box-sizing: border-box;
+  box-shadow: 0 8px 18px rgba(15, 61, 62, 0.08);
   transition:
     background-color 0.25s ease,
     color 0.25s ease,
@@ -300,16 +307,16 @@
   color: #fff;
   background: #0f3d3e;
   border-color: #0f3d3e;
-  box-shadow: 0 12px 24px rgba(15, 61, 62, 0.14);
-  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(15, 61, 62, 0.18);
+  transform: translateY(-1px);
   outline: none;
 }
 
 .blog-filter-button.is-active {
   color: #fff;
-  background: #0f3d3e;
+  background: linear-gradient(135deg, #0f3d3e 0%, #155945 100%);
   border-color: #0f3d3e;
-  box-shadow: 0 12px 24px rgba(15, 61, 62, 0.16);
+  box-shadow: 0 14px 28px rgba(15, 61, 62, 0.2);
 }
 
 .news-masonry {
@@ -344,11 +351,35 @@
 @media (max-width: 767px) {
   .blog-filter-panel {
     margin-bottom: 24px;
+    padding-top: 0;
+  }
+
+  .blog-filter-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 0;
   }
 
   .blog-filter-button {
-    padding: 11px 16px;
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 14px;
     font-size: 13px;
+    white-space: normal;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(15, 61, 62, 0.08);
+  }
+}
+
+@media (max-width: 479px) {
+  .blog-filter-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-filter-button {
+    min-height: 50px;
   }
 }
 
