@@ -323,6 +323,7 @@ const previewImages = {
   "dom-lida-ul-novoprudskaya-2": "/images/objects/pic45.webp",
   "kvartira-lida-ul-nevskogo-44-severny":"/images/objects/pic46.webp",
   "kvartira-lida-ul-rybinovskogo-22" : "/images/objects/pic47.webp",
+  "kvartira-lida-ul-masherova-15-2":"/images/objects/pic48.webp",
 };
 
 /* ======================================================
