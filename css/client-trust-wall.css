@@ -197,7 +197,19 @@
   align-items: center;
 }
 
+.service-network__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
 .service-network__column {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: 26px;
 }
@@ -256,18 +268,11 @@
 
 .service-network__center {
   position: relative;
+  z-index: 2;
   min-height: 860px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.service-network__lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
 }
 
 .service-network__line {
@@ -283,9 +288,9 @@
 
 .service-network__line--pulse {
   stroke: url(#serviceLineGradient);
-  stroke-width: 5;
-  stroke-dasharray: 18 82;
-  animation: service-network-flow 3.6s linear infinite;
+  stroke-width: 6;
+  stroke-dasharray: 22 78;
+  animation: service-network-flow 2.4s linear infinite;
   filter: url(#serviceLineGlow);
 }
 
@@ -370,7 +375,7 @@
     padding: 18px 0 8px;
   }
 
-  .service-network__lines {
+  .service-network__overlay {
     display: none;
   }
 
