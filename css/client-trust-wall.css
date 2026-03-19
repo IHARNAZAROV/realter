@@ -283,11 +283,22 @@
 
 .service-network__line--pulse {
   stroke: url(#serviceLineGradient);
-  stroke-width: 4;
-  stroke-dasharray: 16 84;
-  animation: service-network-flow 6s linear infinite;
+  stroke-width: 5;
+  stroke-dasharray: 18 82;
+  animation: service-network-flow 3.6s linear infinite;
   filter: url(#serviceLineGlow);
 }
+
+.service-network__line--pulse-02,
+.service-network__line--pulse-05 {
+  animation-duration: 2.9s;
+}
+
+.service-network__line--pulse-03,
+.service-network__line--pulse-06 {
+  animation-duration: 4.1s;
+}
+
 
 .service-network__nodes circle {
   fill: #fff;
@@ -301,18 +312,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(100%, 300px);
+  width: min(100%, 320px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
+  padding: 18px;
   border-radius: 32px;
   background: linear-gradient(145deg, #155945, #1e7258);
   box-shadow: 0 28px 60px rgba(21, 89, 69, 0.28), 0 0 0 10px rgba(21, 89, 69, 0.06);
 }
 
 .service-network__logo img {
-  width: 62%;
-  max-width: 180px;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.16));
 }
 
@@ -329,7 +342,7 @@
     stroke-dashoffset: 100;
   }
   to {
-    stroke-dashoffset: 0;
+    stroke-dashoffset: -100;
   }
 }
 
@@ -398,7 +411,8 @@
   }
 
   .service-network__logo {
-    width: min(100%, 220px);
+    width: min(100%, 240px);
+    padding: 14px;
     border-radius: 26px;
   }
 }
