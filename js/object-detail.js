@@ -233,13 +233,15 @@
         ? obj.images.slice(0, 5)
         : ["https://example.com/images/objects/placeholder.webp"];
 
+    const schemaPrice = getDisplayBynPrice(obj);
+
     const schema = {
       "@context": "https://schema.org",
       "@type": "Offer",
       name: obj.title,
       url: window.location.href,
       image: images,
-      price: String(obj.priceBYN),
+      price: String(schemaPrice || obj.priceBYN || ""),
       priceCurrency: "BYN",
       priceValidUntil: "2030-12-31",
       availability: "https://schema.org/InStock",
@@ -431,11 +433,12 @@ function renderObjectDetails(obj) {
 
   /* PRICE */
   if (typeof obj.priceBYN === "number" || typeof obj.priceUSD === "number") {
+    const displayBynPrice = getDisplayBynPrice(obj);
     const initialPriceValue =
       typeof obj.priceUSD === "number"
         ? "Загрузка..."
-        : typeof obj.priceBYN === "number"
-        ? `${formatPrice(obj.priceBYN)} BYN`
+        : typeof displayBynPrice === "number"
+        ? `${formatPrice(displayBynPrice)} BYN`
         : "";
 
     priceWrap.innerHTML = `
@@ -882,9 +885,10 @@ function initSidebarSlider(currentObj, allObjects) {
             ? obj.images[0]
             : "/images/objects/pic1.webp";
 
+        const displayPrice = getDisplayBynPrice(obj);
         const price =
-          typeof obj.priceBYN === "number"
-            ? `${obj.priceBYN.toLocaleString("ru-RU")} BYN`
+          typeof displayPrice === "number"
+            ? `${displayPrice.toLocaleString("ru-RU")} BYN`
             : "";
 
         return `

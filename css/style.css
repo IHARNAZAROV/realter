@@ -8777,17 +8777,25 @@ recent-posts-entry-date .sx-post-info .post-title {
   border-radius: 16px;
   background: transparent;
   color: inherit;
-  padding: 12px 24px;
+  padding: 8px 20px;
   cursor: pointer;
+  transform: translateY(0) scale(1);
   transition:
     background-color 0.25s ease,
     transform 0.25s ease,
-    opacity 0.25s ease;
+    opacity 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .object-price-toggle:hover,
 .object-price-toggle:focus-visible {
   background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px) scale(0.995);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.object-price-toggle:active {
+  transform: translateY(0) scale(0.99);
 }
 
 .object-price-toggle:focus-visible {
@@ -8798,7 +8806,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 .object-price-label {
   font-size: 13px;
   opacity: 0.85;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .object-price-value {
@@ -8825,6 +8833,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 .object-price-toggle.is-loading {
   opacity: 0.9;
   pointer-events: none;
+  transform: scale(0.995);
 }
 
 @media (max-width: 768px) {
