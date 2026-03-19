@@ -8258,7 +8258,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   line-clamp: 2;
 }
 
-.object-price {
+#objectsList .object-price {
   font-weight: 700;
   color: #155945;
 }
@@ -9843,7 +9843,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   color: #6b8f86;
 }
 
-.object-price {
+#objectsList .object-price {
   background: #155945;
   color: #ffffff;
   font-weight: 800;
@@ -9877,7 +9877,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   padding-top: 12px;
 }
 
-.object-price,
+#objectsList .object-price,
 .project-price {
   transition:
     transform 0.25s ease,
