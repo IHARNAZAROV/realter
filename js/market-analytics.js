@@ -34,10 +34,21 @@
     return values.reduce((sum, value) => sum + value, 0) / values.length;
   };
 
+  const getObjectPriceByn = (item) => {
+    if (typeof window.RealterPrice?.getLiveBynPriceSync === 'function') {
+      const livePrice = window.RealterPrice.getLiveBynPriceSync(item);
+      if (Number.isFinite(livePrice) && livePrice > 0) {
+        return livePrice;
+      }
+    }
+
+    return Number(item?.priceBYN) || 0;
+  };
+
   const calcAveragePerSqm = (items) => {
     const values = items
       .map((item) => {
-        const price = Number(item.priceBYN);
+        const price = getObjectPriceByn(item);
         const area = Number(item.areaTotal);
         if (!Number.isFinite(price) || !Number.isFinite(area) || area <= 0) {
           return null;
@@ -151,7 +162,10 @@
       const response = await fetch(objectsPath, { cache: 'no-store' });
       if (!response.ok) throw new Error('Failed to load objects');
 
-      const allObjects = await response.json();
+      let allObjects = await response.json();
+      if (typeof window.RealterPrice?.enrichObjectsWithLivePrices === 'function') {
+        allObjects = await window.RealterPrice.enrichObjectsWithLivePrices(allObjects);
+      }
       const apartments = allObjects.filter(
         (item) =>
           item &&
@@ -161,7 +175,7 @@
           item.city.includes(cityName)
       );
 
-      setText('#avg-apartment-price', formatCurrency(calcAverage(apartments, (item) => item.priceBYN)));
+      setText('#avg-apartment-price', formatCurrency(calcAverage(apartments, (item) => getObjectPriceByn(item))));
       setText(
         '#avg-apartment-sqm',
         `Средняя цена за м² (${cityName}): ${formatCurrency(calcAveragePerSqm(apartments))}`
@@ -190,13 +204,13 @@
           return;
         }
 
-        setText(`#avg-room-${rooms}-price`, formatCurrency(calcAverage(roomApartments, (item) => item.priceBYN)));
+        setText(`#avg-room-${rooms}-price`, formatCurrency(calcAverage(roomApartments, (item) => getObjectPriceByn(item))));
         setText(`#avg-room-${rooms}-sqm`, `Средняя цена за м²: ${formatCurrency(calcAveragePerSqm(roomApartments))}`);
 
         const color = palette[rooms];
         const roomData = monthlyBuckets.map((bucket, idx) => {
           const roomItems = bucket.value.filter((item) => Number(item.rooms) === rooms);
-          const point = roomItems.length ? calcAverage(roomItems, (item) => item.priceBYN) : null;
+          const point = roomItems.length ? calcAverage(roomItems, (item) => getObjectPriceByn(item)) : null;
           if (Number.isFinite(point)) {
             trendSeriesByMonth[idx].push(point);
           }

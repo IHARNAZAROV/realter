@@ -62,6 +62,21 @@
     return `${Math.round(value).toLocaleString("ru-RU")}`;
   }
 
+  function getObjectPriceByn(obj) {
+    if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
+      const livePrice = window.RealterPrice.getLiveBynPriceSync(obj);
+      if (typeof livePrice === "number" && livePrice > 0) {
+        return livePrice;
+      }
+    }
+
+    if (typeof obj?.priceBYN === "number" && obj.priceBYN > 0) {
+      return obj.priceBYN;
+    }
+
+    return null;
+  }
+
   function initMultiBankMortgageCalculator(obj) {
     const root = document.querySelector("[data-mortgage-calculator]");
     const programs = Array.isArray(window.MORTGAGE_PROGRAMS)
@@ -105,8 +120,7 @@
       )
       .join("");
 
-    const defaultPrice =
-      typeof obj?.priceBYN === "number" && obj.priceBYN > 0 ? obj.priceBYN : 90000;
+    const defaultPrice = getObjectPriceByn(obj) || 90000;
 
     priceInput.value = String(defaultPrice);
 

@@ -17,6 +17,172 @@
   const formatPrice = (v) =>
     typeof v === "number" ? v.toLocaleString("ru-RU") : "";
 
+  function getDisplayBynPrice(obj) {
+    if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
+      return window.RealterPrice.getLiveBynPriceSync(obj);
+    }
+
+    return typeof obj?.priceBYN === "number" ? obj.priceBYN : null;
+  }
+
+  async function fetchUsdRate() {
+    if (typeof window.RealterPrice?.fetchUsdRate === "function") {
+      return window.RealterPrice.fetchUsdRate();
+    }
+
+    throw new Error("Модуль live-price.js не подключён");
+  }
+
+  function createPriceState(obj) {
+    return {
+      isUsd: false,
+      isAnimating: false,
+      isRateLoading: false,
+      bynFallback: getDisplayBynPrice(obj),
+      usd: typeof obj.priceUSD === "number" ? obj.priceUSD : null,
+      usdRateData: null,
+    };
+  }
+
+  function getBynPrice(state) {
+    if (state.usdRateData && typeof state.usd === "number") {
+      return Math.round(state.usd * state.usdRateData.ratePerUnit);
+    }
+
+    return state.bynFallback;
+  }
+
+  function getFormattedPriceData(state) {
+    if (state.isUsd) {
+      return {
+        label: "Цена в долларах",
+        value:
+          typeof state.usd === "number"
+            ? `${formatPrice(state.usd)} USD`
+            : "Цена в USD недоступна",
+      };
+    }
+
+    if (state.isRateLoading && typeof state.usd === "number") {
+      return {
+        label: "Цена",
+        value: "Загрузка...",
+      };
+    }
+
+    const bynValue = getBynPrice(state);
+    const bynLabel = state.usdRateData?.dateLabel
+      ? `Цена (по курсу НБРБ на ${state.usdRateData.dateLabel})`
+      : "Цена";
+
+    return {
+      label: bynLabel,
+      value: typeof bynValue === "number" ? `${formatPrice(bynValue)} BYN` : "",
+    };
+  }
+
+  function updatePriceButtonContent(button, state) {
+    const label = button.querySelector("[data-price-label]");
+    const value = button.querySelector("[data-price-value]");
+    const content = getFormattedPriceData(state);
+
+    if (label) label.textContent = content.label;
+    if (value) value.textContent = content.value;
+
+    button.setAttribute(
+      "aria-label",
+      state.isUsd
+        ? "Показать цену в белорусских рублях"
+        : "Показать цену в долларах США",
+    );
+    button.setAttribute("aria-pressed", state.isUsd ? "true" : "false");
+    button.dataset.currency = state.isUsd ? "usd" : "byn";
+  }
+
+  function animatePriceSwap(button, state) {
+    if (state.isAnimating) return;
+
+    state.isAnimating = true;
+    button.classList.add("is-animating");
+
+    window.setTimeout(() => {
+      updatePriceButtonContent(button, state);
+      button.classList.add("is-animating-in");
+    }, 180);
+
+    window.setTimeout(() => {
+      button.classList.remove("is-animating", "is-animating-in");
+      state.isAnimating = false;
+    }, 420);
+  }
+
+  function setupPriceToggle(button, obj) {
+    const state = createPriceState(obj);
+    updatePriceButtonContent(button, state);
+
+    if (typeof state.usd === "number") {
+      state.isRateLoading = true;
+      updatePriceButtonContent(button, state);
+      button.classList.add("is-loading");
+
+      fetchUsdRate()
+        .then((rateData) => {
+          state.usdRateData = rateData;
+
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          state.isRateLoading = false;
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
+          button.classList.remove("is-loading");
+        });
+    }
+
+    button.addEventListener("click", async () => {
+      if (state.isAnimating) return;
+
+      const nextIsUsd = !state.isUsd;
+
+      if (!state.usdRateData && typeof state.usd === "number") {
+        state.isRateLoading = true;
+        if (!state.isUsd) {
+          updatePriceButtonContent(button, state);
+        }
+        button.classList.add("is-loading");
+
+        try {
+          state.usdRateData = await fetchUsdRate();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          state.isRateLoading = false;
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
+          button.classList.remove("is-loading");
+        }
+      }
+
+      if (nextIsUsd && typeof state.usd !== "number") {
+        return;
+      }
+
+      if (!nextIsUsd && !state.usdRateData && typeof state.bynFallback !== "number") {
+        return;
+      }
+
+      state.isUsd = nextIsUsd;
+      animatePriceSwap(button, state);
+    });
+  }
+
   function getSlugFromUrl() {
     const url = new URL(window.location.href);
 
@@ -70,13 +236,15 @@
         ? obj.images.slice(0, 5)
         : ["https://example.com/images/objects/placeholder.webp"];
 
+    const schemaPrice = getDisplayBynPrice(obj);
+
     const schema = {
       "@context": "https://schema.org",
       "@type": "Offer",
       name: obj.title,
       url: window.location.href,
       image: images,
-      price: String(obj.priceBYN),
+      price: String(schemaPrice || obj.priceBYN || ""),
       priceCurrency: "BYN",
       priceValidUntil: "2030-12-31",
       availability: "https://schema.org/InStock",
@@ -267,13 +435,33 @@ function renderObjectDetails(obj) {
   const isFlat = String(obj.type || "").toLowerCase().includes("квартир");
 
   /* PRICE */
-  if (typeof obj.priceBYN === "number") {
+  if (typeof obj.priceBYN === "number" || typeof obj.priceUSD === "number") {
+    const displayBynPrice = getDisplayBynPrice(obj);
+    const initialPriceValue =
+      typeof obj.priceUSD === "number"
+        ? "Загрузка..."
+        : typeof displayBynPrice === "number"
+        ? `${formatPrice(displayBynPrice)} BYN`
+        : "";
+
     priceWrap.innerHTML = `
-      <div class="object-price-label">Цена</div>
-      <div class="object-price-value">
-        ${obj.priceBYN.toLocaleString("ru-RU")} BYN
-      </div>
+      <button
+        type="button"
+        class="object-price-toggle"
+        data-price-toggle
+        aria-pressed="false"
+      >
+        <span class="object-price-label" data-price-label>Цена</span>
+        <span class="object-price-value" data-price-value>
+          ${initialPriceValue}
+        </span>
+      </button>
     `;
+
+    const priceButton = priceWrap.querySelector("[data-price-toggle]");
+    if (priceButton) {
+      setupPriceToggle(priceButton, obj);
+    }
   }
 
   const has = (v) =>
@@ -364,8 +552,9 @@ function renderObjectDetails(obj) {
     if (obj.areaTotal) rows.push(["Площадь", `${obj.areaTotal} м²`]);
     if (obj.yearBuilt) rows.push(["Год", obj.yearBuilt]);
 
-    if (typeof obj.priceBYN === "number")
-      rows.push(["Цена", `${formatPrice(obj.priceBYN)} BYN`]);
+    const displayPrice = getDisplayBynPrice(obj);
+    if (typeof displayPrice === "number")
+      rows.push(["Цена", `${formatPrice(displayPrice)} BYN`]);
 
     if (!rows.length) return;
 
@@ -404,7 +593,7 @@ function renderObjectDetails(obj) {
               [
                 obj.type,
                 obj.areaTotal && `${obj.areaTotal} м²`,
-                obj.priceBYN && `${formatPrice(obj.priceBYN)} BYN`,
+                getDisplayBynPrice(obj) && `${formatPrice(getDisplayBynPrice(obj))} BYN`,
               ],
               " • ",
             );
@@ -474,8 +663,9 @@ function renderSidebarFooter(obj) {
 ===================================================== */
 
   function getObjectPrice(obj) {
-    if (typeof obj.priceBYN === "number" && obj.priceBYN > 0)
-      return obj.priceBYN;
+    const displayPrice = getDisplayBynPrice(obj);
+    if (typeof displayPrice === "number" && displayPrice > 0)
+      return displayPrice;
 
     if (typeof obj.priceUSD === "number" && obj.priceUSD > 0) {
       const USD_TO_BYN = 3.3;
@@ -698,9 +888,10 @@ function initSidebarSlider(currentObj, allObjects) {
             ? obj.images[0]
             : "/images/objects/pic1.webp";
 
+        const displayPrice = getDisplayBynPrice(obj);
         const price =
-          typeof obj.priceBYN === "number"
-            ? `${obj.priceBYN.toLocaleString("ru-RU")} BYN`
+          typeof displayPrice === "number"
+            ? `${displayPrice.toLocaleString("ru-RU")} BYN`
             : "";
 
         return `
@@ -1031,7 +1222,10 @@ async function init() {
   try {
     let slug = getSlugFromUrl();
 
-    const objects = await fetchObjects();
+    let objects = await fetchObjects();
+    if (typeof window.RealterPrice?.enrichObjectsWithLivePrices === "function") {
+      objects = await window.RealterPrice.enrichObjectsWithLivePrices(objects);
+    }
     if (!Array.isArray(objects) || !objects.length) {
       renderNotFound(slug);
       return;

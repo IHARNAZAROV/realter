@@ -23,6 +23,29 @@ function num(v) {
   return Number.isFinite(n) ? n : null;
 }
 
+function getObjectPriceByn(obj) {
+  if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
+    const livePrice = window.RealterPrice.getLiveBynPriceSync(obj);
+    if (typeof livePrice === "number" && livePrice > 0) {
+      return livePrice;
+    }
+  }
+
+  if (typeof obj?.priceBYN === "number" && obj.priceBYN > 0) {
+    return obj.priceBYN;
+  }
+
+  return null;
+}
+
+async function syncObjectsWithLivePrices(list) {
+  if (typeof window.RealterPrice?.enrichObjectsWithLivePrices !== "function") {
+    return list;
+  }
+
+  return window.RealterPrice.enrichObjectsWithLivePrices(list);
+}
+
 const METRICS_INFO = {
   price: {
     title: "Цена за м²",
@@ -369,8 +392,9 @@ let pendingDeleteIndex = null;
 ====================================================== */
 fetch("/data/objects.json")
   .then(r => r.json())
+  .then(data => syncObjectsWithLivePrices(data))
   .then(data => {
-    objects = data;
+    objects = data || [];
     render();
   });
 
@@ -482,6 +506,7 @@ function renderObject(obj, index) {
   const date = obj.status?.date || "";
   const previewSrc = resolvePreviewImage(obj);
   const metrics = calculateMetrics(obj);
+  const displayPriceByn = getObjectPriceByn(obj);
 
   const div = document.createElement("div");
   div.className = `object ${obj.recommended ? "is-recommended" : ""} ${status === "sold" ? "is-sold" : ""}`;
@@ -529,7 +554,7 @@ function renderObject(obj, index) {
       </div>
 
       <div class="object-price">
-        ${obj.priceBYN?.toLocaleString()} BYN
+        ${displayPriceByn?.toLocaleString() || "—"} BYN
         <span class="price-usd">/ ${obj.priceUSD?.toLocaleString()} $</span>
       </div>
 
@@ -757,13 +782,15 @@ addForm.addEventListener("submit", e => {
     });
   }
 
-  objects.unshift(obj);
-  setDirty(true);
-  render();
-  addForm.reset();
-  addFlat.hidden = true;
-  addHouse.hidden = true;
-  closeModal();
+  syncObjectsWithLivePrices([obj]).then(([enrichedObj]) => {
+    objects.unshift(enrichedObj || obj);
+    setDirty(true);
+    render();
+    addForm.reset();
+    addFlat.hidden = true;
+    addHouse.hidden = true;
+    closeModal();
+  });
 });
 
 /* ======================================================
@@ -1261,8 +1288,11 @@ saveEdit.addEventListener("click", () => {
   showErrors(errors);
   if (errors.length) return;
 
-  render();
-  closeEdit();
+  syncObjectsWithLivePrices(objects).then((enrichedObjects) => {
+    objects = enrichedObjects || objects;
+    render();
+    closeEdit();
+  });
 });
 
 function renderSection(title) {

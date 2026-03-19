@@ -8258,7 +8258,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   line-clamp: 2;
 }
 
-.object-price {
+#objectsList .object-price {
   font-weight: 700;
   color: #155945;
 }
@@ -8758,25 +8758,82 @@ recent-posts-entry-date .sx-post-info .post-title {
    PRICE BLOCK
 ===================================================== */
 .object-price {
-  background: #155945;
-  color: #ffffff;
-  border-radius: 16px;
-  padding: 24px;
   margin-bottom: 32px;
+}
+
+.object-price-toggle {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  appearance: none;
+  border: 0;
+  border-radius: 16px;
+  background: #1a684f;
+  color: #ffffff;
   text-align: center;
-  box-shadow: 0 16px 36px rgba(21, 89, 69, 0.3);
+  padding: 10px 20px;
+  cursor: pointer;
+  transform: translateY(0);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.object-price-toggle:hover,
+.object-price-toggle:focus-visible {
+  background: #20765a;
+  transform: translateY(0);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.object-price-toggle:active {
+  background: #165d46;
+  transform: translateY(0);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.object-price-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.65);
+  outline-offset: -4px;
 }
 
 .object-price-label {
   font-size: 13px;
   opacity: 0.85;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .object-price-value {
   font-size: 24px;
   font-weight: 800;
   letter-spacing: 0.02em;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.object-price-toggle.is-animating .object-price-label,
+.object-price-toggle.is-animating .object-price-value {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+.object-price-toggle.is-animating-in .object-price-label,
+.object-price-toggle.is-animating-in .object-price-value {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.object-price-toggle.is-loading {
+  opacity: 0.9;
+  pointer-events: none;
+  filter: saturate(0.92);
 }
 
 @media (max-width: 768px) {
@@ -9786,14 +9843,15 @@ recent-posts-entry-date .sx-post-info .post-title {
   color: #6b8f86;
 }
 
-.object-price {
-  background: #155945;
-  color: #ffffff;
+#objectsList .object-price {
+  background: transparent;
+  color: #155945;
   font-weight: 800;
-  padding: 8px 14px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 0;
   font-size: 14px;
-  box-shadow: 0 6px 18px rgba(21, 89, 69, 0.35);
+  box-shadow: none;
+  letter-spacing: 0.01em;
 }
 
 .object-contract {
@@ -9820,7 +9878,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   padding-top: 12px;
 }
 
-.object-price,
+#objectsList .object-price,
 .project-price {
   transition:
     transform 0.25s ease,
