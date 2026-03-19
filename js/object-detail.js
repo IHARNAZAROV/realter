@@ -72,48 +72,46 @@
     return {
       isUsd: false,
       isAnimating: false,
-      byn: typeof obj.priceBYN === "number" ? obj.priceBYN : null,
-      usdFromJson: typeof obj.priceUSD === "number" ? obj.priceUSD : null,
+      bynFallback: typeof obj.priceBYN === "number" ? obj.priceBYN : null,
+      usd: typeof obj.priceUSD === "number" ? obj.priceUSD : null,
       usdRateData: null,
     };
   }
 
+  function getBynPrice(state) {
+    if (state.usdRateData && typeof state.usd === "number") {
+      return Math.round(state.usd * state.usdRateData.ratePerUnit);
+    }
+
+    return state.bynFallback;
+  }
+
   function getFormattedPriceData(state) {
     if (state.isUsd) {
-      const usdValue =
-        state.usdRateData && typeof state.byn === "number"
-          ? Math.round(state.byn / state.usdRateData.ratePerUnit)
-          : state.usdFromJson;
-
       return {
         label: "Цена в долларах",
         value:
-          typeof usdValue === "number"
-            ? `${formatPrice(usdValue)} USD`
+          typeof state.usd === "number"
+            ? `${formatPrice(state.usd)} USD`
             : "Цена в USD недоступна",
-        hint: state.usdRateData
-          ? `Курс НБРБ на ${state.usdRateData.dateLabel}`
-          : "Цена из карточки объекта",
       };
     }
 
+    const bynValue = getBynPrice(state);
+
     return {
       label: "Цена",
-      value:
-        typeof state.byn === "number" ? `${formatPrice(state.byn)} BYN` : "",
-      hint: "Нажмите, чтобы посмотреть в USD",
+      value: typeof bynValue === "number" ? `${formatPrice(bynValue)} BYN` : "",
     };
   }
 
   function updatePriceButtonContent(button, state) {
     const label = button.querySelector("[data-price-label]");
     const value = button.querySelector("[data-price-value]");
-    const hint = button.querySelector("[data-price-hint]");
     const content = getFormattedPriceData(state);
 
     if (label) label.textContent = content.label;
     if (value) value.textContent = content.value;
-    if (hint) hint.textContent = content.hint;
 
     button.setAttribute(
       "aria-label",
@@ -146,12 +144,31 @@
     const state = createPriceState(obj);
     updatePriceButtonContent(button, state);
 
+    if (typeof state.usd === "number") {
+      button.classList.add("is-loading");
+
+      fetchUsdRate()
+        .then((rateData) => {
+          state.usdRateData = rateData;
+
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          button.classList.remove("is-loading");
+        });
+    }
+
     button.addEventListener("click", async () => {
       if (state.isAnimating) return;
 
       const nextIsUsd = !state.isUsd;
 
-      if (nextIsUsd && !state.usdRateData) {
+      if (!state.usdRateData && typeof state.usd === "number") {
         button.classList.add("is-loading");
 
         try {
@@ -163,7 +180,11 @@
         }
       }
 
-      if (nextIsUsd && !state.usdRateData && typeof state.usdFromJson !== "number") {
+      if (nextIsUsd && typeof state.usd !== "number") {
+        return;
+      }
+
+      if (!nextIsUsd && !state.usdRateData && typeof state.bynFallback !== "number") {
         return;
       }
 
@@ -422,7 +443,14 @@ function renderObjectDetails(obj) {
   const isFlat = String(obj.type || "").toLowerCase().includes("квартир");
 
   /* PRICE */
-  if (typeof obj.priceBYN === "number") {
+  if (typeof obj.priceBYN === "number" || typeof obj.priceUSD === "number") {
+    const initialPriceValue =
+      typeof obj.priceBYN === "number"
+        ? `${formatPrice(obj.priceBYN)} BYN`
+        : typeof obj.priceUSD === "number"
+          ? `${formatPrice(obj.priceUSD)} USD`
+          : "";
+
     priceWrap.innerHTML = `
       <button
         type="button"
@@ -432,10 +460,7 @@ function renderObjectDetails(obj) {
       >
         <span class="object-price-label" data-price-label>Цена</span>
         <span class="object-price-value" data-price-value>
-          ${obj.priceBYN.toLocaleString("ru-RU")} BYN
-        </span>
-        <span class="object-price-hint" data-price-hint>
-          Нажмите, чтобы посмотреть в USD
+          ${initialPriceValue}
         </span>
       </button>
     `;
