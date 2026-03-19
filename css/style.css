@@ -9844,13 +9844,14 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 #objectsList .object-price {
-  background: #155945;
-  color: #ffffff;
+  background: transparent;
+  color: #155945;
   font-weight: 800;
-  padding: 8px 14px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 0;
   font-size: 14px;
-  box-shadow: 0 6px 18px rgba(21, 89, 69, 0.35);
+  box-shadow: none;
+  letter-spacing: 0.01em;
 }
 
 .object-contract {
