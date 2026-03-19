@@ -91,6 +91,21 @@ function formatPrice(v) {
   return v ? Number(v).toLocaleString("ru-RU") : "";
 }
 
+function getObjectPriceByn(obj) {
+  if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
+    const livePrice = window.RealterPrice.getLiveBynPriceSync(obj);
+    if (typeof livePrice === "number" && livePrice > 0) {
+      return livePrice;
+    }
+  }
+
+  if (typeof obj?.priceBYN === "number" && obj.priceBYN > 0) {
+    return obj.priceBYN;
+  }
+
+  return 0;
+}
+
 function parsePrice(v) {
   return v ? Number(String(v).replace(/\s/g, "")) : 0;
 }
@@ -164,6 +179,13 @@ const debouncedApply = debounce(applyFiltersAndSort);
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/data/objects.json")
     .then((r) => r.json())
+    .then(async (data) => {
+      if (typeof window.RealterPrice?.enrichObjectsWithLivePrices === "function") {
+        return window.RealterPrice.enrichObjectsWithLivePrices(data);
+      }
+
+      return data;
+    })
     .then((data) => {
       allObjects = data;
       updateRoomsState();
@@ -280,8 +302,8 @@ function applyFiltersAndSort() {
   const from = parsePrice(priceFromInput.value);
   const to = parsePrice(priceToInput.value);
 
-  if (from) result = result.filter((o) => o.priceBYN >= from);
-  if (to) result = result.filter((o) => o.priceBYN <= to);
+  if (from) result = result.filter((o) => getObjectPriceByn(o) >= from);
+  if (to) result = result.filter((o) => getObjectPriceByn(o) <= to);
 
   /* =========================================
      LOCATION FILTER
@@ -303,11 +325,11 @@ function applyFiltersAndSort() {
   ========================================= */
   switch (sortSelect.value) {
     case "cheap":
-      result.sort((a, b) => a.priceBYN - b.priceBYN);
+      result.sort((a, b) => getObjectPriceByn(a) - getObjectPriceByn(b));
       break;
 
     case "expensive":
-      result.sort((a, b) => b.priceBYN - a.priceBYN);
+      result.sort((a, b) => getObjectPriceByn(b) - getObjectPriceByn(a));
       break;
 
     case "new":
@@ -322,7 +344,7 @@ function applyFiltersAndSort() {
         if (!aArea) return 1;
         if (!bArea) return -1;
 
-        return a.priceBYN / aArea - b.priceBYN / bArea;
+        return getObjectPriceByn(a) / aArea - getObjectPriceByn(b) / bArea;
       });
       break;
 
@@ -392,7 +414,8 @@ function renderObjects(list) {
     const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
 
     const area = getObjectArea(obj);
-    const pricePerMeter = area ? Math.round(obj.priceBYN / area) : null;
+    const objectPrice = getObjectPriceByn(obj);
+    const pricePerMeter = area && objectPrice > 0 ? Math.round(objectPrice / area) : null;
     const contractNumber = obj.contractNumber || null;
     const badgesHTML = renderBadges(obj);
 
@@ -437,7 +460,7 @@ function renderObjects(list) {
 
           <div class="object-meta">
             <span class="object-price">
-              ${formatPrice(obj.priceBYN)} BYN
+              ${formatPrice(objectPrice)} BYN
             </span>
 
             ${

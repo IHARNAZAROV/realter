@@ -3,8 +3,6 @@
 
   const DATA_URL = "/data/objects.json";
   const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
-  const NBRB_USD_RATE_URL = "https://api.nbrb.by/exrates/rates/431";
-  let cachedUsdRatePromise = null;
 
   /* =====================================================
      HELPERS
@@ -19,40 +17,20 @@
   const formatPrice = (v) =>
     typeof v === "number" ? v.toLocaleString("ru-RU") : "";
 
-  async function fetchUsdRate() {
-    if (!cachedUsdRatePromise) {
-      cachedUsdRatePromise = fetch(NBRB_USD_RATE_URL, { cache: "no-store" })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Не удалось получить курс USD из API НБРБ");
-          }
-
-          return res.json();
-        })
-        .then((data) => {
-          const rate = Number(data?.Cur_OfficialRate);
-          const scale = Number(data?.Cur_Scale) || 1;
-          const actualDate = data?.Date ? new Date(data.Date) : null;
-
-          if (!Number.isFinite(rate) || rate <= 0) {
-            throw new Error("API НБРБ вернул некорректный курс USD");
-          }
-
-          return {
-            ratePerUnit: rate / scale,
-            dateLabel:
-              actualDate && !Number.isNaN(actualDate.getTime())
-                ? actualDate.toLocaleDateString("ru-RU")
-                : "",
-          };
-        })
-        .catch((error) => {
-          cachedUsdRatePromise = null;
-          throw error;
-        });
+  function getDisplayBynPrice(obj) {
+    if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
+      return window.RealterPrice.getLiveBynPriceSync(obj);
     }
 
-    return cachedUsdRatePromise;
+    return typeof obj?.priceBYN === "number" ? obj.priceBYN : null;
+  }
+
+  async function fetchUsdRate() {
+    if (typeof window.RealterPrice?.fetchUsdRate === "function") {
+      return window.RealterPrice.fetchUsdRate();
+    }
+
+    throw new Error("Модуль live-price.js не подключён");
   }
 
   function createPriceState(obj) {
@@ -60,7 +38,7 @@
       isUsd: false,
       isAnimating: false,
       isRateLoading: false,
-      bynFallback: typeof obj.priceBYN === "number" ? obj.priceBYN : null,
+      bynFallback: getDisplayBynPrice(obj),
       usd: typeof obj.priceUSD === "number" ? obj.priceUSD : null,
       usdRateData: null,
     };
@@ -568,8 +546,9 @@ function renderObjectDetails(obj) {
     if (obj.areaTotal) rows.push(["Площадь", `${obj.areaTotal} м²`]);
     if (obj.yearBuilt) rows.push(["Год", obj.yearBuilt]);
 
-    if (typeof obj.priceBYN === "number")
-      rows.push(["Цена", `${formatPrice(obj.priceBYN)} BYN`]);
+    const displayPrice = getDisplayBynPrice(obj);
+    if (typeof displayPrice === "number")
+      rows.push(["Цена", `${formatPrice(displayPrice)} BYN`]);
 
     if (!rows.length) return;
 
@@ -608,7 +587,7 @@ function renderObjectDetails(obj) {
               [
                 obj.type,
                 obj.areaTotal && `${obj.areaTotal} м²`,
-                obj.priceBYN && `${formatPrice(obj.priceBYN)} BYN`,
+                getDisplayBynPrice(obj) && `${formatPrice(getDisplayBynPrice(obj))} BYN`,
               ],
               " • ",
             );
@@ -678,8 +657,9 @@ function renderSidebarFooter(obj) {
 ===================================================== */
 
   function getObjectPrice(obj) {
-    if (typeof obj.priceBYN === "number" && obj.priceBYN > 0)
-      return obj.priceBYN;
+    const displayPrice = getDisplayBynPrice(obj);
+    if (typeof displayPrice === "number" && displayPrice > 0)
+      return displayPrice;
 
     if (typeof obj.priceUSD === "number" && obj.priceUSD > 0) {
       const USD_TO_BYN = 3.3;
@@ -1235,7 +1215,10 @@ async function init() {
   try {
     let slug = getSlugFromUrl();
 
-    const objects = await fetchObjects();
+    let objects = await fetchObjects();
+    if (typeof window.RealterPrice?.enrichObjectsWithLivePrices === "function") {
+      objects = await window.RealterPrice.enrichObjectsWithLivePrices(objects);
+    }
     if (!Array.isArray(objects) || !objects.length) {
       renderNotFound(slug);
       return;

@@ -8777,7 +8777,7 @@ recent-posts-entry-date .sx-post-info .post-title {
   border-radius: 16px;
   background: transparent;
   color: inherit;
-  padding: 18px 24px;
+  padding: 12px 24px;
   cursor: pointer;
   transition:
     background-color 0.25s ease,
@@ -8798,7 +8798,7 @@ recent-posts-entry-date .sx-post-info .post-title {
 .object-price-label {
   font-size: 13px;
   opacity: 0.85;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .object-price-value {
