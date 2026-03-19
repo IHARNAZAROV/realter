@@ -3,6 +3,8 @@
 
   const DATA_URL = "/data/objects.json";
   const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
+  const NBRB_USD_RATE_URL = "https://api.nbrb.by/exrates/rates/431";
+  let cachedUsdRatePromise = null;
 
   /* =====================================================
      HELPERS
@@ -16,6 +18,159 @@
 
   const formatPrice = (v) =>
     typeof v === "number" ? v.toLocaleString("ru-RU") : "";
+
+  function getTodayDateString() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  async function fetchUsdRate() {
+    if (!cachedUsdRatePromise) {
+      const url = new URL(NBRB_USD_RATE_URL);
+      url.searchParams.set("parammode", "2");
+      url.searchParams.set("ondate", getTodayDateString());
+
+      cachedUsdRatePromise = fetch(url.toString(), { cache: "no-store" })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Не удалось получить курс USD из API НБРБ");
+          }
+
+          return res.json();
+        })
+        .then((data) => {
+          const rate = Number(data?.Cur_OfficialRate);
+          const scale = Number(data?.Cur_Scale) || 1;
+          const actualDate = data?.Date ? new Date(data.Date) : null;
+
+          if (!Number.isFinite(rate) || rate <= 0) {
+            throw new Error("API НБРБ вернул некорректный курс USD");
+          }
+
+          return {
+            ratePerUnit: rate / scale,
+            dateLabel:
+              actualDate && !Number.isNaN(actualDate.getTime())
+                ? actualDate.toLocaleDateString("ru-RU")
+                : getTodayDateString(),
+          };
+        })
+        .catch((error) => {
+          cachedUsdRatePromise = null;
+          throw error;
+        });
+    }
+
+    return cachedUsdRatePromise;
+  }
+
+  function createPriceState(obj) {
+    return {
+      isUsd: false,
+      isAnimating: false,
+      byn: typeof obj.priceBYN === "number" ? obj.priceBYN : null,
+      usdFromJson: typeof obj.priceUSD === "number" ? obj.priceUSD : null,
+      usdRateData: null,
+    };
+  }
+
+  function getFormattedPriceData(state) {
+    if (state.isUsd) {
+      const usdValue =
+        state.usdRateData && typeof state.byn === "number"
+          ? Math.round(state.byn / state.usdRateData.ratePerUnit)
+          : state.usdFromJson;
+
+      return {
+        label: "Цена в долларах",
+        value:
+          typeof usdValue === "number"
+            ? `${formatPrice(usdValue)} USD`
+            : "Цена в USD недоступна",
+        hint: state.usdRateData
+          ? `Курс НБРБ на ${state.usdRateData.dateLabel}`
+          : "Цена из карточки объекта",
+      };
+    }
+
+    return {
+      label: "Цена",
+      value:
+        typeof state.byn === "number" ? `${formatPrice(state.byn)} BYN` : "",
+      hint: "Нажмите, чтобы посмотреть в USD",
+    };
+  }
+
+  function updatePriceButtonContent(button, state) {
+    const label = button.querySelector("[data-price-label]");
+    const value = button.querySelector("[data-price-value]");
+    const hint = button.querySelector("[data-price-hint]");
+    const content = getFormattedPriceData(state);
+
+    if (label) label.textContent = content.label;
+    if (value) value.textContent = content.value;
+    if (hint) hint.textContent = content.hint;
+
+    button.setAttribute(
+      "aria-label",
+      state.isUsd
+        ? "Показать цену в белорусских рублях"
+        : "Показать цену в долларах США",
+    );
+    button.setAttribute("aria-pressed", state.isUsd ? "true" : "false");
+    button.dataset.currency = state.isUsd ? "usd" : "byn";
+  }
+
+  function animatePriceSwap(button, state) {
+    if (state.isAnimating) return;
+
+    state.isAnimating = true;
+    button.classList.add("is-animating");
+
+    window.setTimeout(() => {
+      updatePriceButtonContent(button, state);
+      button.classList.add("is-animating-in");
+    }, 180);
+
+    window.setTimeout(() => {
+      button.classList.remove("is-animating", "is-animating-in");
+      state.isAnimating = false;
+    }, 420);
+  }
+
+  function setupPriceToggle(button, obj) {
+    const state = createPriceState(obj);
+    updatePriceButtonContent(button, state);
+
+    button.addEventListener("click", async () => {
+      if (state.isAnimating) return;
+
+      const nextIsUsd = !state.isUsd;
+
+      if (nextIsUsd && !state.usdRateData) {
+        button.classList.add("is-loading");
+
+        try {
+          state.usdRateData = await fetchUsdRate();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          button.classList.remove("is-loading");
+        }
+      }
+
+      if (nextIsUsd && !state.usdRateData && typeof state.usdFromJson !== "number") {
+        return;
+      }
+
+      state.isUsd = nextIsUsd;
+      animatePriceSwap(button, state);
+    });
+  }
 
   function getSlugFromUrl() {
     const url = new URL(window.location.href);
@@ -269,11 +424,26 @@ function renderObjectDetails(obj) {
   /* PRICE */
   if (typeof obj.priceBYN === "number") {
     priceWrap.innerHTML = `
-      <div class="object-price-label">Цена</div>
-      <div class="object-price-value">
-        ${obj.priceBYN.toLocaleString("ru-RU")} BYN
-      </div>
+      <button
+        type="button"
+        class="object-price-toggle"
+        data-price-toggle
+        aria-pressed="false"
+      >
+        <span class="object-price-label" data-price-label>Цена</span>
+        <span class="object-price-value" data-price-value>
+          ${obj.priceBYN.toLocaleString("ru-RU")} BYN
+        </span>
+        <span class="object-price-hint" data-price-hint>
+          Нажмите, чтобы посмотреть в USD
+        </span>
+      </button>
     `;
+
+    const priceButton = priceWrap.querySelector("[data-price-toggle]");
+    if (priceButton) {
+      setupPriceToggle(priceButton, obj);
+    }
   }
 
   const has = (v) =>

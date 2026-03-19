@@ -8761,10 +8761,38 @@ recent-posts-entry-date .sx-post-info .post-title {
   background: #155945;
   color: #ffffff;
   border-radius: 16px;
-  padding: 24px;
   margin-bottom: 32px;
   text-align: center;
   box-shadow: 0 16px 36px rgba(21, 89, 69, 0.3);
+  overflow: hidden;
+}
+
+.object-price-toggle {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: inherit;
+  padding: 24px;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.object-price-toggle:hover,
+.object-price-toggle:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.object-price-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.65);
+  outline-offset: -4px;
 }
 
 .object-price-label {
@@ -8777,6 +8805,37 @@ recent-posts-entry-date .sx-post-info .post-title {
   font-size: 24px;
   font-weight: 800;
   letter-spacing: 0.02em;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.object-price-hint {
+  font-size: 12px;
+  line-height: 1.4;
+  opacity: 0.8;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease;
+}
+
+.object-price-toggle.is-animating .object-price-label,
+.object-price-toggle.is-animating .object-price-value,
+.object-price-toggle.is-animating .object-price-hint {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+.object-price-toggle.is-animating-in .object-price-label,
+.object-price-toggle.is-animating-in .object-price-value,
+.object-price-toggle.is-animating-in .object-price-hint {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.object-price-toggle.is-loading {
+  opacity: 0.9;
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {
