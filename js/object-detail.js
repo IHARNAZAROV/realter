@@ -19,22 +19,9 @@
   const formatPrice = (v) =>
     typeof v === "number" ? v.toLocaleString("ru-RU") : "";
 
-  function getTodayDateString() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  }
-
   async function fetchUsdRate() {
     if (!cachedUsdRatePromise) {
-      const url = new URL(NBRB_USD_RATE_URL);
-      url.searchParams.set("parammode", "2");
-      url.searchParams.set("ondate", getTodayDateString());
-
-      cachedUsdRatePromise = fetch(url.toString(), { cache: "no-store" })
+      cachedUsdRatePromise = fetch(NBRB_USD_RATE_URL, { cache: "no-store" })
         .then((res) => {
           if (!res.ok) {
             throw new Error("Не удалось получить курс USD из API НБРБ");
@@ -56,7 +43,7 @@
             dateLabel:
               actualDate && !Number.isNaN(actualDate.getTime())
                 ? actualDate.toLocaleDateString("ru-RU")
-                : getTodayDateString(),
+                : "",
           };
         })
         .catch((error) => {
@@ -72,6 +59,7 @@
     return {
       isUsd: false,
       isAnimating: false,
+      isRateLoading: false,
       bynFallback: typeof obj.priceBYN === "number" ? obj.priceBYN : null,
       usd: typeof obj.priceUSD === "number" ? obj.priceUSD : null,
       usdRateData: null,
@@ -94,6 +82,13 @@
           typeof state.usd === "number"
             ? `${formatPrice(state.usd)} USD`
             : "Цена в USD недоступна",
+      };
+    }
+
+    if (state.isRateLoading && typeof state.usd === "number") {
+      return {
+        label: "Цена",
+        value: "Загрузка...",
       };
     }
 
@@ -145,6 +140,8 @@
     updatePriceButtonContent(button, state);
 
     if (typeof state.usd === "number") {
+      state.isRateLoading = true;
+      updatePriceButtonContent(button, state);
       button.classList.add("is-loading");
 
       fetchUsdRate()
@@ -159,6 +156,10 @@
           console.error(error);
         })
         .finally(() => {
+          state.isRateLoading = false;
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
           button.classList.remove("is-loading");
         });
     }
@@ -169,6 +170,10 @@
       const nextIsUsd = !state.isUsd;
 
       if (!state.usdRateData && typeof state.usd === "number") {
+        state.isRateLoading = true;
+        if (!state.isUsd) {
+          updatePriceButtonContent(button, state);
+        }
         button.classList.add("is-loading");
 
         try {
@@ -176,6 +181,10 @@
         } catch (error) {
           console.error(error);
         } finally {
+          state.isRateLoading = false;
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
           button.classList.remove("is-loading");
         }
       }
@@ -445,11 +454,11 @@ function renderObjectDetails(obj) {
   /* PRICE */
   if (typeof obj.priceBYN === "number" || typeof obj.priceUSD === "number") {
     const initialPriceValue =
-      typeof obj.priceBYN === "number"
+      typeof obj.priceUSD === "number"
+        ? "Загрузка..."
+        : typeof obj.priceBYN === "number"
         ? `${formatPrice(obj.priceBYN)} BYN`
-        : typeof obj.priceUSD === "number"
-          ? `${formatPrice(obj.priceUSD)} USD`
-          : "";
+        : "";
 
     priceWrap.innerHTML = `
       <button
