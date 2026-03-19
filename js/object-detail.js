@@ -71,9 +71,12 @@
     }
 
     const bynValue = getBynPrice(state);
+    const bynLabel = state.usdRateData?.dateLabel
+      ? `Цена (по курсу НБРБ на ${state.usdRateData.dateLabel})`
+      : "Цена";
 
     return {
-      label: "Цена",
+      label: bynLabel,
       value: typeof bynValue === "number" ? `${formatPrice(bynValue)} BYN` : "",
     };
   }
