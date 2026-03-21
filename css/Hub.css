@@ -1,0 +1,466 @@
+     /* ===============================
+   HUB DIAGRAM (UPDATED PREMIUM UI)
+================================= */
+
+.hub-diagram-wrapper {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 180px 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 28px 140px;
+  align-items: center;
+  padding: 20px 0 40px;
+}
+
+.hub-cell-left  { justify-self: end; }
+.hub-cell-center { justify-self: center; }
+.hub-cell-right { justify-self: start; }
+
+/* ===============================
+   CARD BASE (NEW)
+================================= */
+
+.hub-card {
+  position: relative;
+  width: 220px;
+  height: 260px;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(21,89,69,0.12);
+  box-shadow: 0 6px 24px rgba(21,89,69,0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: block;
+}
+
+.hub-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 14px 50px rgba(21,89,69,0.25);
+}
+
+/* ===============================
+   BACKGROUND IMAGE
+================================= */
+
+.hub-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+
+.hub-card:hover .hub-card-bg {
+  transform: scale(1.08);
+}
+
+/* ===============================
+   OVERLAY
+================================= */
+
+.hub-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(21,89,69,0.95) 10%,
+    rgba(21,89,69,0.65) 40%,
+    rgba(21,89,69,0.2) 80%
+  );
+  transition: all 0.4s ease;
+}
+
+.hub-card:hover .hub-card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(21,89,69,0.98) 20%,
+    rgba(21,89,69,0.85) 60%,
+    rgba(21,89,69,0.4) 100%
+  );
+}
+
+/* ===============================
+   CONTENT
+================================= */
+
+.hub-card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* было flex-end */
+  align-items: center;     /* добавили */
+  text-align: center;      /* добавили */
+}
+
+/* TITLE */
+
+.hub-card-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+   transform: translate(-50%, -50%) scale(1);
+  
+  width: 85%;
+  
+  font-size: 18px;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  
+  text-align: center;
+  
+  transition: all 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+}
+
+/* TEXT + BUTTON (hidden initially) */
+
+.hub-card-text,
+.hub-card-btn {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+   text-align: center;
+}
+
+/* reveal */
+
+.hub-card:hover .hub-card-text,
+.hub-card:hover .hub-card-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hub-card:hover .hub-card-title {
+  top: 20px;
+  transform: translateX(-50%) scale(0.78);
+}
+
+.hub-card-title {
+  will-change: transform;
+}
+.hub-card-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
+}
+
+/* скрываем всё кроме заголовка */
+.hub-card-text,
+.hub-card-btn
+{
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.hub-card:hover .hub-card-text,
+.hub-card:hover .hub-card-btn,
+.hub-card:hover {
+
+  transform: translateY(0);
+}
+
+.hub-card-text {
+  margin-top: 50px;
+}
+/* TEXT */
+
+
+.hub-card-text {
+  font-size: 16px;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.hub-card:hover .hub-card-title {color: #d7b39a}
+/* BUTTON */
+
+.hub-card-btn {
+  position: relative;
+  overflow: hidden;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 14px;
+  padding: 8px 18px !important;
+
+  font-size: 12px !important;
+  font-weight: 600;
+
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #F5D38C, #CEA45E);
+  color: #155945;
+
+  backdrop-filter: blur(6px);
+
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: all 0.4s ease;
+
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.hub-card:hover .hub-card-btn {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.hub-card-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.5),
+    transparent
+  );
+
+  transform: skewX(-25deg);
+}
+
+/* запуск блика при hover карточки */
+.hub-card:hover .hub-card-btn::before {
+  animation: shineMove 0.9s ease;
+}
+
+@keyframes shineMove {
+  0% { left: -75%; }
+  100% { left: 130%; }
+}
+
+.hub-card-btn i {
+  transition: transform 0.3s ease;
+}
+
+.hub-card:hover .hub-card-btn i {
+  transform: translateX(6px);
+}
+
+.hub-card-btn {
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.hub-card:hover .hub-card-btn {
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.25),
+    0 0 20px rgba(245,211,140,0.45);
+}
+@keyframes pulseBtn {
+  0%   { box-shadow: 0 0 0 0 rgba(245,211,140,0.5); }
+  70%  { box-shadow: 0 0 0 12px rgba(245,211,140,0); }
+  100% { box-shadow: 0 0 0 0 rgba(245,211,140,0); }
+}
+.hub-card-btn i {
+  font-size: 10px;
+  transition: transform 0.25s;
+}
+
+.hub-card:hover .hub-card-btn i {
+  transform: translateX(3px);
+}
+
+.hub-card-btn i {
+  transition: transform 0.3s ease;
+}
+
+.hub-card:hover .hub-card-btn i {
+  transform: translateX(6px);
+}
+
+/* ===============================
+   CENTER LOGO (UNCHANGED)
+================================= */
+
+.hub-logo-box {
+  width: 160px;
+  height: 160px;
+  background: #155945;
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 8px rgba(21,89,69,0.10), 0 8px 40px rgba(21,89,69,0.22);
+  gap: 6px;
+  padding: 16px;
+}
+
+.hub-logo-svg {
+  width: 68px;
+  height: 68px;
+}
+
+.hub-logo-label {
+  color: #F5D38C;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.hub-logo-sub {
+  color: rgba(245,211,140,0.65);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+/* ===============================
+   SVG LINES
+================================= */
+
+.hub-lines-svg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===============================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 900px) {
+  .hub-diagram-wrapper {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .hub-lines-svg { display: none; }
+
+  .hub-card {
+    width: 200px;
+    height: 240px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hub-diagram-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .hub-card {
+    width: 100%;
+    max-width: 320px;
+    height: 260px;
+  }
+}
+
+.hub-card:hover .hub-card-icon {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.9);
+}
+
+.hub-card-title {
+  width: 85%;
+  max-width: 180px;
+  margin: 0 auto;
+
+
+  line-height: 1.35;
+}
+
+@media (max-width: 600px) {
+  .hub-card-title {
+    max-width: 220px;
+    font-size: 17px;
+    line-height: 1.3;
+  }
+}
+
+.hub-card-title {
+  transition: 
+    transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+    top 0.45s ease;
+}
+
+.hub-card:hover .hub-card-title {
+  top: 20px;
+  transform: translateX(-50%) scale(0.78);
+}
+
+@keyframes titleBounce {
+  0%   { transform: translateX(-50%) scale(1); }
+  60%  { transform: translateX(-50%) scale(0.75); }
+  80%  { transform: translateX(-50%) scale(0.82); }
+  100% { transform: translateX(-50%) scale(0.78); }
+}
+
+.hub-card:hover .hub-card-title {
+  top: 20px;
+  animation: titleBounce 0.5s ease forwards;
+}
+
+/* ===============================
+   MOBILE VERSION FIX
+================================= */
+
+@media (max-width: 768px) {
+
+  /* сетка → 1 колонка */
+  .hub-diagram-wrapper {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 10px 0 30px;
+  }
+
+  /* скрываем центральный блок */
+  .hub-logo-box {
+    display: none !important;
+  }
+
+  /* убираем линии */
+  .hub-lines-svg {
+    display: none;
+  }
+
+  /* выравниваем карточки */
+  .hub-card {
+    width: 100%;
+    max-width: 340px;
+    height: 240px;
+    margin: 0 auto; /* центрируем */
+  }
+
+  /* убираем разное позиционирование */
+  .hub-cell-left,
+  .hub-cell-right,
+  .hub-cell-center {
+    justify-self: center;
+  }
+
+  /* заголовок чуть компактнее */
+  .hub-card-title {
+    max-width: 240px;
+    font-size: 22px;
+  }
+
+  /* текст аккуратнее */
+  .hub-card-text {
+    font-size: 17px;
+  }
+
+  /* кнопка чуть больше */
+  .hub-card-btn {
+    font-size: 12px !important;
+    padding: 8px 18px !important;
+  }
+}

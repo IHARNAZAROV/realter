@@ -992,3 +992,173 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 })();
+
+
+
+        (function() {
+          function drawHubLines() {
+            var svg = document.getElementById('hubLinesSvg');
+            var wrapper = document.getElementById('hubDiagram');
+            var center = document.getElementById('hubCenter');
+            if (!svg || !wrapper || !center) return;
+
+            var wRect = wrapper.getBoundingClientRect();
+            var cRect = center.getBoundingClientRect();
+            var cx = cRect.left - wRect.left + cRect.width / 2;
+            var cy = cRect.top - wRect.top + cRect.height / 2;
+
+            svg.innerHTML = '';
+
+            var NS    = 'http://www.w3.org/2000/svg';
+            var hw    = cRect.width  / 2;
+            var hh    = cRect.height / 2;
+            var SPEED = 150;   // px per second (same for every ray)
+            var RLEN  = 40;    // ray-segment length in px (fixed)
+
+            var exits = {
+              left:   { x: cx - hw, y: cy },
+              right:  { x: cx + hw, y: cy },
+              top:    { x: cx,      y: cy - hh },
+              bottom: { x: cx,      y: cy + hh }
+            };
+
+            // Phase (0–1): where in the cycle each ray starts.
+            // Spreading them avoids two rays sharing the trunk at the same moment.
+            var PHASES = {
+              'hcard-0': 0,     'hcard-1': 0.34,  'hcard-2': 0.67,
+              'hcard-3': 0.17,  'hcard-4': 0.51,  'hcard-5': 0.84,
+              'hcard-top': 0.10, 'hcard-bottom': 0.60
+            };
+
+            function f(n) { return (+n).toFixed(2); }
+
+            function mkPath(d, sw, op) {
+              var el = document.createElementNS(NS, 'path');
+              el.setAttribute('d', d);
+              el.setAttribute('fill', 'none');
+              el.setAttribute('stroke', '#155945');
+              el.setAttribute('stroke-width', sw || '1.5');
+              el.setAttribute('stroke-linejoin', 'miter');
+              el.setAttribute('stroke-linecap', 'round');
+              if (op !== undefined) el.setAttribute('stroke-opacity', op);
+              return el;
+            }
+
+            function mkDot(x, y, r, op) {
+              var el = document.createElementNS(NS, 'circle');
+              el.setAttribute('cx', f(x)); el.setAttribute('cy', f(y));
+              el.setAttribute('r', r || 3.5);
+              el.setAttribute('fill', '#155945');
+              el.setAttribute('fill-opacity', op !== undefined ? op : 0.5);
+              return el;
+            }
+
+            // Attach a phase-shifted loop animation.
+            // The ray starts mid-cycle (determined by `phase`) and loops forever.
+            // Using from/to instead of begin-delay avoids a frozen ray at t=0.
+            function attachAnim(pathEl, phase) {
+              var len = pathEl.getTotalLength();
+              if (len < 1) return;
+              var travel   = len + RLEN;              // total dashoffset travel per cycle
+              var cycleDur = travel / SPEED;
+              var fromOff  = -(phase * travel);       // start mid-cycle
+              var toOff    = -((1 + phase) * travel); // end one full cycle later
+              var gap      = Math.max(0, len - RLEN);
+
+              pathEl.setAttribute('stroke-dasharray',  f(RLEN) + ' ' + f(gap));
+              pathEl.setAttribute('stroke-dashoffset', f(fromOff)); // initial static position
+
+              var anim = document.createElementNS(NS, 'animate');
+              anim.setAttribute('attributeName', 'stroke-dashoffset');
+              anim.setAttribute('from',          f(fromOff));
+              anim.setAttribute('to',            f(toOff));
+              anim.setAttribute('dur',           f(cycleDur) + 's');
+              anim.setAttribute('begin',         '0s');
+              anim.setAttribute('repeatCount',   'indefinite');
+              anim.setAttribute('calcMode',      'linear');
+              pathEl.appendChild(anim);
+            }
+
+            /* ---- draw layers (tracks → rays → dots) ---- */
+            var gTracks = document.createElementNS(NS, 'g');
+            var gRays   = document.createElementNS(NS, 'g');
+            var gDots   = document.createElementNS(NS, 'g');
+            svg.appendChild(gTracks);
+            svg.appendChild(gRays);
+            svg.appendChild(gDots);
+
+            /* ---- side (left / right): each card gets its own full elbow path ---- */
+            function processSide(side, ids) {
+              var exit = exits[side];
+
+              var cardsData = ids.map(function(id) {
+                var card = document.getElementById(id);
+                if (!card) return null;
+                var r  = card.getBoundingClientRect();
+                var tx = side === 'left' ? r.right - wRect.left : r.left - wRect.left;
+                var ty = r.top - wRect.top + r.height / 2;
+                return { id: id, tx: tx, ty: ty };
+              }).filter(Boolean);
+              if (!cardsData.length) return;
+
+              // Elbow bend x (midpoint between logo edge and card edge, same for all 3)
+              var midX = (exit.x + cardsData[0].tx) / 2;
+
+              cardsData.forEach(function(cd) {
+                // Full path: logo exit → midX (trunk) → card (branch)
+                var d = Math.abs(cd.ty - cy) < 1
+                  ? 'M ' + f(exit.x) + ',' + f(cy) + ' H ' + f(cd.tx)
+                  : 'M ' + f(exit.x) + ',' + f(cy) +
+                    ' H ' + f(midX) + ' V ' + f(cd.ty) + ' H ' + f(cd.tx);
+
+                var track = mkPath(d, '1.5', '0.14');
+                var ray   = mkPath(d, '2.8');
+                gTracks.appendChild(track);
+                gRays.appendChild(ray);
+                attachAnim(ray, PHASES[cd.id] || 0);
+
+                gDots.appendChild(mkDot(cd.tx, cd.ty, 3.5, 0.50));
+              });
+
+              // Junction dot at elbow bend, exit dot at logo
+              gDots.appendChild(mkDot(midX,   cy, 4.5, 0.60));
+              gDots.appendChild(mkDot(exit.x, cy, 4.0, 0.55));
+            }
+
+            /* ---- top / bottom: straight vertical ray ---- */
+            function processStraight(side, id) {
+              var exit = exits[side];
+              var card = document.getElementById(id);
+              if (!card) return;
+              var r  = card.getBoundingClientRect();
+              var tx = r.left - wRect.left + r.width / 2;
+              var ty = side === 'top' ? r.bottom - wRect.top : r.top - wRect.top;
+              var d  = 'M ' + f(exit.x) + ',' + f(exit.y) + ' V ' + f(ty);
+
+              gTracks.appendChild(mkPath(d, '1.5', '0.14'));
+              var ray = mkPath(d, '2.8');
+              gRays.appendChild(ray);
+              attachAnim(ray, PHASES[id] || 0);
+
+              gDots.appendChild(mkDot(exit.x, exit.y, 4.0, 0.55));
+              gDots.appendChild(mkDot(tx, ty, 3.5, 0.50));
+            }
+
+            /* ---- draw everything ---- */
+            processSide('left',  ['hcard-0', 'hcard-1', 'hcard-2']);
+            processSide('right', ['hcard-3', 'hcard-4', 'hcard-5']);
+            processStraight('top',    'hcard-top');
+            processStraight('bottom', 'hcard-bottom');
+          }
+
+          function init() {
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', function() { setTimeout(drawHubLines, 200); });
+            } else {
+              setTimeout(drawHubLines, 200);
+            }
+            window.addEventListener('resize', function() { setTimeout(drawHubLines, 100); });
+          }
+
+          init();
+        })();
