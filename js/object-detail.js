@@ -420,12 +420,12 @@ if (dealType) {
 
       // показываем "Продан" только 7 дней
       if (diffDays <= 7) {
-        dealType.textContent = "Продан";
+        dealType.textContent = "Продано";
       } else {
         dealType.textContent = "Продажа";
       }
     } else {
-      dealType.textContent = "Продан";
+      dealType.textContent = "Продано";
     }
 
   } else {
