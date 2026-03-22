@@ -1505,87 +1505,111 @@
                     </li>
                   </ul>
 
-                  <form
-                    class="newsletter-form"
-                    action="https://formspree.io/f/xlglwkob"
-                    method="POST"
-                    id="newsletterForm"
-                  >
-                    <div class="newsletter-field">
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Введите ваш email"
-                        required
-                      />
-                      <button type="submit" aria-label="Отправить">
-                        <i class="fa fa-solid fa-paper-plane"></i>
-                      </button>
-                    </div>
+<form
+  class="newsletter-form"
+  action="https://formspree.io/f/xlglwkob"
+  method="POST"
+  id="newsletterForm"
+>
+  <div class="newsletter-field">
+    <input
+      type="email"
+      name="email"
+      placeholder="Введите ваш email"
+      required
+    />
+    <button type="submit" aria-label="Отправить">
+      <i class="fa fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
 
-                    <div class="newsletter-success">
-                      <i class="fa-solid fa-circle-check success-icon"></i>
-                      <span class="success-text"
-                        >Спасибо! Заявка отправлена</span
-                      >
+  <!-- ЧЕКБОКС -->
+  <label class="newsletter-checkbox" id="checkboxWrapper">
+    <input
+      type="checkbox"
+      name="privacy"
+      id="privacyCheckbox"
+      required
+    />
+    <span>
+      Я принимаю
+      <a href="/privacy.html" target="_blank">
+        политику конфиденциальности
+      </a>
+    </span>
+  </label>
 
-                      <div class="newsletter-progress">
-                        <span class="progress-bar"></span>
-                        <i class="fa-solid fa-paper-plane progress-plane"></i>
-                      </div>
+  <div class="newsletter-success">
+    <i class="fa-solid fa-circle-check success-icon"></i>
+    <span class="success-text">
+      Спасибо! Заявка отправлена
+    </span>
 
-                      <div class="newsletter-timer">
-                        Возврат через
-                        <strong id="newsletterTimer">5</strong> сек
-                      </div>
-                    </div>
+    <div class="newsletter-progress">
+      <span class="progress-bar"></span>
+    </div>
 
-                    <p class="newsletter-hint">
-                      Только важные новости. Без спама.
-                    </p>
-                  </form>
+    <div class="newsletter-timer">
+      Возврат через
+      <strong id="newsletterTimer">5</strong> сек
+    </div>
+  </div>
+
+  <p class="newsletter-hint">
+    Только важные новости. Без спама.
+  </p>
+</form>
 
                   <script>
-                    document
-                      .getElementById("newsletterForm")
-                      .addEventListener("submit", async function (e) {
-                        e.preventDefault();
+      document
+    .getElementById("newsletterForm")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
 
-                        const form = this;
-                        const data = new FormData(form);
-                        const timerEl =
-                          document.getElementById("newsletterTimer");
+      const form = this;
+      const data = new FormData(form);
+      const timerEl = document.getElementById("newsletterTimer");
+      const checkbox = document.getElementById("privacyCheckbox");
+      const checkboxWrapper = document.getElementById("checkboxWrapper");
 
-                        try {
-                          const response = await fetch(form.action, {
-                            method: form.method,
-                            body: data,
-                            headers: { Accept: "application/json" },
-                          });
+      // Проверка чекбокса
+      if (!checkbox.checked) {
+        checkboxWrapper.classList.add("error");
+        return;
+      } else {
+        checkboxWrapper.classList.remove("error");
+      }
 
-                          if (response.ok) {
-                            form.classList.add("success");
-                            form.reset();
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: { Accept: "application/json" },
+        });
 
-                            let timeLeft = 5;
-                            timerEl.textContent = timeLeft;
+        if (response.ok) {
+          form.classList.add("success");
+          form.reset();
 
-                            const interval = setInterval(() => {
-                              timeLeft--;
-                              timerEl.textContent = timeLeft;
+          let timeLeft = 5;
+          timerEl.textContent = timeLeft;
 
-                              if (timeLeft <= 0) {
-                                clearInterval(interval);
-                                form.classList.remove("success");
-                              }
-                            }, 1000);
-                          } else {
-                            alert("Ошибка отправки. Попробуйте позже.");
-                          }
-                        } catch (error) {
-                          alert("Нет соединения с сервером.");
-                        }
-                      });
+          const interval = setInterval(() => {
+            timeLeft--;
+            timerEl.textContent = timeLeft;
+
+            if (timeLeft <= 0) {
+              clearInterval(interval);
+              form.classList.remove("success");
+            }
+          }, 1000);
+        } else {
+          alert("Ошибка отправки. Попробуйте позже.");
+        }
+      } catch (error) {
+        alert("Нет соединения с сервером.");
+      }
+    });
                   </script>
                 </div>
               </div>

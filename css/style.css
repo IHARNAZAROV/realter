@@ -13905,3 +13905,34 @@ opacity:0.7;
       border-radius: 12px; /* На совсем маленьких экранах лучше прямоугольник */
   }
 }
+
+.newsletter-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #d7b39a;
+  cursor: pointer;
+}
+
+.newsletter-checkbox input {
+  margin-top: 3px;
+  accent-color: #111; /* стильный чекбокс */
+  cursor: pointer;
+}
+
+.newsletter-checkbox a {
+  color: #d7b39a;
+  text-decoration: underline;
+  transition: 0.3s;
+}
+
+.newsletter-checkbox a:hover {
+  opacity: 0.6;
+}
+
+.newsletter-checkbox.error {
+  color: red;
+}
