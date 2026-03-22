@@ -407,15 +407,29 @@ if (desc && obj.description) {
       : "";
   }
 
-const soldDate = obj?.status?.date;
-const now = Date.now();
+if (dealType) {
+  const isSold = obj?.status?.type === "sold";
 
-if (obj?.status?.type === "sold" && soldDate) {
-  const soldTime = new Date(soldDate).getTime();
-  const diffDays = (now - soldTime) / (1000 * 60 * 60 * 24);
+  if (isSold) {
+    const soldDate = obj?.status?.date;
+    const now = Date.now();
 
-  if (diffDays <= 7) {
-    dealType.textContent = "Продан";
+    if (soldDate) {
+      const soldTime = new Date(soldDate).getTime();
+      const diffDays = (now - soldTime) / (1000 * 60 * 60 * 24);
+
+      // показываем "Продан" только 7 дней
+      if (diffDays <= 7) {
+        dealType.textContent = "Продан";
+      } else {
+        dealType.textContent = "Продажа";
+      }
+    } else {
+      dealType.textContent = "Продан";
+    }
+
+  } else {
+    dealType.textContent = obj.dealType || "Продажа";
   }
 }
 
