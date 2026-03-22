@@ -880,7 +880,6 @@ function renderHeroMeta(obj) {
     published.textContent = d;
   }
 
-  if (dealType) dealType.textContent = obj.dealType || "Продажа";
 
   if (featured && obj.recommended) {
     featured.hidden = false;
