@@ -407,7 +407,17 @@ if (desc && obj.description) {
       : "";
   }
 
-  if (dealType) dealType.textContent = obj.dealType || "Продажа";
+const soldDate = obj?.status?.date;
+const now = Date.now();
+
+if (obj?.status?.type === "sold" && soldDate) {
+  const soldTime = new Date(soldDate).getTime();
+  const diffDays = (now - soldTime) / (1000 * 60 * 60 * 24);
+
+  if (diffDays <= 7) {
+    dealType.textContent = "Продан";
+  }
+}
 
   if (featured && obj.recommended) {
     featured.hidden = false;

@@ -13936,3 +13936,8 @@ opacity:0.7;
 .newsletter-checkbox.error {
   color: red;
 }
+
+.is-sold {
+  color: #c62828;
+  font-weight: 600;
+}
