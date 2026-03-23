@@ -286,14 +286,31 @@
       schema.itemOffered.numberOfRooms = obj.rooms;
     }
 
+    // Описание
+    if (obj.description) {
+      schema.itemOffered.description = obj.description;
+    }
+
+    // Адрес улицы
+    if (obj.address) {
+      schema.itemOffered.address.streetAddress = obj.address;
+    }
+
     // Гео-координаты (если есть)
-    if (obj.lat && obj.lng) {
+    const lat = obj.location?.lat ?? obj.lat;
+    const lng = obj.location?.lng ?? obj.lng;
+    if (lat && lng) {
       schema.itemOffered.geo = {
         "@type": "GeoCoordinates",
-        latitude: obj.lat,
-        longitude: obj.lng,
+        latitude: lat,
+        longitude: lng,
       };
     }
+
+    // Абсолютные URL для изображений (Schema.org требует полный путь)
+    schema.image = schema.image.map((src) =>
+      src.startsWith("http") ? src : `https://turko.by${src}`
+    );
 
     insertSchema(schema);
 
@@ -326,6 +343,38 @@
     };
 
     insertSchema(breadcrumbs);
+  }
+
+  /* =====================================================
+     DYNAMIC PAGE META (og:*, description, canonical)
+  ===================================================== */
+  function updatePageMeta(obj) {
+    const title = `${obj.title} — Ольга Турко`;
+    const firstImage = Array.isArray(obj.images) && obj.images.length
+      ? (obj.images[0].startsWith("http") ? obj.images[0] : `https://turko.by${obj.images[0]}`)
+      : "https://turko.by/images/main-slider/2.webp";
+    const desc = obj.cardDescription
+      || (obj.description ? obj.description.slice(0, 160).trimEnd() + "…" : "")
+      || "Объект недвижимости — Ольга Турко, риэлтер в Лиде";
+    const url = `https://turko.by/object/${obj.slug}`;
+
+    const setMeta = (sel, attr, val) => {
+      const el = document.querySelector(sel);
+      if (el) el.setAttribute(attr, val);
+    };
+
+    document.title = title;
+    setMeta('meta[name="description"]', "content", desc);
+    setMeta('meta[property="og:title"]', "content", title);
+    setMeta('meta[property="og:description"]', "content", desc);
+    setMeta('meta[property="og:image"]', "content", firstImage);
+    setMeta('meta[property="og:url"]', "content", url);
+    setMeta('meta[name="twitter:title"]', "content", title);
+    setMeta('meta[name="twitter:description"]', "content", desc);
+    setMeta('meta[name="twitter:image"]', "content", firstImage);
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", url);
   }
 
   /* =====================================================
@@ -1287,6 +1336,7 @@ async function init() {
        RENDER
     ========================= */
     renderTopTitle(obj);
+    updatePageMeta(obj);
     renderHeroBlock(obj);
     renderMeta(obj);
     renderRightText(obj);
