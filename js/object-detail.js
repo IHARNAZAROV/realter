@@ -731,9 +731,18 @@ function renderSidebarFooter(obj) {
     return score;
   }
 
+  function isSoldObject(obj) {
+    return (
+      typeof obj?.status?.type === "string" &&
+      obj.status.type.toLowerCase() === "sold"
+    );
+  }
+
   function pickSimilarObjects(currentObj, allObjects, limit = 6) {
     return allObjects
-      .filter((o) => o && o.slug && o.slug !== currentObj.slug)
+      .filter(
+        (o) => o && o.slug && o.slug !== currentObj.slug && !isSoldObject(o)
+      )
       .map((o) => ({ obj: o, score: scoreSimilar(currentObj, o) }))
       .sort((a, b) => a.score - b.score)
       .slice(0, limit)
