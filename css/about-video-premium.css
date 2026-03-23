@@ -1,0 +1,309 @@
+/* ================================================================
+   ABOUT + VIDEO — PREMIUM REALTOR BLOCK
+   ================================================================ */
+
+/* ── 1. SECTION WRAPPER ────────────────────────────────────────── */
+.about-video-premium-section {
+  background: linear-gradient(145deg, #f2f4f3 0%, #faf9f7 55%, #f5f0eb 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-video-premium-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(0, 96, 100, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 85% 80%, rgba(180, 140, 60, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.about-video-premium-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── 2. LEFT CARD (TEXT) ────────────────────────────────────────── */
+.about-home-3 {
+  border-radius: 22px !important;
+  padding: 2.75rem 2.5rem !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow:
+    0 4px 24px rgba(0, 96, 100, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+  transition: transform 0.35s ease-out, box-shadow 0.35s ease-out;
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+.about-home-3.av-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-home-3:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 12px 40px rgba(0, 96, 100, 0.14),
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+}
+
+/* ── 3. HEADING ─────────────────────────────────────────────────── */
+.about-home-3 .sx-tilte {
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem) !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+  color: #1a2b2b;
+  margin-bottom: 1.25rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.about-home-3 .sx-tilte::after {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 52px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-primary, #006064) 0%, rgba(180, 140, 60, 0.7) 100%);
+}
+
+/* ── 4. BODY TEXT ───────────────────────────────────────────────── */
+.about-home-3 p {
+  line-height: 1.85 !important;
+  color: #3d4f50;
+  font-size: 0.97rem;
+}
+
+.about-home-3 p b,
+.about-home-3 p strong {
+  color: var(--color-primary, #006064);
+  font-weight: 700;
+}
+
+/* hermes span already has colour via skin; keep & intensify */
+.about-home-3 .hermes {
+  background: linear-gradient(135deg, var(--color-primary, #006064) 0%, #2a8c70 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* ── 5. VIDEO WRAPPER ───────────────────────────────────────────── */
+.video-section-full-v2 {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.5s ease-out 0.18s, transform 0.5s ease-out 0.18s;
+}
+
+.video-section-full-v2.av-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Decorative border frame */
+.video-section-full-v2::after {
+  border-color: var(--color-primary, #006064) !important;
+  opacity: 0.35;
+  border-radius: 6px;
+}
+
+/* ── 6. VIDEO CARD ──────────────────────────────────────────────── */
+.video-section-full-v2 .video-section-full {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 16px 56px rgba(0, 0, 0, 0.22),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.4s ease-out;
+}
+
+.video-section-full-v2 .video-section-full:hover {
+  box-shadow:
+    0 24px 72px rgba(0, 0, 0, 0.3),
+    0 6px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* Replace flat opacity overlay with rich gradient */
+.video-section-full .overlay-main {
+  background: linear-gradient(
+    to top,
+    rgba(0, 20, 20, 0.78) 0%,
+    rgba(0, 30, 30, 0.42) 40%,
+    rgba(0, 0, 0, 0.12) 100%
+  ) !important;
+  opacity: 1 !important;
+  z-index: 0 !important;
+}
+
+/* Zoom bg on hover */
+.video-section-full-v2 .video-section-full::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  background-size: cover !important;
+  background-position: center !important;
+  transition: transform 0.55s ease-out;
+  z-index: -1;
+}
+
+.video-section-full-v2:hover .video-section-full {
+  background-size: 107% auto !important;
+}
+
+/* ── 7. PLAY BUTTON ─────────────────────────────────────────────── */
+.play-now {
+  width: 76px !important;
+  height: 76px !important;
+  z-index: 10 !important;
+  transition: transform 0.3s ease-out;
+}
+
+.play-now .icon {
+  width: 76px !important;
+  height: 76px !important;
+  line-height: 76px !important;
+  font-size: 1.4rem !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+  color: #fff !important;
+  box-shadow:
+    0 0 0 0 rgba(255, 255, 255, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  transition: box-shadow 0.35s ease-out, background 0.35s ease-out;
+}
+
+.play-now:hover .icon {
+  background: rgba(255, 255, 255, 0.28) !important;
+  box-shadow:
+    0 0 24px 8px rgba(255, 255, 255, 0.25),
+    0 0 0 3px rgba(255, 255, 255, 0.15),
+    0 10px 40px rgba(0, 0, 0, 0.35) !important;
+}
+
+.play-now:hover {
+  transform: translateX(-50%) translateY(-50%) scale(1.1) !important;
+}
+
+/* Ripple glow */
+.play-now .ripple,
+.play-now .ripple::after,
+.play-now .ripple::before {
+  width: 76px !important;
+  height: 76px !important;
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+/* ── 8. STATS CARD (97 СДЕЛОК) ──────────────────────────────────── */
+.video-section-bottom {
+  left: 22px !important;
+  bottom: 22px !important;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 14px !important;
+  padding: 14px 22px !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.5s ease-out 0.55s, transform 0.5s ease-out 0.55s;
+}
+
+.video-section-full-v2.av-visible .video-section-bottom {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.video-section-bottom .sx-title {
+  font-size: 2rem !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  color: #fff !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  margin-bottom: 0;
+}
+
+/* ── 9. GOLDEN ACCENT GLOW ──────────────────────────────────────── */
+.about-video-premium-section::after {
+  content: "";
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(180, 140, 60, 0.12) 0%, transparent 70%);
+  bottom: -80px;
+  right: 10%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── 10. SCROLL ANIMATIONS (IntersectionObserver) ───────────────── */
+@keyframes av-fade-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 11. RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 991px) {
+  .about-home-3 {
+    padding: 2rem 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .video-section-full-v2 {
+    margin-right: 0 !important;
+  }
+
+  .video-section-full-v2::after {
+    display: none;
+  }
+
+  .about-video-premium-section {
+    padding-top: 3.5rem;
+    padding-bottom: 3rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .about-home-3 .sx-tilte {
+    font-size: 1.2rem !important;
+  }
+
+  .play-now,
+  .play-now .icon {
+    width: 60px !important;
+    height: 60px !important;
+    line-height: 60px !important;
+    font-size: 1.1rem !important;
+  }
+
+  .play-now .ripple,
+  .play-now .ripple::after,
+  .play-now .ripple::before {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .video-section-bottom {
+    padding: 10px 16px !important;
+  }
+
+  .video-section-bottom .sx-title {
+    font-size: 1.5rem !important;
+  }
+}
