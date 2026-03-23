@@ -9,7 +9,7 @@ if (document.readyState === "loading") {
 async function initObjectsBadge() {
 
 const badge = document.getElementById("objectsBadge");
-
+if (!badge) return;
 
 try {
 
