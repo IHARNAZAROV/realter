@@ -71,6 +71,7 @@
       data-versioned
     />
     <link rel="stylesheet" href="/css/Hub.css" />
+    <link rel="stylesheet" type="text/css" href="/css/about-video-premium.css" data-versioned />
   </head>
 
   <body>
@@ -528,7 +529,7 @@
         </section>
 
         <!-- About Company Section -->
-        <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
+        <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray about-video-premium-section">
           <div class="container">
             <div class="section-content">
               <div class="row">
@@ -1374,5 +1375,38 @@
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
+    <script>
+      (function () {
+        var targets = [
+          { sel: ".about-home-3", delay: 0 },
+          { sel: ".video-section-full-v2", delay: 180 },
+        ];
+        if (!("IntersectionObserver" in window)) {
+          targets.forEach(function (t) {
+            var el = document.querySelector(t.sel);
+            if (el) el.classList.add("av-visible");
+          });
+          return;
+        }
+        targets.forEach(function (t) {
+          var el = document.querySelector(t.sel);
+          if (!el) return;
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                  setTimeout(function () {
+                    e.target.classList.add("av-visible");
+                  }, t.delay);
+                  io.unobserve(e.target);
+                }
+              });
+            },
+            { threshold: 0.12 }
+          );
+          io.observe(el);
+        });
+      })();
+    </script>
   </body>
 </html>
