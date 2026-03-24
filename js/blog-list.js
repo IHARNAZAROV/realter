@@ -93,7 +93,6 @@ function loadBlogArticles() {
 
       fadeOutSkeletons(() => {
         renderActiveArticles({ skipAnimation: true });
-        reinitMasonry();
       });
     })
     .catch(console.error);
@@ -223,7 +222,6 @@ function renderActiveArticles({ skipAnimation = false } = {}) {
     container.classList.add("blog-list-fade-in");
     renderBlogCards(articles);
     requestAnimationFrame(() => {
-      reinitMasonry();
       window.setTimeout(() => {
         container.classList.remove("blog-list-fade-in");
       }, FILTER_ANIMATION_DURATION);
@@ -238,7 +236,6 @@ function renderActiveArticles({ skipAnimation = false } = {}) {
     renderBlogCards(articles);
     container.classList.remove("blog-list-fade-out");
     container.classList.add("blog-list-fade-in");
-    reinitMasonry();
 
     window.setTimeout(() => {
       container.classList.remove("blog-list-fade-in");
@@ -370,12 +367,6 @@ function renderDate(dateString) {
   const d = parseDate(dateString);
   return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
           <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
-}
-
-function reinitMasonry() {
-  if (window.jQuery && jQuery.fn.masonry) {
-    jQuery(".news-masonry").masonry("reloadItems").masonry();
-  }
 }
 
 /* =========================================================
