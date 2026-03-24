@@ -8,6 +8,14 @@ A professional real estate website for Olga Turko, a realtor from Lida. Built wi
 - **Backend**: PHP 8.2 — serves the API endpoint at `api/book-viewing.php`
 - **Server**: PHP built-in server (`php -S 0.0.0.0:5000 -t .`) handles both static files and PHP
 
+## Slider / Carousel
+- **Swiper.js** (v9+) is used for all carousels — fully migrated from Owl Carousel + jQuery
+  - About-home slider: `.swiper-about-home` — with animated progress line via CSS `--progress-width` var
+  - Testimonials: `.swiper-testimonial-home` — with `.testimonial-home-pagination` dots
+  - Service / recommended objects: `.swiper-service-slider` — loaded dynamically by `home-recommended-slider.js`, initialized in `customgpt.js`
+- **jQuery has been completely removed** from all HTML pages and JavaScript files
+- **Masonry** (v4, vanilla, no jQuery): `js/masonry.pkgd.min.js` loaded on `blog.html`
+
 ## Key Files
 - `index.html` — Homepage
 - `object-detail.html` — Property listing detail page with booking form

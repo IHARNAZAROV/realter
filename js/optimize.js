@@ -96,124 +96,74 @@ function initMenuActiveAndUnderline() {
 
 /**
  * =====================================================
- * OwlCarousel
+ * Swiper Carousels
  * =====================================================
  */
 function initCarousels() {
-  if (!window.jQuery || !jQuery.fn.owlCarousel) return;
+  if (typeof Swiper === "undefined") return;
 
-  const carousels = [
-    {
-      selector: ".testimonial-home",
+  const AUTOPLAY_DELAY = 5000;
+
+  /* ---- About-Home slider with progress line ---- */
+  const aboutEl = document.querySelector(".swiper-about-home");
+  if (aboutEl) {
+    const progressEl = aboutEl.querySelector(".about-home-progress");
+
+    function startProgress() {
+      if (!progressEl) return;
+      progressEl.style.setProperty("--progress-transition", "0ms");
+      progressEl.style.setProperty("--progress-width", "0%");
+      requestAnimationFrame(() => {
+        progressEl.style.setProperty("--progress-transition", `${AUTOPLAY_DELAY}ms`);
+        progressEl.style.setProperty("--progress-width", "100%");
+      });
+    }
+
+    function resetProgress() {
+      if (!progressEl) return;
+      progressEl.style.setProperty("--progress-transition", "0ms");
+      progressEl.style.setProperty("--progress-width", "0%");
+    }
+
+    new Swiper(aboutEl, {
       loop: true,
-      autoplay: true,
-      margin: 30,
-      nav: false,
-      dots: true,
-      responsive: { 0: { items: 1 }, 991: { items: 1 } },
-    },
-    {
-      selector: ".testimonial-home-two",
-      loop: true,
-      autoplay: false,
-      margin: 30,
-      nav: true,
-      dots: false,
-      responsive: { 0: { items: 1 }, 991: { items: 2 } },
-    },
-    {
-      selector: ".about-home",
-      loop: true,
-      autoplay: true,
-      margin: 30,
-      nav: true,
-      dots: true,
-      responsive: { 0: { items: 1 }, 991: { items: 1 } },
-    },
-    {
-      selector: ".project-carousel4",
-      loop: true,
-      autoplay: false,
-      items: 3,
-      margin: 40,
-      nav: true,
-      dots: false,
-      responsive: {
-        0: { items: 1, margin: 15 },
-        640: { items: 2, margin: 15 },
-        800: { items: 3, margin: 20 },
-        1200: { items: 4 },
+      slidesPerView: 1,
+      spaceBetween: 30,
+      speed: 600,
+      autoplay: {
+        delay: AUTOPLAY_DELAY,
+        disableOnInteraction: false,
       },
-    },
-    {
-      selector: ".project-carousel3",
-      loop: true,
-      autoplay: true,
-      items: 3,
-      margin: 40,
-      nav: true,
-      autoplayTimeout: 4000,
-      smartSpeed: 800,
-      dots: false,
-      responsive: {
-        0: { items: 1, margin: 15 },
-        640: { items: 2, margin: 15 },
-        800: { items: 3, margin: 20 },
-        1200: { items: 4 },
+      navigation: {
+        prevEl: aboutEl.querySelector(".about-home-prev"),
+        nextEl: aboutEl.querySelector(".about-home-next"),
       },
-    },
-    {
-      selector: ".project-carousel1",
-      loop: true,
-      autoplay: false,
-      items: 3,
-      margin: 40,
-      nav: true,
-      dots: true,
-      responsive: { 0: { items: 1 }, 768: { items: 1 }, 991: { items: 1 } },
-    },
-  ];
-
-  const $about = jQuery(".about-home");
-  const autoplayTimeout = 5000;
-
-  function startProgress() {
-    const dots = $about.find(".owl-dots")[0];
-    if (!dots) return;
-
-    dots.style.setProperty("--progress-transition", "0ms");
-    dots.style.setProperty("--progress-width", "0%");
-
-    requestAnimationFrame(() => {
-      dots.style.setProperty("--progress-transition", `${autoplayTimeout}ms`);
-      dots.style.setProperty("--progress-width", "100%");
+      on: {
+        init() { startProgress(); },
+        slideChangeTransitionStart() { resetProgress(); },
+        slideChangeTransitionEnd() { startProgress(); },
+      },
     });
   }
 
-  function resetProgress() {
-    const dots = $about.find(".owl-dots")[0];
-    if (!dots) return;
-    dots.style.setProperty("--progress-transition", "0ms");
-    dots.style.setProperty("--progress-width", "0%");
-  }
-
-  if ($about.length) {
-    $about.on("initialized.owl.carousel", startProgress);
-    $about.on("translate.owl.carousel", resetProgress);
-    $about.on("translated.owl.carousel", startProgress);
-  }
-
-  carousels.forEach((cfg) => {
-    const $el = jQuery(cfg.selector);
-    if (!$el.length) return;
-    $el.owlCarousel({
-      ...cfg,
-      navText: [
-        '<i class="fa fa-angle-left"></i>',
-        '<i class="fa fa-angle-right"></i>',
-      ],
+  /* ---- Testimonials slider ---- */
+  const testimonialsEl = document.querySelector(".swiper-testimonial-home");
+  if (testimonialsEl) {
+    new Swiper(testimonialsEl, {
+      loop: true,
+      slidesPerView: 1,
+      spaceBetween: 30,
+      speed: 600,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: testimonialsEl.querySelector(".testimonial-home-pagination"),
+        clickable: true,
+      },
     });
-  });
+  }
 }
 
 /**

@@ -1,7 +1,9 @@
 (function () {
   "use strict";
 
-  const slider = document.querySelector(".service-slider");
+  const sliderEl = document.querySelector(".swiper-service-slider");
+  if (!sliderEl) return;
+  const slider = sliderEl.querySelector(".swiper-wrapper");
   if (!slider) return;
 
   const ROOM_LABELS = {
@@ -68,7 +70,7 @@
     const shortTitle = getShortTitle(objectItem);
 
     return `
-      <div class="item">
+      <div class="swiper-slide">
         <a href="${link}" class="service-card-link" target="_blank" rel="nofollow noopener noreferrer">
           <div class="bgcall-block d-flex flex-wrap justify-content-center align-content-end bg-cover overlay-wraper" style="background-image: url('${image}');">
             <div class="overlay-main bg-black opacity-07"></div>

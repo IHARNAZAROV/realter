@@ -827,41 +827,33 @@ function renderSidebarFooter(obj) {
   `;
   }
 
-  function rebuildOwlCarousel(carouselEl) {
-    if (
-      !window.jQuery ||
-      !window.jQuery.fn ||
-      typeof window.jQuery.fn.owlCarousel !== "function"
-    ) {
-      console.warn("OwlCarousel не найден");
-      return;
+  function rebuildSwiperCarousel(carouselEl) {
+    if (typeof Swiper === "undefined" || !carouselEl) return;
+
+    if (carouselEl._swiperInstance) {
+      carouselEl._swiperInstance.destroy(true, true);
     }
 
-    const $c = window.jQuery(carouselEl);
+    const wrapper = carouselEl.querySelector(".swiper-wrapper");
+    if (!wrapper) return;
 
-    if ($c.hasClass("owl-loaded")) {
-      $c.trigger("destroy.owl.carousel");
-      $c.removeClass("owl-loaded");
-      $c.find(".owl-stage-outer").children().unwrap();
-    }
-
-    $c.owlCarousel({
+    carouselEl._swiperInstance = new Swiper(carouselEl, {
       loop: true,
-      margin: 30,
-      nav: true,
-      autoplay: true,
-      autoplayTimeout: 3500,
-      autoplayHoverPause: true,
-      smartSpeed: 700,
-      navText: [
-        '<i class="fa-solid fa-chevron-left"></i>',
-        '<i class="fa-solid fa-chevron-right"></i>',
-      ],
-      dots: false,
-      responsive: {
-        0: { items: 1 },
-        768: { items: 2 },
-        1200: { items: 3 },
+      slidesPerView: 1,
+      spaceBetween: 30,
+      speed: 700,
+      autoplay: {
+        delay: 3500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      navigation: {
+        prevEl: carouselEl.querySelector(".similar-prev"),
+        nextEl: carouselEl.querySelector(".similar-next"),
+      },
+      breakpoints: {
+        768: { slidesPerView: 2 },
+        1200: { slidesPerView: 3 },
       },
     });
   }
@@ -878,7 +870,7 @@ function renderSidebarFooter(obj) {
     }
 
     carousel.innerHTML = similar.map(renderSimilarItem).join("");
-    rebuildOwlCarousel(carousel);
+    rebuildSwiperCarousel(carousel);
   }
 
 
@@ -1358,47 +1350,6 @@ async function init() {
   }
 }
 
-
-  function rebuildOwlCarousel(carouselEl) {
-    if (
-      !window.jQuery ||
-      !window.jQuery.fn ||
-      typeof window.jQuery.fn.owlCarousel !== "function"
-    ) {
-      console.warn(
-        "OwlCarousel не найден. Проверь подключение jquery + owl.carousel.js",
-      );
-      return;
-    }
-
-    const $c = window.jQuery(carouselEl);
-
-    if ($c.hasClass("owl-loaded")) {
-      $c.trigger("destroy.owl.carousel");
-      $c.removeClass("owl-loaded");
-      $c.find(".owl-stage-outer").children().unwrap();
-    }
-
-    $c.owlCarousel({
-      loop: true,
-      margin: 30,
-      nav: true,
-      autoplay: true,
-      autoplayTimeout: 3500,
-      autoplayHoverPause: true,
-      smartSpeed: 700,
-      navText: [
-        '<i class="fa-solid fa-chevron-left"></i>',
-        '<i class="fa-solid fa-chevron-right"></i>',
-      ],
-      dots: false,
-      responsive: {
-        0: { items: 1 },
-        768: { items: 2 },
-        1200: { items: 3 },
-      },
-    });
-  }
 
   document.addEventListener("DOMContentLoaded", init);
 })();

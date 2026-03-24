@@ -373,8 +373,19 @@ function renderDate(dateString) {
 }
 
 function reinitMasonry() {
-  if (window.jQuery && jQuery.fn.masonry) {
-    jQuery(".news-masonry").masonry("reloadItems").masonry();
+  const container = document.querySelector(".news-masonry");
+  if (!container || typeof Masonry === "undefined") return;
+
+  if (container._masonryInstance) {
+    container._masonryInstance.reloadItems();
+    container._masonryInstance.layout();
+  } else {
+    container._masonryInstance = new Masonry(container, {
+      itemSelector: ".masonry-item",
+      columnWidth: ".masonry-item",
+      percentPosition: true,
+      transitionDuration: "0.4s",
+    });
   }
 }
 

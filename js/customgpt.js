@@ -1,111 +1,50 @@
-(function ($) {
-  "use strict";
+"use strict";
 
-  const $window = $(window);
+(function () {
+  let serviceSwiperInstance = null;
 
-  function owlAnimateFilter() {
-    $(this).addClass("item-scale");
-    window.setTimeout(() => {
-      $(this).removeClass("item-scale");
-    }, 500);
-  }
+  function initServiceSlider() {
+    const sliderEl = document.querySelector(".swiper-service-slider");
+    if (!sliderEl) return;
 
-  /**
-   * =====================================================
-   * Isotope + OwlCarousel (filters, fade slider, service slider)
-   * =====================================================
-   */
-  function initOnLoadFunctions() {
-    // =========================
-    // ISOTOPE
-    // =========================
-    if ($.fn.isotope) {
-      const $container = $(".masonry-outer");
+    const wrapper = sliderEl.querySelector(".swiper-wrapper");
+    if (!wrapper || !wrapper.children.length) return;
 
-      if ($container.length) {
-        $container.isotope({
-          itemSelector: ".masonry-item",
-          transitionDuration: "1s",
-          originLeft: true,
-          stamp: ".stamp",
-        });
-
-        $(".masonry-filter li").on("click", function () {
-          const selector = $(this).find("a").attr("data-filter");
-          $(".masonry-filter li").removeClass("active");
-          $(this).addClass("active");
-          $container.isotope({ filter: selector });
-          return false;
-        });
-      }
+    if (serviceSwiperInstance) {
+      serviceSwiperInstance.destroy(true, true);
+      serviceSwiperInstance = null;
     }
 
-    // =========================
-    // OWL CAROUSEL
-    // =========================
-    if ($.fn.owlCarousel) {
-      
-      // Fade slider
-      const $fadeSlider = $(".owl-fade-slider-one");
-      if ($fadeSlider.length) {
-        $fadeSlider.owlCarousel({
-          loop: true,
-          autoplay: true,
-          autoplayTimeout: 2000,
-          margin: 30,
-          nav: true,
-          navText: [
-            '<i class="fa fa-angle-left"></i>',
-            '<i class="fa fa-angle-right"></i>',
-          ],
-          items: 1,
-          dots: false,
-          animateOut: "fadeOut",
-        });
-      }
-
-      // Service slider
-      const initServiceSlider = () => {
-        const $serviceSlider = $(".service-slider");
-        if (!$serviceSlider.length || !$serviceSlider.children(".item").length) {
-          return;
-        }
-
-        if ($serviceSlider.hasClass("owl-loaded")) {
-          return;
-        }
-
-        $serviceSlider.owlCarousel({
-          loop: true,
-          autoplay: true,
-          autoplayTimeout: 4000, // каждые 4 секунды
-          autoplayHoverPause: true, // пауза при наведении мышью
-          smartSpeed: 700, // плавность анимации
-          center: false,
-          margin: 15,
-          nav: true,
-          dots: false,
-          navText: [
-            `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-               <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-             </svg>`,
-            `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-               <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-             </svg>`,
-          ],
-          responsive: {
-            0: { items: 1 },
-            768: { items: 2 },
-            991: { items: 3 },
-            1200: { items: 3 },
-          },
-        });
-      };
-
-      initServiceSlider();
-      $window.on("recommended-slider-ready", initServiceSlider);
-    }
+    serviceSwiperInstance = new Swiper(sliderEl, {
+      loop: true,
+      slidesPerView: 1,
+      spaceBetween: 15,
+      speed: 700,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      navigation: {
+        prevEl: sliderEl.querySelector(".service-slider-prev"),
+        nextEl: sliderEl.querySelector(".service-slider-next"),
+      },
+      breakpoints: {
+        768: { slidesPerView: 2, spaceBetween: 15 },
+        991: { slidesPerView: 3, spaceBetween: 15 },
+        1200: { slidesPerView: 3, spaceBetween: 15 },
+      },
+    });
   }
 
-  $window.on("load", initOnLoadFunctions);
-})(jQuery);
+  function init() {
+    initServiceSlider();
+    window.addEventListener("recommended-slider-ready", initServiceSlider);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
