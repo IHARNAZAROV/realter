@@ -365,10 +365,13 @@ function pluralizeArticles(count) {
 }
 
 function renderDate(dateString) {
-  const d = parseDate(dateString);
-  if (!d || typeof d.getDate !== "function" || isNaN(d.getTime())) return "";
-  return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
-          <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
+  try {
+    const d = parseDate(dateString);
+    return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
+            <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
+  } catch (e) {
+    return "";
+  }
 }
 
 /* =========================================================
