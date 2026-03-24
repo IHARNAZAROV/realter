@@ -9,14 +9,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document.body.classList.add("loaded");
 
   initMenuActiveAndUnderline();
-  initCarousels();
   initContactSlide();
   initCounterUp();
   wrapResponsiveIframes();
   initScopedClickDelegation(); // INP FIX
   initStickyHeader();
   bg_moving();
-  initBlogMasonryFilter();
   initServiceCardsAnimation();
 });
 
@@ -90,81 +88,6 @@ function initMenuActiveAndUnderline() {
     link.addEventListener("mouseleave", () => {
       setUnderline(link, 0, "50%");
       if (activeLink) setUnderline(activeLink, 1, "50%");
-    });
-  });
-}
-
-/**
- * =====================================================
- * OwlCarousel
- * =====================================================
- */
-function initCarousels() {
-  if (!window.jQuery || !jQuery.fn.owlCarousel) return;
-
-  const carousels = [
-    {
-      selector: ".testimonial-home-two",
-      loop: true,
-      autoplay: false,
-      margin: 30,
-      nav: true,
-      dots: false,
-      responsive: { 0: { items: 1 }, 991: { items: 2 } },
-    },
-    {
-      selector: ".project-carousel4",
-      loop: true,
-      autoplay: false,
-      items: 3,
-      margin: 40,
-      nav: true,
-      dots: false,
-      responsive: {
-        0: { items: 1, margin: 15 },
-        640: { items: 2, margin: 15 },
-        800: { items: 3, margin: 20 },
-        1200: { items: 4 },
-      },
-    },
-    {
-      selector: ".project-carousel3",
-      loop: true,
-      autoplay: true,
-      items: 3,
-      margin: 40,
-      nav: true,
-      autoplayTimeout: 4000,
-      smartSpeed: 800,
-      dots: false,
-      responsive: {
-        0: { items: 1, margin: 15 },
-        640: { items: 2, margin: 15 },
-        800: { items: 3, margin: 20 },
-        1200: { items: 4 },
-      },
-    },
-    {
-      selector: ".project-carousel1",
-      loop: true,
-      autoplay: false,
-      items: 3,
-      margin: 40,
-      nav: true,
-      dots: true,
-      responsive: { 0: { items: 1 }, 768: { items: 1 }, 991: { items: 1 } },
-    },
-  ];
-
-  carousels.forEach((cfg) => {
-    const $el = jQuery(cfg.selector);
-    if (!$el.length) return;
-    $el.owlCarousel({
-      ...cfg,
-      navText: [
-        '<i class="fa fa-angle-left"></i>',
-        '<i class="fa fa-angle-right"></i>',
-      ],
     });
   });
 }
@@ -451,43 +374,6 @@ function handleSubmenu(e) {
   submenu.style.display = isOpen ? "block" : "none";
   toggle.setAttribute("aria-expanded", String(isOpen));
   e.preventDefault();
-}
-
-/**
- * =====================================================
- * Masonry
- * =====================================================
- */
-function initBlogMasonryFilter() {
-  const container = document.querySelector(".news-masonry");
-  if (!container || !window.Masonry) return;
-
-  const items = Array.from(container.querySelectorAll(".masonry-item"));
-  const masonry = new Masonry(container, {
-    itemSelector: ".masonry-item",
-    percentPosition: true,
-  });
-
-  document.addEventListener("click", (e) => {
-    const link = e.target.closest(".masonry-filter a");
-    if (!link) return;
-
-    e.preventDefault();
-    const filter = link.dataset.filter;
-
-    document
-      .querySelectorAll(".masonry-filter li")
-      .forEach((li) => li.classList.remove("active"));
-    link.parentElement.classList.add("active");
-
-    items.forEach((item) => {
-      item.style.display =
-        filter === "*" || item.matches(filter) ? "" : "none";
-    });
-
-    masonry.reloadItems();
-    masonry.layout();
-  });
 }
 
 /**

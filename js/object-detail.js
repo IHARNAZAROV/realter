@@ -827,45 +827,6 @@ function renderSidebarFooter(obj) {
   `;
   }
 
-  function rebuildOwlCarousel(carouselEl) {
-    if (
-      !window.jQuery ||
-      !window.jQuery.fn ||
-      typeof window.jQuery.fn.owlCarousel !== "function"
-    ) {
-      console.warn("OwlCarousel не найден");
-      return;
-    }
-
-    const $c = window.jQuery(carouselEl);
-
-    if ($c.hasClass("owl-loaded")) {
-      $c.trigger("destroy.owl.carousel");
-      $c.removeClass("owl-loaded");
-      $c.find(".owl-stage-outer").children().unwrap();
-    }
-
-    $c.owlCarousel({
-      loop: true,
-      margin: 30,
-      nav: true,
-      autoplay: true,
-      autoplayTimeout: 3500,
-      autoplayHoverPause: true,
-      smartSpeed: 700,
-      navText: [
-        '<i class="fa-solid fa-chevron-left"></i>',
-        '<i class="fa-solid fa-chevron-right"></i>',
-      ],
-      dots: false,
-      responsive: {
-        0: { items: 1 },
-        768: { items: 2 },
-        1200: { items: 3 },
-      },
-    });
-  }
-
   function renderSimilarSlider(currentObj, allObjects) {
     const carousel = document.querySelector("#similarCarousel");
     if (!carousel) return;
@@ -878,7 +839,6 @@ function renderSidebarFooter(obj) {
     }
 
     carousel.innerHTML = similar.map(renderSimilarItem).join("");
-    rebuildOwlCarousel(carousel);
   }
 
 
@@ -1358,47 +1318,6 @@ async function init() {
   }
 }
 
-
-  function rebuildOwlCarousel(carouselEl) {
-    if (
-      !window.jQuery ||
-      !window.jQuery.fn ||
-      typeof window.jQuery.fn.owlCarousel !== "function"
-    ) {
-      console.warn(
-        "OwlCarousel не найден. Проверь подключение jquery + owl.carousel.js",
-      );
-      return;
-    }
-
-    const $c = window.jQuery(carouselEl);
-
-    if ($c.hasClass("owl-loaded")) {
-      $c.trigger("destroy.owl.carousel");
-      $c.removeClass("owl-loaded");
-      $c.find(".owl-stage-outer").children().unwrap();
-    }
-
-    $c.owlCarousel({
-      loop: true,
-      margin: 30,
-      nav: true,
-      autoplay: true,
-      autoplayTimeout: 3500,
-      autoplayHoverPause: true,
-      smartSpeed: 700,
-      navText: [
-        '<i class="fa-solid fa-chevron-left"></i>',
-        '<i class="fa-solid fa-chevron-right"></i>',
-      ],
-      dots: false,
-      responsive: {
-        0: { items: 1 },
-        768: { items: 2 },
-        1200: { items: 3 },
-      },
-    });
-  }
 
   document.addEventListener("DOMContentLoaded", init);
 })();
