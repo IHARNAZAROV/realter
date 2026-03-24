@@ -104,15 +104,6 @@ function initCarousels() {
 
   const carousels = [
     {
-      selector: ".testimonial-home",
-      loop: true,
-      autoplay: true,
-      margin: 30,
-      nav: false,
-      dots: true,
-      responsive: { 0: { items: 1 }, 991: { items: 1 } },
-    },
-    {
       selector: ".testimonial-home-two",
       loop: true,
       autoplay: false,

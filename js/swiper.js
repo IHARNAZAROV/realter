@@ -17,6 +17,31 @@
     }
   });
 
+  /* ── TESTIMONIALS SLIDER ─────────────────────────────── */
+  const testiEl = document.querySelector('.testimonials-swiper');
+  if (testiEl) {
+    new Swiper('.testimonials-swiper', {
+      slidesPerView: 1,
+      speed: 600,
+      loop: true,
+      grabCursor: true,
+      autoplay: {
+        delay: 5500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+      pagination: {
+        el: '.testi-swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.testi-swiper-next',
+        prevEl: '.testi-swiper-prev',
+        disabledClass: 'swiper-button-disabled',
+      },
+    });
+  }
+
   /* ── ABOUT SLIDER ────────────────────────────────────── */
   const ABOUT_DELAY = 5000;
 
