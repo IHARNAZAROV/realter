@@ -304,9 +304,10 @@ function renderEmptyState(container) {
    HELPERS
    ========================================================= */
 function parseDate(str) {
+  if (!str || typeof str !== "string") return new Date(0);
   if (str.includes(".")) {
-    const [d, m, y] = str.split(".");
-    return new Date(y, m - 1, d);
+    const [day, month, year] = str.split(".");
+    return new Date(+year, +month - 1, +day);
   }
   return new Date(str);
 }
@@ -365,6 +366,7 @@ function pluralizeArticles(count) {
 
 function renderDate(dateString) {
   const d = parseDate(dateString);
+  if (!d || typeof d.getDate !== "function" || isNaN(d.getTime())) return "";
   return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
           <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
 }
