@@ -382,7 +382,6 @@ function handleSubmenu(e) {
  * =====================================================
  */
 function bg_moving() {
-  if (!window.scroll) return;
   BGScroll.init(".bg-moving", {
     scrollSpeed: 20,
     direction: "h",
