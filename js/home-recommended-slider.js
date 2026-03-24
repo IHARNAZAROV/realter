@@ -1,8 +1,8 @@
 (function () {
   "use strict";
 
-  const slider = document.querySelector(".service-slider");
-  if (!slider) return;
+  const wrapper = document.querySelector(".service-swiper .swiper-wrapper");
+  if (!wrapper) return;
 
   const ROOM_LABELS = {
     "1": "Однокомнатная квартира",
@@ -68,7 +68,7 @@
     const shortTitle = getShortTitle(objectItem);
 
     return `
-      <div class="item">
+      <div class="swiper-slide">
         <a href="${link}" class="service-card-link" target="_blank" rel="nofollow noopener noreferrer">
           <div class="bgcall-block d-flex flex-wrap justify-content-center align-content-end bg-cover overlay-wraper" style="background-image: url('${image}');">
             <div class="overlay-main bg-black opacity-07"></div>
@@ -104,10 +104,31 @@
         ? objects.filter((item) => item && item.recommended === true && item.slug)
         : [];
 
-      slider.innerHTML = recommended.map(buildSlideMarkup).join("");
-      window.dispatchEvent(new Event("recommended-slider-ready"));
+      wrapper.innerHTML = recommended.map(buildSlideMarkup).join("");
+
+      new Swiper(".service-swiper", {
+        loop: recommended.length > 3,
+        speed: 700,
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        grabCursor: true,
+        spaceBetween: 15,
+        slidesPerView: 1,
+        navigation: {
+          nextEl: ".service-swiper-next",
+          prevEl: ".service-swiper-prev",
+          disabledClass: "service-swiper-btn--disabled",
+        },
+        breakpoints: {
+          768: { slidesPerView: 2 },
+          991: { slidesPerView: 3 },
+        },
+      });
     } catch (error) {
-      slider.innerHTML = "";
+      wrapper.innerHTML = "";
       console.error("Не удалось загрузить рекомендуемые объекты для слайдера:", error);
     }
   }

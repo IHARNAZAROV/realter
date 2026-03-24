@@ -5304,7 +5304,7 @@ body.is-locked {
 }
 
 /*-------------------------------------
-	Title separators 
+        Title separators 
 -------------------------------------*/
 .sx-separator-outer {
   overflow: hidden;
@@ -5590,25 +5590,63 @@ body.is-locked {
   text-align: center;
 }
 
-.service-slider .owl-nav button {
+/* ── SERVICE SWIPER (объекты на продажу) ─────────────────── */
+.service-swiper-wrap {
+  position: relative;
+}
+
+.service-swiper {
+  overflow: hidden;
+}
+
+.service-swiper-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55) !important;
-  color: #fff !important;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease;
 }
 
-.service-slider .owl-nav button svg {
+.service-swiper-btn:hover {
+  background: rgba(21, 89, 69, 0.85);
+}
+
+.service-swiper-prev {
+  left: -22px;
+}
+
+.service-swiper-next {
+  right: -22px;
+}
+
+.service-swiper-btn svg {
   display: block;
+  flex-shrink: 0;
 }
 
-.service-slider .owl-nav button {
-  width: 54px;
-  height: 40px;
-  border-radius: 999px;
+.service-swiper-btn--disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .service-swiper-prev {
+    left: 4px;
+  }
+
+  .service-swiper-next {
+    right: 4px;
+  }
 }
 
 .sx-accordion .acod-body {
@@ -6434,7 +6472,7 @@ blockquote.author-quote .fa-quote-left {
   outline-offset: 3px;
 }
 /*-------------------------------------
-	side bar
+        side bar
 -------------------------------------*/
 
 .side-bar .widget {
@@ -10791,41 +10829,118 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* =========================================================
-   ABOUT SLIDER — FINAL PREMIUM
+   ABOUT SLIDER — SWIPER PREMIUM
    ========================================================= */
 
-/* Карточка */
-.section-full.mobile-page-padding .about-home.owl-carousel .item {
+/* Обёртка слайдера */
+.about-home-swiper {
+  position: relative;
+  max-width: 369px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Слайд */
+.about-home-swiper .swiper-slide {
   height: 520px;
-  background: #ffffff;
   border-radius: 18px;
   overflow: hidden;
-  display: flex;
-  align-items: stretch;
 }
 
 /* Контейнер изображения */
-.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect {
+.about-home-swiper .sx-img-effect {
   height: 100%;
-  background: #ffffff;
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
+  position: relative;
 }
 
 /* Картинка */
-.section-full.mobile-page-padding .about-home.owl-carousel .sx-img-effect img {
+.about-home-swiper .sx-img-effect img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #ffffff;
   display: block;
-  transition: transform 0.6s ease;
+  transition: transform 10s ease;
 }
 
-/* Очень мягкий zoom */
-.section-full.mobile-page-padding .sx-img-effect.zoom-slow:hover img {
+/* Zoom при hover */
+.about-home-swiper .sx-img-effect.zoom-slow:hover img {
   transform: scale(1.05);
+}
+
+/* Overlay при hover */
+.about-home-swiper .about-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.4s ease;
+  border-radius: 18px;
+  pointer-events: none;
+}
+
+.about-home-swiper .sx-img-effect:hover .about-img-overlay {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* Кастомные стрелки */
+.about-swiper-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-white);
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+  transition: background 0.25s, color 0.25s, transform 0.25s;
+}
+
+.about-swiper-btn:hover {
+  background: var(--color-primary);
+  color: var(--color-white);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.about-swiper-prev {
+  left: 12px;
+}
+
+.about-swiper-next {
+  right: 12px;
+}
+
+.about-swiper-btn.swiper-button-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Прогресс-бар */
+.about-swiper-progress {
+  position: relative;
+  height: 2px;
+  margin-top: 28px;
+  background: rgba(21, 89, 69, 0.18);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.about-swiper-bar {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: var(--color-primary);
+  transition: width linear;
 }
 
 /* Фоновое статичное фото */
@@ -10834,34 +10949,15 @@ recent-posts-entry-date .sx-post-info .post-title {
   filter: grayscale(100%) contrast(0.9);
 }
 
-/* ---------- PROGRESS LINE ---------- */
-.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots {
-  position: relative;
-  height: 2px;
-  margin-top: 28px;
-  background: rgba(21, 89, 69, 0.18);
-  overflow: hidden;
-}
-
-/* убираем точки */
-.section-full.mobile-page-padding .about-home.owl-carousel .owl-dot {
-  display: none;
-}
-
-/* линия прогресса */
-.section-full.mobile-page-padding .about-home.owl-carousel .owl-dots::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  width: var(--progress-width, 0%);
-  background-color: var(--color-primary);
-  transition: width linear;
-  transition-duration: var(--progress-transition, 0ms);
-}
-
 /* Mobile */
-@media (max-width: 768px) {
-  .section-full.mobile-page-padding .about-home.owl-carousel .item {
+@media (max-width: 991px) {
+  .about-home-swiper {
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .about-home-swiper .swiper-slide {
     height: 420px;
   }
 }
@@ -13940,4 +14036,194 @@ opacity:0.7;
 .is-sold {
   color: #c62828;
   font-weight: 600;
+}
+/* =========================================================
+   TESTIMONIALS SWIPER — PREMIUM CARD DESIGN
+   ========================================================= */
+
+.testimonials-swiper {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 52px;
+}
+
+/* Карточка */
+.testi-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(21, 89, 69, 0.10);
+  border-left: 4px solid #155945;
+  min-height: 280px;
+  position: relative;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.testi-card:hover {
+  box-shadow: 0 16px 48px rgba(21, 89, 69, 0.16);
+  transform: translateY(-2px);
+}
+
+/* Верхняя строка: кавычка + звёзды */
+.testi-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.testi-card__quote {
+  font-size: 5rem;
+  line-height: 0.7;
+  color: #155945;
+  font-family: Georgia, serif;
+  font-weight: 700;
+  opacity: 0.25;
+  user-select: none;
+}
+
+.testi-card__stars {
+  color: #e9a100;
+  font-size: 1.05rem;
+  letter-spacing: 2px;
+}
+
+/* Текст отзыва */
+.testi-card__text {
+  font-size: 0.93rem;
+  line-height: 1.7;
+  color: #3a3a3a;
+  flex: 1;
+  margin: 0;
+}
+
+/* Блок автора */
+.testi-card__author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(21, 89, 69, 0.12);
+}
+
+.testi-card__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2.5px solid #155945;
+}
+
+.testi-card__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.testi-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.testi-card__name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #155945;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.testi-card__name:hover {
+  color: #0e3d30;
+  text-decoration: underline;
+}
+
+.testi-card__role {
+  font-size: 0.78rem;
+  color: #787878;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* Пагинация (точки) */
+.testi-swiper-pagination {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+}
+
+.testi-swiper-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(21, 89, 69, 0.2);
+  opacity: 1;
+  transition: background 0.3s, width 0.3s;
+}
+
+.testi-swiper-pagination .swiper-pagination-bullet-active {
+  background: #155945;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Кастомные стрелки */
+.testi-swiper-btn {
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(21, 89, 69, 0.3);
+  background: transparent;
+  color: #155945;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.testi-swiper-btn:hover {
+  background: #155945;
+  color: #ffffff;
+  border-color: #155945;
+}
+
+.testi-swiper-prev {
+  left: 0;
+}
+
+.testi-swiper-next {
+  left: 46px;
+}
+
+.testi-swiper-btn.swiper-button-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .testi-card {
+    padding: 24px 20px 22px;
+    min-height: auto;
+  }
+
+  .testi-card__quote {
+    font-size: 3.5rem;
+  }
 }

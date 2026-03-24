@@ -64,46 +64,6 @@
         });
       }
 
-      // Service slider
-      const initServiceSlider = () => {
-        const $serviceSlider = $(".service-slider");
-        if (!$serviceSlider.length || !$serviceSlider.children(".item").length) {
-          return;
-        }
-
-        if ($serviceSlider.hasClass("owl-loaded")) {
-          return;
-        }
-
-        $serviceSlider.owlCarousel({
-          loop: true,
-          autoplay: true,
-          autoplayTimeout: 4000, // каждые 4 секунды
-          autoplayHoverPause: true, // пауза при наведении мышью
-          smartSpeed: 700, // плавность анимации
-          center: false,
-          margin: 15,
-          nav: true,
-          dots: false,
-          navText: [
-            `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-               <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-             </svg>`,
-            `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-               <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-             </svg>`,
-          ],
-          responsive: {
-            0: { items: 1 },
-            768: { items: 2 },
-            991: { items: 3 },
-            1200: { items: 3 },
-          },
-        });
-      };
-
-      initServiceSlider();
-      $window.on("recommended-slider-ready", initServiceSlider);
     }
   }
 
