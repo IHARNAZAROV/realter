@@ -508,7 +508,7 @@
       <!-- SECTION: Main Slider -->
       <section class="section__slider">
         <div class="container__center">
-          <div class="swiper">
+          <div class="swiper hero-swiper">
             <div class="swiper-wrapper">
               <!-- Slide 1 (Contains H1) -->
               <div class="swiper-slide">
@@ -1087,8 +1087,22 @@
           </header>
           <!-- TITLE END -->
           <div class="section-content">
-            <div class="owl-carousel service-slider owl-btn-vertical-center">
-              <!-- Слайды подгружаются динамически из /data/objects.json -->
+            <div class="service-swiper-wrap">
+              <div class="swiper service-swiper">
+                <div class="swiper-wrapper">
+                  <!-- Слайды подгружаются динамически из /data/objects.json -->
+                </div>
+              </div>
+              <button class="service-swiper-btn service-swiper-prev" aria-label="Предыдущий объект">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="service-swiper-btn service-swiper-next" aria-label="Следующий объект">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
             </div>
           </div>
           <div class="btn-center">

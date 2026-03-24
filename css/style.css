@@ -5590,25 +5590,63 @@ body.is-locked {
   text-align: center;
 }
 
-.service-slider .owl-nav button {
+/* ── SERVICE SWIPER (объекты на продажу) ─────────────────── */
+.service-swiper-wrap {
+  position: relative;
+}
+
+.service-swiper {
+  overflow: hidden;
+}
+
+.service-swiper-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.55) !important;
-  color: #fff !important;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: background 0.25s ease;
 }
 
-.service-slider .owl-nav button svg {
+.service-swiper-btn:hover {
+  background: rgba(21, 89, 69, 0.85);
+}
+
+.service-swiper-prev {
+  left: -22px;
+}
+
+.service-swiper-next {
+  right: -22px;
+}
+
+.service-swiper-btn svg {
   display: block;
+  flex-shrink: 0;
 }
 
-.service-slider .owl-nav button {
-  width: 54px;
-  height: 40px;
-  border-radius: 999px;
+.service-swiper-btn--disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .service-swiper-prev {
+    left: 4px;
+  }
+
+  .service-swiper-next {
+    right: 4px;
+  }
 }
 
 .sx-accordion .acod-body {

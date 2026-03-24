@@ -3,7 +3,7 @@
       return;
   }
 
-  const heroSwiper = new Swiper('.swiper', {
+  const heroSwiper = new Swiper('.hero-swiper', {
     slidesPerView: 1,
     speed: 1200,
     loop: false,
