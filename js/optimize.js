@@ -122,15 +122,6 @@ function initCarousels() {
       responsive: { 0: { items: 1 }, 991: { items: 2 } },
     },
     {
-      selector: ".about-home",
-      loop: true,
-      autoplay: true,
-      margin: 30,
-      nav: true,
-      dots: true,
-      responsive: { 0: { items: 1 }, 991: { items: 1 } },
-    },
-    {
       selector: ".project-carousel4",
       loop: true,
       autoplay: false,
@@ -173,35 +164,6 @@ function initCarousels() {
       responsive: { 0: { items: 1 }, 768: { items: 1 }, 991: { items: 1 } },
     },
   ];
-
-  const $about = jQuery(".about-home");
-  const autoplayTimeout = 5000;
-
-  function startProgress() {
-    const dots = $about.find(".owl-dots")[0];
-    if (!dots) return;
-
-    dots.style.setProperty("--progress-transition", "0ms");
-    dots.style.setProperty("--progress-width", "0%");
-
-    requestAnimationFrame(() => {
-      dots.style.setProperty("--progress-transition", `${autoplayTimeout}ms`);
-      dots.style.setProperty("--progress-width", "100%");
-    });
-  }
-
-  function resetProgress() {
-    const dots = $about.find(".owl-dots")[0];
-    if (!dots) return;
-    dots.style.setProperty("--progress-transition", "0ms");
-    dots.style.setProperty("--progress-width", "0%");
-  }
-
-  if ($about.length) {
-    $about.on("initialized.owl.carousel", startProgress);
-    $about.on("translate.owl.carousel", resetProgress);
-    $about.on("translated.owl.carousel", startProgress);
-  }
 
   carousels.forEach((cfg) => {
     const $el = jQuery(cfg.selector);
