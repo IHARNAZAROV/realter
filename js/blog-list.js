@@ -89,7 +89,7 @@ function loadBlogArticles() {
       return res.json();
     })
     .then((articles) => {
-      allArticles = [...articles].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+      allArticles = [...articles].sort((a, b) => blogParseDate(b.date) - blogParseDate(a.date));
 
       fadeOutSkeletons(() => {
         renderActiveArticles({ skipAnimation: true });
@@ -303,7 +303,7 @@ function renderEmptyState(container) {
 /* =========================================================
    HELPERS
    ========================================================= */
-function parseDate(str) {
+function blogParseDate(str) {
   if (!str || typeof str !== "string") return new Date(0);
   if (str.includes(".")) {
     const [day, month, year] = str.split(".");
@@ -366,7 +366,7 @@ function pluralizeArticles(count) {
 
 function renderDate(dateString) {
   try {
-    const d = parseDate(dateString);
+    const d = blogParseDate(dateString);
     return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
             <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
   } catch (e) {
