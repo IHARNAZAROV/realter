@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
   wrapResponsiveIframes();
   initScopedClickDelegation(); // INP FIX
   initStickyHeader();
-  bg_moving();
   initServiceCardsAnimation();
 });
 
@@ -376,19 +375,6 @@ function handleSubmenu(e) {
   e.preventDefault();
 }
 
-/**
- * =====================================================
- * BG moving
- * =====================================================
- */
-function bg_moving() {
-  if (!window.scroll) return;
-  BGScroll.init(".bg-moving", {
-    scrollSpeed: 20,
-    direction: "h",
-    pauseWhenHidden: true,
-  });
-}
 
 /**
  * =====================================================
