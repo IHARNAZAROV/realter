@@ -10912,13 +10912,15 @@ recent-posts-entry-date .sx-post-info .post-title {
 }
 
 /* Mobile */
-@media (max-width: 768px) {
-  .about-home-swiper .swiper-slide {
-    height: 420px;
-  }
-
+@media (max-width: 991px) {
   .about-home-swiper {
     max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .about-home-swiper .swiper-slide {
+    height: 420px;
   }
 }
 
