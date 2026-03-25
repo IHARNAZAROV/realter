@@ -55,14 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
    SKELETON
    ========================================================= */
 function renderSkeletons(count) {
-  const container = document.querySelector(".news-masonry");
+  const container = document.querySelector(".blog-grid-list");
   if (!container) return;
 
   container.innerHTML = "";
 
   for (let i = 0; i < count; i++) {
     const item = document.createElement("div");
-    item.className = "masonry-item";
+    item.className = "blog-grid-item";
 
     item.innerHTML = `
       <div class="blog-post blog-card">
@@ -102,7 +102,7 @@ function loadBlogArticles() {
    FADE OUT SKELETON
    ========================================================= */
 function fadeOutSkeletons(callback) {
-  const container = document.querySelector(".news-masonry");
+  const container = document.querySelector(".blog-grid-list");
   container.classList.add("skeleton-fade-out");
 
   setTimeout(() => {
@@ -116,7 +116,7 @@ function fadeOutSkeletons(callback) {
    RENDER REAL CARDS
    ========================================================= */
 function renderBlogCards(articles) {
-  const container = document.querySelector(".news-masonry");
+  const container = document.querySelector(".blog-grid-list");
   if (!container) return;
 
   container.innerHTML = "";
@@ -128,7 +128,7 @@ function renderBlogCards(articles) {
 
   articles.forEach((article) => {
     const item = document.createElement("div");
-    item.className = "masonry-item";
+    item.className = "blog-grid-item";
 
     item.innerHTML = `
       <div class="blog-post blog-grid date-style-2 blog-card">
@@ -211,7 +211,7 @@ function updateActiveFilterButton() {
 }
 
 function renderActiveArticles({ skipAnimation = false } = {}) {
-  const container = document.querySelector(".news-masonry");
+  const container = document.querySelector(".blog-grid-list");
   if (!container || !allArticles.length) return;
 
   const articles = getVisibleArticles();
