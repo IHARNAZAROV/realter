@@ -34,3 +34,14 @@ Environment variables:
 ## Deployment
 - Target: autoscale
 - Run: `php -S 0.0.0.0:5000 -t .`
+
+## Admin Panel Protection (`/adminka_objects/`)
+To add a second protection layer, this repo now includes `adminka_objects/.htaccess` with HTTP Basic Auth.
+
+Setup steps:
+1. Create a password file outside the public web root (example):
+   `htpasswd -c /absolute/path/outside/public_html/.htpasswd-adminka admin`
+2. Edit `adminka_objects/.htaccess` and set `AuthUserFile` to that absolute path.
+3. Keep bearer token checks in app code enabled as the first/second factor (defense in depth).
+
+`adminka_objects/.htpasswd.example` is only a template and must not be used in production.
