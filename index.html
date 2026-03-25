@@ -1,212 +1,173 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <!-- ==============================================
-         META TAGS & CONFIGURATION
+<head>
+
+  <!-- ==============================================
+       1. BASE META (КРИТИЧНО)
   =============================================== -->
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- SEO Meta -->
-    <title>Риэлтер в Лиде — Ольга Турко | Покупка и продажа недвижимости</title>
-    <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
-    <meta name="robots" content="index, follow" />
-    <meta
-      name="description"
-      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
-    />
-    <link rel="canonical" href="https://turko.by/" />
-
-    <!-- Open Graph (Facebook/Instagram) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Ольга Турко, риэлтер в Лиде" />
-    <meta
-      property="og:description"
-      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
-    />
-    <meta property="og:url" content="https://turko.by" />
-    <meta
-      property="og:image"
-      content="https://turko.by/images/main-slider/2.webp"
-    />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Ольга Турко, риэлтер в Лиде" />
-    <meta
-      name="twitter:description"
-      content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия."
-    />
-    <meta
-      name="twitter:image"
-      content="https://turko.by/images/main-slider/2.webp"
-    />
-    <meta name="twitter:image:width" content="1200" />
-    <meta name="twitter:image:height" content="630" />
-
-    <!-- Favicons -->
-    <link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
-    <link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
-    <link rel="manifest" href="https://turko.by/site.webmanifest" />
-    <meta name="theme-color" content="#006064" />
-    <link rel="apple-touch-icon" href="https://turko.by/apple-touch-icon.png" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="https://turko.by/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="https://turko.by/web-app-manifest-192x192.png"
-    />
-
-    <!-- ==============================================
-         RESOURCE HINTS (Performance)
+  <!-- ==============================================
+       2. SEO
   =============================================== -->
-    <link rel="preconnect" href="https://cdn.qform.io" />
-    <link rel="preconnect" href="https://widget.yourgood.app" />
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link rel="preconnect" href="https://analytics.ahrefs.com" />
-    <link
-      rel="preload"
-      as="image"
-      href="/images/main-slider/1.webp"
-      fetchpriority="high"
-    />
+  <title>Риэлтер в Лиде — Ольга Турко | Покупка и продажа недвижимости</title>
+  <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде. Актуальные объекты, сопровождение сделок, честные условия.">
+  <link rel="canonical" href="https://turko.by/">
 
-    <!-- ==============================================
-         SITE VERSION (AUTO CACHE BUSTING)
-    =============================================== -->
-    <script src="/site-version.php"></script>
+  <!-- ==============================================
+       3. SOCIAL META (НЕ ВЛИЯЕТ НА РЕНДЕР)
+  =============================================== -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ольга Турко, риэлтер в Лиде">
+  <meta property="og:description" content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде.">
+  <meta property="og:url" content="https://turko.by">
+  <meta property="og:image" content="https://turko.by/images/main-slider/2.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 
-    <!-- ==============================================
-         CSS STYLES
-    =============================================== -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-    <link rel="stylesheet" href="/css/swiper-bundle.css" />
-    <link rel="stylesheet" href="/css/swiper.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="css/style.css"
-      data-versioned
-    />
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ольга Турко, риэлтер в Лиде">
+  <meta name="twitter:description" content="Риэлтер Ольга Турко — помощь в покупке и продаже квартир в Лиде.">
+  <meta name="twitter:image" content="https://turko.by/images/main-slider/2.webp">
+
+  <!-- ==============================================
+       4. FAVICONS
+  =============================================== -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#006064">
+
+  <!-- ==============================================
+       5. PERFORMANCE (ПЕРЕД CSS!)
+  =============================================== -->
+
+  <!-- preconnect -->
+  <link rel="preconnect" href="https://cdn.qform.io">
+  <link rel="preconnect" href="https://widget.yourgood.app">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+
+  <!-- hero image -->
+  <link rel="preload" as="image" href="/images/main-slider/1.webp" fetchpriority="high">
+
+  <!-- ==============================================
+       6. SITE VERSION (раньше CSS!)
+  =============================================== -->
+  <script src="/site-version.php"></script>
+
+  <!-- ==============================================
+       7. CRITICAL CSS (БЛОКИРУЮЩИЕ)
+  =============================================== -->
+
+  <!-- Bootstrap пока оставляем -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+  <!-- Основные стили -->
+  <link rel="stylesheet" href="/css/style.css" data-versioned>
+  <link rel="stylesheet" href="/css/skin/skin-1.css">
+
+  <!-- ==============================================
+       8. NON-CRITICAL CSS (АСИНХРОННО)
+  =============================================== -->
+
+  <!-- Swiper -->
+  <link rel="preload" href="/css/swiper-bundle.css" as="style" onload="this.rel='stylesheet'">
+  <link rel="preload" href="/css/swiper.css" as="style" onload="this.rel='stylesheet'">
+
+  <!-- FontAwesome -->
+  <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.rel='stylesheet'">
+  <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.rel='stylesheet'">
+  <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.rel='stylesheet'">
+  <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.rel='stylesheet'">
+
+  <!-- Icons -->
+  <link rel="preload" href="/css/flaticon.min.css" as="style" onload="this.rel='stylesheet'">
+
+  <!-- Blog -->
+  <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.rel='stylesheet'">
+
+  <!-- fallback -->
+  <noscript>
+    <link rel="stylesheet" href="/css/swiper-bundle.css">
+    <link rel="stylesheet" href="/css/swiper.css">
+    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/css/flaticon.min.css">
     <link rel="stylesheet" href="/css/blog-badge.css">
-    <link
-      rel="stylesheet"
-      class="skin"
-      type="text/css"
-      href="css/skin/skin-1.css"
-    />
+  </noscript>
 
-    <!-- ==============================================
-         QFORM (forms)
+  <!-- ==============================================
+       9. ВНЕШНИЕ СКРИПТЫ (НЕ БЛОКИРУЮТ)
   =============================================== -->
-    <script>
-      (function () {
-        function init() {
-          if (window.__qform_loaded) return;
-          window.__qform_loaded = true;
-          var scr = document.createElement("script");
-          scr.type = "text/javascript";
-          scr.async = true;
-          scr.src = "https://cdn.qform.io/forms.js?v=" + Date.now();
-          scr.charset = "UTF-8";
-          var scrInsert = document.getElementsByTagName("script")[0];
-          scrInsert.parentNode.insertBefore(scr, scrInsert);
-        }
-        if (document.readyState === "complete") {
-          init();
-        } else {
-          window.addEventListener("load", init);
-        }
-      })();
-    </script>
 
-    <!-- ==============================================
-         Messenger Widget
+  <!-- QFORM -->
+  <script>
+    window.addEventListener("load", function () {
+      const s = document.createElement("script");
+      s.src = "https://cdn.qform.io/forms.js?v=" + Date.now();
+      s.async = true;
+      document.body.appendChild(s);
+    });
+  </script>
+
+  <!-- Messenger -->
+  <script defer src="https://widget.yourgood.app/script/widget.js?id=91257780-c790-4d68-b7a4-e236c85a4e37"></script>
+
+  <!-- ==============================================
+       10. SCHEMA (ПОСЛЕДНИЙ)
   =============================================== -->
-    <script>
-      (function () {
-        var widget = document.createElement("script");
-        widget.defer = true;
-        widget.dataset.pfId = "91257780-c790-4d68-b7a4-e236c85a4e37";
-        widget.src =
-          "https://widget.yourgood.app/script/widget.js?id=91257780-c790-4d68-b7a4-e236c85a4e37&now=" +
-          Date.now();
-        document.head.appendChild(widget);
-      })();
-    </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateAgent",
 
-    <!-- ==============================================
-         Schema.org JSON-LD
-  =============================================== -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "RealEstateAgent",
-        "name": "Ольга Турко - Риэлтер в Лиде",
-        "image": "https://turko.by/images/main-slider/2.webp",
-        "url": "https://turko.by",
-        "telephone": "+375291809516",
-        "email": "olgaturko1975@gmail.com",
-        "priceRange": "По договорённости",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "бульвар Князя Гедимина, дом 12",
-          "addressLocality": "Лида",
-          "addressRegion": "Гродненская область",
-          "postalCode": "231300",
-          "addressCountry": "BY"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": "53.885517",
-          "longitude": "25.300224"
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday"
-            ],
-            "opens": "09:00",
-            "closes": "18:00"
-          }
-        ],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+375291809516",
-          "contactType": "customer service",
-          "areaServed": "Lida",
-          "availableLanguage": "ru"
-        },
-        "sameAs": [
-          "https://www.instagram.com/rielter_olga_lida",
-          "https://www.tiktok.com/@rieltor_olga_lida"
-        ]
-      }
-    </script>
+  "name": "Ольга Турко — Риэлтер в Лиде",
+  "url": "https://turko.by",
+  "image": "https://turko.by/images/main-slider/2.webp",
 
-<script src="https://analytics.ahrefs.com/analytics.js" data-key="4XWP46Km11YwHu9L3Pnq5w" async></script>
+  "telephone": "+375291809516",
+  "email": "olgaturko1975@gmail.com",
 
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "бульвар Князя Гедимина, 12",
+    "addressLocality": "Лида",
+    "addressRegion": "Гродненская область",
+    "postalCode": "231300",
+    "addressCountry": "BY"
+  },
 
-  </head>
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 53.885517,
+    "longitude": 25.300224
+  },
+
+  "areaServed": {
+    "@type": "City",
+    "name": "Лида"
+  },
+
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  ],
+
+  "sameAs": [
+    "https://www.instagram.com/rielter_olga_lida",
+    "https://www.tiktok.com/@rieltor_olga_lida"
+  ]
+}
+</script>
+</head>
 
   <body>
     <div class="page-wraper">
