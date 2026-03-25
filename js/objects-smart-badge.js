@@ -13,7 +13,7 @@ if (!badge) return;
 
 try {
 
-const res = await fetch("/data/objects.json", { cache: "no-store" });
+const res = await fetch("/data/objects-list.json", { cache: "no-store" });
 if (!res.ok) return;
 
 const objects = await res.json();

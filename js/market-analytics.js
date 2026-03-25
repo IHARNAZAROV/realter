@@ -1,5 +1,5 @@
 (function () {
-  const objectsPath = '/data/objects.json';
+  const objectsPath = '/data/objects-list.json';
   const cityName = 'Лида';
   const roomTypes = [1, 2, 3, 4];
   const minObjectsForRoom = 3;

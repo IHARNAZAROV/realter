@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  const DATA_URL = "/data/objects.json";
+  const OBJECT_URL = (slug) => `/data/objects/${encodeURIComponent(slug)}.json`;
+  const LIST_URL = "/data/objects-list.json";
   const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
 
   /* =====================================================
@@ -195,9 +196,15 @@
     return "";
   }
 
-  async function fetchObjects() {
-    const res = await fetch(DATA_URL, { cache: "no-store" });
-    if (!res.ok) throw new Error("Ошибка загрузки objects.json");
+  async function fetchSingleObject(slug) {
+    const res = await fetch(OBJECT_URL(slug), { cache: "no-store" });
+    if (!res.ok) throw new Error(`Объект не найден: ${slug}`);
+    return res.json();
+  }
+
+  async function fetchObjectsList() {
+    const res = await fetch(LIST_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("Ошибка загрузки objects-list.json");
     return res.json();
   }
 
@@ -1262,18 +1269,10 @@ new maplibregl.Marker({
 async function init() {
   try {
     let slug = getSlugFromUrl();
-
-    let objects = await fetchObjects();
-    if (typeof window.RealterPrice?.enrichObjectsWithLivePrices === "function") {
-      objects = await window.RealterPrice.enrichObjectsWithLivePrices(objects);
-    }
-    if (!Array.isArray(objects) || !objects.length) {
-      renderNotFound(slug);
-      return;
-    }
+    let listObjects;
 
     /* =========================
-       DEBUG MODE (Live Server)
+       DEBUG MODE (localhost, slug не задан)
     ========================= */
     if (!isFilled(slug)) {
       const isLocal =
@@ -1281,36 +1280,59 @@ async function init() {
         location.hostname === "127.0.0.1";
 
       if (isLocal) {
-        console.warn("DEBUG MODE: slug не найден, берём первый объект");
-        slug = objects[0].slug;
+        console.warn("DEBUG MODE: slug не найден, берём первый объект из списка");
+        listObjects = await fetchObjectsList();
+        if (!Array.isArray(listObjects) || !listObjects.length) {
+          renderNotFound(slug);
+          return;
+        }
+        slug = listObjects[0].slug;
       }
     }
 
-    const obj = objects.find((o) => o && o.slug === slug);
-    if (!obj) {
+    if (!isFilled(slug)) {
       renderNotFound(slug);
       return;
     }
 
     /* =========================
+       ПАРАЛЛЕЛЬНАЯ ЗАГРУЗКА
+    ========================= */
+    const [obj, fetchedList] = await Promise.all([
+      fetchSingleObject(slug),
+      listObjects ? Promise.resolve(listObjects) : fetchObjectsList(),
+    ]);
+
+    listObjects = Array.isArray(fetchedList) ? fetchedList : (listObjects || []);
+
+    /* =========================
+       LIVE PRICES
+    ========================= */
+    let enrichedObj = obj;
+    if (typeof window.RealterPrice?.enrichObjectsWithLivePrices === "function") {
+      const result = await window.RealterPrice.enrichObjectsWithLivePrices([obj]);
+      enrichedObj = result[0] || obj;
+    }
+
+    /* =========================
        RENDER
     ========================= */
-    renderTopTitle(obj);
-    updatePageMeta(obj);
-    renderHeroBlock(obj);
-    renderMeta(obj);
-    renderRightText(obj);
-    renderHeroMeta(obj);
-    renderSidebarTitle(obj);
-    renderObjectDetails(obj);
-    renderSidebarFooter(obj);
-    initSidebarSlider(obj, objects);
-    renderSimilarSlider(obj, objects);
+    renderTopTitle(enrichedObj);
+    updatePageMeta(enrichedObj);
+    renderHeroBlock(enrichedObj);
+    renderMeta(enrichedObj);
+    renderRightText(enrichedObj);
+    renderHeroMeta(enrichedObj);
+    renderSidebarTitle(enrichedObj);
+    renderObjectDetails(enrichedObj);
+    renderSidebarFooter(enrichedObj);
+    initSidebarSlider(enrichedObj, listObjects);
+    renderSimilarSlider(enrichedObj, listObjects);
     animateAgentCardOnce();
-    renderAmenities(obj);
-    generateObjectSchema(obj);
-    initObjectMap(obj);
-    initMortgageCalculator(obj);
+    renderAmenities(enrichedObj);
+    generateObjectSchema(enrichedObj);
+    initObjectMap(enrichedObj);
+    initMortgageCalculator(enrichedObj);
 
   } catch (e) {
     console.error("INIT ERROR:", e);
