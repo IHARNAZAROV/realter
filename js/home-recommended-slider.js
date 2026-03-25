@@ -96,8 +96,8 @@
 
   async function initRecommendedObjectsSlider() {
     try {
-      const response = await fetch("/data/objects.json", { cache: "no-store" });
-      if (!response.ok) throw new Error("Failed to fetch objects.json");
+      const response = await fetch("/data/objects-list.json", { cache: "no-store" });
+      if (!response.ok) throw new Error("Failed to fetch objects-list.json");
 
       const objects = await response.json();
       const recommended = Array.isArray(objects)
