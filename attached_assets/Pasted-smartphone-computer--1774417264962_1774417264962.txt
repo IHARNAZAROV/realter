@@ -1,0 +1,227 @@
+smartphone
+Мобильные устройства
+
+computer
+Компьютер
+
+Определяйте фактическую производительность сайта
+Нет данных
+
+Выявляйте проблемы с производительностью
+56
+Производительность
+92
+Специальные возможности
+100
+Рекомендации
+92
+Поисковая оптимизация
+56
+FCP
++0
+LCP
++0
+TBT
++28
+CLS
++25
+SI
++2
+Производительность
+Значения приблизительные и могут изменяться. Уровень производительности рассчитывается непосредственно на основании этих показателей.Показать калькулятор
+0–49
+50–89
+90–100
+Final Screenshot
+
+Показатели
+Свернуть
+First Contentful Paint
+6,9 сек.
+Первая отрисовка контента – показатель, который отражает время между началом загрузки страницы и появлением первого изображения или блока текста. Подробнее о первой отрисовке контента…
+Largest Contentful Paint
+11,4 сек.
+Отрисовка самого крупного контента – показатель, который отражает время, требуемое на полную отрисовку самого крупного изображения или текстового блока. Подробнее об отрисовке самого крупного контента…
+Total Blocking Time
+150 мс
+Сумма (в миллисекундах) всех периодов от первой отрисовки контента до загрузки для взаимодействия, когда скорость выполнения задач превышала 50 мс. Подробнее об общем времени блокировки…
+Cumulative Layout Shift
+0
+Совокупное смещение макета – это величина, на которую смещаются видимые элементы области просмотра при загрузке. Подробнее о совокупном смещении макета…
+Speed Index
+8,0 сек.
+Speed Index отражает, как быстро на странице появляется контент. Подробнее о Speed Index…
+Captured at 25 мар. 2026 г., 08:32 GMT+3
+Эмуляция устройства Moto G Power with Lighthouse 13.0.1
+Сеанс с просмотром одной страницы
+Начальная загрузка страницы
+Ограничение для сети 4G с низкой скоростью
+Using HeadlessChromium 145.0.7632.159 with lr
+Открыть карту эффективности
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Screenshot
+Показать аудиты
+
+All
+
+FCP
+
+LCP
+
+TBT
+
+CLS
+Статистика
+Запросы, блокирующие отрисовку страницы Ожидаемая экономия – 4 690 мс
+Запросы блокируют обработку при первоначальной загрузке страницы. Это может привести к увеличению значения LCP. Отсрочка или встраивание могут избавить от негативного воздействия этих сетевых запросов.LCPFCPНе оценивается
+URL
+Объем переданных данных
+Длительность
+turko.by Собственные
+129,5 KiB	8 190 мс
+/css/swiper-bundle.css(turko.by)
+3,5 KiB
+570 мс
+…skin/skin-1.css(turko.by)
+0,6 KiB
+190 мс
+/css/style.css(turko.by)
+62,4 KiB
+2 280 мс
+…css/fontawesome.min.css(turko.by)
+17,8 KiB
+1 140 мс
+/css/flaticon.min.css(turko.by)
+0,8 KiB
+570 мс
+…css/solid.min.css(turko.by)
+0,9 KiB
+190 мс
+/css/bootstrap.min.css(turko.by)
+34,4 KiB
+1 520 мс
+/css/swiper.css(turko.by)
+1,6 KiB
+570 мс
+/css/blog-badge.css(turko.by)
+1,0 KiB
+190 мс
+…css/brands.min.css(turko.by)
+5,4 KiB
+570 мс
+…css/regular.min.css(turko.by)
+0,9 KiB
+190 мс
+/site-version.php(turko.by)
+0,3 KiB
+190 мс
+Выбирайте эффективный период хранения кеша Ожидаемая экономия – 834 КиБ
+Благодаря долгому времени хранения кеша страница может быстрее загружаться при повторных посещениях. Подробнее…LCPFCPНе оценивается
+Запрос
+Время жизни кеша
+Объем переданных данных
+qform.io
+574 KiB
+/chunks/4325.38a37ea….js(cdn.qform.io)
+None
+329 KiB
+/styles/app.a0e7021….css(cdn.qform.io)
+None
+43 KiB
+/chunks/685.39aa06c….js(cdn.qform.io)
+None
+32 KiB
+/chunks/435.465a0e7….js(cdn.qform.io)
+None
+26 KiB
+/chunks/app.a0e7021….js(cdn.qform.io)
+None
+25 KiB
+/chunks/5986.507aeb8….js(cdn.qform.io)
+None
+25 KiB
+/chunks/QuizModule.74ccafe….js(cdn.qform.io)
+None
+21 KiB
+/styles/5986.507aeb8….css(cdn.qform.io)
+None
+15 KiB
+/chunks/1256.1f7ca6f….js(cdn.qform.io)
+None
+10 KiB
+/chunks/8267.d79f05c….js(cdn.qform.io)
+None
+9 KiB
+/chunks/CheckboxComponent.7a7ea55….js(cdn.qform.io)
+None
+8 KiB
+/chunks/3882.20e17ca….js(cdn.qform.io)
+None
+6 KiB
+/chunks/1461.ca19315….js(cdn.qform.io)
+None
+5 KiB
+/forms.js?v=177…(cdn.qform.io)
+1 с
+4 KiB
+/chunks/AgreementComponent.608adb6….js(cdn.qform.io)
+None
+4 KiB
+/chunks/transporter.bf54607….js(cdn.qform.io)
+None
+3 KiB
+/chunks/BtnModalComponent.11a9ee5….js(cdn.qform.io)
+None
+2 KiB
+/chunks/CaptchaComponent.a8642cf….js(cdn.qform.io)
+None
+2 KiB
+/chunks/Emitter.59d5971….js(cdn.qform.io)
+None
+1 KiB
+/chunks/analyticsService.0dc33b4….js(cdn.qform.io)
+None
+1 KiB
+/chunks/Statistic….a0bad9a….js(cdn.qform.io)
+None
+1 KiB
+/chunks/dom.1b39215….js(cdn.qform.io)
+None
+1 KiB
+/chunks/BoxTextComponent.b0d5151….js(cdn.qform.io)
+None
+1 KiB
+/chunks/LoaderComponent.e273c33….js(cdn.qform.io)
+None
+1 KiB
+yourgood.app
+258 KiB
+/script/widget.js?id=…(widget.yourgood.app)
+None
+237 KiB
+…qr/generate?url=…(widget.yourgood.app)
+None
+10 KiB
+/script/598.widget.js(widget.yourgood.app)
+None
+10 KiB
+/script/ads.bundle.min.js(widget.yourgood.app)
+None
+0 KiB
+ahrefs.com
+3 KiB
+/analytics.js(analytics.ahrefs.com)
+4 ч
+3 KiB
+turko.by Собственные
+0 KiB
+/site-version.php(turko.by)
+None
+0 KiB
+Улучшите загрузку...
