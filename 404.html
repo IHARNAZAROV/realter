@@ -36,7 +36,7 @@
          <!-- ==============================================
          SITE VERSION (AUTO CACHE BUSTING)
     =============================================== -->
-    <script src="/site-version.php"></script>
+    <script src="/site-version.php" defer></script>
     <link
       rel="stylesheet"
       type="text/css"
@@ -45,13 +45,8 @@
       onload="this.media = 'all'"
     />
     <!-- FLATICON STYLE SHEET -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="css/flaticon.min.css"
-      media="print"
-      onload="this.media = 'all'"
-    />
+    <link rel="preload" href="css/flaticon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/flaticon.min.css"></noscript>
     <!-- MAIN STYLE SHEET -->
     <link
       rel="stylesheet"
@@ -61,18 +56,16 @@
       onload="this.media = 'all'"
     />
     <!-- Color Theme Change Css -->
-    <link
-      rel="stylesheet"
-      class="skin"
-      type="text/css"
-      href="css/skin/skin-1.css"
-      media="print"
-      onload="this.media = 'all'"
-    />
-    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
+    <link rel="preload" href="css/skin/skin-1.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/skin/skin-1.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/brands.min.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/regular.min.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/solid.min.css"></noscript>
   </head>
 
   <body id="bg">

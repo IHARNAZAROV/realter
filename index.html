@@ -83,32 +83,36 @@
     <!-- ==============================================
          SITE VERSION (AUTO CACHE BUSTING)
     =============================================== -->
-    <script src="/site-version.php"></script>
+    <script src="/site-version.php" defer></script>
 
     <!-- ==============================================
          CSS STYLES
     =============================================== -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-    <link rel="stylesheet" href="/css/swiper-bundle.css" />
-    <link rel="stylesheet" href="/css/swiper.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
+    <link rel="preload" href="css/flaticon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/flaticon.min.css"></noscript>
+    <link rel="preload" href="/css/swiper-bundle.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/swiper-bundle.css"></noscript>
+    <link rel="preload" href="/css/swiper.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/swiper.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/brands.min.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/regular.min.css"></noscript>
+    <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/fontawesome/css/solid.min.css"></noscript>
     <link
       rel="stylesheet"
       type="text/css"
       href="css/style.css"
       data-versioned
     />
-    <link rel="stylesheet" href="/css/blog-badge.css">
-    <link
-      rel="stylesheet"
-      class="skin"
-      type="text/css"
-      href="css/skin/skin-1.css"
-    />
+    <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/blog-badge.css"></noscript>
+    <link rel="preload" href="css/skin/skin-1.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/skin/skin-1.css"></noscript>
 
     <!-- ==============================================
          QFORM (forms)

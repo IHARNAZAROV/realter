@@ -80,6 +80,11 @@ ErrorDocument 403 /403.html
     Header set Cache-Control "no-cache"
   </FilesMatch>
 
+  # PHP (dynamic, must not be cached)
+  <FilesMatch "\.php$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate"
+  </FilesMatch>
+
   # JSON
   <FilesMatch "\.(json)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
