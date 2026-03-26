@@ -1,83 +1,16 @@
-/* =========================================================
-   FOOTER RANDOM BLOG POSTS
-   Независимый скрипт для футера
-   ========================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  loadFooterPosts();
-});
-
-/* =========================================================
-   LOAD ARTICLES JSON
-   ========================================================= */
-function loadFooterPosts() {
-  fetch("/data/blog-articles.json")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Не удалось загрузить blog-articles.json");
-      }
-      return response.json();
-    })
-    .then((articles) => {
-      if (!Array.isArray(articles) || articles.length === 0) return;
-
-      renderFooterRandomPosts(articles);
-    })
-    .catch((error) => {
-      console.error("Footer posts error:", error);
-    });
-}
-
-/* =========================================================
-   RENDER RANDOM POSTS IN FOOTER
-   ========================================================= */
-function renderFooterRandomPosts(articles) {
-  const container = document.getElementById("footer-recent-posts");
-  if (!container) return;
-
-  // Перемешиваем массив (Fisher–Yates)
-  const shuffled = [...articles];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-
-// Парсим дату
-function parseDate(dateString) {
-  if (!dateString) return null;
-
-  // Формат: DD.MM.YYYY
-  const parts = dateString.split(".");
-  if (parts.length !== 3) return null;
-
-  const [day, month, year] = parts.map(Number);
-
-  return new Date(year, month - 1, day);
-}
-
-  // Берем первые 3 статьи
-  const selected = shuffled.slice(0, 3);
-
-  container.innerHTML = selected
-    .map((article) => {
-      const date = parseDate(article.date);
-if (!date) return "";
-
-      return `
+function loadFooterPosts(){fetch("/data/blog-articles.json").then(t=>{if(!t.ok)throw Error("Не удалось загрузить blog-articles.json");return t.json()}).then(t=>{Array.isArray(t)&&0!==t.length&&renderFooterRandomPosts(t)}).catch(t=>{console.error("Footer posts error:",t)})}function renderFooterRandomPosts(t){let e=document.getElementById("footer-recent-posts");if(!e)return;let s=[...t];for(let o=s.length-1;o>0;o--){let r=Math.floor(Math.random()*(o+1));[s[o],s[r]]=[s[r],s[o]]}let l=s.slice(0,3);e.innerHTML=l.map(t=>{let e=function t(e){if(!e)return null;let s=e.split(".");if(3!==s.length)return null;let[o,r,l]=s.map(Number);return new Date(l,r-1,o)}(t.date);return e?`
         <div class="widget-post clearfix">
           <div class="sx-post-date text-center text-uppercase text-white">
-            <strong class="p-date">${date.getDate()}</strong>
-            <span class="p-month">${date.toLocaleString("ru-RU", {
-              month: "short",
-            })}</span>
-            <span class="p-year">${date.getFullYear()}</span>
+            <strong class="p-date">${e.getDate()}</strong>
+            <span class="p-month">${e.toLocaleString("ru-RU",{month:"short"})}</span>
+            <span class="p-year">${e.getFullYear()}</span>
           </div>
 
           <div class="sx-post-info">
             <div class="sx-post-header">
               <h6 class="post-title">
-                <a href="/blog/${article.slug}">
-                  ${article.title}
+                <a href="/blog/${t.slug}">
+                  ${t.title}
                 </a>
               </h6>
             </div>
@@ -86,13 +19,10 @@ if (!date) return "";
               <ul>
                 <li class="post-author">
                   <i class="fa fa-user"></i>
-                  ${article.author || "Ольга Турко"}
+                  ${t.author||"Ольга Турко"}
                 </li>
               </ul>
             </div>
           </div>
         </div>
-      `;
-    })
-    .join("");
-}
+      `:""}).join("")}document.addEventListener("DOMContentLoaded",()=>{loadFooterPosts()});
