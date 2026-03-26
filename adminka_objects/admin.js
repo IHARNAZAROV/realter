@@ -349,6 +349,7 @@ const previewImages = {
   "kvartira-lida-ul-masherova-15-2":"/images/objects/pic48.webp",
   "dom-lida-ul-poselkovaya-industrialny":"/images/objects/pic49.webp",
   "kvartira-lida-ul-kommunisticheskaya-49":"/images/objects/pic50.webp",
+   "kvartira-shchuchin-ul-ostrovskogo-22":"/images/objects/pic51.webp",
 };
 
 /* ======================================================

@@ -2,7 +2,7 @@
 # IMPORTANT: set an absolute path to your real .htpasswd file (outside public web root).
 AuthType Basic
 AuthName "Restricted Admin Area"
-AuthUserFile "/absolute/path/outside/public_html/.htpasswd-adminka"
+AuthUserFile "home/turkoby/public_html/.htpasswd-adminka"
 Require valid-user
 
 # Extra safety if credentials file is accidentally placed in this directory.
