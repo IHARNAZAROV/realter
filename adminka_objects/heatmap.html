@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Heatmap / Карты поведения — Админка</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "w2cf1xtz16");
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, #0f141a 0%, #0b0f14 100%);
+      min-height: 100vh;
+      color: #e5e7eb;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      background: #0f141a;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .breadcrumbs .project { font-weight: 400; color: #9ca3af; }
+    .breadcrumbs .sep { color: #4b5563; }
+
+    .admin-nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    .admin-nav a {
+      display: inline-flex;
+      align-items: center;
+      height: 34px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #9ca3af;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+
+    .admin-nav a:hover {
+      background: rgba(255,255,255,0.07);
+      color: #e5e7eb;
+    }
+
+    .admin-nav a.active {
+      background: rgba(255,255,255,0.10);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .heatmap-layout {
+      display: flex;
+      min-height: calc(100vh - 71px);
+    }
+
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #4b5563;
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+
+    .heatmap-main {
+      flex: 1;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .admin-switch-btn {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: 0.2s;
+      width: fit-content;
+    }
+
+    .admin-switch-btn:hover {
+      background: #333;
+    }
+
+    .heatmap-frame {
+      width: 100%;
+      height: calc(100vh - 180px);
+      min-height: 480px;
+      border: none;
+      border-radius: 12px;
+      background: #0b0f14;
+    }
+
+    @media (max-width: 900px) {
+      .heatmap-layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .heatmap-main { padding: 18px; }
+      .heatmap-frame {
+        height: calc(100vh - 250px);
+        min-height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+<header class="dashboard-header">
+  <div class="header-left">
+    <div class="breadcrumbs">
+      <span class="home">Ольга Турко</span>
+      <span class="sep">›</span>
+      <span class="project">turko.by</span>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="/adminka_objects/index.html">Объекты</a>
+      <a href="/adminka_objects/tasks.html">Задачи</a>
+      <a href="/adminka_objects/heatmap.html" class="active">Heatmap</a>
+    </nav>
+  </div>
+</header>
+
+<div class="heatmap-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Навигация</div>
+    <button class="admin-switch-btn" onclick="location.href='/adminka_objects/tasks.html'">
+      ← Назад
+    </button>
+  </aside>
+
+  <main class="heatmap-main">
+    <h1>Heatmap / Карты поведения</h1>
+    <iframe
+      class="heatmap-frame"
+      src="https://clarity.microsoft.com/projects/view/w2cf1xtz16"
+      style="width:100%; height: calc(100vh - 100px); border: none;"
+      title="Microsoft Clarity Heatmap">
+    </iframe>
+  </main>
+</div>
+</body>
+</html>
