@@ -317,6 +317,112 @@
       margin-bottom: 10px;
     }
 
+    .visitor-section {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 8px 0 12px;
+    }
+
+    .visitor-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f3f4f6;
+      margin-bottom: 6px;
+    }
+
+    .visitor-note {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .visitor-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .visitor-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .visitor-card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .visitor-card-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f9fafb;
+      line-height: 1.1;
+    }
+
+    .visitor-card-meta {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .visitor-breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
+    .visitor-breakdown-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 120px;
+    }
+
+    .visitor-breakdown-title {
+      font-size: 13px;
+      color: #f3f4f6;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .visitor-breakdown-list {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      font-size: 12px;
+      color: #d1d5db;
+    }
+
+    .visitor-breakdown-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .visitor-breakdown-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .visitor-breakdown-count {
+      color: #86efac;
+      font-weight: 600;
+    }
+
     .api-panel-actions {
       display: flex;
       gap: 8px;
@@ -353,6 +459,12 @@
         grid-template-columns: 1fr;
       }
       .insights-grid {
+        grid-template-columns: 1fr;
+      }
+      .visitor-grid {
+        grid-template-columns: 1fr;
+      }
+      .visitor-breakdown-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -436,6 +548,16 @@
         <ul id="insightsExtraList" class="insights-extra-list"></ul>
       </section>
 
+      <section id="visitorSection" class="visitor-section" hidden>
+        <div class="visitor-title">Данные посетителей (кто / куда / когда)</div>
+        <p class="visitor-note">
+          Clarity Live Insights показывает агрегированную статистику сессий, а не персональные данные конкретных людей.
+          Ниже — сводка по сессиям, источникам и разрезам (страны, устройства, страницы, время), если API их вернул.
+        </p>
+        <div id="visitorSummaryGrid" class="visitor-grid"></div>
+        <div id="visitorBreakdownGrid" class="visitor-breakdown-grid"></div>
+      </section>
+
       <div id="apiStatus" class="api-status">Готово к проверке.</div>
       <ul class="api-hints">
         <li><strong>500</strong> — чаще всего не настроен <code>CLARITY_API_TOKEN</code> на сервере.</li>
@@ -467,6 +589,9 @@
     const insightsGrid = document.getElementById('insightsGrid');
     const insightsExtra = document.getElementById('insightsExtra');
     const insightsExtraList = document.getElementById('insightsExtraList');
+    const visitorSection = document.getElementById('visitorSection');
+    const visitorSummaryGrid = document.getElementById('visitorSummaryGrid');
+    const visitorBreakdownGrid = document.getElementById('visitorBreakdownGrid');
 
     if (!checkBtn || !numOfDaysSelect || !apiStatus || !apiResponse) {
       return;
@@ -596,10 +721,131 @@
       }
     };
 
+    const toNumber = (value) => {
+      if (typeof value === 'number') return value;
+      if (typeof value === 'string') {
+        const normalized = Number(value.replace(',', '.'));
+        return Number.isFinite(normalized) ? normalized : 0;
+      }
+      return 0;
+    };
+
+    const getLiveInsightRows = (payload) => {
+      const data = payload && typeof payload === 'object' && payload.data ? payload.data : payload;
+      if (Array.isArray(data)) return data;
+      if (data && typeof data === 'object') {
+        if (Array.isArray(data.data)) return data.data;
+        if (Array.isArray(data.metrics)) return data.metrics;
+        if (Array.isArray(data.liveInsights)) return data.liveInsights;
+      }
+      return [];
+    };
+
+    const renderVisitorData = (payload) => {
+      if (!visitorSection || !visitorSummaryGrid || !visitorBreakdownGrid) return;
+
+      const rows = getLiveInsightRows(payload);
+      if (!rows.length) {
+        visitorSection.hidden = true;
+        visitorSummaryGrid.innerHTML = '';
+        visitorBreakdownGrid.innerHTML = '';
+        return;
+      }
+
+      const whoKeywords = ['device', 'browser', 'os', 'new', 'returning', 'user type'];
+      const whereKeywords = ['country', 'city', 'region', 'location'];
+      const whenKeywords = ['hour', 'day', 'week', 'date', 'time'];
+      const whereToKeywords = ['page', 'url', 'path', 'screen', 'route', 'referrer', 'source'];
+
+      const metricMatches = (metricName, keywords) => {
+        const value = String(metricName || '').toLowerCase();
+        return keywords.some((word) => value.includes(word));
+      };
+
+      const sessionsTotal = rows.reduce((sum, row) => {
+        const info = Array.isArray(row && row.information) ? row.information : [];
+        const rowSum = info.reduce((acc, item) => acc + toNumber(item && item.sessionsCount), 0);
+        return sum + rowSum;
+      }, 0);
+
+      const whoCount = rows.filter((row) => metricMatches(row.metricName, whoKeywords)).length;
+      const whereCount = rows.filter((row) => metricMatches(row.metricName, whereKeywords)).length;
+      const whenCount = rows.filter((row) => metricMatches(row.metricName, whenKeywords)).length;
+      const whereToCount = rows.filter((row) => metricMatches(row.metricName, whereToKeywords)).length;
+
+      const summaryCards = [
+        { label: 'Сессии (сумма по метрикам)', value: sessionsTotal, meta: 'Агрегировано из information[].sessionsCount' },
+        { label: 'Кто заходил', value: whoCount, meta: 'Доступных разрезов по типу посетителя/устройству' },
+        { label: 'Куда заходили', value: whereToCount, meta: 'Разрезы по страницам/источникам/URL' },
+        { label: 'Откуда заходили', value: whereCount, meta: 'Разрезы по стране/городу/локации' },
+        { label: 'Когда заходили', value: whenCount, meta: 'Разрезы по времени (день/час), если есть в API' }
+      ];
+
+      visitorSummaryGrid.innerHTML = '';
+      summaryCards.forEach((card) => {
+        const article = document.createElement('article');
+        article.className = 'visitor-card';
+
+        const label = document.createElement('div');
+        label.className = 'visitor-card-label';
+        label.textContent = card.label;
+
+        const value = document.createElement('div');
+        value.className = 'visitor-card-value';
+        value.textContent = String(card.value);
+
+        const meta = document.createElement('div');
+        meta.className = 'visitor-card-meta';
+        meta.textContent = card.meta;
+
+        article.append(label, value, meta);
+        visitorSummaryGrid.appendChild(article);
+      });
+
+      visitorBreakdownGrid.innerHTML = '';
+      rows.forEach((row) => {
+        const title = normalizeLabel(row && row.metricName ? row.metricName : 'Метрика');
+        const info = Array.isArray(row && row.information) ? row.information.slice(0, 8) : [];
+        if (!info.length) return;
+
+        const card = document.createElement('article');
+        card.className = 'visitor-breakdown-card';
+
+        const heading = document.createElement('div');
+        heading.className = 'visitor-breakdown-title';
+        heading.textContent = title;
+
+        const list = document.createElement('ul');
+        list.className = 'visitor-breakdown-list';
+
+        info.forEach((entry) => {
+          const item = document.createElement('li');
+          item.className = 'visitor-breakdown-row';
+
+          const name = document.createElement('span');
+          name.className = 'visitor-breakdown-name';
+          name.textContent = entry && entry.name ? String(entry.name) : '—';
+
+          const count = document.createElement('span');
+          count.className = 'visitor-breakdown-count';
+          count.textContent = `${toNumber(entry && entry.sessionsCount)}`;
+
+          item.append(name, count);
+          list.appendChild(item);
+        });
+
+        card.append(heading, list);
+        visitorBreakdownGrid.appendChild(card);
+      });
+
+      visitorSection.hidden = false;
+    };
+
     const renderResponse = (payload) => {
       const text = JSON.stringify(payload, null, 2);
       apiResponse.textContent = text;
       renderInsights(payload);
+      renderVisitorData(payload);
       lastPayload = text;
       copyResponseBtn.disabled = false;
       retryBtn.disabled = false;
@@ -633,8 +879,10 @@
           retryBtn.disabled = false;
           try {
             renderInsights(JSON.parse(saved.payload));
+            renderVisitorData(JSON.parse(saved.payload));
           } catch (error) {
             renderInsights(null);
+            renderVisitorData(null);
           }
         }
 
