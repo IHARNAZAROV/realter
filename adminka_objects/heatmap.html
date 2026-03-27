@@ -138,86 +138,13 @@
       background: #333;
     }
 
-    .heatmap-panel {
-      border: 1px solid rgba(255,255,255,0.12);
+    .heatmap-frame {
+      width: 100%;
+      height: calc(100vh - 180px);
+      min-height: 480px;
+      border: none;
       border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      padding: 20px;
-      display: grid;
-      gap: 14px;
-      max-width: 860px;
-    }
-
-    .heatmap-panel p {
-      color: #cbd5e1;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-
-    .heatmap-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .heatmap-link-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      background: rgba(255,255,255,0.09);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 10px 16px;
-      border-radius: 8px;
-      transition: 0.2s;
-      font-size: 14px;
-    }
-
-    .heatmap-link-btn:hover {
-      background: rgba(255,255,255,0.16);
-    }
-
-
-    .api-toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .api-toolbar .admin-switch-btn {
-      margin-bottom: 0;
-    }
-
-    .api-select {
-      height: 38px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      padding: 0 10px;
-    }
-
-    .api-status {
-      color: #93c5fd;
-      font-size: 13px;
-      margin-top: 6px;
-    }
-
-    .api-json {
-      margin-top: 6px;
-      max-height: 380px;
-      overflow: auto;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(2,6,23,0.9);
-      padding: 12px;
-      color: #e2e8f0;
-      font-size: 12px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
+      background: #0b0f14;
     }
 
     @media (max-width: 900px) {
@@ -228,6 +155,10 @@
         border-bottom: 1px solid rgba(255,255,255,0.06);
       }
       .heatmap-main { padding: 18px; }
+      .heatmap-frame {
+        height: calc(100vh - 250px);
+        min-height: 420px;
+      }
     }
   </style>
 </head>
@@ -258,68 +189,13 @@
 
   <main class="heatmap-main">
     <h1>Heatmap / Карты поведения</h1>
-    <section class="heatmap-panel">
-      <p>
-        Встраивание Clarity-проекта через <code>iframe</code> заблокировано самим Clarity
-        (<code>X-Frame-Options: sameorigin</code>), поэтому здесь используется API-подход.
-      </p>
-
-      <div class="api-toolbar">
-        <label for="daysSelect">Период:</label>
-        <select id="daysSelect" class="api-select">
-          <option value="1">1 день</option>
-          <option value="2">2 дня</option>
-          <option value="3">3 дня</option>
-        </select>
-        <button class="admin-switch-btn" id="refreshInsightsBtn">Обновить API данные</button>
-      </div>
-
-      <div id="apiStatus" class="api-status">Загрузка данных Clarity API…</div>
-      <pre id="apiJson" class="api-json"></pre>
-
-      <div class="heatmap-actions">
-        <a class="heatmap-link-btn" href="https://clarity.microsoft.com/projects/view/w2cf1xtz16" target="_blank" rel="noopener noreferrer">
-          Открыть Clarity
-        </a>
-        <a class="heatmap-link-btn" href="https://clarity.microsoft.com/" target="_blank" rel="noopener noreferrer">
-          Войти в Clarity
-        </a>
-      </div>
-    </section>
+    <iframe
+      class="heatmap-frame"
+      src="https://clarity.microsoft.com/projects/view/w2cf1xtz16"
+      style="width:100%; height: calc(100vh - 100px); border: none;"
+      title="Microsoft Clarity Heatmap">
+    </iframe>
   </main>
 </div>
-
-<script>
-  const apiStatus = document.getElementById('apiStatus');
-  const apiJson = document.getElementById('apiJson');
-  const refreshBtn = document.getElementById('refreshInsightsBtn');
-  const daysSelect = document.getElementById('daysSelect');
-
-  async function loadInsights() {
-    const days = encodeURIComponent(daysSelect.value || '1');
-    apiStatus.textContent = 'Загрузка данных Clarity API…';
-    try {
-      const res = await fetch(`/adminka_objects/clarity-insights.php?numOfDays=${days}`, {
-        credentials: 'same-origin'
-      });
-      const data = await res.json();
-
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || `HTTP ${res.status}`);
-      }
-
-      apiStatus.textContent = `Данные получены. HTTP ${data.status}. Период: ${data.numOfDays} дн.`;
-      apiJson.textContent = JSON.stringify(data.data, null, 2);
-    } catch (error) {
-      apiStatus.textContent = `Ошибка загрузки API: ${error.message}`;
-      apiJson.textContent = 'Проверьте токен CLARITY_API_TOKEN на сервере и доступ к Clarity API.';
-    }
-  }
-
-  refreshBtn.addEventListener('click', loadInsights);
-  daysSelect.addEventListener('change', loadInsights);
-  loadInsights();
-</script>
-
 </body>
 </html>
