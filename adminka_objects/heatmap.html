@@ -138,44 +138,13 @@
       background: #333;
     }
 
-    .heatmap-panel {
-      border: 1px solid rgba(255,255,255,0.12);
+    .heatmap-frame {
+      width: 100%;
+      height: calc(100vh - 180px);
+      min-height: 480px;
+      border: none;
       border-radius: 12px;
-      background: rgba(255,255,255,0.03);
-      padding: 20px;
-      display: grid;
-      gap: 14px;
-      max-width: 860px;
-    }
-
-    .heatmap-panel p {
-      color: #cbd5e1;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-
-    .heatmap-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .heatmap-link-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      background: rgba(255,255,255,0.09);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 10px 16px;
-      border-radius: 8px;
-      transition: 0.2s;
-      font-size: 14px;
-    }
-
-    .heatmap-link-btn:hover {
-      background: rgba(255,255,255,0.16);
+      background: #0b0f14;
     }
 
     @media (max-width: 900px) {
@@ -186,6 +155,10 @@
         border-bottom: 1px solid rgba(255,255,255,0.06);
       }
       .heatmap-main { padding: 18px; }
+      .heatmap-frame {
+        height: calc(100vh - 250px);
+        min-height: 420px;
+      }
     }
   </style>
 </head>
@@ -216,25 +189,12 @@
 
   <main class="heatmap-main">
     <h1>Heatmap / Карты поведения</h1>
-    <section class="heatmap-panel">
-      <p>
-        Microsoft Clarity блокирует встраивание панели проекта через <code>iframe</code>
-        (заголовок <code>X-Frame-Options: sameorigin</code>), поэтому карта не может
-        отобразиться внутри админки.
-      </p>
-      <p>
-        Открывайте Clarity в новой вкладке или подключайте API (через backend),
-        если нужны кастомные метрики внутри админки.
-      </p>
-      <div class="heatmap-actions">
-        <a class="heatmap-link-btn" href="https://clarity.microsoft.com/projects/view/w2cf1xtz16" target="_blank" rel="noopener noreferrer">
-          Открыть Clarity
-        </a>
-        <a class="heatmap-link-btn" href="https://clarity.microsoft.com/" target="_blank" rel="noopener noreferrer">
-          Войти в Clarity
-        </a>
-      </div>
-    </section>
+    <iframe
+      class="heatmap-frame"
+      src="https://clarity.microsoft.com/projects/view/w2cf1xtz16"
+      style="width:100%; height: calc(100vh - 100px); border: none;"
+      title="Microsoft Clarity Heatmap">
+    </iframe>
   </main>
 </div>
 </body>
