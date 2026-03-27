@@ -92,6 +92,38 @@ Example: Deploy to GitHub Pages
 - Adjust styles in the CSS files (variables and layout) to match branding.
 - Extend JavaScript code to integrate real backend APIs (for forms or listings).
 
+## Blog scheduling and sitemap updates
+You can schedule blog publication dates and keep `sitemap.xml` in sync with a simple JSON + cron workflow.
+
+### 1) Store articles in `data/blog-articles.json`
+Recommended fields per article:
+- `slug` — URL part for article page.
+- `title` — article title.
+- `publishAt` — planned publication datetime (ISO format, for example: `2026-04-10T09:00:00+03:00`).
+- `date` — public date (`DD.MM.YYYY`) used for `<lastmod>` in sitemap.
+
+### 2) How sitemap generation treats scheduled posts
+`generate-sitemap.cjs` now excludes entries with a future publication date from `sitemap.xml`.
+- It checks fields in this order: `publishAt`, `publish_at`, `scheduledAt`, `scheduled_at`, `date`.
+- If publication date is in the future, URL is skipped.
+- If publication date is in the past (or no publish field exists), URL is included.
+
+### 3) Automate publishing
+Run sitemap generation regularly (for example every hour/day) on your server:
+
+```bash
+node generate-sitemap.cjs
+```
+
+Cron example (every hour):
+
+```cron
+0 * * * * cd /path/to/realter && /usr/bin/node generate-sitemap.cjs
+```
+
+### 4) Optional: auto-deploy after sitemap update
+If you host via CI/CD (GitHub Actions, Netlify, Vercel), trigger deployment after content updates so new scheduled articles become available automatically at the planned time.
+
 
 ## Booking form + Telegram setup
 The booking form on `object-detail.html` sends data to `api/book-viewing.php`.

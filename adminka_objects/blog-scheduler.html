@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Планировщик статей — Админка</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/adminka_objects/blog-scheduler.css">
+</head>
+<body>
+  <header class="dashboard-header">
+    <div class="header-left">
+      <div class="breadcrumbs">
+        <span class="home">Ольга Турко</span>
+        <span class="sep">›</span>
+        <span class="project">turko.by</span>
+      </div>
+      <nav class="admin-nav">
+        <a href="/adminka_objects/index.html">Объекты</a>
+        <a href="/adminka_objects/tasks.html">Задачи</a>
+        <a href="/adminka_objects/blog-scheduler.html" class="active">Планировщик статей</a>
+      </nav>
+    </div>
+
+    <div class="header-right">
+      <button id="setTokenBtn" class="btn-secondary" type="button">🔐 Ввести токен</button>
+      <button id="downloadBtn" class="btn-secondary" type="button">⬇ Скачать копию</button>
+      <button id="saveBtn" class="btn-primary" type="button">💾 Сохранить на сервер</button>
+    </div>
+  </header>
+
+  <main class="scheduler-layout">
+    <section class="panel panel-form">
+      <div class="panel-header">
+        <h1>Планировщик публикаций блога</h1>
+        <p>Вставьте JSON статьи, выберите дату публикации — статья автоматически попадёт в общий массив.</p>
+      </div>
+
+      <div id="errors" class="errors" role="alert"></div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="publishAt">Дата и время публикации</label>
+          <input id="publishAt" type="datetime-local" required>
+        </div>
+
+        <div class="field">
+          <label for="timezoneHint">Таймзона</label>
+          <input id="timezoneHint" type="text" disabled>
+        </div>
+
+        <div class="field full">
+          <label for="articleJson">JSON статьи (один объект)</label>
+          <textarea id="articleJson" rows="12" placeholder='{"title":"...","slug":"...","content":[]}'></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button id="addArticleBtn" class="btn-primary" type="button">➕ Добавить в план</button>
+        <span id="dirtyIndicator" class="dirty-indicator">● Есть несохранённые изменения</span>
+      </div>
+    </section>
+
+    <section class="panel panel-list">
+      <div class="panel-header list-header">
+        <h2>Запланированные статьи</h2>
+        <span id="articleCount" class="pill">0</span>
+      </div>
+
+      <div id="articlesList" class="articles-list"></div>
+    </section>
+  </main>
+
+  <script src="/adminka_objects/blog-scheduler.js"></script>
+</body>
+</html>

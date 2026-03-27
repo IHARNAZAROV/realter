@@ -38,6 +38,7 @@ const SOURCES = [
     priority: "0.7",
     changefreq: "monthly",
     dateField: "date",
+    publishDateFields: ["publishAt", "publish_at", "scheduledAt", "scheduled_at", "date"],
   },
 ];
 
@@ -79,6 +80,29 @@ function parseDate(str) {
   return isNaN(d.getTime()) ? null : d.toISOString().replace(/\.\d+Z$/, "+00:00");
 }
 
+function parseIsoLikeDate(str) {
+  if (!str || typeof str !== "string") return null;
+  const date = new Date(str);
+  return isNaN(date.getTime()) ? null : date;
+}
+
+function parseAnyDate(str) {
+  return parseDate(str) ? new Date(parseDate(str)) : parseIsoLikeDate(str);
+}
+
+function isPublished(item, publishDateFields = [], nowDate = new Date()) {
+  if (!Array.isArray(publishDateFields) || publishDateFields.length === 0) return true;
+
+  for (const field of publishDateFields) {
+    if (!Object.prototype.hasOwnProperty.call(item, field)) continue;
+    const parsed = parseAnyDate(item[field]);
+    if (!parsed) return false;
+    return parsed.getTime() <= nowDate.getTime();
+  }
+
+  return true;
+}
+
 function escapeXml(str) {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -103,6 +127,7 @@ function buildUrlEntry({ loc, lastmod, priority, changefreq }) {
 
 function generateSitemap() {
   const now = isoNow();
+  const nowDate = new Date();
   const entries = [];
 
   // 1. Статические страницы
@@ -116,7 +141,7 @@ function generateSitemap() {
   });
 
   // 2. Динамические страницы из JSON
-  SOURCES.forEach(({ file, buildUrl, priority, changefreq, dateField }) => {
+  SOURCES.forEach(({ file, buildUrl, priority, changefreq, dateField, publishDateFields }) => {
     if (!fs.existsSync(file)) {
       console.warn(`⚠️  Файл не найден: ${file}`);
       return;
@@ -126,6 +151,7 @@ function generateSitemap() {
     const items = uniqBySlag(collectItemsDeep(json));
 
     items.forEach((item) => {
+      if (!isPublished(item, publishDateFields, nowDate)) return;
       const lastmod = (dateField && parseDate(item[dateField])) || now;
       entries.push(buildUrlEntry({
         loc: buildUrl(item.slug),
