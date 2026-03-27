@@ -5,13 +5,6 @@
   <title>Heatmap / Карты поведения — Админка</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <script type="text/javascript">
-  (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window, document, "clarity", "script", "w2cf1xtz16");
-  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -150,15 +143,6 @@
       cursor: wait;
     }
 
-    .heatmap-frame {
-      width: 100%;
-      height: calc(100vh - 200px);
-      min-height: 360px;
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 12px;
-      background: #0b0f14;
-    }
-
     .api-panel {
       padding: 16px;
       border: 1px solid rgba(255,255,255,0.1);
@@ -239,6 +223,68 @@
       word-break: break-word;
     }
 
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 10px;
+      margin: 12px 0 10px;
+    }
+
+    .insight-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 86px;
+    }
+
+    .insight-card-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: #9ca3af;
+      margin-bottom: 8px;
+    }
+
+    .insight-card-value {
+      font-size: 22px;
+      line-height: 1.15;
+      color: #f9fafb;
+      font-weight: 700;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+
+    .insight-card-meta {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .insights-extra {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 8px 0 12px;
+    }
+
+    .insights-extra-title {
+      font-size: 13px;
+      color: #cbd5e1;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .insights-extra-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding-left: 18px;
+      color: #d1d5db;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
     .api-status {
       font-size: 13px;
       color: #9ca3af;
@@ -303,11 +349,10 @@
         border-bottom: 1px solid rgba(255,255,255,0.06);
       }
       .heatmap-main { padding: 18px; }
-      .heatmap-frame {
-        height: calc(100vh - 280px);
-        min-height: 420px;
-      }
       .api-info-grid {
+        grid-template-columns: 1fr;
+      }
+      .insights-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -341,20 +386,14 @@
   <main class="heatmap-main">
     <h1>Heatmap / Карты поведения</h1>
     <p class="page-subtitle">
-      Встроенная карта из Microsoft Clarity и блок быстрой проверки Live Insights API.
+      Страница показывает сводку Microsoft Clarity Live Insights в формате карточек админки.
       API ограничен 1–3 днями и может отдавать 429 при частых запросах — панель ниже показывает понятные подсказки.
     </p>
-
-    <iframe
-      class="heatmap-frame"
-      src="https://clarity.microsoft.com/projects/view/w2cf1xtz16"
-      title="Microsoft Clarity Heatmap">
-    </iframe>
 
     <section class="api-panel" aria-live="polite">
       <div class="api-panel-header">
         <div>
-          <div class="api-panel-title">Проверка API Clarity (Live Insights)</div>
+          <div class="api-panel-title">Live Insights из API Clarity</div>
           <div class="api-panel-subtitle">Источник: <code>/adminka_objects/clarity-insights.php</code> → Clarity Project Live Insights</div>
         </div>
       </div>
@@ -384,6 +423,19 @@
         </div>
       </div>
 
+      <div id="insightsGrid" class="insights-grid" aria-label="Карточки метрик API">
+        <article class="insight-card">
+          <div class="insight-card-label">Статус</div>
+          <div class="insight-card-value">Ожидание</div>
+          <div class="insight-card-meta">Запустите проверку API.</div>
+        </article>
+      </div>
+
+      <section id="insightsExtra" class="insights-extra" hidden>
+        <div class="insights-extra-title">Дополнительные данные</div>
+        <ul id="insightsExtraList" class="insights-extra-list"></ul>
+      </section>
+
       <div id="apiStatus" class="api-status">Готово к проверке.</div>
       <ul class="api-hints">
         <li><strong>500</strong> — чаще всего не настроен <code>CLARITY_API_TOKEN</code> на сервере.</li>
@@ -412,6 +464,9 @@
     const lastCheckedValue = document.getElementById('lastCheckedValue');
     const httpStatusValue = document.getElementById('httpStatusValue');
     const payloadSizeValue = document.getElementById('payloadSizeValue');
+    const insightsGrid = document.getElementById('insightsGrid');
+    const insightsExtra = document.getElementById('insightsExtra');
+    const insightsExtraList = document.getElementById('insightsExtraList');
 
     if (!checkBtn || !numOfDaysSelect || !apiStatus || !apiResponse) {
       return;
@@ -441,9 +496,110 @@
       payloadSizeValue.textContent = payloadText ? `${new Blob([payloadText]).size} B` : '—';
     };
 
+    const normalizeLabel = (key) => String(key || '')
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/[_-]+/g, ' ')
+      .trim();
+
+    const flattenScalarMetrics = (data, maxItems = 8) => {
+      const metrics = [];
+      const skipKeys = new Set(['ok', 'status', 'data', 'timestamp', 'date', 'startDate', 'endDate']);
+      const queue = [{ key: 'data', value: data, depth: 0 }];
+
+      while (queue.length && metrics.length < maxItems) {
+        const current = queue.shift();
+        if (!current || current.value == null) continue;
+
+        if (Array.isArray(current.value)) {
+          if (current.value.length && typeof current.value[0] === 'object') {
+            queue.push({ key: `${current.key}.length`, value: current.value.length, depth: current.depth + 1 });
+          }
+          continue;
+        }
+
+        if (typeof current.value === 'object') {
+          Object.entries(current.value).forEach(([childKey, childValue]) => {
+            if (skipKeys.has(childKey)) return;
+            queue.push({
+              key: current.key ? `${current.key}.${childKey}` : childKey,
+              value: childValue,
+              depth: current.depth + 1
+            });
+          });
+          continue;
+        }
+
+        if (['number', 'string', 'boolean'].includes(typeof current.value)) {
+          metrics.push({ label: normalizeLabel(current.key), value: current.value });
+        }
+      }
+
+      return metrics;
+    };
+
+    const renderInsights = (payload) => {
+      if (!insightsGrid) return;
+      const data = payload && typeof payload === 'object' && payload.data ? payload.data : payload;
+      const cards = flattenScalarMetrics(data, 8);
+
+      insightsGrid.innerHTML = '';
+      if (!cards.length) {
+        cards.push({ label: 'Нет данных', value: '—', meta: 'API вернул пустую структуру.' });
+      }
+      cards.forEach((item) => {
+        const article = document.createElement('article');
+        article.className = 'insight-card';
+
+        const label = document.createElement('div');
+        label.className = 'insight-card-label';
+        label.textContent = item.label || 'Метрика';
+
+        const value = document.createElement('div');
+        value.className = 'insight-card-value';
+        value.textContent = String(item.value);
+
+        const meta = document.createElement('div');
+        meta.className = 'insight-card-meta';
+        meta.textContent = item.meta || 'Источник: Clarity API';
+
+        article.append(label, value, meta);
+        insightsGrid.appendChild(article);
+      });
+
+      if (!insightsExtra || !insightsExtraList) return;
+
+      const arraySummaries = [];
+      Object.entries(data || {}).forEach(([key, value]) => {
+        if (!Array.isArray(value) || !value.length) return;
+        const firstItem = typeof value[0] === 'object' ? JSON.stringify(value[0]).slice(0, 120) : String(value[0]);
+        arraySummaries.push({
+          label: normalizeLabel(key),
+          length: value.length,
+          firstItem
+        });
+      });
+
+      if (arraySummaries.length) {
+        insightsExtraList.innerHTML = '';
+        arraySummaries.forEach((item) => {
+          const li = document.createElement('li');
+          const label = document.createElement('strong');
+          label.textContent = `${item.label}: `;
+          li.appendChild(label);
+          li.append(`${item.length} записей, первый элемент: ${item.firstItem}`);
+          insightsExtraList.appendChild(li);
+        });
+        insightsExtra.hidden = false;
+      } else {
+        insightsExtra.hidden = true;
+        insightsExtraList.innerHTML = '';
+      }
+    };
+
     const renderResponse = (payload) => {
       const text = JSON.stringify(payload, null, 2);
       apiResponse.textContent = text;
+      renderInsights(payload);
       lastPayload = text;
       copyResponseBtn.disabled = false;
       retryBtn.disabled = false;
@@ -475,6 +631,11 @@
           lastPayload = saved.payload;
           copyResponseBtn.disabled = false;
           retryBtn.disabled = false;
+          try {
+            renderInsights(JSON.parse(saved.payload));
+          } catch (error) {
+            renderInsights(null);
+          }
         }
 
         setPayloadMeta({
