@@ -147,6 +147,67 @@
       background: #0b0f14;
     }
 
+    .api-panel {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      max-width: 920px;
+    }
+
+    .api-panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .api-panel-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .api-panel-label {
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    .api-panel-select {
+      background: #0f141a;
+      color: #e5e7eb;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 6px 10px;
+    }
+
+    .api-panel button {
+      margin-bottom: 0;
+    }
+
+    .api-status {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 8px;
+      min-height: 18px;
+    }
+
+    .api-response {
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 260px;
+      overflow: auto;
+      background: rgba(0,0,0,0.35);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #d1d5db;
+    }
+
     @media (max-width: 900px) {
       .heatmap-layout { flex-direction: column; }
       .sidebar {
@@ -195,7 +256,72 @@
       style="width:100%; height: calc(100vh - 100px); border: none;"
       title="Microsoft Clarity Heatmap">
     </iframe>
+
+    <section class="api-panel" aria-live="polite">
+      <div class="api-panel-title">Проверка API Clarity (Live Insights)</div>
+      <div class="api-panel-controls">
+        <label class="api-panel-label" for="numOfDaysSelect">numOfDays (оптимально 1):</label>
+        <select id="numOfDaysSelect" class="api-panel-select">
+          <option value="1" selected>1 день (рекомендуется)</option>
+          <option value="2">2 дня</option>
+          <option value="3">3 дня</option>
+        </select>
+        <button id="checkApiBtn" class="admin-switch-btn" type="button">Проверить API</button>
+      </div>
+      <div id="apiStatus" class="api-status">Готово к проверке.</div>
+      <pre id="apiResponse" class="api-response">Нажмите «Проверить API», чтобы получить ответ с /adminka_objects/clarity-insights.php.</pre>
+    </section>
   </main>
 </div>
+<script>
+  (function () {
+    const checkBtn = document.getElementById('checkApiBtn');
+    const numOfDaysSelect = document.getElementById('numOfDaysSelect');
+    const apiStatus = document.getElementById('apiStatus');
+    const apiResponse = document.getElementById('apiResponse');
+
+    if (!checkBtn || !numOfDaysSelect || !apiStatus || !apiResponse) {
+      return;
+    }
+
+    const setStatus = (message, isError = false) => {
+      apiStatus.textContent = message;
+      apiStatus.style.color = isError ? '#fca5a5' : '#9ca3af';
+    };
+
+    const renderResponse = (payload) => {
+      apiResponse.textContent = JSON.stringify(payload, null, 2);
+    };
+
+    checkBtn.addEventListener('click', async () => {
+      const numOfDays = Number(numOfDaysSelect.value) || 1;
+      const endpoint = `/adminka_objects/clarity-insights.php?numOfDays=${encodeURIComponent(numOfDays)}`;
+
+      checkBtn.disabled = true;
+      setStatus(`Запрос: ${endpoint}`);
+      apiResponse.textContent = 'Загрузка...';
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
+        const data = await response.json();
+        renderResponse(data);
+        setStatus(`HTTP ${response.status} • numOfDays=${numOfDays}`, !response.ok || !data.ok);
+      } catch (error) {
+        setStatus('Ошибка запроса к API.', true);
+        renderResponse({
+          ok: false,
+          error: 'Fetch failed',
+          details: error && error.message ? error.message : String(error),
+          endpoint
+        });
+      } finally {
+        checkBtn.disabled = false;
+      }
+    });
+  })();
+</script>
 </body>
 </html>
