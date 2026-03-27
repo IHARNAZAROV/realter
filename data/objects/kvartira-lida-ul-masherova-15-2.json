@@ -54,5 +54,9 @@
   ],
   "publishedAt": "2026-03-16",
   "contractNumber": "Договор № 63/4 от 16.03.2026",
-  "livePriceBYN": 98822
+  "livePriceBYN": 97852,
+  "status": {
+    "type": "sold",
+    "date": "2026-03-27"
+  }
 }

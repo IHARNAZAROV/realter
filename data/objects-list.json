@@ -904,6 +904,10 @@
     "address": "ул. Машерова, 15/2",
     "priceBYN": 97664,
     "priceUSD": 33000,
+    "status": {
+      "type": "sold",
+      "date": "2026-03-27"
+    },
     "publishedAt": "2026-03-16",
     "rooms": 1,
     "areaTotal": 40.2,
