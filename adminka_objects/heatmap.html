@@ -115,11 +115,19 @@
       display: flex;
       flex-direction: column;
       min-width: 0;
+      gap: 16px;
     }
 
     h1 {
       font-size: 26px;
-      margin-bottom: 16px;
+      margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+      color: #9ca3af;
+      font-size: 14px;
+      line-height: 1.45;
+      max-width: 980px;
     }
 
     .admin-switch-btn {
@@ -129,37 +137,55 @@
       padding: 10px 16px;
       border-radius: 8px;
       cursor: pointer;
-      margin-bottom: 15px;
       transition: 0.2s;
       width: fit-content;
     }
 
-    .admin-switch-btn:hover {
+    .admin-switch-btn:hover:not(:disabled) {
       background: #333;
+    }
+
+    .admin-switch-btn:disabled {
+      opacity: .6;
+      cursor: wait;
     }
 
     .heatmap-frame {
       width: 100%;
-      height: calc(100vh - 180px);
-      min-height: 380px;
-      border: none;
+      height: calc(100vh - 200px);
+      min-height: 360px;
+      border: 1px solid rgba(255,255,255,0.09);
       border-radius: 12px;
       background: #0b0f14;
     }
 
     .api-panel {
-      margin-top: 16px;
       padding: 16px;
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
       background: rgba(255,255,255,0.02);
-      max-width: 920px;
+      max-width: 1080px;
+    }
+
+    .api-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
     }
 
     .api-panel-title {
       font-size: 16px;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 4px;
+    }
+
+    .api-panel-subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.4;
     }
 
     .api-panel-controls {
@@ -180,11 +206,37 @@
       color: #e5e7eb;
       border: 1px solid rgba(255,255,255,0.2);
       border-radius: 8px;
-      padding: 6px 10px;
+      padding: 8px 10px;
+      min-width: 200px;
     }
 
-    .api-panel button {
-      margin-bottom: 0;
+    .api-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .api-info-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .api-info-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    .api-info-value {
+      font-size: 14px;
+      color: #f3f4f6;
+      font-weight: 600;
+      word-break: break-word;
     }
 
     .api-status {
@@ -192,6 +244,16 @@
       color: #9ca3af;
       margin-bottom: 8px;
       min-height: 18px;
+    }
+
+    .api-hints {
+      margin: 8px 0 10px;
+      padding-left: 18px;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.45;
+      display: grid;
+      gap: 3px;
     }
 
     .api-response {
@@ -206,7 +268,32 @@
       font-size: 12px;
       line-height: 1.45;
       color: #d1d5db;
+      margin-bottom: 10px;
     }
+
+    .api-panel-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .admin-ghost-btn {
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.03);
+      color: #e5e7eb;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .admin-ghost-btn:hover:not(:disabled) {
+      background: rgba(255,255,255,.08);
+    }
+
+    .status-error { color: #fca5a5; }
+    .status-success { color: #86efac; }
+    .status-warning { color: #fcd34d; }
 
     @media (max-width: 900px) {
       .heatmap-layout { flex-direction: column; }
@@ -217,8 +304,11 @@
       }
       .heatmap-main { padding: 18px; }
       .heatmap-frame {
-        height: calc(100vh - 250px);
+        height: calc(100vh - 280px);
         min-height: 420px;
+      }
+      .api-info-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -250,17 +340,27 @@
 
   <main class="heatmap-main">
     <h1>Heatmap / Карты поведения</h1>
+    <p class="page-subtitle">
+      Встроенная карта из Microsoft Clarity и блок быстрой проверки Live Insights API.
+      API ограничен 1–3 днями и может отдавать 429 при частых запросах — панель ниже показывает понятные подсказки.
+    </p>
+
     <iframe
       class="heatmap-frame"
       src="https://clarity.microsoft.com/projects/view/w2cf1xtz16"
-      style="width:100%; height: calc(100vh - 100px); border: none;"
       title="Microsoft Clarity Heatmap">
     </iframe>
 
     <section class="api-panel" aria-live="polite">
-      <div class="api-panel-title">Проверка API Clarity (Live Insights)</div>
+      <div class="api-panel-header">
+        <div>
+          <div class="api-panel-title">Проверка API Clarity (Live Insights)</div>
+          <div class="api-panel-subtitle">Источник: <code>/adminka_objects/clarity-insights.php</code> → Clarity Project Live Insights</div>
+        </div>
+      </div>
+
       <div class="api-panel-controls">
-        <label class="api-panel-label" for="numOfDaysSelect">numOfDays (оптимально 1):</label>
+        <label class="api-panel-label" for="numOfDaysSelect">numOfDays:</label>
         <select id="numOfDaysSelect" class="api-panel-select">
           <option value="1" selected>1 день (рекомендуется)</option>
           <option value="2">2 дня</option>
@@ -268,59 +368,237 @@
         </select>
         <button id="checkApiBtn" class="admin-switch-btn" type="button">Проверить API</button>
       </div>
+
+      <div class="api-info-grid">
+        <div class="api-info-card">
+          <div class="api-info-label">Последняя проверка</div>
+          <div id="lastCheckedValue" class="api-info-value">—</div>
+        </div>
+        <div class="api-info-card">
+          <div class="api-info-label">HTTP статус</div>
+          <div id="httpStatusValue" class="api-info-value">—</div>
+        </div>
+        <div class="api-info-card">
+          <div class="api-info-label">Размер ответа</div>
+          <div id="payloadSizeValue" class="api-info-value">—</div>
+        </div>
+      </div>
+
       <div id="apiStatus" class="api-status">Готово к проверке.</div>
-      <pre id="apiResponse" class="api-response">Нажмите «Проверить API», чтобы получить ответ с /adminka_objects/clarity-insights.php.</pre>
+      <ul class="api-hints">
+        <li><strong>500</strong> — чаще всего не настроен <code>CLARITY_API_TOKEN</code> на сервере.</li>
+        <li><strong>429</strong> — превышен лимит запросов Clarity, подождите 1–2 минуты.</li>
+        <li><strong>502</strong> — временная ошибка сети между сервером и Clarity API.</li>
+      </ul>
+      <pre id="apiResponse" class="api-response">Нажмите «Проверить API», чтобы получить ответ.</pre>
+
+      <div class="api-panel-actions">
+        <button id="copyResponseBtn" class="admin-ghost-btn" type="button" disabled>Копировать JSON</button>
+        <button id="retryBtn" class="admin-ghost-btn" type="button" disabled>Повторить последний запрос</button>
+      </div>
     </section>
   </main>
 </div>
+
 <script>
   (function () {
+    const STORAGE_KEY = 'clarityInsightsLastResult';
     const checkBtn = document.getElementById('checkApiBtn');
+    const retryBtn = document.getElementById('retryBtn');
+    const copyResponseBtn = document.getElementById('copyResponseBtn');
     const numOfDaysSelect = document.getElementById('numOfDaysSelect');
     const apiStatus = document.getElementById('apiStatus');
     const apiResponse = document.getElementById('apiResponse');
+    const lastCheckedValue = document.getElementById('lastCheckedValue');
+    const httpStatusValue = document.getElementById('httpStatusValue');
+    const payloadSizeValue = document.getElementById('payloadSizeValue');
 
     if (!checkBtn || !numOfDaysSelect || !apiStatus || !apiResponse) {
       return;
     }
 
-    const setStatus = (message, isError = false) => {
+    let lastPayload = null;
+    let lastNumOfDays = Number(numOfDaysSelect.value) || 1;
+
+    const formatDateTime = (value) => {
+      if (!value) return '—';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return '—';
+      return date.toLocaleString('ru-RU');
+    };
+
+    const setStatus = (message, tone = 'default') => {
       apiStatus.textContent = message;
-      apiStatus.style.color = isError ? '#fca5a5' : '#9ca3af';
+      apiStatus.classList.remove('status-error', 'status-success', 'status-warning');
+      if (tone === 'error') apiStatus.classList.add('status-error');
+      if (tone === 'success') apiStatus.classList.add('status-success');
+      if (tone === 'warning') apiStatus.classList.add('status-warning');
+    };
+
+    const setPayloadMeta = ({ checkedAt = null, status = null, payloadText = '' } = {}) => {
+      lastCheckedValue.textContent = formatDateTime(checkedAt);
+      httpStatusValue.textContent = status || '—';
+      payloadSizeValue.textContent = payloadText ? `${new Blob([payloadText]).size} B` : '—';
     };
 
     const renderResponse = (payload) => {
-      apiResponse.textContent = JSON.stringify(payload, null, 2);
+      const text = JSON.stringify(payload, null, 2);
+      apiResponse.textContent = text;
+      lastPayload = text;
+      copyResponseBtn.disabled = false;
+      retryBtn.disabled = false;
+      return text;
     };
 
-    checkBtn.addEventListener('click', async () => {
-      const numOfDays = Number(numOfDaysSelect.value) || 1;
+    const persistLastResult = (state) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        console.warn('Не удалось сохранить результат проверки API.', error);
+      }
+    };
+
+    const restoreLastResult = () => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (!saved || typeof saved !== 'object') return;
+
+        if (saved.numOfDays && [1, 2, 3].includes(saved.numOfDays)) {
+          numOfDaysSelect.value = String(saved.numOfDays);
+          lastNumOfDays = saved.numOfDays;
+        }
+
+        if (saved.payload) {
+          apiResponse.textContent = saved.payload;
+          lastPayload = saved.payload;
+          copyResponseBtn.disabled = false;
+          retryBtn.disabled = false;
+        }
+
+        setPayloadMeta({
+          checkedAt: saved.checkedAt,
+          status: saved.status,
+          payloadText: saved.payload
+        });
+
+        if (saved.status) {
+          const isOk = saved.status >= 200 && saved.status < 300;
+          setStatus(`Восстановлен последний результат: HTTP ${saved.status}.`, isOk ? 'success' : 'warning');
+        }
+      } catch (error) {
+        console.warn('Не удалось восстановить предыдущий результат API.', error);
+      }
+    };
+
+    const fetchInsights = async (numOfDays) => {
       const endpoint = `/adminka_objects/clarity-insights.php?numOfDays=${encodeURIComponent(numOfDays)}`;
+      const checkedAt = new Date().toISOString();
 
       checkBtn.disabled = true;
-      setStatus(`Запрос: ${endpoint}`);
+      retryBtn.disabled = true;
+      setStatus(`Запрос к ${endpoint}`, 'default');
       apiResponse.textContent = 'Загрузка...';
 
       try {
         const response = await fetch(endpoint, {
           method: 'GET',
-          headers: { 'Accept': 'application/json' }
+          headers: { Accept: 'application/json' },
+          cache: 'no-store'
         });
-        const data = await response.json();
-        renderResponse(data);
-        setStatus(`HTTP ${response.status} • numOfDays=${numOfDays}`, !response.ok || !data.ok);
+
+        const text = await response.text();
+        let data;
+
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch (jsonError) {
+          data = {
+            ok: false,
+            error: 'Invalid JSON',
+            details: jsonError.message,
+            raw: text
+          };
+        }
+
+        const rendered = renderResponse(data);
+        setPayloadMeta({ checkedAt, status: response.status, payloadText: rendered });
+
+        let tone = 'success';
+        let message = `HTTP ${response.status} • numOfDays=${numOfDays}`;
+
+        if (response.status === 429) {
+          tone = 'warning';
+          message = 'HTTP 429: Clarity временно ограничил частоту запросов. Подождите 1–2 минуты.';
+        } else if (response.status === 500) {
+          tone = 'error';
+          message = 'HTTP 500: проверьте CLARITY_API_TOKEN в env.php или переменных окружения.';
+        } else if (response.status === 502) {
+          tone = 'warning';
+          message = 'HTTP 502: сервер не смог получить ответ от Clarity API, попробуйте позже.';
+        } else if (!response.ok || data.ok === false) {
+          tone = 'warning';
+          message = `HTTP ${response.status}: API ответил с ошибкой.`;
+        }
+
+        setStatus(message, tone);
+        lastNumOfDays = numOfDays;
+
+        persistLastResult({
+          checkedAt,
+          status: response.status,
+          payload: rendered,
+          numOfDays
+        });
       } catch (error) {
-        setStatus('Ошибка запроса к API.', true);
-        renderResponse({
+        const payload = {
           ok: false,
           error: 'Fetch failed',
           details: error && error.message ? error.message : String(error),
-          endpoint
+          endpoint,
+          checkedAt
+        };
+
+        const rendered = renderResponse(payload);
+        setPayloadMeta({ checkedAt, status: 'network', payloadText: rendered });
+        setStatus('Сетевая ошибка при запросе к API.', 'error');
+
+        persistLastResult({
+          checkedAt,
+          status: 'network',
+          payload: rendered,
+          numOfDays
         });
       } finally {
         checkBtn.disabled = false;
+        retryBtn.disabled = false;
+      }
+    };
+
+    checkBtn.addEventListener('click', async () => {
+      const numOfDays = Number(numOfDaysSelect.value) || 1;
+      await fetchInsights(numOfDays);
+    });
+
+    retryBtn.addEventListener('click', async () => {
+      await fetchInsights(lastNumOfDays);
+    });
+
+    copyResponseBtn.addEventListener('click', async () => {
+      if (!lastPayload) {
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(lastPayload);
+        setStatus('JSON скопирован в буфер обмена.', 'success');
+      } catch (error) {
+        setStatus('Не удалось скопировать JSON. Проверьте разрешения браузера.', 'warning');
       }
     });
+
+    restoreLastResult();
   })();
 </script>
 </body>
