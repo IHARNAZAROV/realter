@@ -365,20 +365,23 @@
       || "Объект недвижимости — Ольга Турко, риэлтер в Лиде";
     const url = `https://turko.by/object/${obj.slug}`;
 
-    const setMeta = (sel, attr, val) => {
+    document.title = title;
+    
+    const metaMap = {
+      'meta[name="description"]': { attr: "content", val: desc },
+      'meta[property="og:title"]': { attr: "content", val: title },
+      'meta[property="og:description"]': { attr: "content", val: desc },
+      'meta[property="og:image"]': { attr: "content", val: firstImage },
+      'meta[property="og:url"]': { attr: "content", val: url },
+      'meta[name="twitter:title"]': { attr: "content", val: title },
+      'meta[name="twitter:description"]': { attr: "content", val: desc },
+      'meta[name="twitter:image"]': { attr: "content", val: firstImage },
+    };
+    
+    Object.entries(metaMap).forEach(([sel, {attr, val}]) => {
       const el = document.querySelector(sel);
       if (el) el.setAttribute(attr, val);
-    };
-
-    document.title = title;
-    setMeta('meta[name="description"]', "content", desc);
-    setMeta('meta[property="og:title"]', "content", title);
-    setMeta('meta[property="og:description"]', "content", desc);
-    setMeta('meta[property="og:image"]', "content", firstImage);
-    setMeta('meta[property="og:url"]', "content", url);
-    setMeta('meta[name="twitter:title"]', "content", title);
-    setMeta('meta[name="twitter:description"]', "content", desc);
-    setMeta('meta[name="twitter:image"]', "content", firstImage);
+    });
 
     const canonical = document.querySelector('link[rel="canonical"]');
     if (canonical) canonical.setAttribute("href", url);
@@ -649,7 +652,35 @@ function renderObjectDetails(obj) {
       .join("");
   }
 
-  function renderRightText(obj) {
+  // Кэш для нередко меняющихся данных объекта
+let _cachedObjectPrices = {};
+let _cachedObjectPriceKey = null;
+
+function getCachedObjectPrice(obj) {
+  const key = obj?.slug;
+  if (_cachedObjectPriceKey === key && _cachedObjectPrices[key]) {
+    return _cachedObjectPrices[key];
+  }
+  _cachedObjectPriceKey = key;
+  
+  const displayPrice = getDisplayBynPrice(obj);
+  if (typeof displayPrice === "number" && displayPrice > 0) {
+    _cachedObjectPrices[key] = displayPrice;
+    return displayPrice;
+  }
+  
+  if (typeof obj.priceUSD === "number" && obj.priceUSD > 0) {
+    const USD_TO_BYN = 3.3;
+    const price = Math.round(obj.priceUSD * USD_TO_BYN);
+    _cachedObjectPrices[key] = price;
+    return price;
+  }
+  
+  _cachedObjectPrices[key] = null;
+  return null;
+}
+
+function renderRightText(obj) {
     const titleEl = qs("[data-object-title]");
     const subEl = qs("[data-object-subtitle]");
     const descEl = qs("[data-object-description]");
@@ -669,23 +700,17 @@ function renderObjectDetails(obj) {
               ],
               " • ",
             )
-          : safeJoin(
-              [
-                obj.type,
-                obj.areaTotal && `${obj.areaTotal} м²`,
-                getDisplayBynPrice(obj) && `${formatPrice(getDisplayBynPrice(obj))} BYN`,
-              ],
-              " • ",
-            );
-
-      if (line) subEl.textContent = line;
-    }
-
-    if (descEl) {
-      const blocks = [];
-
-      if (obj.description) blocks.push(`<p>${obj.description}</p>`);
-
+          : (() => {
+              const cachedPrice = getCachedObjectPrice(obj);
+              return safeJoin(
+                [
+                  obj.type,
+                  obj.areaTotal && `${obj.areaTotal} м²`,
+                  cachedPrice && `${formatPrice(cachedPrice)} BYN`,
+                ],
+                " • ",
+              );
+            })();
       if (Array.isArray(obj.features) && obj.features.length) {
         blocks.push(`
           <p><b>Преимущества:</b></p>
@@ -743,16 +768,7 @@ function renderSidebarFooter(obj) {
 ===================================================== */
 
   function getObjectPrice(obj) {
-    const displayPrice = getDisplayBynPrice(obj);
-    if (typeof displayPrice === "number" && displayPrice > 0)
-      return displayPrice;
-
-    if (typeof obj.priceUSD === "number" && obj.priceUSD > 0) {
-      const USD_TO_BYN = 3.3;
-      return Math.round(obj.priceUSD * USD_TO_BYN);
-    }
-
-    return null;
+    return getCachedObjectPrice(obj);
   }
 
   function normalizeText(v) {
@@ -794,8 +810,17 @@ function renderSidebarFooter(obj) {
     );
   }
 
+  let _cachedSimilarObjects = null;
+  let _cachedSimilarKey = null;
+  
   function pickSimilarObjects(currentObj, allObjects, limit = 6) {
-    return allObjects
+    const cacheKey = currentObj?.slug;
+    
+    if (_cachedSimilarKey === cacheKey && _cachedSimilarObjects) {
+      return _cachedSimilarObjects;
+    }
+    
+    const result = allObjects
       .filter(
         (o) => o && o.slug && o.slug !== currentObj.slug && !isSoldObject(o)
       )
@@ -803,6 +828,10 @@ function renderSidebarFooter(obj) {
       .sort((a, b) => a.score - b.score)
       .slice(0, limit)
       .map((x) => x.obj);
+    
+    _cachedSimilarKey = cacheKey;
+    _cachedSimilarObjects = result;
+    return result;
   }
 
   function renderSimilarItem(obj) {
@@ -887,29 +916,7 @@ function toggleFavorite(slug) {
 
 
 
-function renderHeroMeta(obj) {
-  const title = document.querySelector("[data-hero-title]");
-  const location = document.querySelector("[data-hero-location]");
-  const published = document.querySelector("[data-published]");
-  const dealType = document.querySelector("[data-deal-type]");
-  const featured = document.querySelector("[data-featured]");
-
-  if (title) title.textContent = obj.title || "";
-  if (location)
-    location.textContent = [obj.city, obj.address].filter(Boolean).join(", ");
-
-  if (published) {
-    const d = obj.publishedAt
-      ? new Date(obj.publishedAt).toLocaleDateString("ru-RU")
-      : "";
-    published.textContent = d;
-  }
-
-
-  if (featured && obj.recommended) {
-    featured.hidden = false;
-  }
-}
+// renderHeroMeta удаления — логика встроена в renderHeroBlock
 
 
 function renderSidebarTitle(obj) {
@@ -986,6 +993,24 @@ function initSidebarSlider(currentObj, allObjects) {
   function stopAuto() {
     if (autoTimer) clearInterval(autoTimer);
   }
+  
+  const handleMouseEnter = stopAuto;
+  const handleMouseLeave = startAuto;
+  const handleTouchStart = (e) => {
+    const startX = e.touches[0].clientX;
+    stopAuto();
+    
+    const handleTouchEnd = (e) => {
+      const diff = e.changedTouches[0].clientX - startX;
+      if (Math.abs(diff) > 50) {
+        diff < 0 ? next() : prev();
+      }
+      startAuto();
+      track.removeEventListener("touchend", handleTouchEnd);
+    };
+    
+    track.addEventListener("touchend", handleTouchEnd, { once: true });
+  };
 
   /* INIT */
   renderSlides();
@@ -993,24 +1018,21 @@ function initSidebarSlider(currentObj, allObjects) {
   startAuto();
 
   /* HOVER PAUSE */
-  track.addEventListener("mouseenter", stopAuto);
-  track.addEventListener("mouseleave", startAuto);
+  track.addEventListener("mouseenter", handleMouseEnter);
+  track.addEventListener("mouseleave", handleMouseLeave);
 
   /* SWIPE */
-  let startX = 0;
-
-  track.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
+  track.addEventListener("touchstart", handleTouchStart);
+  
+  /* CLEANUP */
+  const cleanup = () => {
     stopAuto();
-  });
-
-  track.addEventListener("touchend", (e) => {
-    const diff = e.changedTouches[0].clientX - startX;
-    if (Math.abs(diff) > 50) {
-      diff < 0 ? next() : prev();
-    }
-    startAuto();
-  });
+    track.removeEventListener("mouseenter", handleMouseEnter);
+    track.removeEventListener("mouseleave", handleMouseLeave);
+    track.removeEventListener("touchstart", handleTouchStart);
+  };
+  
+  window._sidebarSliderCleanup = cleanup;
 }
 
 
@@ -1064,7 +1086,6 @@ function renderAmenities(obj) {
 
 function initRevealBlocks() {
   const blocks = document.querySelectorAll(".reveal");
-
   if (!blocks.length) return;
 
   const observer = new IntersectionObserver(
@@ -1072,19 +1093,20 @@ function initRevealBlocks() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target); // один раз
+          observer.unobserve(entry.target);
         }
       });
     },
-    {
-      threshold: 0.15,
-    }
+    { threshold: 0.15 }
   );
 
   blocks.forEach(block => observer.observe(block));
+  
+  // Очистка
+  window._revealBlocksObserver = observer;
 }
 
-document.addEventListener("DOMContentLoaded", initRevealBlocks);
+// initRevealBlocks вызывается в init(), убрал дублирование DOMContentLoaded
 
 
 
@@ -1222,52 +1244,93 @@ function initObjectMap(obj) {
 
   const map = new maplibregl.Map({
     container: mapEl,
-   style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
+    style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
     center: [lng, lat],
     zoom: 15,
     attributionControl: true
-    
   });
-
 
   map.on("load", () => {
-  const layers = map.getStyle().layers;
-
-  layers.forEach(layer => {
-    if (
-      layer.type === "symbol" &&
-      layer.layout &&
-      layer.layout["text-field"]
-    ) {
-      map.setLayoutProperty(layer.id, "text-field", [
-        "coalesce",
-        ["get", "name:ru"],
-        ["get", "name"]
-      ]);
-    }
+    const layers = map.getStyle().layers;
+    layers.forEach(layer => {
+      if (
+        layer.type === "symbol" &&
+        layer.layout &&
+        layer.layout["text-field"]
+      ) {
+        map.setLayoutProperty(layer.id, "text-field", [
+          "coalesce",
+          ["get", "name:ru"],
+          ["get", "name"]
+        ]);
+      }
+    });
   });
-});
 
   map.addControl(new maplibregl.NavigationControl(), "top-right");
-  map.scrollZoom.disable(); // чтобы не мешала скроллу страницы
-map.dragRotate.disable();
-map.touchZoomRotate.disableRotation();
+  map.scrollZoom.disable();
+  map.dragRotate.disable();
+  map.touchZoomRotate.disableRotation();
 
-new maplibregl.Marker({
-  color: "var(--color-primary)", 
-  scale: 1.1
-})
-  .setLngLat([lng, lat])
-  .addTo(map);
+  new maplibregl.Marker({
+    color: "var(--color-primary)", 
+    scale: 1.1
+  })
+    .setLngLat([lng, lat])
+    .addTo(map);
+  
+  // Сохраняем инстанс для возможной очистки при переходе
+  window._objectMap = map;
 }
 
 
 
   /* =====================================================
+     CLEANUP (для переходов между страницами)
+  ===================================================== */
+  function cleanupResources() {
+    // Очистка карты
+    if (window._objectMap) {
+      window._objectMap.remove();
+      window._objectMap = null;
+    }
+    
+    // Очистка слайдера сайдбара
+    if (window._sidebarSliderCleanup) {
+      window._sidebarSliderCleanup();
+      window._sidebarSliderCleanup = null;
+    }
+    
+    // Очистка IntersectionObserver'ов
+    if (window._agentCardObserver) {
+      window._agentCardObserver.disconnect();
+      window._agentCardObserver = null;
+    }
+    
+    if (window._revealBlocksObserver) {
+      window._revealBlocksObserver.disconnect();
+      window._revealBlocksObserver = null;
+    }
+    
+    // Очистка кэша
+    _cachedObjectPrices = {};
+    _cachedObjectPriceKey = null;
+    _cachedSimilarObjects = null;
+    _cachedSimilarKey = null;
+  }
+  
+  window._cleanupObjectDetail = cleanupResources;
+
+  /* =====================================================
      INIT
   ===================================================== */
-async function init() {
-  try {
+  let _initCompleted = false;
+
+  async function init() {
+    if (_initCompleted) return;
+    _initCompleted = true;
+
+    try {
     let slug = getSlugFromUrl();
     let listObjects;
 
@@ -1322,7 +1385,6 @@ async function init() {
     renderHeroBlock(enrichedObj);
     renderMeta(enrichedObj);
     renderRightText(enrichedObj);
-    renderHeroMeta(enrichedObj);
     renderSidebarTitle(enrichedObj);
     renderObjectDetails(enrichedObj);
     renderSidebarFooter(enrichedObj);
@@ -1333,6 +1395,7 @@ async function init() {
     generateObjectSchema(enrichedObj);
     initObjectMap(enrichedObj);
     initMortgageCalculator(enrichedObj);
+    initRevealBlocks();
 
   } catch (e) {
     console.error("INIT ERROR:", e);

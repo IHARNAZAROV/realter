@@ -393,11 +393,25 @@ let pendingDeleteIndex = null;
 /* ======================================================
    LOAD DATA
 ====================================================== */
+let isInitialized = false;
+
 fetch("/data/objects.json")
   .then(r => r.json())
   .then(data => syncObjectsWithLivePrices(data))
   .then(data => {
     objects = data || [];
+    
+    // Инициализируем event delegation только один раз
+    if (!isInitialized) {
+      setupEventDelegation();
+      bindEditButtons();
+      bindDeleteButtons();
+      bindInlinePriceEdit();
+      bindQuickActions();
+      bindDashboardFilters();
+      isInitialized = true;
+    }
+    
     render();
   });
 
@@ -411,44 +425,47 @@ function setDirty(state = true) {
   dirtyIndicator.classList.toggle("is-visible", isDirty);
 }
 
-
+// Инициализируем createdAt за один раз, без срабатывания setDirty()
+let hasCreatedAtUpdates = false;
 objects.forEach(obj => {
   if (!obj.createdAt) {
     obj.createdAt = obj.publishedAt || new Date().toISOString();
-    setDirty();
+    hasCreatedAtUpdates = true;
   }
 });
+if (hasCreatedAtUpdates) {
+  setDirty();
+}
 /* ======================================================
-   RENDER
+   RENDER - OPTIMIZED
 ====================================================== */
 function render() {
   container.innerHTML = "";
 
-// 1. применяем фильтры
-let list = applyFilter(objects);
+  // 1. применяем фильтры
+  let list = applyFilter(objects);
 
-// 2. применяем сортировку из хедера
-list = sortObjects(list);
+  // 2. применяем сортировку из хедера
+  list = sortObjects(list);
 
-// 🔥 2.1 РЕНДЕРИМ СТАТИСТИКУ ПОРТФЕЛЯ (НАД СПИСКОМ)
+  // 🔥 2.1 РЕНДЕРИМ СТАТИСТИКУ ПОРТФЕЛЯ (НАД СПИСКОМ)
   renderPortfolioStats(list); 
 
-// 3. рендерим
-list.forEach(obj => {
-  const index = objects.indexOf(obj);
-  container.appendChild(renderObject(obj, index));
-});
+  // 3. рендерим объекты с индексом из массива objects
+  const indexMap = new Map();
+  objects.forEach((obj, i) => indexMap.set(obj, i));
+  
+  list.forEach(obj => {
+    const index = indexMap.get(obj);
+    container.appendChild(renderObject(obj, index));
+  });
 
-  bind();
-  bindEditButtons();
-  bindDeleteButtons();
-  bindInlinePriceEdit();
-  bindQuickActions();
+  // 4. обновляем статистику
   updateStats();
-  bindDashboardFilters();
-renderDashboardCharts();
-bindDashboardFilters();
-enableDragAndDrop(container, objects);
+  renderDashboardCharts();
+  
+  // 5. переинициализируем drag-and-drop (только DOM заново создан)
+  enableDragAndDrop(container, objects);
 }
 
 function enableDragAndDrop(container, dataArray) {
@@ -456,51 +473,62 @@ function enableDragAndDrop(container, dataArray) {
 
   let draggedEl = null;
 
+  // Используем event delegation вместо привязки к каждому элементу
+  container.addEventListener("dragstart", (e) => {
+    const item = e.target.closest(".object");
+    if (!item) return;
+    
+    draggedEl = item;
+    item.classList.add("dragging");
+  });
+
+  container.addEventListener("dragend", (e) => {
+    const item = e.target.closest(".object");
+    if (!item) return;
+    
+    item.classList.remove("dragging");
+    draggedEl = null;
+  });
+
+  container.addEventListener("dragover", (e) => {
+    e.preventDefault();
+  });
+
+  container.addEventListener("drop", (e) => {
+    e.preventDefault();
+    if (!draggedEl) return;
+
+    const dropTarget = e.target.closest(".object");
+    if (!dropTarget || draggedEl === dropTarget) return;
+
+    const fromIndex = Number(draggedEl.dataset.index);
+    const toIndex = Number(dropTarget.dataset.index);
+    if (Number.isNaN(fromIndex) || Number.isNaN(toIndex)) return;
+
+    /* ===== 1. ДВИГАЕМ DOM ===== */
+    const rect = dropTarget.getBoundingClientRect();
+    const isAfter = e.clientY > rect.top + rect.height / 2;
+
+    container.insertBefore(
+      draggedEl,
+      isAfter ? dropTarget.nextSibling : dropTarget
+    );
+
+    /* ===== 2. ОБНОВЛЯЕМ МАССИВ ===== */
+    const moved = dataArray.splice(fromIndex, 1)[0];
+    dataArray.splice(toIndex, 0, moved);
+
+    /* ===== 3. ОБНОВЛЯЕМ data-index ===== */
+    container.querySelectorAll(".object").forEach((el, i) => {
+      el.dataset.index = i;
+    });
+
+    setDirty();
+  });
+
+  // Устанавливаем draggable атрибут для всех элементов
   container.querySelectorAll(".object").forEach((item) => {
     item.draggable = true;
-
-    item.addEventListener("dragstart", () => {
-      draggedEl = item;
-      item.classList.add("dragging");
-    });
-
-    item.addEventListener("dragend", () => {
-      item.classList.remove("dragging");
-      draggedEl = null;
-    });
-
-    item.addEventListener("dragover", (e) => {
-      e.preventDefault();
-    });
-
-    item.addEventListener("drop", (e) => {
-      e.preventDefault();
-      if (!draggedEl || draggedEl === item) return;
-
-      const fromIndex = Number(draggedEl.dataset.index);
-      const toIndex = Number(item.dataset.index);
-      if (Number.isNaN(fromIndex) || Number.isNaN(toIndex)) return;
-
-      /* ===== 1. ДВИГАЕМ DOM (БЕЗ RENDER) ===== */
-      const rect = item.getBoundingClientRect();
-      const isAfter = e.clientY > rect.top + rect.height / 2;
-
-      container.insertBefore(
-        draggedEl,
-        isAfter ? item.nextSibling : item
-      );
-
-      /* ===== 2. ОБНОВЛЯЕМ МАССИВ ===== */
-      const moved = dataArray.splice(fromIndex, 1)[0];
-      dataArray.splice(toIndex, 0, moved);
-
-      /* ===== 3. ОБНОВЛЯЕМ data-index У ВСЕХ ===== */
-      container.querySelectorAll(".object").forEach((el, i) => {
-        el.dataset.index = i;
-      });
-
-      setDirty(); // или isDirty = true
-    });
   });
 }
 
@@ -634,58 +662,48 @@ function renderObject(obj, index) {
   return div;
 }
 /* ======================================================
-   EVENTS (LIST)
+   EVENTS (LIST) - CENTRALIZED EVENT DELEGATION
 ====================================================== */
-function bind() {
+function setupEventDelegation() {
+  // Используем event delegation на контейнер вместо привязки к каждому элементу
+  container.addEventListener("input", e => {
+    const index = e.target.dataset.index;
+    if (!index) return;
 
-  container.querySelectorAll(".price").forEach(el => {
-    el.addEventListener("input", e => {
-      objects[e.target.dataset.index].priceBYN = Number(e.target.value);
+    if (e.target.classList.contains("price")) {
+      objects[index].priceBYN = Number(e.target.value);
       setDirty();
-    });
+    } else if (e.target.classList.contains("desc")) {
+      objects[index].cardDescription = e.target.value.trim();
+      setDirty();
+    }
   });
 
-  container.querySelectorAll(".desc").forEach(el => {
-    el.addEventListener("input", e => {
-      objects[e.target.dataset.index].cardDescription = e.target.value.trim();
-      setDirty();
-    });
-  });
+  container.addEventListener("change", e => {
+    const index = e.target.dataset.index;
+    if (!index) return;
 
-  container.querySelectorAll(".recommended").forEach(el => {
-    el.addEventListener("change", e => {
-      objects[e.target.dataset.index].recommended = e.target.checked;
+    if (e.target.classList.contains("recommended")) {
+      objects[index].recommended = e.target.checked;
       setDirty();
       render();
-    });
-  });
-
-  container.querySelectorAll(".status").forEach(el => {
-    el.addEventListener("change", e => {
-      const i = e.target.dataset.index;
-
+    } else if (e.target.classList.contains("status")) {
       if (e.target.value === "sold") {
-        objects[i].status = {
+        objects[index].status = {
           type: "sold",
           date: new Date().toISOString().slice(0, 10)
         };
       } else {
-        delete objects[i].status;
+        delete objects[index].status;
       }
-
       setDirty();
       render();
-    });
-  });
-
-  container.querySelectorAll(".date").forEach(el => {
-    el.addEventListener("change", e => {
-      const i = e.target.dataset.index;
-      if (objects[i].status) {
-        objects[i].status.date = e.target.value;
+    } else if (e.target.classList.contains("date")) {
+      if (objects[index].status) {
+        objects[index].status.date = e.target.value;
         setDirty();
       }
-    });
+    }
   });
 }
 
@@ -951,14 +969,6 @@ function slugifyLatin(text) {
     .replace(/^-|-$/g, "");
 }
 
-function downloadSingleObject(obj) {
-  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = `${obj.slug}.json`;
-  a.click();
-}
-
 function generateFeaturesFromDescription(text, type) {
   if (!text) return [];
 
@@ -1202,11 +1212,13 @@ function renderObjectEditor(obj) {
 
 
 function bindEditButtons() {
-  document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const index = Number(btn.dataset.index);
-      openEditModal(index);
-    });
+  // Используем event delegation для кнопок редактирования
+  container.addEventListener("click", e => {
+    const editBtn = e.target.closest(".edit-btn");
+    if (!editBtn) return;
+
+    const index = Number(editBtn.dataset.index);
+    openEditModal(index);
   });
 }
 
@@ -1231,12 +1243,14 @@ function closeDeleteConfirmModal() {
 }
 
 function bindDeleteButtons() {
-  document.querySelectorAll(".delete-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const index = Number(btn.dataset.index);
-      if (Number.isNaN(index)) return;
-      openDeleteConfirm(index);
-    });
+  // Используем event delegation для кнопок удаления
+  container.addEventListener("click", e => {
+    const deleteBtn = e.target.closest(".delete-btn");
+    if (!deleteBtn) return;
+
+    const index = Number(deleteBtn.dataset.index);
+    if (Number.isNaN(index)) return;
+    openDeleteConfirm(index);
   });
 }
 
@@ -1307,11 +1321,13 @@ function renderSection(title) {
 
 
 function bindQuickActions() {
+  // Используем event delegation для badge кликов
+  container.addEventListener("click", e => {
+    const statusBadge = e.target.closest(".status-badge");
+    const recommendStar = e.target.closest(".recommend-toggle");
 
-  // 🔁 статус продажи
-  document.querySelectorAll(".status-badge").forEach(badge => {
-    badge.addEventListener("click", () => {
-      const i = badge.dataset.index;
+    if (statusBadge) {
+      const i = statusBadge.dataset.index;
       const obj = objects[i];
 
       if (obj.status?.type === "sold") {
@@ -1325,50 +1341,47 @@ function bindQuickActions() {
 
       setDirty();
       render();
-    });
-  });
+    }
 
-  // ⭐ рекомендованный
-  document.querySelectorAll(".recommend-toggle").forEach(star => {
-    star.addEventListener("click", () => {
-      const i = star.dataset.index;
+    if (recommendStar) {
+      const i = recommendStar.dataset.index;
       objects[i].recommended = !objects[i].recommended;
       setDirty();
       render();
-    });
+    }
   });
 }
 
 function bindInlinePriceEdit() {
-  document.querySelectorAll(".editable-price").forEach(el => {
-    el.addEventListener("click", () => {
-      const i = el.dataset.index;
-      const obj = objects[i];
+  // Используем event delegation для inline редактирования цены
+  container.addEventListener("click", e => {
+    const editablePrice = e.target.closest(".editable-price");
+    if (!editablePrice || editablePrice.querySelector("input")) return;
 
-      if (el.querySelector("input")) return;
+    const i = editablePrice.dataset.index;
+    const obj = objects[i];
 
-      const input = document.createElement("input");
-      input.type = "number";
-      input.value = obj.priceBYN;
-      input.className = "inline-input";
+    const input = document.createElement("input");
+    input.type = "number";
+    input.value = obj.priceBYN;
+    input.className = "inline-input";
 
-      el.innerHTML = "";
-      el.appendChild(input);
-      input.focus();
+    editablePrice.innerHTML = "";
+    editablePrice.appendChild(input);
+    input.focus();
 
-      function save() {
-        obj.priceBYN = Number(input.value);
-        setDirty();
-        render();
-      }
+    function save() {
+      obj.priceBYN = Number(input.value);
+      setDirty();
+      render();
+    }
 
-      input.addEventListener("keydown", e => {
-        if (e.key === "Enter") save();
-        if (e.key === "Escape") render();
-      });
-
-      input.addEventListener("blur", save);
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") save();
+      if (e.key === "Escape") render();
     });
+
+    input.addEventListener("blur", save);
   });
 }
 
@@ -1548,6 +1561,7 @@ function drawInteractiveDateChart(canvas, points, color, onPointClick) {
   const max = Math.max(...points.map(p => p.value));
   const padding = 6;
 
+  // ✅ КЭШИРУЕМ координаты (вычисляем один раз)
   const coords = points.map((p, i) => {
     const x = (width / (points.length - 1)) * i;
     const y =
@@ -1566,7 +1580,7 @@ function drawInteractiveDateChart(canvas, points, color, onPointClick) {
   });
   ctx.stroke();
 
-  // tooltip
+  // ✅ Используем кэшированные координаты при mousemove (не пересчитываем)
   canvas.onmousemove = e => {
     const rect = canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
@@ -1882,71 +1896,6 @@ function renderPortfolioStats(objects) {
   renderAvgPrice(stats.avgPricePerM2);
 }
 
-function renderStatsGroup(containerId, data) {
-  const container = document.querySelector(`#${containerId} .stats-items`);
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  Object.entries(data).forEach(([key, value]) => {
-    /* ===== HIDE EMPTY PRICE SEGMENTS ===== */
-    if (
-      containerId === "statsPrices" &&
-      statsFilters.priceRange &&
-      value === 0
-    ) {
-      return; // ❗ просто не рендерим
-    }
-
-    let label = key;
-    let isActive = false;
-
-    if (containerId === "statsRooms") {
-      label = formatRoomsLabel(key);
-      isActive = statsFilters.rooms === key;
-    }
-
-    if (containerId === "statsCities") {
-      label = key;
-      isActive = statsFilters.city === key;
-    }
-
-    if (containerId === "statsPrices") {
-      label = formatPriceRangeLabel(key);
-      isActive = statsFilters.priceRange === key;
-    }
-
-
-
-    const el = document.createElement("div");
-    el.className = "stats-item";
-    if (isActive) el.classList.add("is-active");
-
-    el.textContent = `${label} — ${value} шт.`;
-
-    el.addEventListener("click", () => {
-      if (containerId === "statsRooms") {
-        statsFilters.rooms =
-          statsFilters.rooms === key ? null : key;
-      }
-
-      if (containerId === "statsCities") {
-        statsFilters.city =
-          statsFilters.city === key ? null : key;
-      }
-
-      if (containerId === "statsPrices") {
-        statsFilters.priceRange =
-          statsFilters.priceRange === key ? null : key;
-      }
-
-      render();
-    });
-
-    container.appendChild(el);
-  });
-}
-
 function renderAvgPrice(data) {
   const footer = document.getElementById("statsAvgPrice");
   if (!footer) return;
@@ -1957,26 +1906,6 @@ function renderAvgPrice(data) {
   );
 
   footer.textContent = `Средняя цена за м²: ${parts.join(" | ")}`;
-}
-
-
-function formatRoomsLabel(v) {
-  return {
-    1: "Однокомнатные",
-    2: "Двухкомнатные",
-    3: "Трёхкомнатные",
-    4: "4+ комнатные"
-  }[v] || `${v} комнат`;
-}
-
-function formatPriceRangeLabel(key) {
-  const map = {
-    "<30000": "До 30 тыс. $",
-    "30000-50000": "30–50 тыс. $",
-    "50000-80000": "50–80 тыс. $",
-    ">80000": "От 80 тыс. $"
-  };
-  return map[key] || key;
 }
 
 

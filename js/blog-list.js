@@ -1,1 +1,421 @@
-"use strict";const BLOG_FILTERS={all:{key:"all",predicate:()=>!0},latest:{key:"latest",predicate:()=>!0,limit:6},legal:{key:"legal",predicate:e=>includesText(e.category,"юрид")||hasTag(e.tags,"юридические риски")},sale:{key:"sale",predicate:e=>hasTag(e.tags,"покупка квартиры")||hasTag(e.tags,"продажа квартиры")},psychology:{key:"psychology",predicate:e=>includesText(e.category,"псих")}},FILTER_ANIMATION_DURATION=260;let allArticles=[],activeFilterKey="latest",activeTagSlug=getTagFromQuery();function renderSkeletons(e){const t=document.querySelector(".blog-grid-list");if(t){t.innerHTML="";for(let a=0;a<e;a++){const e=document.createElement("div");e.className="blog-grid-item",e.innerHTML='\n      <div class="blog-post blog-card">\n        <div class="skeleton skeleton-img"></div>\n        <div class="sx-post-info p-t30">\n          <div class="skeleton skeleton-line"></div>\n          <div class="skeleton skeleton-line short"></div>\n          <div class="skeleton skeleton-line"></div>\n        </div>\n      </div>\n    ',t.appendChild(e)}}}function loadBlogArticles(){fetch("/data/blog-articles.json").then((e=>{if(!e.ok)throw new Error("JSON load error");return e.json()})).then((e=>{allArticles=[...e].sort(((e,t)=>blogParseDate(t.date)-blogParseDate(e.date))),fadeOutSkeletons((()=>{renderActiveArticles({skipAnimation:!0})}))})).catch(console.error)}function fadeOutSkeletons(e){const t=document.querySelector(".blog-grid-list");t.classList.add("skeleton-fade-out"),setTimeout((()=>{t.classList.remove("skeleton-fade-out"),t.innerHTML="",e()}),400)}function renderBlogCards(e){const t=document.querySelector(".blog-grid-list");t&&(t.innerHTML="",e.length?e.forEach((e=>{const a=document.createElement("div");a.className="blog-grid-item",a.innerHTML=`\n      <div class="blog-post blog-grid date-style-2 blog-card">\n        <div class="sx-post-media sx-img-effect img-reflection">\n          <a href="/blog/${e.slug}">\n            <img src="${e.image}" alt="${e.imageAlt||e.title}" loading="lazy">\n          </a>\n        </div>\n\n        <div class="sx-post-info p-t30">\n          <div class="sx-post-meta">\n            <ul>\n              <li class="post-date">${renderDate(e.date)}</li>\n              <li class="post-author"><span>${e.author}</span></li>\n                                    <li class="post-reading">\n                         <i class="fa-solid fa-clock"></i>\n   ${calculateReadingTime(e)} мин\n</li>\n            </ul>\n          </div>\n\n          <div class="sx-post-title">\n            <h4 class="post-title">\n              <a href="/blog/${e.slug}">${e.title}</a>\n            </h4>\n          </div>\n\n          <a href="/blog/${e.slug}" class="blog-read-more">\n            Узнать подробнее <i class="fa-solid fa-arrow-right"></i>\n          </a>\n        </div>\n      </div>\n    `,t.appendChild(a)})):renderEmptyState(t))}function initBlogFilters(){const e=document.getElementById("blog-filter-buttons");e&&e.addEventListener("click",(e=>{const t=e.target.closest(".blog-filter-button");if(!t)return;const a=t.dataset.filter;BLOG_FILTERS[a]&&(a!==activeFilterKey||activeTagSlug)&&(activeTagSlug=null,activeFilterKey=a,syncTagQueryParam(),updateTagResultsState(),updateActiveFilterButton(),renderActiveArticles())}))}function initTagResultsReset(){document.addEventListener("click",(e=>{e.target.closest("[data-clear-tag-filter]")&&(activeTagSlug=null,activeFilterKey="all",syncTagQueryParam(),updateTagResultsState(),updateActiveFilterButton(),renderActiveArticles())}))}function updateActiveFilterButton(){document.querySelectorAll(".blog-filter-button").forEach((e=>{e.classList.toggle("is-active",!activeTagSlug&&e.dataset.filter===activeFilterKey)}))}function renderActiveArticles({skipAnimation:e=!1}={}){const t=document.querySelector(".blog-grid-list");if(!t||!allArticles.length)return;const a=getVisibleArticles();if(updateTagResultsState(a.length),e)return t.classList.remove("blog-list-fade-out"),t.classList.add("blog-list-fade-in"),renderBlogCards(a),void requestAnimationFrame((()=>{window.setTimeout((()=>{t.classList.remove("blog-list-fade-in")}),FILTER_ANIMATION_DURATION)}));t.classList.remove("blog-list-fade-in"),t.classList.add("blog-list-fade-out"),window.setTimeout((()=>{renderBlogCards(a),t.classList.remove("blog-list-fade-out"),t.classList.add("blog-list-fade-in"),window.setTimeout((()=>{t.classList.remove("blog-list-fade-in")}),FILTER_ANIMATION_DURATION)}),FILTER_ANIMATION_DURATION)}function getVisibleArticles(){if(activeTagSlug)return allArticles.filter((e=>e.tags?.some((e=>slugify(e)===activeTagSlug))));const e=BLOG_FILTERS[activeFilterKey]||BLOG_FILTERS.latest,t=allArticles.filter(e.predicate);return"number"==typeof e.limit?t.slice(0,e.limit):t}function updateTagResultsState(e=0){const t=document.getElementById("blog-tag-results");if(!t)return;if(!activeTagSlug)return t.hidden=!0,void(t.innerHTML="");const a=getTagLabel(activeTagSlug),n=pluralizeArticles(e);t.hidden=!1,t.innerHTML=`\n    <div class="blog-tag-results-text">\n      <span>Показаны материалы по тегу</span>\n      <strong>#${a}</strong>\n      <span>— найдено ${e} ${n}</span>\n    </div>\n    <button type="button" class="blog-tag-reset" data-clear-tag-filter>\n      Сбросить фильтр\n    </button>\n  `}function renderEmptyState(e){const t=activeTagSlug?"По этому тегу пока нет статей":"По выбранному фильтру пока нет статей",a=activeTagSlug?"Попробуйте сбросить фильтр или выбрать другую тему.":"Попробуйте выбрать другую категорию.";e.innerHTML=`\n    <div class="blog-empty-state">\n      <h3>${t}</h3>\n      <p>${a}</p>\n    </div>\n  `}function blogParseDate(e){if(!e||"string"!=typeof e)return new Date(0);if(e.includes(".")){const[t,a,n]=e.split(".");return new Date(+n,+a-1,+t)}return new Date(e)}function includesText(e,t){return String(e||"").toLowerCase().includes(String(t).toLowerCase())}function hasTag(e,t){return!!Array.isArray(e)&&e.some((e=>String(e).toLowerCase()===t.toLowerCase()))}function getTagFromQuery(){return new URLSearchParams(window.location.search).get("tag")}function syncTagQueryParam(){const e=new URL(window.location.href);activeTagSlug?e.searchParams.set("tag",activeTagSlug):e.searchParams.delete("tag"),window.history.replaceState({},"",`${e.pathname}${e.search}${e.hash}`)}function slugify(e){return String(e||"").toLowerCase().trim().replace(/\s+/g,"-").replace(/[^\w\-а-яё]/gi,"")}function getTagLabel(e){for(const t of allArticles){const a=t.tags?.find((t=>slugify(t)===e));if(a)return a}return e.replace(/-/g," ")}function pluralizeArticles(e){const t=e%10,a=e%100;return 1===t&&11!==a?"статья":t>=2&&t<=4&&(a<12||a>14)?"статьи":"статей"}function renderDate(e){try{const t=blogParseDate(e);return`<strong>${t.getDate().toString().padStart(2,"0")}</strong>\n            <span>${t.toLocaleDateString("ru-RU",{month:"short"})}</span>`}catch(e){return""}}function calculateReadingTime(e){if(!e.content)return 1;let t="";e.content.forEach((e=>{"paragraph"===e.type&&(t+=" "+e.text),"list"===e.type&&e.items&&(t+=" "+e.items.join(" "))}));const a=t.trim().split(/\s+/).length;return Math.max(1,Math.ceil(a/200))}document.addEventListener("DOMContentLoaded",(()=>{activeTagSlug&&(activeFilterKey=null),renderSkeletons(8),loadBlogArticles(),initBlogFilters(),initTagResultsReset(),updateActiveFilterButton(),updateTagResultsState()}));
+"use strict";
+
+/* =========================================================
+   BLOG LIST + SKELETON
+   ========================================================= */
+
+const BLOG_FILTERS = {
+  all: {
+    key: "all",
+    predicate: () => true,
+  },
+  latest: {
+    key: "latest",
+    predicate: () => true,
+    limit: 6,
+  },
+  legal: {
+    key: "legal",
+    predicate: (article) =>
+      includesText(article.category, "юрид") ||
+      hasTag(article.tags, "юридические риски"),
+  },
+  sale: {
+    key: "sale",
+    predicate: (article) =>
+      hasTag(article.tags, "покупка квартиры") ||
+      hasTag(article.tags, "продажа квартиры"),
+  },
+  psychology: {
+    key: "psychology",
+    predicate: (article) => includesText(article.category, "псих"),
+  },
+};
+
+const FILTER_ANIMATION_DURATION = 260;
+
+let allArticles = [];
+let activeFilterKey = "latest";
+let activeTagSlug = getTagFromQuery();
+let tagLabelCache = {}; // ✅ Кэш для slugs -> labels
+let prevActiveFilterKey = null; // ✅ Для оптимизации обновления кнопок
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (activeTagSlug) {
+    activeFilterKey = null;
+  }
+
+  renderSkeletons(8);
+  loadBlogArticles();
+  initBlogFilters();
+  initTagResultsReset();
+  updateActiveFilterButton();
+  updateTagResultsState();
+});
+
+/* =========================================================
+   SKELETON
+   ========================================================= */
+function renderSkeletons(count) {
+  const container = document.querySelector(".blog-grid-list");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  for (let i = 0; i < count; i++) {
+    const item = document.createElement("div");
+    item.className = "blog-grid-item";
+
+    item.innerHTML = `
+      <div class="blog-post blog-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="sx-post-info p-t30">
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line short"></div>
+          <div class="skeleton skeleton-line"></div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(item);
+  }
+}
+
+/* =========================================================
+   LOAD JSON
+   ========================================================= */
+function loadBlogArticles() {
+  fetch("/data/blog-articles.json")
+    .then((res) => {
+      if (!res.ok) throw new Error("JSON load error");
+      return res.json();
+    })
+    .then((articles) => {
+      allArticles = [...articles].sort((a, b) => blogParseDate(b.date) - blogParseDate(a.date));
+
+      // ✅ Кэшируем все теги при загрузке
+      buildTagLabelCache();
+
+      fadeOutSkeletons(() => {
+        renderActiveArticles({ skipAnimation: true });
+      });
+    })
+    .catch(console.error);
+}
+
+/* =========================================================
+   FADE OUT SKELETON
+   ========================================================= */
+function fadeOutSkeletons(callback) {
+  const container = document.querySelector(".blog-grid-list");
+  container.classList.add("skeleton-fade-out");
+
+  setTimeout(() => {
+    container.classList.remove("skeleton-fade-out");
+    container.innerHTML = "";
+    callback();
+  }, 400);
+}
+
+/* =========================================================
+   RENDER REAL CARDS
+   ========================================================= */
+function renderBlogCards(articles) {
+  const container = document.querySelector(".blog-grid-list");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (!articles.length) {
+    renderEmptyState(container);
+    return;
+  }
+
+  articles.forEach((article) => {
+    const item = document.createElement("div");
+    item.className = "blog-grid-item";
+
+    item.innerHTML = `
+      <div class="blog-post blog-grid date-style-2 blog-card">
+        <div class="sx-post-media sx-img-effect img-reflection">
+          <a href="/blog/${article.slug}">
+            <img src="${article.image}" alt="${article.imageAlt || article.title}" loading="lazy">
+          </a>
+        </div>
+
+        <div class="sx-post-info p-t30">
+          <div class="sx-post-meta">
+            <ul>
+              <li class="post-date">${renderDate(article.date)}</li>
+              <li class="post-author"><span>${article.author}</span></li>
+                                    <li class="post-reading">
+                         <i class="fa-solid fa-clock"></i>
+   ${calculateReadingTime(article)} мин
+</li>
+            </ul>
+          </div>
+
+          <div class="sx-post-title">
+            <h4 class="post-title">
+              <a href="/blog/${article.slug}">${article.title}</a>
+            </h4>
+          </div>
+
+          <a href="/blog/${article.slug}" class="blog-read-more">
+            Узнать подробнее <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(item);
+  });
+}
+
+function initBlogFilters() {
+  const buttonsContainer = document.getElementById("blog-filter-buttons");
+  if (!buttonsContainer) return;
+
+  buttonsContainer.addEventListener("click", (event) => {
+    const button = event.target.closest(".blog-filter-button");
+    if (!button) return;
+
+    const nextFilterKey = button.dataset.filter;
+    if (!BLOG_FILTERS[nextFilterKey] || (nextFilterKey === activeFilterKey && !activeTagSlug)) return;
+
+    activeTagSlug = null;
+    activeFilterKey = nextFilterKey;
+    syncTagQueryParam();
+    updateTagResultsState();
+    updateActiveFilterButton();
+    renderActiveArticles();
+  });
+}
+
+function initTagResultsReset() {
+  document.addEventListener("click", (event) => {
+    const resetButton = event.target.closest("[data-clear-tag-filter]");
+    if (!resetButton) return;
+
+    activeTagSlug = null;
+    activeFilterKey = "all";
+    syncTagQueryParam();
+    updateTagResultsState();
+    updateActiveFilterButton();
+    renderActiveArticles();
+  });
+}
+
+function updateActiveFilterButton() {
+  // ✅ Обновляем только нужные кнопки
+  document.querySelectorAll(".blog-filter-button").forEach((button) => {
+    const shouldBeActive = !activeTagSlug && button.dataset.filter === activeFilterKey;
+    button.classList.toggle("is-active", shouldBeActive);
+  });
+}
+
+function renderActiveArticles({ skipAnimation = false } = {}) {
+  const container = document.querySelector(".blog-grid-list");
+  if (!container || !allArticles.length) return;
+
+  const articles = getVisibleArticles();
+  updateTagResultsState(articles.length);
+
+  if (skipAnimation) {
+    // ✅ Простая отрисовка без анимации при загрузке
+    renderBlogCards(articles);
+    container.classList.add("blog-list-fade-in");
+    setTimeout(() => {
+      container.classList.remove("blog-list-fade-in");
+    }, FILTER_ANIMATION_DURATION);
+    return;
+  }
+
+  // ✅ Анимация переключения фильтров: исчезновение -> смена -> появление
+  container.classList.add("blog-list-fade-out");
+
+  setTimeout(() => {
+    renderBlogCards(articles);
+    container.classList.remove("blog-list-fade-out");
+    container.classList.add("blog-list-fade-in");
+
+    setTimeout(() => {
+      container.classList.remove("blog-list-fade-in");
+    }, FILTER_ANIMATION_DURATION);
+  }, FILTER_ANIMATION_DURATION);
+}
+
+function getVisibleArticles() {
+  if (activeTagSlug) {
+    return allArticles.filter((article) =>
+      article.tags?.some((tag) => slugify(tag) === activeTagSlug)
+    );
+  }
+
+  const definition = BLOG_FILTERS[activeFilterKey] || BLOG_FILTERS.latest;
+  const filtered = allArticles.filter(definition.predicate);
+
+  return typeof definition.limit === "number"
+    ? filtered.slice(0, definition.limit)
+    : filtered;
+}
+
+function updateTagResultsState(resultCount = 0) {
+  const container = document.getElementById("blog-tag-results");
+  if (!container) return;
+
+  if (!activeTagSlug) {
+    container.hidden = true;
+    container.innerHTML = "";
+    return;
+  }
+
+  const tagLabel = getTagLabel(activeTagSlug);
+  const articleLabel = pluralizeArticles(resultCount);
+
+  container.hidden = false;
+  container.innerHTML = `
+    <div class="blog-tag-results-text">
+      <span>Показаны материалы по тегу</span>
+      <strong>#${tagLabel}</strong>
+      <span>— найдено ${resultCount} ${articleLabel}</span>
+    </div>
+    <button type="button" class="blog-tag-reset" data-clear-tag-filter>
+      Сбросить фильтр
+    </button>
+  `;
+}
+
+function renderEmptyState(container) {
+  const title = activeTagSlug
+    ? "По этому тегу пока нет статей"
+    : "По выбранному фильтру пока нет статей";
+  const description = activeTagSlug
+    ? "Попробуйте сбросить фильтр или выбрать другую тему."
+    : "Попробуйте выбрать другую категорию.";
+
+  container.innerHTML = `
+    <div class="blog-empty-state">
+      <h3>${title}</h3>
+      <p>${description}</p>
+    </div>
+  `;
+}
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+function blogParseDate(str) {
+  if (!str || typeof str !== "string") return new Date(0);
+  if (str.includes(".")) {
+    const [day, month, year] = str.split(".");
+    return new Date(+year, +month - 1, +day);
+  }
+  return new Date(str);
+}
+
+function includesText(value, needle) {
+  return String(value || "").toLowerCase().includes(String(needle).toLowerCase());
+}
+
+function hasTag(tags, expectedTag) {
+  return Array.isArray(tags)
+    ? tags.some((tag) => String(tag).toLowerCase() === expectedTag.toLowerCase())
+    : false;
+}
+
+function getTagFromQuery() {
+  return new URLSearchParams(window.location.search).get("tag");
+}
+
+function syncTagQueryParam() {
+  const url = new URL(window.location.href);
+
+  if (activeTagSlug) {
+    url.searchParams.set("tag", activeTagSlug);
+  } else {
+    url.searchParams.delete("tag");
+  }
+
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+function slugify(text) {
+  return String(text || "")
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-а-яё]/gi, "");
+}
+
+// ✅ Кэшируем все теги при загрузке для быстрого доступа
+function buildTagLabelCache() {
+  tagLabelCache = {};
+  for (const article of allArticles) {
+    if (article.tags?.length) {
+      article.tags.forEach((tag) => {
+        const tagSlug = slugify(tag);
+        if (!tagLabelCache[tagSlug]) {
+          tagLabelCache[tagSlug] = tag;
+        }
+      });
+    }
+  }
+}
+
+function getTagLabel(tagSlug) {
+  // ✅ Используем кэш вместо поиска в цикле
+  return tagLabelCache[tagSlug] || tagSlug.replace(/-/g, " ");
+}
+
+function pluralizeArticles(count) {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+
+  if (mod10 === 1 && mod100 !== 11) return "статья";
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "статьи";
+  return "статей";
+}
+
+function renderDate(dateString) {
+  try {
+    const d = blogParseDate(dateString);
+    return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
+            <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
+  } catch (e) {
+    return "";
+  }
+}
+
+/* =========================================================
+   READING TIME
+   ========================================================= */
+
+function calculateReadingTime(article) {
+  // ✅ Если уже вычислено, возвращаем кэшированное значение
+  if (article.readingTime !== undefined) return article.readingTime;
+
+  const wordsPerMinute = 200;
+
+  if (!article.content) return 1;
+
+  // ✅ Используем map/join вместо конкатенации строк в цикле
+  const textParts = [];
+
+  article.content.forEach(block => {
+    if (block.type === "paragraph" && block.text) {
+      textParts.push(block.text);
+    } else if (block.type === "list" && block.items?.length) {
+      textParts.push(...block.items);
+    }
+  });
+
+  const text = textParts.join(" ");
+  const words = text.trim().split(/\s+/).length;
+  const readingTime = Math.max(1, Math.ceil(words / wordsPerMinute));
+
+  // ✅ Кэшируем результат в самом объекте
+  article.readingTime = readingTime;
+
+  return readingTime;
+}
