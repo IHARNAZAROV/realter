@@ -86,6 +86,52 @@ Example: Deploy to GitHub Pages
 1. Push to the repository
 2. In repository settings, enable GitHub Pages from the main branch (or gh-pages branch)
 
+### Recommended Git workflow (VS Code → GitHub → Server without conflicts)
+If you edit files in VS Code and deploy by `git push`, then on the server run `git pull`, use this strict rule:
+
+**Never edit project files directly on the server.**
+
+Keep server repository as a read-only deployment mirror. All code/content changes go through your local machine and GitHub.
+
+#### Daily flow
+1. **Local (VS Code):** create a branch from `main`.
+   - `git checkout main`
+   - `git pull origin main`
+   - `git checkout -b feature/blog-article-2026-04-10`
+2. Make changes locally (including `data/blog-articles.json` via admin UI or manually), commit and push:
+   - `git add .`
+   - `git commit -m "Add scheduled blog article"`
+   - `git push -u origin feature/blog-article-2026-04-10`
+3. Open PR on GitHub and merge into `main`.
+4. **Server:** update only from `main`:
+   - `git checkout main`
+   - `git fetch origin`
+   - `git reset --hard origin/main`
+   - `git clean -fd`
+
+Using `reset --hard origin/main` instead of plain `pull` avoids merge commits and removes accidental local server drift.
+
+#### Before updating server, always check status
+- `git status`
+- `git branch --show-current`
+
+If status is not clean, do **not** pull. First find why files changed locally on server.
+
+#### If server already has local changes
+Temporary save + restore approach:
+- `git stash push -u -m "server-temp"`
+- `git fetch origin && git reset --hard origin/main && git clean -fd`
+- optionally inspect `git stash list` and drop stale stashes.
+
+#### Handling admin panel edits (`blog-articles.json`)
+Since admin panel writes directly to server file:
+- either disable server-side save in production and edit only via Git flow,
+- or schedule a reverse sync step:
+  1) commit server changes back to GitHub immediately,
+  2) then continue only from GitHub as source of truth.
+
+Best long-term option: keep **single source of truth = GitHub `main`**.
+
 ## Customization
 - Replace demo content (text, images, listings) in the HTML templates.
 - Update contact details in the contact section and in the form handler.
