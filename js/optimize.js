@@ -193,6 +193,21 @@ function handleSubmenu(e) {
     t.setAttribute("aria-expanded", String(s)),
     e.preventDefault());
 }
+
+function handleMobileDrawer(e) {
+  if (
+    document.getElementById("mnav") &&
+    document.getElementById("mnavOverlay")
+  )
+    return;
+  const t = e.target.closest("#mobile-side-drawer");
+  if (!t) return;
+  const n = t.getAttribute("data-target");
+  if (!n) return;
+  const o = document.querySelector(n);
+  o &&
+    (o.classList.toggle("is-open"), t.classList.toggle("is-active"), e.preventDefault());
+}
 function initServiceCardsAnimation() {
   const e = document.querySelectorAll(".number-block-three");
   if (!e.length) return;
