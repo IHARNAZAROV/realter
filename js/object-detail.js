@@ -1,1 +1,1345 @@
-!function(){"use strict";const e=e=>`/data/objects/${encodeURIComponent(e)}.json`,t="/data/objects-list.json",n="ZSZnUbPl4oOTpdLavjmE",a=(e,t=document)=>t.querySelector(e),i=e=>null!=e&&""!==String(e).trim(),o=(e,t=" • ")=>e.filter(i).join(t),s=e=>"number"==typeof e?e.toLocaleString("ru-RU"):"";function r(e){return"function"==typeof window.RealterPrice?.getLiveBynPriceSync?window.RealterPrice.getLiveBynPriceSync(e):"number"==typeof e?.priceBYN?e.priceBYN:null}async function c(){if("function"==typeof window.RealterPrice?.fetchUsdRate)return window.RealterPrice.fetchUsdRate();throw new Error("Модуль live-price.js не подключён")}function l(e){if(e.isUsd)return{label:"Цена в долларах",value:"number"==typeof e.usd?`${s(e.usd)} USD`:"Цена в USD недоступна"};if(e.isRateLoading&&"number"==typeof e.usd)return{label:"Цена",value:"Загрузка..."};const t=function(e){return e.usdRateData&&"number"==typeof e.usd?Math.round(e.usd*e.usdRateData.ratePerUnit):e.bynFallback}(e);return{label:e.usdRateData?.dateLabel?`Цена (по курсу НБРБ на ${e.usdRateData.dateLabel})`:"Цена",value:"number"==typeof t?`${s(t)} BYN`:""}}function d(e,t){const n=e.querySelector("[data-price-label]"),a=e.querySelector("[data-price-value]"),i=l(t);n&&(n.textContent=i.label),a&&(a.textContent=i.value),e.setAttribute("aria-label",t.isUsd?"Показать цену в белорусских рублях":"Показать цену в долларах США"),e.setAttribute("aria-pressed",t.isUsd?"true":"false"),e.dataset.currency=t.isUsd?"usd":"byn"}function u(e,t){const n=function(e){return{isUsd:!1,isAnimating:!1,isRateLoading:!1,bynFallback:r(e),usd:"number"==typeof e.priceUSD?e.priceUSD:null,usdRateData:null}}(t);d(e,n),"number"==typeof n.usd&&(n.isRateLoading=!0,d(e,n),e.classList.add("is-loading"),c().then((t=>{n.usdRateData=t,n.isUsd||d(e,n)})).catch((e=>{console.error(e)})).finally((()=>{n.isRateLoading=!1,n.isUsd||d(e,n),e.classList.remove("is-loading")}))),e.addEventListener("click",(async()=>{if(n.isAnimating)return;const t=!n.isUsd;if(!n.usdRateData&&"number"==typeof n.usd){n.isRateLoading=!0,n.isUsd||d(e,n),e.classList.add("is-loading");try{n.usdRateData=await c()}catch(e){console.error(e)}finally{n.isRateLoading=!1,n.isUsd||d(e,n),e.classList.remove("is-loading")}}t&&"number"!=typeof n.usd||(t||n.usdRateData||"number"==typeof n.bynFallback)&&(n.isUsd=t,function(e,t){t.isAnimating||(t.isAnimating=!0,e.classList.add("is-animating"),window.setTimeout((()=>{d(e,t),e.classList.add("is-animating-in")}),180),window.setTimeout((()=>{e.classList.remove("is-animating","is-animating-in"),t.isAnimating=!1}),420))}(e,n))}))}function p(){const e=new URL(window.location.href),t=e.searchParams.get("slug");if(i(t))return t.trim();const n=e.pathname.replace(/^\/+|\/+$/g,"").split("/");return 2!==n.length||"objects"!==n[0]&&"object"!==n[0]?"":decodeURIComponent(n[1])}async function m(t){const n=await fetch(e(t),{cache:"no-store"});if(!n.ok)throw new Error(`Объект не найден: ${t}`);return n.json()}async function f(){const e=await fetch(t,{cache:"no-store"});if(!e.ok)throw new Error("Ошибка загрузки objects-list.json");return e.json()}function y(e){const t=document.createElement("script");t.type="application/ld+json",t.textContent=JSON.stringify(e,null,2),document.head.appendChild(t)}function g(e){if(!e)return;const t="квартира"===String(e.type).toLowerCase(),n=function(e){const t=e.area??e.areaTotal??e.totalArea??e.square??null;if(!t)return null;const n=Number(String(t).replace(",",".").replace(/[^\d.]/g,""));return n>0?n:null}(e),a=Array.isArray(e.images)&&e.images.length?e.images.slice(0,5):["https://example.com/images/objects/placeholder.webp"],i=r(e),o={"@context":"https://schema.org","@type":"Offer",name:e.title,url:window.location.href,image:a,price:String(i||e.priceBYN||""),priceCurrency:"BYN",priceValidUntil:"2030-12-31",availability:"https://schema.org/InStock",datePosted:e.publishedAt||(new Date).toISOString().split("T")[0],seller:{"@type":"RealEstateAgent",name:"Ольга Турко",url:"https://turko.by",address:{"@type":"PostalAddress",addressLocality:"Лида",addressCountry:"BY"}},itemOffered:{"@type":t?"Apartment":"House",name:e.title,address:{"@type":"PostalAddress",addressLocality:e.city||"Лида",addressCountry:"BY"}}};n&&(o.itemOffered.floorSize={"@type":"QuantitativeValue",value:n,unitCode:"MTK"}),t&&e.rooms&&(o.itemOffered.numberOfRooms=e.rooms),e.description&&(o.itemOffered.description=e.description),e.address&&(o.itemOffered.address.streetAddress=e.address);const s=e.location?.lat??e.lat,c=e.location?.lng??e.lng;s&&c&&(o.itemOffered.geo={"@type":"GeoCoordinates",latitude:s,longitude:c}),o.image=o.image.map((e=>e.startsWith("http")?e:`https://turko.by${e}`)),y(o);y({"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:"Главная",item:"https://turko.by/"},{"@type":"ListItem",position:2,name:"Объекты недвижимости",item:"https://turko.by/nedvizhimost-lida"},{"@type":"ListItem",position:3,name:e.title,item:window.location.href}]})}function b(e){const t=e?.title||"Детали объекта";document.title=`${t} — Ольга Турко`;const n=document.querySelector("[data-page-title]");n&&(n.textContent=t)}function h(e){const t=document.querySelector("[data-object-details]"),n=document.querySelector("[data-object-price]");if(!t||!n)return;const a=String(e.type||"").toLowerCase().includes("квартир");if("number"==typeof e.priceBYN||"number"==typeof e.priceUSD){const t=r(e),a="number"==typeof e.priceUSD?"Загрузка...":"number"==typeof t?`${s(t)} BYN`:"";n.innerHTML=`\n      <button\n        type="button"\n        class="object-price-toggle"\n        data-price-toggle\n        aria-pressed="false"\n      >\n        <span class="object-price-label" data-price-label>Цена</span>\n        <span class="object-price-value" data-price-value>\n          ${a}\n        </span>\n      </button>\n    `;const i=n.querySelector("[data-price-toggle]");i&&u(i,e)}const i=(e,t,n,a)=>{return null!=(i=n)&&""!==String(i).trim()?{icon:e,label:t,value:n,group:a}:null;var i};let o=[];a?o.push(i("fa-house","Тип объекта",e.type,"Основное"),i("fa-door-open","Комнат",e.rooms,"Основное"),i("fa-layer-group","Этаж",e.floor&&e.floorsTotal?`${e.floor} из ${e.floorsTotal}`:e.floor,"Основное"),i("fa-expand","Общая площадь",e.areaTotal&&`${e.areaTotal} м²`,"Площади"),i("fa-couch","Жилая площадь",e.areaLiving&&`${e.areaLiving} м²`,"Площади"),i("fa-ruler-combined","Кухня",e.areaKitchen&&`${e.areaKitchen} м²`,"Площади"),i("fa-bath","Санузел",e.bathroom,"Площади"),i("fa-calendar","Год постройки",e.yearBuilt,"Основное")):o.push(i("fa-house","Тип объекта",e.type,"Основное"),i("fa-expand","Площадь дома",e.areaTotal&&`${e.areaTotal} м²`,"Площади"),i("fa-couch","Жилая площадь",e.areaLiving&&`${e.areaLiving} м²`,"Площади"),i("fa-tree","Участок",e.areaPlot&&`${e.areaPlot} соток`,"Площади"),i("fa-fire","Отопление",e.heating,"Коммуникации"),i("fa-faucet","Вода",e.water,"Коммуникации"),i("fa-toilet","Канализация",e.sewerage,"Коммуникации"),i("fa-calendar","Год постройки",e.yearBuilt,"Основное")),o=o.filter(Boolean);const c={};o.forEach((e=>{c[e.group]||(c[e.group]=[]),c[e.group].push(e)})),t.innerHTML=Object.entries(c).map((([e,t])=>`\n        <div class="object-details-group">\n          <h5 class="object-details-group-title">${e}</h5>\n          <div class="object-details-list">\n            ${t.map((e=>`\n                <div class="object-detail-row">\n                  <div class="object-detail-label">\n                    <i class="fa-solid ${e.icon}"></i>\n                    ${e.label}\n                  </div>\n                  <div class="object-detail-value">${e.value}</div>\n                </div>\n              `)).join("")}\n          </div>\n        </div>\n      `)).join("")}function v(e){b({title:"Объект не найден"});const t=a(".project-detail-containt-2 .bg-white");t&&(t.innerHTML=`\n      <h4>Объект не найден</h4>\n      <p>slug: <b>${e||"—"}</b></p>\n    `)}function L(e){const t=r(e);if("number"==typeof t&&t>0)return t;if("number"==typeof e.priceUSD&&e.priceUSD>0){const t=3.3;return Math.round(e.priceUSD*t)}return null}function w(e){return String(e||"").trim().toLowerCase()}function S(e,t){let n=0;w(e.type)!==w(t.type)&&(n+=1e5),w(e.city)!==w(t.city)&&(n+=1e4);const a=L(e),i=L(t);return n+="number"==typeof a&&"number"==typeof i?Math.abs(a-i):5e3,n}function j(e,t,n=6){return t.filter((t=>{return t&&t.slug&&t.slug!==e.slug&&(n=t,!("string"==typeof n?.status?.type&&"sold"===n.status.type.toLowerCase()));var n})).map((t=>({obj:t,score:S(e,t)}))).sort(((e,t)=>e.score-t.score)).slice(0,n).map((e=>e.obj))}function $(e){const t=Array.isArray(e.images)&&e.images[0]?e.images[0]:"/images/objects/pic1.webp",n=e.title||"Объект недвижимости",a=`/objects/${encodeURIComponent(e.slug)}`;return`\n    <div class="item">\n      <div class="project-mas m-a30">\n      \n        <div class="image-effect-one">\n          <img loading="lazy" decoding="async" src="${t}" alt="${n}">\n        </div>\n        <div class="project-info p-t20">\n          <h4 class="sx-tilte m-t0">\n            <a href="${a}">${n}</a>\n          </h4>\n          <a href="${a}">\n            <i class="link-plus bg-primary"></i>\n          </a>\n        </div>\n      </div>\n    </div>\n  `}function A(e,t){const n=document.querySelector("[data-sidebar-track]");if(!n)return;const a=j(e,t,6);if(!a.length)return;let i=0,o=null;function s(){n.style.transform=`translateX(-${100*i}%)`}function c(){i=(i+1)%a.length,s()}function l(){d(),o=setInterval(c,5e3)}function d(){o&&clearInterval(o)}n.innerHTML=a.map((e=>{const t=Array.isArray(e.images)&&e.images[0]?e.images[0]:"/images/objects/pic1.webp",n=r(e),a="number"==typeof n?`${n.toLocaleString("ru-RU")} BYN`:"";return`\n          <a href="/objects/${e.slug}" class="sidebar-slide">\n            <div class="sidebar-slide-image">\n              <img src="${t}" alt="${e.title}">\n            </div>\n\n            <div class="sidebar-slide-content">\n              <h6>${e.title}</h6>\n\n              <div class="sidebar-slide-location">\n                <i class="fa-solid fa-location-dot"></i>\n                ${[e.city,e.address].filter(Boolean).join(", ")}\n              </div>\n\n              <div class="sidebar-slide-price">${a}</div>\n            </div>\n          </a>\n        `})).join(""),s(),l(),n.addEventListener("mouseenter",d),n.addEventListener("mouseleave",l);let u=0;n.addEventListener("touchstart",(e=>{u=e.touches[0].clientX,d()})),n.addEventListener("touchend",(e=>{const t=e.changedTouches[0].clientX-u;Math.abs(t)>50&&(t<0?c():(i=(i-1+a.length)%a.length,s())),l()}))}document.addEventListener("DOMContentLoaded",(function(){const e=document.querySelectorAll(".reveal");if(!e.length)return;const t=new IntersectionObserver((e=>{e.forEach((e=>{e.isIntersecting&&(e.target.classList.add("is-visible"),t.unobserve(e.target))}))}),{threshold:.15});e.forEach((e=>t.observe(e)))})),window.initCustomSelectUI=function(e){if(!e||"1"===e.dataset.customReady)return;const t=document.createElement("div");t.className="filter-select-ui";const n=document.createElement("button");n.type="button",n.className="filter-select-trigger",n.setAttribute("aria-haspopup","listbox"),n.setAttribute("aria-expanded","false");const a=document.createElement("span");a.className="filter-select-trigger-text";const i=document.createElement("div");function o(){const o=e.options[e.selectedIndex];a.textContent=o?o.textContent:"",i.querySelectorAll(".filter-select-option").forEach((t=>{t.classList.toggle("is-selected",t.dataset.value===e.value)})),t.classList.toggle("is-disabled",e.disabled),n.disabled=e.disabled}i.className="filter-select-menu",i.setAttribute("role","listbox"),t.appendChild(n),n.appendChild(a),t.appendChild(i),e.classList.add("is-customized-select"),e.dataset.customReady="1",e.insertAdjacentElement("afterend",t),n.addEventListener("click",(()=>{if(e.disabled)return;const a=!t.classList.contains("is-open");document.querySelectorAll(".filter-select-ui.is-open").forEach((e=>{e!==t&&(e.classList.remove("is-open"),e.querySelector(".filter-select-trigger")?.setAttribute("aria-expanded","false"))})),t.classList.toggle("is-open",a),n.setAttribute("aria-expanded",a?"true":"false")})),document.addEventListener("click",(e=>{e.target.closest(".filter-select-ui")||(t.classList.remove("is-open"),n.setAttribute("aria-expanded","false"))})),document.addEventListener("keydown",(e=>{"Escape"===e.key&&(t.classList.remove("is-open"),n.setAttribute("aria-expanded","false"))})),e.addEventListener("change",o),i.innerHTML="",Array.from(e.options).forEach((a=>{const s=document.createElement("button");s.type="button",s.className="filter-select-option",s.textContent=a.textContent,s.dataset.value=a.value,s.disabled=a.disabled,s.addEventListener("click",(()=>{e.disabled||s.disabled||(e.value=s.dataset.value,e.dispatchEvent(new Event("change",{bubbles:!0})),o(),t.classList.remove("is-open"),n.setAttribute("aria-expanded","false"))})),i.appendChild(s)})),o()},document.addEventListener("DOMContentLoaded",(async function(){try{let e,t=p();if(!i(t)){if("localhost"===location.hostname||"127.0.0.1"===location.hostname){if(console.warn("DEBUG MODE: slug не найден, берём первый объект из списка"),e=await f(),!Array.isArray(e)||!e.length)return void v(t);t=e[0].slug}}if(!i(t))return void v(t);const[c,l]=await Promise.all([m(t),e?Promise.resolve(e):f()]);e=Array.isArray(l)?l:e||[];let d=c;if("function"==typeof window.RealterPrice?.enrichObjectsWithLivePrices){d=(await window.RealterPrice.enrichObjectsWithLivePrices([c]))[0]||c}b(d),function(e){const t=`${e.title} — Ольга Турко`,n=Array.isArray(e.images)&&e.images.length?e.images[0].startsWith("http")?e.images[0]:`https://turko.by${e.images[0]}`:"https://turko.by/images/main-slider/2.webp",a=e.cardDescription||(e.description?e.description.slice(0,160).trimEnd()+"…":"")||"Объект недвижимости — Ольга Турко, риэлтер в Лиде",i=`https://turko.by/object/${e.slug}`,o=(e,t,n)=>{const a=document.querySelector(e);a&&a.setAttribute(t,n)};document.title=t,o('meta[name="description"]',"content",a),o('meta[property="og:title"]',"content",t),o('meta[property="og:description"]',"content",a),o('meta[property="og:image"]',"content",n),o('meta[property="og:url"]',"content",i),o('meta[name="twitter:title"]',"content",t),o('meta[name="twitter:description"]',"content",a),o('meta[name="twitter:image"]',"content",n);const s=document.querySelector('link[rel="canonical"]');s&&s.setAttribute("href",i)}(d),function(e){const t=document.querySelector("[data-hero-images]");if(!t)return;const n=Array.isArray(e.images)?e.images.slice(0,4):[],a=document.querySelector("[data-hero-description]");if(a&&e.description){const t=e.description.trim().split(/\n\s*\n|\.\s*\n/).map((e=>e.trim())).filter(Boolean),n=e=>e.replace(/(\d+[.,]?\d*\s?(м²|м2|кв\.м|кв\. м)?|\d+-этажного|\d+\s?этаж|\d+\s?комнат)/gi,"<strong>$1</strong>");a.innerHTML=t.map((e=>`<p>${n(e)}</p>`)).join("")}t.innerHTML=n.map((e=>`\n      \n        <div class="object-hero-image">\n          <img loading="lazy" decoding="async" src="${e}" alt="">\n        </div>\n   \n    `)).join("");const i=document.querySelector("[data-hero-title]"),o=document.querySelector("[data-hero-location]"),s=document.querySelector("[data-published]"),r=document.querySelector("[data-deal-type]"),c=document.querySelector("[data-featured]");if(i&&(i.textContent=e.title||""),o&&(o.textContent=[e.city,e.address].filter(Boolean).join(", ")),s&&(s.textContent=e.publishedAt?new Date(e.publishedAt).toLocaleDateString("ru-RU"):""),r)if("sold"===e?.status?.type){const t=e?.status?.date,n=Date.now();if(t){const e=(n-new Date(t).getTime())/864e5;r.textContent=e<=7?"Продано":"Продажа"}else r.textContent="Продано"}else r.textContent=e.dealType||"Продажа";c&&e.recommended&&(c.hidden=!1)}(d),function(e){const t=a("[data-meta-list]");if(!t)return;const n=[];e.type&&n.push(["Тип объекта",e.type]),(e.city||e.address)&&n.push(["Локация",o([e.city,e.address],", ")]),e.rooms&&n.push(["Комнат",e.rooms]),e.areaTotal&&n.push(["Площадь",`${e.areaTotal} м²`]),e.yearBuilt&&n.push(["Год",e.yearBuilt]);const i=r(e);"number"==typeof i&&n.push(["Цена",`${s(i)} BYN`]),n.length&&(t.innerHTML=n.map((([e,t])=>`\n        <li style="display:flex;justify-content:space-between">\n          <span style="font-weight:700;color:#155945">${e}</span>\n          <span>${t}</span>\n        </li>`)).join(""))}(d),function(e){const t=a("[data-object-title]"),n=a("[data-object-subtitle]"),i=a("[data-object-description]");t&&(t.textContent=e.title);const c=String(e.type||"").toLowerCase();if(n){const t=o("дом"===c?[e.areaPlot&&`Участок ${e.areaPlot} соток`,e.water&&`Вода: ${e.water}`,e.heating&&`Отопление: ${e.heating}`]:[e.type,e.areaTotal&&`${e.areaTotal} м²`,r(e)&&`${s(r(e))} BYN`]," • ");t&&(n.textContent=t)}if(i){const t=[];e.description&&t.push(`<p>${e.description}</p>`),Array.isArray(e.features)&&e.features.length&&t.push(`\n          <p><b>Преимущества:</b></p>\n          <ul>${e.features.map((e=>`<li>${e}</li>`)).join("")}</ul>\n        `),t.push('\n        <p style="margin-top:14px">\n          📍 Агентство недвижимости «ГермесГрупп»<br>\n          г. Лида, б-р Князя Гедимина, 12, пом. 9.\n        </p>\n      '),i.innerHTML=t.join("")}}(d),function(e){const t=document.querySelector("[data-hero-title]"),n=document.querySelector("[data-hero-location]"),a=document.querySelector("[data-published]"),i=(document.querySelector("[data-deal-type]"),document.querySelector("[data-featured]"));if(t&&(t.textContent=e.title||""),n&&(n.textContent=[e.city,e.address].filter(Boolean).join(", ")),a){const t=e.publishedAt?new Date(e.publishedAt).toLocaleDateString("ru-RU"):"";a.textContent=t}i&&e.recommended&&(i.hidden=!1)}(d),function(e){const t=document.querySelector("[data-sidebar-title]");t&&(t.textContent=e.title||"")}(d),h(d),function(e){const t=document.querySelector("[data-sidebar-footer]");if(!t)return;const n=e.contractNumber?`<div class="sidebar-contract">${e.contractNumber}</div>`:"";t.innerHTML=`\n    <div class="sidebar-agency">\n      <div class="sidebar-agency-title">\n        📍 Агентство недвижимости «ГермесГрупп»\n      </div>\n      <div class="sidebar-agency-address">\n        г. Лида, б-р Князя Гедимина, дом 12, помещение 9.\n      </div>\n      ${n}\n    </div>\n  `}(d),A(d,e),function(e,t){const n=document.querySelector("#similarCarousel");if(!n)return;const a=j(e,t,6);a.length?n.innerHTML=a.map($).join(""):n.innerHTML=""}(d,e),function(){const e=document.querySelector(".agent-card");if(!e)return;const t=new IntersectionObserver((([n])=>{n.isIntersecting&&(e.classList.add("is-visible"),t.disconnect())}),{threshold:.3});t.observe(e)}(),function(e){const t=document.querySelector("[data-object-amenities]"),n=document.querySelector("[data-amenities-list]");t&&n&&(Array.isArray(e.features)&&e.features.length?(t.hidden=!1,n.innerHTML=e.features.map((e=>`\n      <div class="amenity-item">\n        <span class="amenity-icon">\n          <i class="fa-solid fa-check"></i>\n        </span>\n        <span class="amenity-text">${e}</span>\n      </div>\n    `)).join("")):t.hidden=!0)}(d),g(d),function(e){if(!(e&&e.location&&e.location.lat&&e.location.lng))return void console.warn("Координаты объекта не найдены");const t=document.getElementById("objectMap");if(!t)return void console.warn("Контейнер #objectMap не найден");const{lat:a,lng:i}=e.location,o=new maplibregl.Map({container:t,style:`https://api.maptiler.com/maps/basic-v2/style.json?key=${n}`,center:[i,a],zoom:15,attributionControl:!0});o.on("load",(()=>{o.getStyle().layers.forEach((e=>{"symbol"===e.type&&e.layout&&e.layout["text-field"]&&o.setLayoutProperty(e.id,"text-field",["coalesce",["get","name:ru"],["get","name"]])}))})),o.addControl(new maplibregl.NavigationControl,"top-right"),o.scrollZoom.disable(),o.dragRotate.disable(),o.touchZoomRotate.disableRotation(),new maplibregl.Marker({color:"var(--color-primary)",scale:1.1}).setLngLat([i,a]).addTo(o)}(d),function(e){"function"==typeof window.initMultiBankMortgageCalculator&&window.initMultiBankMortgageCalculator(e)}(d)}catch(e){console.error("INIT ERROR:",e),v(p())}}))}();
+(function () {
+  "use strict";
+
+  const OBJECT_URL = (slug) => `/data/objects/${encodeURIComponent(slug)}.json`;
+  const LIST_URL = "/data/objects-list.json";
+  const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
+
+  /* =====================================================
+     HELPERS
+  ===================================================== */
+  const qs = (s, r = document) => r.querySelector(s);
+
+  const isFilled = (v) =>
+    v !== null && v !== undefined && String(v).trim() !== "";
+
+  const safeJoin = (parts, sep = " • ") => parts.filter(isFilled).join(sep);
+
+  const formatPrice = (v) =>
+    typeof v === "number" ? v.toLocaleString("ru-RU") : "";
+
+  function getDisplayBynPrice(obj) {
+    if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
+      return window.RealterPrice.getLiveBynPriceSync(obj);
+    }
+
+    return typeof obj?.priceBYN === "number" ? obj.priceBYN : null;
+  }
+
+  async function fetchUsdRate() {
+    if (typeof window.RealterPrice?.fetchUsdRate === "function") {
+      return window.RealterPrice.fetchUsdRate();
+    }
+
+    throw new Error("Модуль live-price.js не подключён");
+  }
+
+  function createPriceState(obj) {
+    return {
+      isUsd: false,
+      isAnimating: false,
+      isRateLoading: false,
+      bynFallback: getDisplayBynPrice(obj),
+      usd: typeof obj.priceUSD === "number" ? obj.priceUSD : null,
+      usdRateData: null,
+    };
+  }
+
+  function getBynPrice(state) {
+    if (state.usdRateData && typeof state.usd === "number") {
+      return Math.round(state.usd * state.usdRateData.ratePerUnit);
+    }
+
+    return state.bynFallback;
+  }
+
+  function getFormattedPriceData(state) {
+    if (state.isUsd) {
+      return {
+        label: "Цена в долларах",
+        value:
+          typeof state.usd === "number"
+            ? `${formatPrice(state.usd)} USD`
+            : "Цена в USD недоступна",
+      };
+    }
+
+    if (state.isRateLoading && typeof state.usd === "number") {
+      return {
+        label: "Цена",
+        value: "Загрузка...",
+      };
+    }
+
+    const bynValue = getBynPrice(state);
+    const bynLabel = state.usdRateData?.dateLabel
+      ? `Цена (по курсу НБРБ на ${state.usdRateData.dateLabel})`
+      : "Цена";
+
+    return {
+      label: bynLabel,
+      value: typeof bynValue === "number" ? `${formatPrice(bynValue)} BYN` : "",
+    };
+  }
+
+  function updatePriceButtonContent(button, state) {
+    const label = button.querySelector("[data-price-label]");
+    const value = button.querySelector("[data-price-value]");
+    const content = getFormattedPriceData(state);
+
+    if (label) label.textContent = content.label;
+    if (value) value.textContent = content.value;
+
+    button.setAttribute(
+      "aria-label",
+      state.isUsd
+        ? "Показать цену в белорусских рублях"
+        : "Показать цену в долларах США",
+    );
+    button.setAttribute("aria-pressed", state.isUsd ? "true" : "false");
+    button.dataset.currency = state.isUsd ? "usd" : "byn";
+  }
+
+  function animatePriceSwap(button, state) {
+    if (state.isAnimating) return;
+
+    state.isAnimating = true;
+    button.classList.add("is-animating");
+
+    window.setTimeout(() => {
+      updatePriceButtonContent(button, state);
+      button.classList.add("is-animating-in");
+    }, 180);
+
+    window.setTimeout(() => {
+      button.classList.remove("is-animating", "is-animating-in");
+      state.isAnimating = false;
+    }, 420);
+  }
+
+  function setupPriceToggle(button, obj) {
+    const state = createPriceState(obj);
+    updatePriceButtonContent(button, state);
+
+    if (typeof state.usd === "number") {
+      state.isRateLoading = true;
+      updatePriceButtonContent(button, state);
+      button.classList.add("is-loading");
+
+      fetchUsdRate()
+        .then((rateData) => {
+          state.usdRateData = rateData;
+
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          state.isRateLoading = false;
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
+          button.classList.remove("is-loading");
+        });
+    }
+
+    button.addEventListener("click", async () => {
+      if (state.isAnimating) return;
+
+      const nextIsUsd = !state.isUsd;
+
+      if (!state.usdRateData && typeof state.usd === "number") {
+        state.isRateLoading = true;
+        if (!state.isUsd) {
+          updatePriceButtonContent(button, state);
+        }
+        button.classList.add("is-loading");
+
+        try {
+          state.usdRateData = await fetchUsdRate();
+        } catch (error) {
+          console.error(error);
+        } finally {
+          state.isRateLoading = false;
+          if (!state.isUsd) {
+            updatePriceButtonContent(button, state);
+          }
+          button.classList.remove("is-loading");
+        }
+      }
+
+      if (nextIsUsd && typeof state.usd !== "number") {
+        return;
+      }
+
+      if (!nextIsUsd && !state.usdRateData && typeof state.bynFallback !== "number") {
+        return;
+      }
+
+      state.isUsd = nextIsUsd;
+      animatePriceSwap(button, state);
+    });
+  }
+
+  function getSlugFromUrl() {
+    const url = new URL(window.location.href);
+
+    const qsSlug = url.searchParams.get("slug");
+    if (isFilled(qsSlug)) return qsSlug.trim();
+
+    const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
+    if (parts.length === 2 && (parts[0] === "objects" || parts[0] === "object")) return decodeURIComponent(parts[1]);
+
+    return "";
+  }
+
+  async function fetchSingleObject(slug) {
+    const res = await fetch(OBJECT_URL(slug), { cache: "no-store" });
+    if (!res.ok) throw new Error(`Объект не найден: ${slug}`);
+    return res.json();
+  }
+
+  async function fetchObjectsList() {
+    const res = await fetch(LIST_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("Ошибка загрузки objects-list.json");
+    return res.json();
+  }
+
+  function getObjectArea(obj) {
+    const raw =
+      obj.area ?? obj.areaTotal ?? obj.totalArea ?? obj.square ?? null;
+
+    if (!raw) return null;
+
+    const n = Number(
+      String(raw)
+        .replace(",", ".")
+        .replace(/[^\d.]/g, ""),
+    );
+    return n > 0 ? n : null;
+  }
+
+  /* =====================================================
+     JSON-LD SCHEMA (DYNAMIC)
+  ===================================================== */
+  function insertSchema(schema) {
+    const s = document.createElement("script");
+    s.type = "application/ld+json";
+    s.textContent = JSON.stringify(schema, null, 2);
+    document.head.appendChild(s);
+  }
+
+  function generateObjectSchema(obj) {
+    if (!obj) return;
+
+    const isFlat = String(obj.type).toLowerCase() === "квартира";
+    const area = getObjectArea(obj);
+
+    const images =
+      Array.isArray(obj.images) && obj.images.length
+        ? obj.images.slice(0, 5)
+        : ["https://example.com/images/objects/placeholder.webp"];
+
+    const schemaPrice = getDisplayBynPrice(obj);
+
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Offer",
+      name: obj.title,
+      url: window.location.href,
+      image: images,
+      price: String(schemaPrice || obj.priceBYN || ""),
+      priceCurrency: "BYN",
+      priceValidUntil: "2030-12-31",
+      availability: "https://schema.org/InStock",
+      datePosted: obj.publishedAt || new Date().toISOString().split("T")[0],
+
+      seller: {
+        "@type": "RealEstateAgent",
+        name: "Ольга Турко",
+        url: "https://turko.by",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Лида",
+          addressCountry: "BY",
+        },
+      },
+
+      itemOffered: {
+        "@type": isFlat ? "Apartment" : "House",
+        name: obj.title,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: obj.city || "Лида",
+          addressCountry: "BY",
+        },
+      },
+    };
+
+    // Площадь
+    if (area) {
+      schema.itemOffered.floorSize = {
+        "@type": "QuantitativeValue",
+        value: area,
+        unitCode: "MTK",
+      };
+    }
+
+    // Комнаты
+    if (isFlat && obj.rooms) {
+      schema.itemOffered.numberOfRooms = obj.rooms;
+    }
+
+    // Описание
+    if (obj.description) {
+      schema.itemOffered.description = obj.description;
+    }
+
+    // Адрес улицы
+    if (obj.address) {
+      schema.itemOffered.address.streetAddress = obj.address;
+    }
+
+    // Гео-координаты (если есть)
+    const lat = obj.location?.lat ?? obj.lat;
+    const lng = obj.location?.lng ?? obj.lng;
+    if (lat && lng) {
+      schema.itemOffered.geo = {
+        "@type": "GeoCoordinates",
+        latitude: lat,
+        longitude: lng,
+      };
+    }
+
+    // Абсолютные URL для изображений (Schema.org требует полный путь)
+    schema.image = schema.image.map((src) =>
+      src.startsWith("http") ? src : `https://turko.by${src}`
+    );
+
+    insertSchema(schema);
+
+    /* =========================
+     BREADCRUMBS
+  ========================= */
+    const breadcrumbs = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Главная",
+          item: "https://turko.by/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Объекты недвижимости",
+          item: "https://turko.by/nedvizhimost-lida",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: obj.title,
+          item: window.location.href,
+        },
+      ],
+    };
+
+    insertSchema(breadcrumbs);
+  }
+
+  /* =====================================================
+     DYNAMIC PAGE META (og:*, description, canonical)
+  ===================================================== */
+  function updatePageMeta(obj) {
+    const title = `${obj.title} — Ольга Турко`;
+    const firstImage = Array.isArray(obj.images) && obj.images.length
+      ? (obj.images[0].startsWith("http") ? obj.images[0] : `https://turko.by${obj.images[0]}`)
+      : "https://turko.by/images/main-slider/2.webp";
+    const desc = obj.cardDescription
+      || (obj.description ? obj.description.slice(0, 160).trimEnd() + "…" : "")
+      || "Объект недвижимости — Ольга Турко, риэлтер в Лиде";
+    const url = `https://turko.by/object/${obj.slug}`;
+
+    const setMeta = (sel, attr, val) => {
+      const el = document.querySelector(sel);
+      if (el) el.setAttribute(attr, val);
+    };
+
+    document.title = title;
+    setMeta('meta[name="description"]', "content", desc);
+    setMeta('meta[property="og:title"]', "content", title);
+    setMeta('meta[property="og:description"]', "content", desc);
+    setMeta('meta[property="og:image"]', "content", firstImage);
+    setMeta('meta[property="og:url"]', "content", url);
+    setMeta('meta[name="twitter:title"]', "content", title);
+    setMeta('meta[name="twitter:description"]', "content", desc);
+    setMeta('meta[name="twitter:image"]', "content", firstImage);
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", url);
+  }
+
+  /* =====================================================
+     RENDER BLOCKS
+  ===================================================== */
+function renderTopTitle(obj) {
+  const title = obj?.title || "Детали объекта";
+
+  // <title> в head
+  document.title = `${title} — Ольга Турко`;
+
+  // PAGE INTRO TITLE
+  const h = document.querySelector("[data-page-title]");
+
+  if (h) {
+    h.textContent = title;
+  }
+}
+
+
+function renderHeroBlock(obj) {
+  const imagesWrap = document.querySelector("[data-hero-images]");
+  if (!imagesWrap) return;
+
+  const imgs = Array.isArray(obj.images) ? obj.images.slice(0, 4) : [];
+
+const desc = document.querySelector("[data-hero-description]");
+
+if (desc && obj.description) {
+  const text = obj.description.trim();
+
+
+  const paragraphs = text
+    .split(/\n\s*\n|\.\s*\n/)
+    .map(p => p.trim())
+    .filter(Boolean);
+
+ 
+  const highlightNumbers = (str) =>
+    str.replace(
+      /(\d+[.,]?\d*\s?(м²|м2|кв\.м|кв\. м)?|\d+-этажного|\d+\s?этаж|\d+\s?комнат)/gi,
+      "<strong>$1</strong>"
+    );
+
+  desc.innerHTML = paragraphs
+    .map(p => `<p>${highlightNumbers(p)}</p>`)
+    .join("");
+}
+  imagesWrap.innerHTML = imgs
+    .map(
+      (src) => `
+      
+        <div class="object-hero-image">
+          <img loading="lazy" decoding="async" src="${src}" alt="">
+        </div>
+   
+    `,
+    )
+    .join("");
+
+
+
+    
+  // META
+  const title = document.querySelector("[data-hero-title]");
+  const location = document.querySelector("[data-hero-location]");
+  const published = document.querySelector("[data-published]");
+  const dealType = document.querySelector("[data-deal-type]");
+  const featured = document.querySelector("[data-featured]");
+
+  if (title) title.textContent = obj.title || "";
+
+  if (location)
+    location.textContent = [obj.city, obj.address].filter(Boolean).join(", ");
+
+  if (published) {
+    published.textContent = obj.publishedAt
+      ? new Date(obj.publishedAt).toLocaleDateString("ru-RU")
+      : "";
+  }
+
+if (dealType) {
+  const isSold = obj?.status?.type === "sold";
+
+  if (isSold) {
+    const soldDate = obj?.status?.date;
+    const now = Date.now();
+
+    if (soldDate) {
+      const soldTime = new Date(soldDate).getTime();
+      const diffDays = (now - soldTime) / (1000 * 60 * 60 * 24);
+
+      // показываем "Продан" только 7 дней
+      if (diffDays <= 7) {
+        dealType.textContent = "Продано";
+      } else {
+        dealType.textContent = "Продажа";
+      }
+    } else {
+      dealType.textContent = "Продано";
+    }
+
+  } else {
+    dealType.textContent = obj.dealType || "Продажа";
+  }
+}
+
+  if (featured && obj.recommended) {
+    featured.hidden = false;
+  }
+}
+
+
+function getAreaTotal(obj) {
+  return obj.areaTotal ?? obj.totalArea ?? null;
+}
+
+function getAreaLiving(obj) {
+  return obj.areaLiving ?? obj.livingArea ?? null;
+}
+
+function getAreaKitchen(obj) {
+  return obj.areaKitchen ?? obj.kitchenArea ?? null;
+}
+
+function renderObjectDetails(obj) {
+  const wrap = document.querySelector("[data-object-details]");
+  const priceWrap = document.querySelector("[data-object-price]");
+  if (!wrap || !priceWrap) return;
+
+  const isFlat = String(obj.type || "").toLowerCase().includes("квартир");
+
+  /* PRICE */
+  if (typeof obj.priceBYN === "number" || typeof obj.priceUSD === "number") {
+    const displayBynPrice = getDisplayBynPrice(obj);
+    const initialPriceValue =
+      typeof obj.priceUSD === "number"
+        ? "Загрузка..."
+        : typeof displayBynPrice === "number"
+        ? `${formatPrice(displayBynPrice)} BYN`
+        : "";
+
+    priceWrap.innerHTML = `
+      <button
+        type="button"
+        class="object-price-toggle"
+        data-price-toggle
+        aria-pressed="false"
+      >
+        <span class="object-price-label" data-price-label>Цена</span>
+        <span class="object-price-value" data-price-value>
+          ${initialPriceValue}
+        </span>
+      </button>
+    `;
+
+    const priceButton = priceWrap.querySelector("[data-price-toggle]");
+    if (priceButton) {
+      setupPriceToggle(priceButton, obj);
+    }
+  }
+
+  const has = (v) =>
+    v !== null && v !== undefined && String(v).trim() !== "";
+
+  const make = (icon, label, value, group) =>
+    has(value) ? { icon, label, value, group } : null;
+
+  let items = [];
+
+  if (isFlat) {
+    items.push(
+      make("fa-house", "Тип объекта", obj.type, "Основное"),
+      make("fa-door-open", "Комнат", obj.rooms, "Основное"),
+      make(
+        "fa-layer-group",
+        "Этаж",
+        obj.floor && obj.floorsTotal
+          ? `${obj.floor} из ${obj.floorsTotal}`
+          : obj.floor,
+        "Основное"
+      ),
+      make("fa-expand", "Общая площадь", obj.areaTotal && `${obj.areaTotal} м²`, "Площади"),
+      make("fa-couch", "Жилая площадь", obj.areaLiving && `${obj.areaLiving} м²`, "Площади"),
+      make("fa-ruler-combined", "Кухня", obj.areaKitchen && `${obj.areaKitchen} м²`, "Площади"),
+      make("fa-bath", "Санузел", obj.bathroom, "Площади"),
+      make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное")
+    );
+  } else {
+    items.push(
+      make("fa-house", "Тип объекта", obj.type, "Основное"),
+      make("fa-expand", "Площадь дома", obj.areaTotal && `${obj.areaTotal} м²`, "Площади"),
+      make("fa-couch", "Жилая площадь", obj.areaLiving && `${obj.areaLiving} м²`, "Площади"),
+      make("fa-tree", "Участок", obj.areaPlot && `${obj.areaPlot} соток`, "Площади"),
+      make("fa-fire", "Отопление", obj.heating, "Коммуникации"),
+      make("fa-faucet", "Вода", obj.water, "Коммуникации"),
+      make("fa-toilet", "Канализация", obj.sewerage, "Коммуникации"),
+      make("fa-calendar", "Год постройки", obj.yearBuilt, "Основное")
+    );
+  }
+
+  items = items.filter(Boolean);
+
+  const groups = {};
+  items.forEach((i) => {
+    if (!groups[i.group]) groups[i.group] = [];
+    groups[i.group].push(i);
+  });
+
+  wrap.innerHTML = Object.entries(groups)
+    .map(
+      ([group, rows]) => `
+        <div class="object-details-group">
+          <h5 class="object-details-group-title">${group}</h5>
+          <div class="object-details-list">
+            ${rows
+              .map(
+                (r) => `
+                <div class="object-detail-row">
+                  <div class="object-detail-label">
+                    <i class="fa-solid ${r.icon}"></i>
+                    ${r.label}
+                  </div>
+                  <div class="object-detail-value">${r.value}</div>
+                </div>
+              `
+              )
+              .join("")}
+          </div>
+        </div>
+      `
+    )
+    .join("");
+}
+
+
+
+  function renderMeta(obj) {
+    const meta = qs("[data-meta-list]");
+    if (!meta) return;
+
+    const rows = [];
+
+    if (obj.type) rows.push(["Тип объекта", obj.type]);
+    if (obj.city || obj.address)
+      rows.push(["Локация", safeJoin([obj.city, obj.address], ", ")]);
+    if (obj.rooms) rows.push(["Комнат", obj.rooms]);
+    if (obj.areaTotal) rows.push(["Площадь", `${obj.areaTotal} м²`]);
+    if (obj.yearBuilt) rows.push(["Год", obj.yearBuilt]);
+
+    const displayPrice = getDisplayBynPrice(obj);
+    if (typeof displayPrice === "number")
+      rows.push(["Цена", `${formatPrice(displayPrice)} BYN`]);
+
+    if (!rows.length) return;
+
+    meta.innerHTML = rows
+      .map(
+        ([l, v]) => `
+        <li style="display:flex;justify-content:space-between">
+          <span style="font-weight:700;color:#155945">${l}</span>
+          <span>${v}</span>
+        </li>`,
+      )
+      .join("");
+  }
+
+  function renderRightText(obj) {
+    const titleEl = qs("[data-object-title]");
+    const subEl = qs("[data-object-subtitle]");
+    const descEl = qs("[data-object-description]");
+
+    if (titleEl) titleEl.textContent = obj.title;
+
+    const typeLower = String(obj.type || "").toLowerCase();
+
+    if (subEl) {
+      const line =
+        typeLower === "дом"
+          ? safeJoin(
+              [
+                obj.areaPlot && `Участок ${obj.areaPlot} соток`,
+                obj.water && `Вода: ${obj.water}`,
+                obj.heating && `Отопление: ${obj.heating}`,
+              ],
+              " • ",
+            )
+          : safeJoin(
+              [
+                obj.type,
+                obj.areaTotal && `${obj.areaTotal} м²`,
+                getDisplayBynPrice(obj) && `${formatPrice(getDisplayBynPrice(obj))} BYN`,
+              ],
+              " • ",
+            );
+
+      if (line) subEl.textContent = line;
+    }
+
+    if (descEl) {
+      const blocks = [];
+
+      if (obj.description) blocks.push(`<p>${obj.description}</p>`);
+
+      if (Array.isArray(obj.features) && obj.features.length) {
+        blocks.push(`
+          <p><b>Преимущества:</b></p>
+          <ul>${obj.features.map((f) => `<li>${f}</li>`).join("")}</ul>
+        `);
+      }
+
+      blocks.push(`
+        <p style="margin-top:14px">
+          📍 Агентство недвижимости «ГермесГрупп»<br>
+          г. Лида, б-р Князя Гедимина, 12, пом. 9.
+        </p>
+      `);
+
+      descEl.innerHTML = blocks.join("");
+    }
+  }
+
+  function renderNotFound(slug) {
+    renderTopTitle({ title: "Объект не найден" });
+    const box = qs(".project-detail-containt-2 .bg-white");
+    if (!box) return;
+
+    box.innerHTML = `
+      <h4>Объект не найден</h4>
+      <p>slug: <b>${slug || "—"}</b></p>
+    `;
+  }
+
+
+function renderSidebarFooter(obj) {
+  const box = document.querySelector("[data-sidebar-footer]");
+  if (!box) return;
+
+  const contract = obj.contractNumber
+    ? `<div class="sidebar-contract">${obj.contractNumber}</div>`
+    : "";
+
+  box.innerHTML = `
+    <div class="sidebar-agency">
+      <div class="sidebar-agency-title">
+        📍 Агентство недвижимости «ГермесГрупп»
+      </div>
+      <div class="sidebar-agency-address">
+        г. Лида, б-р Князя Гедимина, дом 12, помещение 9.
+      </div>
+      ${contract}
+    </div>
+  `;
+}
+
+
+  /* =====================================================
+   SIMILAR OBJECTS (Похожие варианты)
+===================================================== */
+
+  function getObjectPrice(obj) {
+    const displayPrice = getDisplayBynPrice(obj);
+    if (typeof displayPrice === "number" && displayPrice > 0)
+      return displayPrice;
+
+    if (typeof obj.priceUSD === "number" && obj.priceUSD > 0) {
+      const USD_TO_BYN = 3.3;
+      return Math.round(obj.priceUSD * USD_TO_BYN);
+    }
+
+    return null;
+  }
+
+  function normalizeText(v) {
+    return String(v || "")
+      .trim()
+      .toLowerCase();
+  }
+
+  function scoreSimilar(current, candidate) {
+    let score = 0;
+
+    // Тип объекта — самый важный
+    if (normalizeText(current.type) !== normalizeText(candidate.type)) {
+      score += 100000;
+    }
+
+    // Город
+    if (normalizeText(current.city) !== normalizeText(candidate.city)) {
+      score += 10000;
+    }
+
+    // Цена
+    const p1 = getObjectPrice(current);
+    const p2 = getObjectPrice(candidate);
+
+    if (typeof p1 === "number" && typeof p2 === "number") {
+      score += Math.abs(p1 - p2);
+    } else {
+      score += 5000;
+    }
+
+    return score;
+  }
+
+  function isSoldObject(obj) {
+    return (
+      typeof obj?.status?.type === "string" &&
+      obj.status.type.toLowerCase() === "sold"
+    );
+  }
+
+  function pickSimilarObjects(currentObj, allObjects, limit = 6) {
+    return allObjects
+      .filter(
+        (o) => o && o.slug && o.slug !== currentObj.slug && !isSoldObject(o)
+      )
+      .map((o) => ({ obj: o, score: scoreSimilar(currentObj, o) }))
+      .sort((a, b) => a.score - b.score)
+      .slice(0, limit)
+      .map((x) => x.obj);
+  }
+
+  function renderSimilarItem(obj) {
+    const img =
+      Array.isArray(obj.images) && obj.images[0]
+        ? obj.images[0]
+        : "/images/objects/pic1.webp";
+
+    const title = obj.title || "Объект недвижимости";
+    const link = `/objects/${encodeURIComponent(obj.slug)}`;
+
+    return `
+    <div class="item">
+      <div class="project-mas m-a30">
+      
+        <div class="image-effect-one">
+          <img loading="lazy" decoding="async" src="${img}" alt="${title}">
+        </div>
+        <div class="project-info p-t20">
+          <h4 class="sx-tilte m-t0">
+            <a href="${link}">${title}</a>
+          </h4>
+          <a href="${link}">
+            <i class="link-plus bg-primary"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+  }
+
+  function renderSimilarSlider(currentObj, allObjects) {
+    const carousel = document.querySelector("#similarCarousel");
+    if (!carousel) return;
+
+    const similar = pickSimilarObjects(currentObj, allObjects, 6);
+
+    if (!similar.length) {
+      carousel.innerHTML = "";
+      return;
+    }
+
+    carousel.innerHTML = similar.map(renderSimilarItem).join("");
+  }
+
+
+/* =====================================================
+   FAVORITES (localStorage)
+===================================================== */
+
+const FAVORITES_KEY = "favoriteObjects";
+
+function getFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveFavorites(list) {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(list));
+}
+
+function isFavorite(slug) {
+  return getFavorites().includes(slug);
+}
+
+function toggleFavorite(slug) {
+  const favs = getFavorites();
+  const idx = favs.indexOf(slug);
+
+  if (idx >= 0) {
+    favs.splice(idx, 1);
+  } else {
+    favs.push(slug);
+  }
+
+  saveFavorites(favs);
+  return favs.includes(slug);
+}
+
+
+
+function renderHeroMeta(obj) {
+  const title = document.querySelector("[data-hero-title]");
+  const location = document.querySelector("[data-hero-location]");
+  const published = document.querySelector("[data-published]");
+  const dealType = document.querySelector("[data-deal-type]");
+  const featured = document.querySelector("[data-featured]");
+
+  if (title) title.textContent = obj.title || "";
+  if (location)
+    location.textContent = [obj.city, obj.address].filter(Boolean).join(", ");
+
+  if (published) {
+    const d = obj.publishedAt
+      ? new Date(obj.publishedAt).toLocaleDateString("ru-RU")
+      : "";
+    published.textContent = d;
+  }
+
+
+  if (featured && obj.recommended) {
+    featured.hidden = false;
+  }
+}
+
+
+function renderSidebarTitle(obj) {
+  const title = document.querySelector("[data-sidebar-title]");
+  if (title) title.textContent = obj.title || "";
+}
+
+
+function initSidebarSlider(currentObj, allObjects) {
+  const track = document.querySelector("[data-sidebar-track]");
+  if (!track) return;
+
+  const items = pickSimilarObjects(currentObj, allObjects, 6);
+  if (!items.length) return;
+
+  let index = 0;
+  let autoTimer = null;
+
+  function renderSlides() {
+    track.innerHTML = items
+      .map((obj) => {
+        const img =
+          Array.isArray(obj.images) && obj.images[0]
+            ? obj.images[0]
+            : "/images/objects/pic1.webp";
+
+        const displayPrice = getDisplayBynPrice(obj);
+        const price =
+          typeof displayPrice === "number"
+            ? `${displayPrice.toLocaleString("ru-RU")} BYN`
+            : "";
+
+        return `
+          <a href="/objects/${obj.slug}" class="sidebar-slide">
+            <div class="sidebar-slide-image">
+              <img src="${img}" alt="${obj.title}">
+            </div>
+
+            <div class="sidebar-slide-content">
+              <h6>${obj.title}</h6>
+
+              <div class="sidebar-slide-location">
+                <i class="fa-solid fa-location-dot"></i>
+                ${[obj.city, obj.address].filter(Boolean).join(", ")}
+              </div>
+
+              <div class="sidebar-slide-price">${price}</div>
+            </div>
+          </a>
+        `;
+      })
+      .join("");
+  }
+
+  function updatePosition() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  function next() {
+    index = (index + 1) % items.length;
+    updatePosition();
+  }
+
+  function prev() {
+    index = (index - 1 + items.length) % items.length;
+    updatePosition();
+  }
+
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(next, 5000);
+  }
+
+  function stopAuto() {
+    if (autoTimer) clearInterval(autoTimer);
+  }
+
+  /* INIT */
+  renderSlides();
+  updatePosition();
+  startAuto();
+
+  /* HOVER PAUSE */
+  track.addEventListener("mouseenter", stopAuto);
+  track.addEventListener("mouseleave", startAuto);
+
+  /* SWIPE */
+  let startX = 0;
+
+  track.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    stopAuto();
+  });
+
+  track.addEventListener("touchend", (e) => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (Math.abs(diff) > 50) {
+      diff < 0 ? next() : prev();
+    }
+    startAuto();
+  });
+}
+
+
+
+function animateAgentCardOnce() {
+  const card = document.querySelector(".agent-card");
+  if (!card) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        card.classList.add("is-visible");
+        observer.disconnect(); // ⬅️ только один раз
+      }
+    },
+    {
+      threshold: 0.3,
+    },
+  );
+
+  observer.observe(card);
+}
+
+
+function renderAmenities(obj) {
+  const wrap = document.querySelector("[data-object-amenities]");
+  const list = document.querySelector("[data-amenities-list]");
+
+  if (!wrap || !list) return;
+
+  if (!Array.isArray(obj.features) || !obj.features.length) {
+    wrap.hidden = true;
+    return;
+  }
+
+  wrap.hidden = false;
+
+  list.innerHTML = obj.features
+    .map(
+      (item) => `
+      <div class="amenity-item">
+        <span class="amenity-icon">
+          <i class="fa-solid fa-check"></i>
+        </span>
+        <span class="amenity-text">${item}</span>
+      </div>
+    `,
+    )
+    .join("");
+}
+
+function initRevealBlocks() {
+  const blocks = document.querySelectorAll(".reveal");
+
+  if (!blocks.length) return;
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target); // один раз
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+    }
+  );
+
+  blocks.forEach(block => observer.observe(block));
+}
+
+document.addEventListener("DOMContentLoaded", initRevealBlocks);
+
+
+
+
+
+
+
+function initCustomSelectUI(nativeSelect) {
+  if (!nativeSelect || nativeSelect.dataset.customReady === "1") return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "filter-select-ui";
+
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "filter-select-trigger";
+  trigger.setAttribute("aria-haspopup", "listbox");
+  trigger.setAttribute("aria-expanded", "false");
+
+  const triggerText = document.createElement("span");
+  triggerText.className = "filter-select-trigger-text";
+
+  const menu = document.createElement("div");
+  menu.className = "filter-select-menu";
+  menu.setAttribute("role", "listbox");
+
+  wrapper.appendChild(trigger);
+  trigger.appendChild(triggerText);
+  wrapper.appendChild(menu);
+
+  nativeSelect.classList.add("is-customized-select");
+  nativeSelect.dataset.customReady = "1";
+  nativeSelect.insertAdjacentElement("afterend", wrapper);
+
+  const closeAll = () => {
+    document.querySelectorAll(".filter-select-ui.is-open").forEach((el) => {
+      if (el !== wrapper) {
+        el.classList.remove("is-open");
+        el
+          .querySelector(".filter-select-trigger")
+          ?.setAttribute("aria-expanded", "false");
+      }
+    });
+  };
+
+  function buildOptions() {
+    menu.innerHTML = "";
+
+    Array.from(nativeSelect.options).forEach((option) => {
+      const optionBtn = document.createElement("button");
+      optionBtn.type = "button";
+      optionBtn.className = "filter-select-option";
+      optionBtn.textContent = option.textContent;
+      optionBtn.dataset.value = option.value;
+      optionBtn.disabled = option.disabled;
+
+      optionBtn.addEventListener("click", () => {
+        if (nativeSelect.disabled || optionBtn.disabled) return;
+
+        nativeSelect.value = optionBtn.dataset.value;
+        nativeSelect.dispatchEvent(new Event("change", { bubbles: true }));
+
+        syncFromNative();
+        wrapper.classList.remove("is-open");
+        trigger.setAttribute("aria-expanded", "false");
+      });
+
+      menu.appendChild(optionBtn);
+    });
+  }
+
+  function syncFromNative() {
+    const selected = nativeSelect.options[nativeSelect.selectedIndex];
+    triggerText.textContent = selected ? selected.textContent : "";
+
+    menu.querySelectorAll(".filter-select-option").forEach((btn) => {
+      btn.classList.toggle("is-selected", btn.dataset.value === nativeSelect.value);
+    });
+
+    wrapper.classList.toggle("is-disabled", nativeSelect.disabled);
+    trigger.disabled = nativeSelect.disabled;
+  }
+
+  trigger.addEventListener("click", () => {
+    if (nativeSelect.disabled) return;
+
+    const willOpen = !wrapper.classList.contains("is-open");
+    closeAll();
+    wrapper.classList.toggle("is-open", willOpen);
+    trigger.setAttribute("aria-expanded", willOpen ? "true" : "false");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".filter-select-ui")) {
+      wrapper.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      wrapper.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  nativeSelect.addEventListener("change", syncFromNative);
+
+  buildOptions();
+  syncFromNative();
+}
+
+window.initCustomSelectUI = initCustomSelectUI;
+
+function initMortgageCalculator(obj) {
+  if (typeof window.initMultiBankMortgageCalculator === "function") {
+    window.initMultiBankMortgageCalculator(obj);
+  }
+}
+
+
+function initObjectMap(obj) {
+  if (!obj || !obj.location || !obj.location.lat || !obj.location.lng) {
+    console.warn("Координаты объекта не найдены");
+    return;
+  }
+
+  const mapEl = document.getElementById("objectMap");
+  if (!mapEl) {
+    console.warn("Контейнер #objectMap не найден");
+    return;
+  }
+
+  const { lat, lng } = obj.location;
+
+  const map = new maplibregl.Map({
+    container: mapEl,
+   style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
+    center: [lng, lat],
+    zoom: 15,
+    attributionControl: true
+    
+  });
+
+
+  map.on("load", () => {
+  const layers = map.getStyle().layers;
+
+  layers.forEach(layer => {
+    if (
+      layer.type === "symbol" &&
+      layer.layout &&
+      layer.layout["text-field"]
+    ) {
+      map.setLayoutProperty(layer.id, "text-field", [
+        "coalesce",
+        ["get", "name:ru"],
+        ["get", "name"]
+      ]);
+    }
+  });
+});
+
+  map.addControl(new maplibregl.NavigationControl(), "top-right");
+  map.scrollZoom.disable(); // чтобы не мешала скроллу страницы
+map.dragRotate.disable();
+map.touchZoomRotate.disableRotation();
+
+new maplibregl.Marker({
+  color: "var(--color-primary)", 
+  scale: 1.1
+})
+  .setLngLat([lng, lat])
+  .addTo(map);
+}
+
+
+
+  /* =====================================================
+     INIT
+  ===================================================== */
+async function init() {
+  try {
+    let slug = getSlugFromUrl();
+    let listObjects;
+
+    /* =========================
+       DEBUG MODE (localhost, slug не задан)
+    ========================= */
+    if (!isFilled(slug)) {
+      const isLocal =
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1";
+
+      if (isLocal) {
+        console.warn("DEBUG MODE: slug не найден, берём первый объект из списка");
+        listObjects = await fetchObjectsList();
+        if (!Array.isArray(listObjects) || !listObjects.length) {
+          renderNotFound(slug);
+          return;
+        }
+        slug = listObjects[0].slug;
+      }
+    }
+
+    if (!isFilled(slug)) {
+      renderNotFound(slug);
+      return;
+    }
+
+    /* =========================
+       ПАРАЛЛЕЛЬНАЯ ЗАГРУЗКА
+    ========================= */
+    const [obj, fetchedList] = await Promise.all([
+      fetchSingleObject(slug),
+      listObjects ? Promise.resolve(listObjects) : fetchObjectsList(),
+    ]);
+
+    listObjects = Array.isArray(fetchedList) ? fetchedList : (listObjects || []);
+
+    /* =========================
+       LIVE PRICES
+    ========================= */
+    let enrichedObj = obj;
+    if (typeof window.RealterPrice?.enrichObjectsWithLivePrices === "function") {
+      const result = await window.RealterPrice.enrichObjectsWithLivePrices([obj]);
+      enrichedObj = result[0] || obj;
+    }
+
+    /* =========================
+       RENDER
+    ========================= */
+    renderTopTitle(enrichedObj);
+    updatePageMeta(enrichedObj);
+    renderHeroBlock(enrichedObj);
+    renderMeta(enrichedObj);
+    renderRightText(enrichedObj);
+    renderHeroMeta(enrichedObj);
+    renderSidebarTitle(enrichedObj);
+    renderObjectDetails(enrichedObj);
+    renderSidebarFooter(enrichedObj);
+    initSidebarSlider(enrichedObj, listObjects);
+    renderSimilarSlider(enrichedObj, listObjects);
+    animateAgentCardOnce();
+    renderAmenities(enrichedObj);
+    generateObjectSchema(enrichedObj);
+    initObjectMap(enrichedObj);
+    initMortgageCalculator(enrichedObj);
+
+  } catch (e) {
+    console.error("INIT ERROR:", e);
+    renderNotFound(getSlugFromUrl());
+  }
+}
+
+
+  document.addEventListener("DOMContentLoaded", init);
+})();

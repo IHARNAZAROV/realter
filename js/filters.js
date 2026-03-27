@@ -4,6 +4,7 @@
    GLOBAL STATE
 ========================================================= */
 let allObjects = [];
+let priceCache = new Map(); // Кэш цен объектов
 
 /* =========================================================
    LOAD MORE STATE
@@ -29,6 +30,12 @@ const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
 const VIEW_STORAGE_KEY = "objectsViewMode";
 const FAVORITES_VIEW_KEY = "favoritesViewMode";
+
+/* =========================================================
+   CACHED DOM ELEMENTS
+========================================================= */
+let cachedViewButtons = null;
+let favoriteCounter = null;
 
 /* =========================================================
    PREVIEW IMAGES (static mapping)
@@ -95,18 +102,27 @@ function formatPrice(v) {
 }
 
 function getObjectPriceByn(obj) {
+  // Проверяем кэш
+  if (priceCache.has(obj.slug)) {
+    return priceCache.get(obj.slug);
+  }
+
+  let price = 0;
+
   if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
     const livePrice = window.RealterPrice.getLiveBynPriceSync(obj);
     if (typeof livePrice === "number" && livePrice > 0) {
-      return livePrice;
+      price = livePrice;
     }
   }
 
-  if (typeof obj?.priceBYN === "number" && obj.priceBYN > 0) {
-    return obj.priceBYN;
+  if (price <= 0 && typeof obj?.priceBYN === "number" && obj.priceBYN > 0) {
+    price = obj.priceBYN;
   }
 
-  return 0;
+  // Сохраняем в кэш
+  priceCache.set(obj.slug, price);
+  return price;
 }
 
 function parsePrice(v) {
@@ -122,32 +138,45 @@ function debounce(fn, delay = 400) {
 }
 
 /* =========================================================
-   FAVORITES
+   FAVORITES (с оптимизацией кэша)
 ========================================================= */
 const FAVORITES_KEY = "favoriteObjects";
+let favoritesCache = null; // Кэш Set для быстрого поиска O(1)
+
+function getFavoritesSet() {
+  if (favoritesCache === null) {
+    try {
+      const raw = localStorage.getItem(FAVORITES_KEY);
+      favoritesCache = new Set(raw ? JSON.parse(raw) : []);
+    } catch {
+      favoritesCache = new Set();
+    }
+  }
+  return favoritesCache;
+}
+
+function clearFavoritesCache() {
+  favoritesCache = null; // Сбрасываем кэш
+}
 
 function getFavorites() {
-  try {
-    return JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
-  } catch {
-    return [];
-  }
+  return Array.from(getFavoritesSet());
 }
 
 function isFavorite(slug) {
-  return getFavorites().includes(slug);
+  return getFavoritesSet().has(slug);
 }
 
 function toggleFavorite(slug) {
-  let favs = getFavorites();
-
-  if (favs.includes(slug)) {
-    favs = favs.filter((s) => s !== slug);
+  const favSet = getFavoritesSet();
+  
+  if (favSet.has(slug)) {
+    favSet.delete(slug);
   } else {
-    favs.push(slug);
+    favSet.add(slug);
   }
 
-  localStorage.setItem(FAVORITES_KEY, JSON.stringify(favs));
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favSet)));
 }
 
 function isFavoritesMode() {
@@ -198,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   bindEvents();
   initViewSwitcher();
+  initFavoritesCounter();
 
   if (isFavoritesMode()) {
     document
@@ -268,65 +298,60 @@ function handlePriceInput() {
 }
 
 /* =========================================================
-   FILTER + SORT
+   FILTER + SORT (оптимизированная версия)
 ========================================================= */
 function applyFiltersAndSort() {
-  let result = [...allObjects];
-  result = result.filter((obj) => !shouldHideSold(obj, 7));
-  /* =========================================
-     ONLY FAVORITES MODE
-  ========================================= */
-  if (isFavoritesMode()) {
-    const favs = getFavorites();
-    result = result.filter((o) => favs.includes(o.slug));
-  }
+  // Подготовка фильтров
+  const favs = isFavoritesMode() ? getFavoritesSet() : null;
+  const typeValue = typeSelect.value;
+  const roomValue = roomsSelect.value;
+  const locationValue = locationSelect.value;
+  const priceFrom = parsePrice(priceFromInput.value);
+  const priceTo = parsePrice(priceToInput.value);
+  const isFlat = typeValue === "Квартира";
 
-  /* =========================================
-     TYPE FILTER
-  ========================================= */
-  if (typeSelect.value !== "all") {
-    result = result.filter((o) => o.type === typeSelect.value);
-  }
+  // ЕДИНЫЙ ЦИКЛ ФИЛЬТРАЦИИ (вместо 5 отдельных)
+  let result = allObjects.filter((obj) => {
+    // Скрытые объекты
+    if (shouldHideSold(obj, 7)) return false;
 
-  /* =========================================
-     ROOMS FILTER (ONLY FOR FLATS)
-  ========================================= */
-  if (typeSelect.value === "Квартира" && roomsSelect.value !== "all") {
-    result = result.filter((o) =>
-      roomsSelect.value === "4"
-        ? o.rooms >= 4
-        : o.rooms === Number(roomsSelect.value),
-    );
-  }
+    // Режим избранного
+    if (favs && !favs.has(obj.slug)) return false;
 
-  /* =========================================
-     PRICE FILTER
-  ========================================= */
-  const from = parsePrice(priceFromInput.value);
-  const to = parsePrice(priceToInput.value);
+    // Фильтр типа
+    if (typeValue !== "all" && obj.type !== typeValue) return false;
 
-  if (from) result = result.filter((o) => getObjectPriceByn(o) >= from);
-  if (to) result = result.filter((o) => getObjectPriceByn(o) <= to);
-
-  /* =========================================
-     LOCATION FILTER
-  ========================================= */
-  if (locationSelect.value !== "all") {
-    result = result.filter((o) => {
-      if (locationSelect.value === "lida") {
-        return o.city === "Лида";
+    // Фильтр комнат (только для квартир)
+    if (isFlat && roomValue !== "all") {
+      const objRooms = Number(obj.rooms);
+      if (roomValue === "4") {
+        if (objRooms < 4) return false;
+      } else if (objRooms !== Number(roomValue)) {
+        return false;
       }
-      if (locationSelect.value === "district") {
-        return o.city === "Лидский район";
-      }
-      return o.city !== "Лида" && o.city !== "Лидский район";
-    });
-  }
+    }
+
+    // Фильтр цены
+    const objPrice = getObjectPriceByn(obj);
+    if (priceFrom && objPrice < priceFrom) return false;
+    if (priceTo && objPrice > priceTo) return false;
+
+    // Фильтр локации
+    if (locationValue !== "all") {
+      if (locationValue === "lida" && obj.city !== "Лида") return false;
+      if (locationValue === "district" && obj.city !== "Лидский район") return false;
+      if (locationValue === "other" && (obj.city === "Лида" || obj.city === "Лидский район")) return false;
+    }
+
+    return true;
+  });
 
   /* =========================================
-     SORTING
+     SORTING (с кэшированными ценами)
   ========================================= */
-  switch (sortSelect.value) {
+  const sortValue = sortSelect.value;
+  
+  switch (sortValue) {
     case "cheap":
       result.sort((a, b) => getObjectPriceByn(a) - getObjectPriceByn(b));
       break;
@@ -361,7 +386,7 @@ function applyFiltersAndSort() {
   updateObjectsCounter(result.length);
 
   /* =========================================
-     LOAD MORE RESET (ВАЖНО)
+     LOAD MORE RESET
   ========================================= */
   isAppendMode = false;
   visibleCount = OBJECTS_STEP;
@@ -380,7 +405,7 @@ function applyFiltersAndSort() {
 }
 
 /* =========================================================
-   RENDER
+   RENDER (оптимизированная версия)
 ========================================================= */
 function renderObjects(list) {
   /* =========================================
@@ -407,10 +432,13 @@ function renderObjects(list) {
   const alreadyRendered = objectsList.children.length;
   const nextItems = list.slice(alreadyRendered, visibleCount);
 
+  // Создаём DocumentFragment для batch-вставки (быстрее, чем append в цикле)
+  const fragment = document.createDocumentFragment();
+
   /* =========================================
      APPEND NEW ITEMS ONLY
   ========================================= */
-  nextItems.forEach((obj, index) => {
+  nextItems.forEach((obj) => {
     const li = document.createElement("li");
     li.className = "object-item";
 
@@ -486,15 +514,21 @@ function renderObjects(list) {
       </div>
     `;
 
-    objectsList.appendChild(li);
+    fragment.appendChild(li);
+  });
 
-    /* =========================================
-       APPEAR ANIMATION (ONLY FOR NEW ITEMS)
-    ========================================= */
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+  // Batch-вставка всех элементов за раз
+  objectsList.appendChild(fragment);
+
+  // ОПТИМИЗИРОВАНО: Один requestAnimationFrame вместо двух
+  requestAnimationFrame(() => {
+    document.querySelectorAll(".object-item.is-visible").length; // flush layout
+    
+    nextItems.forEach((obj) => {
+      const li = objectsList.querySelector(`[data-slug="${obj.slug}"]`)?.closest(".object-item");
+      if (li) {
         li.classList.add("is-visible");
-      });
+      }
     });
   });
 
@@ -507,6 +541,8 @@ function renderObjects(list) {
 }
 
 function toggleLoadMore(canLoadMore, isLoading = false) {
+  if (!loadMoreBtn) return;
+
   if (!loadMoreAppearedOnce && canLoadMore) {
     loadMoreBtn.classList.add("is-appear");
     loadMoreAppearedOnce = true;
@@ -517,7 +553,6 @@ function toggleLoadMore(canLoadMore, isLoading = false) {
       { once: true },
     );
   }
-  if (!loadMoreBtn) return;
 
   const total = lastRenderedList.length;
   const shown = Math.min(visibleCount, total);
@@ -578,57 +613,59 @@ function isNewObject(obj, days = 7) {
 }
 
 /* =========================================================
-   Избранное
+   Избранное (оптимизировано с делегацией событий)
 ========================================================= */
-objectsList.addEventListener("click", (e) => {
-  const btn = e.target.closest(".favorite-btn");
-  if (!btn) return;
+if (objectsList) {
+  objectsList.addEventListener("click", (e) => {
+    const btn = e.target.closest(".favorite-btn");
+    if (!btn) return;
 
-  e.preventDefault();
-  e.stopPropagation();
+    e.preventDefault();
+    e.stopPropagation();
 
-  const slug = btn.dataset.slug;
-  toggleFavorite(slug);
+    const slug = btn.dataset.slug;
+    toggleFavorite(slug);
 
-  btn.classList.toggle("is-active");
-  btn.setAttribute(
-    "aria-label",
-    btn.classList.contains("is-active")
-      ? "Убрать из избранного"
-      : "Добавить в избранное",
-  );
-  const icon = btn.querySelector("i");
-  icon.classList.toggle("fa-solid");
-  icon.classList.toggle("fa-regular");
-  btn.classList.remove("is-pulse");
-  void btn.offsetWidth;
-  btn.classList.add("is-pulse");
-  updateFavoritesFilterCounter(true);
-});
-
-const favoritesCounter = document.getElementById("favoritesFilterCounter");
-
-if (favoritesCounter) {
-  favoritesCounter.addEventListener("click", () => {
-    const isActive = isFavoritesMode();
-
-    setFavoritesMode(!isActive);
-    applyFiltersAndSort();
-    updateFavoritesFilterCounter();
-
-    favoritesCounter.classList.toggle("is-active", !isActive);
+    btn.classList.toggle("is-active");
+    btn.setAttribute(
+      "aria-label",
+      btn.classList.contains("is-active")
+        ? "Убрать из избранного"
+        : "Добавить в избранное",
+    );
+    
+    const icon = btn.querySelector("i");
+    if (icon) {
+      icon.classList.toggle("fa-solid");
+      icon.classList.toggle("fa-regular");
+    }
+    
+    // Пульс анимация
+    btn.classList.remove("is-pulse");
+    void btn.offsetWidth; // reflow
+    btn.classList.add("is-pulse");
+    updateFavoritesFilterCounter(true);
   });
 }
 
+// Инициализируем кэш элемента при загрузке
+function getCachedFavoritesCounter() {
+  if (!favoriteCounter) {
+    favoriteCounter = document.getElementById("favoritesFilterCounter");
+  }
+  return favoriteCounter;
+}
+
 function updateFavoritesFilterCounter(pulse = false) {
-  const el = document.getElementById("favoritesFilterCounter");
+  const el = getCachedFavoritesCounter();
   if (!el) return;
 
   const countEl = el.querySelector(".count");
-  const favs = getFavorites();
+  if (!countEl) return;
 
-  countEl.textContent = favs.length;
-  el.classList.toggle("is-empty", favs.length === 0);
+  const favCount = getFavoritesSet().size;
+  countEl.textContent = favCount;
+  el.classList.toggle("is-empty", favCount === 0);
 
   if (pulse) {
     el.classList.remove("is-pulse");
@@ -636,9 +673,25 @@ function updateFavoritesFilterCounter(pulse = false) {
     el.classList.add("is-pulse");
   }
 }
-document.addEventListener("DOMContentLoaded", () => {
+
+// Инициализация слушателя избранного - ВНУТРИ DOMContentLoaded
+function initFavoritesCounter() {
+  const fc = getCachedFavoritesCounter();
+  if (!fc) return;
+
+  fc.addEventListener("click", () => {
+    const isActive = isFavoritesMode();
+
+    setFavoritesMode(!isActive);
+    applyFiltersAndSort();
+    updateFavoritesFilterCounter();
+
+    fc.classList.toggle("is-active", !isActive);
+  });
+
+  // Обновляем счетчик при инициализации
   updateFavoritesFilterCounter();
-});
+}
 
 /* =========================================================
    Счетчик
@@ -745,14 +798,14 @@ function loadFiltersFromStorage() {
 }
 
 function initViewSwitcher() {
-  const buttons = document.querySelectorAll(".view-btn");
-  if (!buttons.length) return;
+  cachedViewButtons = document.querySelectorAll(".view-btn");
+  if (!cachedViewButtons.length) return;
 
   const savedView = localStorage.getItem(VIEW_STORAGE_KEY) || "grid";
 
   setViewMode(savedView);
 
-  buttons.forEach((btn) => {
+  cachedViewButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const view = btn.dataset.view;
       setViewMode(view);
@@ -762,10 +815,14 @@ function initViewSwitcher() {
 }
 
 function setViewMode(mode) {
+  if (!objectsList) return;
+
   objectsList.classList.remove("view-grid", "view-compact");
   objectsList.classList.add(`view-${mode}`);
 
-  document.querySelectorAll(".view-btn").forEach((btn) => {
+  // Используем кэшированные кнопки если доступны
+  const buttons = cachedViewButtons || document.querySelectorAll(".view-btn");
+  buttons.forEach((btn) => {
     btn.classList.toggle("is-active", btn.dataset.view === mode);
   });
 }
@@ -825,12 +882,12 @@ if (loadMoreBtn) {
 })();
 
 function isSold(obj) {
-  return obj.status?.type === "sold";
+  return obj?.status?.type === "sold";
 }
 
 function shouldHideSold(obj, days = 7) {
   if (!isSold(obj)) return false;
-  if (!obj.status.date) return false;
+  if (!obj.status?.date) return false;
 
   const soldDate = new Date(obj.status.date);
   const now = new Date();

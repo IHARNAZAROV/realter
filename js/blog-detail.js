@@ -1,1 +1,663 @@
-function getSlugFromUrl(){const e=new URL(window.location.href),t=e.searchParams.get("slug");if(t)return t;const n=e.pathname.replace(/^\/+|\/+$/g,"").split("/");return 2===n.length&&"blog"===n[0]?decodeURIComponent(n[1]):""}function loadArticleData(){fetch("/data/blog-articles.json").then((e=>{if(!e.ok)throw new Error("Не удалось загрузить JSON");return e.json()})).then((e=>{if(!Array.isArray(e)||0===e.length)return void console.error("JSON пуст или имеет неверный формат");const t=getArticleBySlug(e);if(!t)return void console.error("Статья не найдена");window.currentArticle=t,renderArticle(t),renderRelatedPosts(currentArticle,e),window.blogTags&&t.tags&&window.blogTags.renderPostTags(t.tags);renderRandomPosts(e,getSlugFromUrl()||t.slug)})).catch((e=>{console.error("Ошибка загрузки статьи:",e)}))}function getArticleBySlug(e){const t=getSlugFromUrl();return t?e.find((e=>e.slug===t)):e[0]}function renderArticle(e){renderMeta(e),renderHeader(e),renderBreadcrumb(e),renderImage(e),renderContent(e),renderConclusion(e),renderInstagram(e),renderSchema(e)}function renderMeta(e){document.title=e.title||document.title;const t=document.querySelector('meta[name="description"]');t&&e.metaDescription&&t.setAttribute("content",e.metaDescription);const n=document.querySelector('link[rel="canonical"]');n&&e.slug&&(n.href=`https://turko.by/blog/${e.slug}`)}function renderHeader(e){const t=document.getElementById("page-title");t&&(t.textContent=e.title||"");const n=document.getElementById("page-lead");n&&e.lead&&(n.textContent=e.lead);const o=document.getElementById("page-eyebrow");o&&e.category&&(o.textContent=e.category);const r=document.getElementById("post-date");r&&e.date&&(r.textContent=e.date);const a=document.getElementById("post-author");a&&e.author&&(a.textContent=e.author);const i=document.getElementById("post-category");i&&e.category&&(i.textContent=e.category)}function renderBreadcrumb(e){const t=document.getElementById("breadcrumb");if(!t||!e)return;t.innerHTML="";const n=document.createElement("li");n.innerHTML='<a href="/">Главная</a>';const o=document.createElement("li");o.innerHTML='<a href="/blog">Блог</a>';const r=document.createElement("li");r.textContent=e.title||"",t.appendChild(n),t.appendChild(o),t.appendChild(r)}function renderSchema(e){if(!e)return;const t={"@context":"https://schema.org","@type":"BlogPosting",headline:e.title,description:e.metaDescription||e.conclusion||"",author:{"@type":"Person",name:e.author||"Ольга Турко",sameAs:["https://www.instagram.com/rielter_olga_lida/","https://t.me/TurkoOlga"]},datePublished:e.date,dateModified:e.date,image:e.image?`https://turko.by${e.image}`:void 0,mainEntityOfPage:{"@type":"WebPage","@id":`https://turko.by/blog/${e.slug}`},publisher:{"@type":"Organization",name:"Ольга Турко — недвижимость в Лиде",logo:{"@type":"ImageObject",url:"https://turko.by/images/logo-light.webp"}}};Object.keys(t).forEach((e=>void 0===t[e]&&delete t[e]));const n=document.createElement("script");n.type="application/ld+json",n.textContent=JSON.stringify(t),document.head.appendChild(n)}function renderRandomPosts(e,t){const n=document.getElementById("recent-posts");if(!n||!Array.isArray(e))return;const o=e.filter((e=>e.slug!==t));for(let e=o.length-1;e>0;e--){const t=Math.floor(Math.random()*(e+1));[o[e],o[t]]=[o[t],o[e]]}const r=o.slice(0,3);n.innerHTML=r.map((e=>`\n        <div class="widget-post clearfix">\n          <div class="sx-post-media">\n            <a href="/blog/${e.slug}">\n              <img\n                src="${e.image}"\n                alt="${e.imageAlt||e.title}"\n                loading="lazy"\n              />\n            </a>\n          </div>\n          <div class="sx-post-info">\n            <div class="sx-post-header">\n              <h6 class="post-title">\n                <a href="/blog/${e.slug}">\n                  ${e.title}\n                </a>\n              </h6>\n            </div>\n            <div class="sx-post-meta">\n              <ul>\n                <li class="post-author">\n                  ${formatDate(e.date)}\n                </li>\n              </ul>\n            </div>\n          </div>\n        </div>\n      `)).join("")}function formatDate(e){if(!e)return"";if(e.includes(".")){const[t,n,o]=e.split(".");return new Date(o,n-1,t).toLocaleDateString("ru-RU",{day:"2-digit",month:"short",year:"numeric"})}const t=new Date(e);return isNaN(t)?"":t.toLocaleDateString("ru-RU",{day:"2-digit",month:"short",year:"numeric"})}function renderImage(e){const t=document.getElementById("post-image");t&&e.image&&(t.src=e.image,t.alt=e.imageAlt||e.title||"")}function renderContent(e){const t=document.getElementById("post-content");t&&Array.isArray(e.content)&&(t.innerHTML="",e.content.forEach((e=>{renderContentBlock(t,e)})))}function renderContentBlock(e,t){if(t&&t.type){if("paragraph"===t.type){const n=document.createElement("p");n.textContent=t.text||"",e.appendChild(n)}if("list"===t.type){if(t.title){const n=document.createElement("h4");n.textContent=t.title,e.appendChild(n)}let n;"check"===t.style?(n=document.createElement("ul"),n.className="sx-checklist"):"numbered"===t.style?(n=document.createElement("ol"),n.className="sx-numbered-list"):n=document.createElement("ul"),(t.items||[]).forEach((e=>{const t=document.createElement("li");t.textContent=e,n.appendChild(t)})),e.appendChild(n)}if("disclaimer"===t.type){const n=document.createElement("div");n.className="sx-legal-disclaimer",n.textContent=t.text||"",e.appendChild(n)}}}function renderConclusion(e){if(!e.conclusion)return;const t=document.getElementById("post-content");if(!t)return;const n=document.createElement("blockquote");n.className="author-quote bdr-1 bdr-solid bdr-gray";const o=document.createElement("h4");o.textContent=e.conclusion;const r=document.createElement("i");if(r.className="fa fa-quote-left",o.appendChild(r),n.appendChild(o),e.quoteAuthor||e.quoteRole){const t=document.createElement("div");if(t.className="p-t15",e.quoteAuthor){const n=document.createElement("strong");n.textContent=e.quoteAuthor,t.appendChild(n)}if(e.quoteRole){const n=document.createElement("span");n.textContent=e.quoteRole,t.appendChild(n)}n.appendChild(t)}t.appendChild(n)}function renderInstagram(e){const t=document.querySelector("[data-instagram]");if(!t||!e.instagram)return;const n=t.querySelector("[data-instagram-image]"),o=t.querySelector("[data-instagram-text]"),r=t.querySelector("[data-instagram-date]");n&&e.instagram.image&&(n.src=e.instagram.image,n.alt=e.instagram.alt||"Instagram пост — "+(e.title||"")),o&&(o.textContent=e.instagram.text||""),r&&(r.textContent=e.instagram.date||""),t.onclick=()=>{window.open(e.instagram.url,"_blank","noopener")},t.style.display="flex"}function renderRelatedPosts(e,t){const n=document.getElementById("relatedPosts");if(!n)return;if(!e.tags||0===e.tags.length)return void(n.innerHTML="");const o=e.tags,r=t.filter((t=>t.id!==e.id)).map((e=>{const t=e.tags?.filter((e=>o.includes(e)))||[];return{...e,relevance:t.length}})).filter((e=>e.relevance>0)).sort(((e,t)=>t.relevance-e.relevance)).slice(0,4);0!==r.length?n.innerHTML=r.map((e=>`\n  <a href="/blog/${e.slug}" class="related-card">\n    <div class="related-card-content">\n      \n      <div class="related-card-meta">\n        ${e.category||"Недвижимость"}\n      </div>\n\n      <div class="related-card-title">\n        ${e.title}\n      </div>\n\n      <div class="related-card-arrow">\n        →\n      </div>\n\n    </div>\n  </a>\n`)).join(""):n.innerHTML=""}document.addEventListener("DOMContentLoaded",(()=>{loadArticleData()})),document.addEventListener("scroll",(function(){const e=document.getElementById("readingProgressBar");if(!e)return;const t=document.querySelector(".blog-detail");if(!t)return;const n=t.offsetTop,o=t.offsetHeight,r=window.scrollY,a=n-.2*window.innerHeight;let i=(r-a)/(n+o-a);i=Math.max(0,Math.min(i,1)),e.style.width=100*i+"%"})),document.addEventListener("DOMContentLoaded",(function(){const e=document.getElementById("post-content"),t=document.getElementById("reading-time");if(!e||!t)return;const n=(e.innerText||e.textContent).trim().split(/\s+/).length,o=Math.max(1,Math.ceil(n/200));function r(){const n=e.offsetTop,r=e.offsetHeight;let a=(window.scrollY+window.innerHeight-n)/r;a=Math.max(0,Math.min(a,1));const i=Math.max(1,Math.ceil(o*(1-a)));t.textContent=a<.1?o+" мин чтения":o+" мин чтения • осталось "+i+" мин"}r(),window.addEventListener("scroll",r)}));
+/* =========================================================
+   BLOG DETAIL PAGE SCRIPT
+   Работает с массивом статей и slug
+   ========================================================= */
+
+/* =========================================================
+   CACHED DOM ELEMENTS & STATE
+   ========================================================= */
+let cachedDOMElements = {
+  progressBar: null,
+  article: null,
+  readingTimeEl: null,
+  postContent: null,
+  postImage: null,
+  pageTitle: null,
+  pageLead: null,
+  pageEyebrow: null,
+  postDate: null,
+  postAuthor: null,
+  postCategory: null,
+  breadcrumb: null,
+  recentPosts: null,
+  relatedPosts: null,
+  instagramContainer: null,
+};
+
+let scrollState = {
+  lastScrollTime: 0,
+  throttleDelay: 16, // ~60fps
+};
+
+/* =========================================================
+   1. DOM READY
+   ========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  cacheDOM();
+  loadArticleData();
+  initScrollObserver();
+});
+
+/* =========================================================
+   HELPER: Cache DOM Elements
+   ========================================================= */
+function cacheDOM() {
+  cachedDOMElements.progressBar = document.getElementById("readingProgressBar");
+  cachedDOMElements.article = document.querySelector(".blog-detail");
+  cachedDOMElements.readingTimeEl = document.getElementById("reading-time");
+  cachedDOMElements.postContent = document.getElementById("post-content");
+  cachedDOMElements.postImage = document.getElementById("post-image");
+  cachedDOMElements.pageTitle = document.getElementById("page-title");
+  cachedDOMElements.pageLead = document.getElementById("page-lead");
+  cachedDOMElements.pageEyebrow = document.getElementById("page-eyebrow");
+  cachedDOMElements.postDate = document.getElementById("post-date");
+  cachedDOMElements.postAuthor = document.getElementById("post-author");
+  cachedDOMElements.postCategory = document.getElementById("post-category");
+  cachedDOMElements.breadcrumb = document.getElementById("breadcrumb");
+  cachedDOMElements.recentPosts = document.getElementById("recent-posts");
+  cachedDOMElements.relatedPosts = document.getElementById("relatedPosts");
+  cachedDOMElements.instagramContainer = document.querySelector("[data-instagram]");
+}
+
+/* =========================================================
+   HELPER: Throttle scroll events
+   ========================================================= */
+function throttleScroll(callback) {
+  return function () {
+    const now = Date.now();
+    if (now - scrollState.lastScrollTime >= scrollState.throttleDelay) {
+      scrollState.lastScrollTime = now;
+      callback();
+    }
+  };
+}
+
+function getSlugFromUrl() {
+  const url = new URL(window.location.href);
+  const qsSlug = url.searchParams.get("slug");
+
+  if (qsSlug) return qsSlug;
+
+  const parts = url.pathname.replace(/^\/+|\/+$/g, "").split("/");
+  if (parts.length === 2 && parts[0] === "blog") {
+    return decodeURIComponent(parts[1]);
+  }
+
+  return "";
+}
+
+/* =========================================================
+   2. LOAD JSON
+   ========================================================= */
+function loadArticleData() {
+  fetch("/data/blog-articles.json")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Не удалось загрузить JSON");
+      }
+      return response.json();
+    })
+    .then((articles) => {
+      if (!Array.isArray(articles) || articles.length === 0) {
+        console.error("JSON пуст или имеет неверный формат");
+        return;
+      }
+
+      const article = getArticleBySlug(articles);
+
+      if (!article) {
+        console.error("Статья не найдена");
+        return;
+      }
+
+window.currentArticle = article;
+
+renderArticle(article);
+
+renderRelatedPosts(currentArticle, articles);
+
+/* ВАЖНО — рендер тегов */
+if (window.blogTags && article.tags) {
+  window.blogTags.renderPostTags(article.tags);
+}
+
+const currentSlug = getSlugFromUrl() || article.slug;
+renderRandomPosts(articles, currentSlug);
+    })
+    .catch((error) => {
+      console.error("Ошибка загрузки статьи:", error);
+    });
+}
+
+/* =========================================================
+   3. GET ARTICLE BY SLUG
+   ========================================================= */
+function getArticleBySlug(articles) {
+  const slug = getSlugFromUrl();
+
+  if (!slug) {
+    return articles[0]; // fallback — первая статья
+  }
+
+  return articles.find((article) => article.slug === slug);
+}
+
+/* =========================================================
+   4. RENDER FULL ARTICLE
+   ========================================================= */
+function renderArticle(article) {
+  renderMeta(article);
+  renderHeader(article);
+  renderBreadcrumb(article);
+  renderImage(article);
+  renderContent(article);
+  renderConclusion(article);
+  renderInstagram(article);
+  renderSchema(article);
+}
+
+/* =========================================================
+   5. META & SEO
+   ========================================================= */
+function renderMeta(article) {
+  document.title = article.title || document.title;
+
+  const description = document.querySelector('meta[name="description"]');
+  if (description && article.metaDescription) {
+    description.setAttribute("content", article.metaDescription);
+  }
+
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical && article.slug) {
+    canonical.href = `https://turko.by/blog/${article.slug}`;
+  }
+}
+
+/* =========================================================
+   6. HEADER / TITLE / BREADCRUMB
+   ========================================================= */
+function renderHeader(article) {
+  // PAGE INTRO TITLE
+  if (cachedDOMElements.pageTitle) {
+    cachedDOMElements.pageTitle.textContent = article.title || "";
+  }
+
+  // PAGE INTRO LEAD (опционально)
+  if (cachedDOMElements.pageLead && article.lead) {
+    cachedDOMElements.pageLead.textContent = article.lead;
+  }
+
+  // EYEBROW (если захочешь из JSON)
+  if (cachedDOMElements.pageEyebrow && article.category) {
+    cachedDOMElements.pageEyebrow.textContent = article.category;
+  }
+
+  // DATE, AUTHOR, CATEGORY
+  if (cachedDOMElements.postDate && article.date) {
+    cachedDOMElements.postDate.textContent = article.date;
+  }
+
+  if (cachedDOMElements.postAuthor && article.author) {
+    cachedDOMElements.postAuthor.textContent = article.author;
+  }
+
+  if (cachedDOMElements.postCategory && article.category) {
+    cachedDOMElements.postCategory.textContent = article.category;
+  }
+}
+
+
+/* =========================================================
+   BREADCRUMB
+   ========================================================= */
+function renderBreadcrumb(article) {
+  const breadcrumb = cachedDOMElements.breadcrumb;
+  if (!breadcrumb || !article) return;
+
+  // Используем DocumentFragment для batch-вставки (быстрее)
+  const fragment = document.createDocumentFragment();
+
+  const home = document.createElement("li");
+  home.innerHTML = `<a href="/">Главная</a>`;
+
+  const blog = document.createElement("li");
+  blog.innerHTML = `<a href="/blog">Блог</a>`;
+
+  const current = document.createElement("li");
+  current.textContent = article.title || "";
+
+  fragment.appendChild(home);
+  fragment.appendChild(blog);
+  fragment.appendChild(current);
+
+  breadcrumb.textContent = ""; // Очистка вместо innerHTML = ""
+  breadcrumb.appendChild(fragment);
+}
+
+/* =========================================================
+   SCHEMA.ORG (JSON-LD)
+   ========================================================= */
+
+function renderSchema(article) {
+  if (!article) return;
+
+  // Проверяем, не добавлен ли уже schema (во избежание дублирования)
+  const existingSchema = document.querySelector('script[data-schema="blog-posting"]');
+  if (existingSchema) existingSchema.remove();
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.title,
+    description: article.metaDescription || article.conclusion || "",
+    author: {
+      "@type": "Person",
+      name: article.author || "Ольга Турко",
+      sameAs: [
+        "https://www.instagram.com/rielter_olga_lida/",
+        "https://t.me/TurkoOlga",
+      ],
+    },
+    datePublished: article.date,
+    dateModified: article.date,
+    image: article.image ? `https://turko.by${article.image}` : undefined,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://turko.by/blog/${article.slug}`,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Ольга Турко — недвижимость в Лиде",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://turko.by/images/logo-light.webp",
+      },
+    },
+  };
+
+  // Удаляем undefined поля (чистота schema)
+  Object.keys(schema).forEach(
+    (key) => schema[key] === undefined && delete schema[key],
+  );
+
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.textContent = JSON.stringify(schema);
+  script.setAttribute("data-schema", "blog-posting");
+
+  document.head.appendChild(script);
+}
+
+/* =========================================================
+   RANDOM RECENT POSTS (3 articles, exclude current)
+   ========================================================= */
+
+function renderRandomPosts(articles, currentSlug) {
+  const container = cachedDOMElements.recentPosts;
+  if (!container || !Array.isArray(articles)) return;
+
+  // 1. Убираем текущую статью и перемешиваем
+  const filtered = articles.filter((article) => article.slug !== currentSlug);
+
+  // 2. Перемешиваем массив (Fisher–Yates)
+  for (let i = filtered.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [filtered[i], filtered[j]] = [filtered[j], filtered[i]];
+  }
+
+  // 3. Берём первые 3
+  const selected = filtered.slice(0, 3);
+
+  // 4. Генерируем HTML с DocumentFragment
+  const fragment = document.createDocumentFragment();
+  
+  selected.forEach((article) => {
+    const div = document.createElement("div");
+    div.className = "widget-post clearfix";
+    div.innerHTML = `
+      <div class="sx-post-media">
+        <a href="/blog/${article.slug}">
+          <img
+            src="${article.image}"
+            alt="${article.imageAlt || article.title}"
+            loading="lazy"
+          />
+        </a>
+      </div>
+      <div class="sx-post-info">
+        <div class="sx-post-header">
+          <h6 class="post-title">
+            <a href="/blog/${article.slug}">
+              ${article.title}
+            </a>
+          </h6>
+        </div>
+        <div class="sx-post-meta">
+          <ul>
+            <li class="post-author">
+              ${formatDate(article.date)}
+            </li>
+          </ul>
+        </div>
+      </div>
+    `;
+    fragment.appendChild(div);
+  });
+
+  container.textContent = "";
+  container.appendChild(fragment);
+}
+
+/* =========================================================
+   DATE FORMATTER (2026-01-29 → 29 Янв 2026)
+   ========================================================= */
+
+function formatDate(dateString) {
+  if (!dateString) return "";
+
+  // DD.MM.YYYY
+  if (dateString.includes(".")) {
+    const [day, month, year] = dateString.split(".");
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  }
+
+  // ISO fallback
+  const date = new Date(dateString);
+  if (isNaN(date)) return "";
+
+  return date.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+/* =========================================================
+   7. IMAGE
+   ========================================================= */
+function renderImage(article) {
+  const imageEl = cachedDOMElements.postImage;
+
+  if (!imageEl || !article.image) return;
+
+  imageEl.src = article.image;
+  imageEl.alt = article.imageAlt || article.title || "";
+}
+
+/* =========================================================
+   8. MAIN CONTENT
+   ========================================================= */
+function renderContent(article) {
+  const container = cachedDOMElements.postContent;
+  if (!container || !Array.isArray(article.content)) return;
+
+  container.innerHTML = "";
+
+  article.content.forEach((block) => {
+    renderContentBlock(container, block);
+  });
+}
+
+/* =========================================================
+   9. CONTENT BLOCK TYPES
+   ========================================================= */
+function renderContentBlock(container, block) {
+  if (!block || !block.type) return;
+
+  /* ---------- Paragraph ---------- */
+  if (block.type === "paragraph") {
+    const p = document.createElement("p");
+    p.textContent = block.text || "";
+    container.appendChild(p);
+  }
+
+  /* ---------- List / Checklist ---------- */
+  if (block.type === "list") {
+    if (block.title) {
+      const h4 = document.createElement("h4");
+      h4.textContent = block.title;
+      container.appendChild(h4);
+    }
+
+    let list;
+
+    if (block.style === "check") {
+      list = document.createElement("ul");
+      list.className = "sx-checklist";
+    } else if (block.style === "numbered") {
+      list = document.createElement("ol");
+      list.className = "sx-numbered-list";
+    } else {
+      list = document.createElement("ul");
+    }
+
+    (block.items || []).forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+
+    container.appendChild(list);
+  }
+
+  /* ---------- Disclaimer ---------- */
+  if (block.type === "disclaimer") {
+    const div = document.createElement("div");
+    div.className = "sx-legal-disclaimer";
+    div.textContent = block.text || "";
+    container.appendChild(div);
+  }
+}
+
+/* =========================================================
+   10. CONCLUSION / QUOTE
+   ========================================================= */
+function renderConclusion(article) {
+  if (!article.conclusion) return;
+
+  const container = cachedDOMElements.postContent;
+  if (!container) return;
+
+  const blockquote = document.createElement("blockquote");
+  blockquote.className = "author-quote bdr-1 bdr-solid bdr-gray";
+
+  const h4 = document.createElement("h4");
+  h4.textContent = article.conclusion;
+
+  const iconLeft = document.createElement("i");
+  iconLeft.className = "fa fa-quote-left";
+
+  h4.appendChild(iconLeft);
+  blockquote.appendChild(h4);
+
+  if (article.quoteAuthor || article.quoteRole) {
+    const authorWrap = document.createElement("div");
+    authorWrap.className = "p-t15";
+
+    if (article.quoteAuthor) {
+      const strong = document.createElement("strong");
+      strong.textContent = article.quoteAuthor;
+      authorWrap.appendChild(strong);
+    }
+
+    if (article.quoteRole) {
+      const span = document.createElement("span");
+      span.textContent = article.quoteRole;
+      authorWrap.appendChild(span);
+    }
+
+    blockquote.appendChild(authorWrap);
+  }
+
+  container.appendChild(blockquote);
+}
+
+/* =========================================================
+   11. INSTAGRAM CARD (with addEventListener instead of onclick)
+   ========================================================= */
+function renderInstagram(article) {
+  const container = cachedDOMElements.instagramContainer;
+  if (!container || !article.instagram) return;
+
+  const image = container.querySelector("[data-instagram-image]");
+  const text = container.querySelector("[data-instagram-text]");
+  const date = container.querySelector("[data-instagram-date]");
+
+  if (image && article.instagram.image) {
+    image.src = article.instagram.image;
+    image.alt =
+      article.instagram.alt || "Instagram пост — " + (article.title || "");
+  }
+
+  if (text) text.textContent = article.instagram.text || "";
+  if (date) date.textContent = article.instagram.date || "";
+
+  // Удаляем старый обработчик если есть
+  const newContainer = container.cloneNode(true);
+  container.parentNode.replaceChild(newContainer, container);
+  
+  // Добавляем новый обработчик (лучше чем onclick)
+  newContainer.addEventListener("click", () => {
+    window.open(article.instagram.url, "_blank", "noopener");
+  });
+
+  newContainer.style.display = "flex";
+}
+
+/* =====================================
+   Unified Scroll Observer (Progress Bar + Reading Time) - ОПТИМИЗИРОВАНО
+===================================== */
+
+function initScrollObserver() {
+  const progressBar = cachedDOMElements.progressBar;
+  const article = cachedDOMElements.article;
+  const readingTimeEl = cachedDOMElements.readingTimeEl;
+  const postContent = cachedDOMElements.postContent;
+
+  // Требуется хотя бы один из них
+  if (!article || (!progressBar && !readingTimeEl)) return;
+
+  // Для reading time
+  let totalMinutes = 0;
+  if (readingTimeEl && postContent) {
+    const wordsPerMinute = 200;
+    const text = postContent.innerText || postContent.textContent;
+    const words = text.trim().split(/\s+/).length;
+    totalMinutes = Math.max(1, Math.ceil(words / wordsPerMinute));
+  }
+
+  // Объединённая функция обновления (вызывается с throttle)
+  function updateMetrics() {
+    const scrollTop = window.scrollY;
+    const windowHeight = window.innerHeight;
+
+    // ПЕРЕСЧИТЫВАЕМ на каждый скролл (высота может измениться после загрузки изображений)
+    const articleTop = article.offsetTop;
+    const articleHeight = article.offsetHeight;
+
+    // PROGRESS BAR
+    if (progressBar) {
+      const articleStart = articleTop - windowHeight * 0.2;
+      const articleEnd = articleTop + articleHeight;
+      let progress = (scrollTop - articleStart) / (articleEnd - articleStart);
+      progress = Math.max(0, Math.min(progress, 1));
+      progressBar.style.width = (progress * 100) + "%";
+    }
+
+    // READING TIME
+    if (readingTimeEl && totalMinutes > 0) {
+      let progress = (scrollTop + windowHeight - articleTop) / articleHeight;
+      progress = Math.max(0, Math.min(progress, 1));
+      
+      const remaining = Math.max(1, Math.ceil(totalMinutes * (1 - progress)));
+
+      if (progress < 0.1) {
+        readingTimeEl.textContent = totalMinutes + " мин чтения";
+      } else {
+        readingTimeEl.textContent = totalMinutes + " мин чтения • осталось " + remaining + " мин";
+      }
+    }
+  }
+
+  // ОДИН слушатель со throttle вместо двух
+  const throttledUpdate = throttleScroll(updateMetrics);
+  window.addEventListener("scroll", throttledUpdate);
+}
+
+
+function renderRelatedPosts(currentArticle, allArticles) {
+  const container = cachedDOMElements.relatedPosts;
+  if (!container) return;
+
+  if (!currentArticle.tags || currentArticle.tags.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const currentTags = currentArticle.tags;
+  const currentId = currentArticle.id;
+
+  // ОПТИМИЗИРОВАНО: объединяем фильтр + map + фильтр + sort в один цикл
+  const related = [];
+  
+  for (let i = 0; i < allArticles.length; i++) {
+    const article = allArticles[i];
+    
+    // Пропукаем текущую статью
+    if (article.id === currentId) continue;
+    
+    // Считаем общие теги
+    const commonTags = article.tags?.filter(tag => currentTags.includes(tag)) || [];
+    const relevance = commonTags.length;
+    
+    // Пропускаем без релевантности
+    if (relevance === 0) continue;
+    
+    related.push({
+      ...article,
+      relevance: relevance
+    });
+  }
+
+  // Сортируем по релевантности
+  related.sort((a, b) => b.relevance - a.relevance);
+  
+  // Берём максимум 4
+  const selected = related.slice(0, 4);
+
+  if (selected.length === 0) {
+    container.innerHTML = "";
+    return;
+  }
+
+  // Используем DocumentFragment вместо innerHTML.join()
+  const fragment = document.createDocumentFragment();
+  
+  selected.forEach(article => {
+    const a = document.createElement("a");
+    a.href = `/blog/${article.slug}`;
+    a.className = "related-card";
+    a.innerHTML = `
+      <div class="related-card-content">
+        <div class="related-card-meta">
+          ${article.category || "Недвижимость"}
+        </div>
+        <div class="related-card-title">
+          ${article.title}
+        </div>
+        <div class="related-card-arrow">
+          →
+        </div>
+      </div>
+    `;
+    fragment.appendChild(a);
+  });
+
+  container.textContent = "";
+  container.appendChild(fragment);
+}
