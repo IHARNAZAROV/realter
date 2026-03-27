@@ -221,6 +221,23 @@
       flex-wrap: wrap;
     }
 
+
+    .admin-switch-btn {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: 0.2s;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .admin-switch-btn:hover {
+      background: #333;
+    }
     #taskInput {
       flex: 1;
       min-width: 200px;
@@ -571,6 +588,14 @@
     }
     .modal-confirm:hover { background: rgba(99,102,241,0.35); }
   </style>
+<script type="text/javascript">
+(function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "w2cf1xtz16");
+</script>
+
 </head>
 <body>
 
@@ -586,6 +611,7 @@
     <nav class="admin-nav">
       <a href="/adminka_objects/index.html">Объекты</a>
       <a href="/adminka_objects/tasks.html" class="active">Задачи</a>
+      <a href="/adminka_objects/heatmap.html">Heatmap</a>
     </nav>
   </div>
 
@@ -617,6 +643,9 @@
 
     <!-- add task bar -->
     <div class="add-task-bar">
+      <button class="admin-switch-btn" onclick="location.href='/adminka_objects/heatmap.html'">
+        Карты (Heatmap)
+      </button>
       <input id="taskInput" type="text" placeholder="Добавить задачу…">
       <div class="selects-group">
         <div class="custom-select-wrap">

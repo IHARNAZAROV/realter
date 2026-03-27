@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>Heatmap / Карты поведения — Админка</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "w2cf1xtz16");
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, #0f141a 0%, #0b0f14 100%);
+      min-height: 100vh;
+      color: #e5e7eb;
+    }
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      background: #0f141a;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .breadcrumbs .project { font-weight: 400; color: #9ca3af; }
+    .breadcrumbs .sep { color: #4b5563; }
+
+    .admin-nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    .admin-nav a {
+      display: inline-flex;
+      align-items: center;
+      height: 34px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #9ca3af;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+
+    .admin-nav a:hover {
+      background: rgba(255,255,255,0.07);
+      color: #e5e7eb;
+    }
+
+    .admin-nav a.active {
+      background: rgba(255,255,255,0.10);
+      color: #ffffff;
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .heatmap-layout {
+      display: flex;
+      min-height: calc(100vh - 71px);
+    }
+
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #4b5563;
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+
+    .heatmap-main {
+      flex: 1;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .admin-switch-btn {
+      background: #111;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: 0.2s;
+      width: fit-content;
+    }
+
+    .admin-switch-btn:hover {
+      background: #333;
+    }
+
+    .heatmap-panel {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+      max-width: 860px;
+    }
+
+    .heatmap-panel p {
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .heatmap-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .heatmap-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: rgba(255,255,255,0.09);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 10px 16px;
+      border-radius: 8px;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    .heatmap-link-btn:hover {
+      background: rgba(255,255,255,0.16);
+    }
+
+
+    .api-toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .api-toolbar .admin-switch-btn {
+      margin-bottom: 0;
+    }
+
+    .api-select {
+      height: 38px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      padding: 0 10px;
+    }
+
+    .api-status {
+      color: #93c5fd;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .api-json {
+      margin-top: 6px;
+      max-height: 380px;
+      overflow: auto;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(2,6,23,0.9);
+      padding: 12px;
+      color: #e2e8f0;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    @media (max-width: 900px) {
+      .heatmap-layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+      .heatmap-main { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+<header class="dashboard-header">
+  <div class="header-left">
+    <div class="breadcrumbs">
+      <span class="home">Ольга Турко</span>
+      <span class="sep">›</span>
+      <span class="project">turko.by</span>
+    </div>
+
+    <nav class="admin-nav">
+      <a href="/adminka_objects/index.html">Объекты</a>
+      <a href="/adminka_objects/tasks.html">Задачи</a>
+      <a href="/adminka_objects/heatmap.html" class="active">Heatmap</a>
+    </nav>
+  </div>
+</header>
+
+<div class="heatmap-layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">Навигация</div>
+    <button class="admin-switch-btn" onclick="location.href='/adminka_objects/tasks.html'">
+      ← Назад
+    </button>
+  </aside>
+
+  <main class="heatmap-main">
+    <h1>Heatmap / Карты поведения</h1>
+    <section class="heatmap-panel">
+      <p>
+        Встраивание Clarity-проекта через <code>iframe</code> заблокировано самим Clarity
+        (<code>X-Frame-Options: sameorigin</code>), поэтому здесь используется API-подход.
+      </p>
+
+      <div class="api-toolbar">
+        <label for="daysSelect">Период:</label>
+        <select id="daysSelect" class="api-select">
+          <option value="1">1 день</option>
+          <option value="2">2 дня</option>
+          <option value="3">3 дня</option>
+        </select>
+        <button class="admin-switch-btn" id="refreshInsightsBtn">Обновить API данные</button>
+      </div>
+
+      <div id="apiStatus" class="api-status">Загрузка данных Clarity API…</div>
+      <pre id="apiJson" class="api-json"></pre>
+
+      <div class="heatmap-actions">
+        <a class="heatmap-link-btn" href="https://clarity.microsoft.com/projects/view/w2cf1xtz16" target="_blank" rel="noopener noreferrer">
+          Открыть Clarity
+        </a>
+        <a class="heatmap-link-btn" href="https://clarity.microsoft.com/" target="_blank" rel="noopener noreferrer">
+          Войти в Clarity
+        </a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  const apiStatus = document.getElementById('apiStatus');
+  const apiJson = document.getElementById('apiJson');
+  const refreshBtn = document.getElementById('refreshInsightsBtn');
+  const daysSelect = document.getElementById('daysSelect');
+
+  async function loadInsights() {
+    const days = encodeURIComponent(daysSelect.value || '1');
+    apiStatus.textContent = 'Загрузка данных Clarity API…';
+    try {
+      const res = await fetch(`/adminka_objects/clarity-insights.php?numOfDays=${days}`, {
+        credentials: 'same-origin'
+      });
+      const data = await res.json();
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data.error || `HTTP ${res.status}`);
+      }
+
+      apiStatus.textContent = `Данные получены. HTTP ${data.status}. Период: ${data.numOfDays} дн.`;
+      apiJson.textContent = JSON.stringify(data.data, null, 2);
+    } catch (error) {
+      apiStatus.textContent = `Ошибка загрузки API: ${error.message}`;
+      apiJson.textContent = 'Проверьте токен CLARITY_API_TOKEN на сервере и доступ к Clarity API.';
+    }
+  }
+
+  refreshBtn.addEventListener('click', loadInsights);
+  daysSelect.addEventListener('change', loadInsights);
+  loadInsights();
+</script>
+
+</body>
+</html>
