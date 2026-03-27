@@ -147,31 +147,6 @@
       background: #0b0f14;
     }
 
-    .heatmap-blocked {
-      width: 100%;
-      min-height: 220px;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.02);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .heatmap-blocked-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #e5e7eb;
-    }
-
-    .heatmap-blocked-text {
-      font-size: 13px;
-      color: #9ca3af;
-      line-height: 1.5;
-      max-width: 980px;
-    }
-
     .api-panel {
       margin-top: 16px;
       padding: 16px;
@@ -217,46 +192,6 @@
       color: #9ca3af;
       margin-bottom: 8px;
       min-height: 18px;
-    }
-
-    .api-warning {
-      display: none;
-      margin-bottom: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid rgba(250, 204, 21, 0.35);
-      background: rgba(250, 204, 21, 0.08);
-      color: #fde68a;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .metric-card {
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.02);
-      padding: 8px 10px;
-    }
-
-    .metric-label {
-      font-size: 11px;
-      color: #9ca3af;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-
-    .metric-value {
-      font-size: 18px;
-      font-weight: 700;
-      color: #e5e7eb;
     }
 
     .api-response {
@@ -315,38 +250,25 @@
 
   <main class="heatmap-main">
     <h1>Heatmap / Карты поведения</h1>
-    <div class="heatmap-blocked">
-      <div class="heatmap-blocked-title">Встроенный Heatmap недоступен в iframe</div>
-      <p class="heatmap-blocked-text">
-        Clarity запрещает открытие интерфейса `clarity.microsoft.com` внутри iframe (политика безопасности браузера),
-        поэтому карта может не отображаться на этой странице. Это ожидаемое поведение. Откройте карту в новой вкладке.
-      </p>
-      <a class="admin-switch-btn" style="text-decoration:none;display:inline-flex;align-items:center;"
-         href="https://clarity.microsoft.com/projects/view/w2cf1xtz16" target="_blank" rel="noopener noreferrer">
-        Открыть Heatmap в Clarity ↗
-      </a>
-      <iframe
-        class="heatmap-frame"
-        src="about:blank"
-        title="Clarity frame placeholder"
-        aria-hidden="true">
-      </iframe>
-    </div>
+    <iframe
+      class="heatmap-frame"
+      src="https://clarity.microsoft.com/projects/view/w2cf1xtz16"
+      style="width:100%; height: calc(100vh - 100px); border: none;"
+      title="Microsoft Clarity Heatmap">
+    </iframe>
 
     <section class="api-panel" aria-live="polite">
       <div class="api-panel-title">Проверка API Clarity (Live Insights)</div>
       <div class="api-panel-controls">
-        <label class="api-panel-label" for="numOfDaysSelect">numOfDays (для малого трафика лучше 3):</label>
+        <label class="api-panel-label" for="numOfDaysSelect">numOfDays (оптимально 1):</label>
         <select id="numOfDaysSelect" class="api-panel-select">
-          <option value="1">1 день</option>
+          <option value="1" selected>1 день (рекомендуется)</option>
           <option value="2">2 дня</option>
-          <option value="3" selected>3 дня (рекомендуется)</option>
+          <option value="3">3 дня</option>
         </select>
         <button id="checkApiBtn" class="admin-switch-btn" type="button">Проверить API</button>
       </div>
       <div id="apiStatus" class="api-status">Готово к проверке.</div>
-      <div id="apiWarning" class="api-warning"></div>
-      <div id="metricsGrid" class="metrics-grid"></div>
       <pre id="apiResponse" class="api-response">Нажмите «Проверить API», чтобы получить ответ с /adminka_objects/clarity-insights.php.</pre>
     </section>
   </main>
@@ -357,10 +279,8 @@
     const numOfDaysSelect = document.getElementById('numOfDaysSelect');
     const apiStatus = document.getElementById('apiStatus');
     const apiResponse = document.getElementById('apiResponse');
-    const metricsGrid = document.getElementById('metricsGrid');
-    const apiWarning = document.getElementById('apiWarning');
 
-    if (!checkBtn || !numOfDaysSelect || !apiStatus || !apiResponse || !metricsGrid || !apiWarning) {
+    if (!checkBtn || !numOfDaysSelect || !apiStatus || !apiResponse) {
       return;
     }
 
@@ -371,65 +291,6 @@
 
     const renderResponse = (payload) => {
       apiResponse.textContent = JSON.stringify(payload, null, 2);
-    };
-
-    const getMetricInfo = (metrics, metricName) => {
-      const found = metrics.find((item) => item && item.metricName === metricName);
-      return found && Array.isArray(found.information) ? found.information[0] || null : null;
-    };
-
-    const num = (value) => {
-      const parsed = Number(value);
-      return Number.isFinite(parsed) ? parsed : 0;
-    };
-
-    const renderMetricCards = (payload) => {
-      metricsGrid.innerHTML = '';
-      apiWarning.style.display = 'none';
-      apiWarning.textContent = '';
-
-      if (!payload || !payload.ok || !Array.isArray(payload.data)) {
-        return;
-      }
-
-      const metrics = payload.data;
-      const traffic = getMetricInfo(metrics, 'Traffic') || {};
-      const deadClick = getMetricInfo(metrics, 'DeadClickCount') || {};
-      const rageClick = getMetricInfo(metrics, 'RageClickCount') || {};
-      const errorClick = getMetricInfo(metrics, 'ErrorClickCount') || {};
-      const scriptErrors = getMetricInfo(metrics, 'ScriptErrorCount') || {};
-      const popularPagesRaw = getMetricInfo(metrics, 'PopularPages');
-      const popularPageUrl = popularPagesRaw && popularPagesRaw.url ? String(popularPagesRaw.url) : '—';
-
-      const totalSessionCount = num(traffic.totalSessionCount);
-      const botSessionCount = num(traffic.totalBotSessionCount);
-      const distinctUserCount = num(traffic.distinctUserCount);
-
-      const cards = [
-        { label: 'Сессии', value: totalSessionCount },
-        { label: 'Бот-сессии', value: botSessionCount },
-        { label: 'Пользователи', value: distinctUserCount },
-        { label: 'Dead Click', value: num(deadClick.sessionsCount) },
-        { label: 'Rage Click', value: num(rageClick.sessionsCount) },
-        { label: 'Error Click', value: num(errorClick.sessionsCount) },
-        { label: 'Script Error', value: num(scriptErrors.sessionsCount) },
-        { label: 'Top URL', value: popularPageUrl }
-      ];
-
-      cards.forEach((card) => {
-        const cardNode = document.createElement('div');
-        cardNode.className = 'metric-card';
-        cardNode.innerHTML = `
-          <div class="metric-label">${card.label}</div>
-          <div class="metric-value">${card.value}</div>
-        `;
-        metricsGrid.appendChild(cardNode);
-      });
-
-      if (totalSessionCount === 0) {
-        apiWarning.style.display = 'block';
-        apiWarning.textContent = 'Нет пользовательских сессий за выбранный период. Увеличьте numOfDays до 3 и проверьте, что Clarity-тег стоит на боевом домене turko.by (сейчас в PopularPages виден другой URL).';
-      }
     };
 
     checkBtn.addEventListener('click', async () => {
@@ -447,7 +308,6 @@
         });
         const data = await response.json();
         renderResponse(data);
-        renderMetricCards(data);
         setStatus(`HTTP ${response.status} • numOfDays=${numOfDays}`, !response.ok || !data.ok);
       } catch (error) {
         setStatus('Ошибка запроса к API.', true);
@@ -457,14 +317,10 @@
           details: error && error.message ? error.message : String(error),
           endpoint
         });
-        metricsGrid.innerHTML = '';
-        apiWarning.style.display = 'none';
       } finally {
         checkBtn.disabled = false;
       }
     });
-
-    checkBtn.click();
   })();
 </script>
 </body>
