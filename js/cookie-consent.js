@@ -1,6 +1,18 @@
 (function() {
   'use strict';
 
+  // Загрузить CSS файл для правильных стилей disabled состояния
+  function loadCookieStyles() {
+    // Проверить не загружен ли уже
+    if (document.getElementById('cookie-consent-fixed-styles')) return;
+    
+    const link = document.createElement('link');
+    link.id = 'cookie-consent-fixed-styles';
+    link.rel = 'stylesheet';
+    link.href = '/css/cookie-consent-fixed.css';
+    document.head.appendChild(link);
+  }
+
   const COOKIE_NAME = 'cookieConsent';
   const COOKIE_DURATION_DAYS = 180;
   const YANDEX_METRICA_ID = 105770392;
@@ -65,6 +77,9 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+    // Загрузить CSS для правильного отображения disabled состояния
+    loadCookieStyles();
+    
     // Создать HTML модалки
     function createCookieModal() {
       if (document.getElementById('cookieModal')) return;
@@ -121,8 +136,8 @@
               <strong>Analytics</strong>
               <span>GA4 / GTM / Яндекс.Метрика (всегда включены)</span>
             </div>
-            <label class="cookie-switch">
-              <input type="checkbox" checked disabled />
+            <label class="cookie-switch cookie-switch-disabled">
+              <input type="checkbox" checked disabled id="cookieAnalyticsDisabled" />
               <span class="cookie-slider"></span>
             </label>
           </div>
@@ -154,6 +169,30 @@
 
     // Проверка наличия модалки
     if (!document.getElementById('cookieModal')) return;
+
+    // Защита от клика на disabled переключатели Analytics
+    const analyticsInput = document.getElementById('cookieAnalyticsDisabled');
+    const analyticsLabel = document.querySelector('.cookie-switch-disabled');
+    
+    if (analyticsInput && analyticsLabel) {
+      // Предотвратить клики на label с disabled input
+      analyticsLabel.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }, true);
+      
+      // Предотвратить даже изменение input
+      analyticsInput.addEventListener('change', function(e) {
+        e.preventDefault();
+        this.checked = true; // Всегда checked
+        return false;
+      });
+      
+      // Убедиться что чекбокс всегда checked
+      analyticsInput.checked = true;
+      analyticsInput.disabled = true;
+    }
 
     // Элементы
     const btnAcceptAll = document.getElementById('cookieAcceptAll');
