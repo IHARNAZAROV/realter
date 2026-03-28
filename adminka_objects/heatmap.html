@@ -441,6 +441,105 @@
       font-weight: 600;
     }
 
+    .friction-section {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 12px;
+      margin: 8px 0 12px;
+    }
+
+    .friction-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f3f4f6;
+      margin-bottom: 6px;
+    }
+
+    .friction-note {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .friction-table-wrap {
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      background: rgba(0,0,0,0.20);
+    }
+
+    .friction-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 820px;
+    }
+
+    .friction-table th,
+    .friction-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      text-align: left;
+      font-size: 12px;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+
+    .friction-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: #9ca3af;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .friction-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .friction-metric {
+      color: #f3f4f6;
+      font-weight: 600;
+    }
+
+    .friction-group {
+      color: #93c5fd;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .friction-value {
+      color: #86efac;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .friction-advice {
+      margin-top: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .friction-advice-title {
+      font-size: 12px;
+      color: #f3f4f6;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .friction-advice-list {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 5px;
+      font-size: 12px;
+      color: #d1d5db;
+      line-height: 1.45;
+    }
+
     .api-panel-actions {
       display: flex;
       gap: 8px;
@@ -573,6 +672,30 @@
         <div id="visitorBreakdownGrid" class="visitor-breakdown-grid"></div>
       </section>
 
+      <section id="frictionSection" class="friction-section" hidden>
+        <div class="friction-title">UX-проблемы и фрустрация пользователей</div>
+        <p class="friction-note">
+          Ниже — перевод и объяснение ключевых метрик Clarity в 4 колонках, сгруппированных по логике проблем.
+        </p>
+        <div class="friction-table-wrap">
+          <table class="friction-table" aria-label="Расшифровка метрик UX-фрустрации">
+            <thead>
+            <tr>
+              <th>Группа</th>
+              <th>Параметр (EN)</th>
+              <th>Перевод</th>
+              <th>Что значит + значение</th>
+            </tr>
+            </thead>
+            <tbody id="frictionTableBody"></tbody>
+          </table>
+        </div>
+        <div class="friction-advice">
+          <div class="friction-advice-title">Автосоветы по проблемным сигналам</div>
+          <ul id="frictionAdviceList" class="friction-advice-list"></ul>
+        </div>
+      </section>
+
       <div id="apiStatus" class="api-status">Готово к проверке.</div>
       <ul class="api-hints">
         <li><strong>500</strong> — чаще всего не настроен <code>CLARITY_API_TOKEN</code> на сервере.</li>
@@ -603,6 +726,9 @@
     const visitorSection = document.getElementById('visitorSection');
     const visitorSummaryColumns = document.getElementById('visitorSummaryColumns');
     const visitorBreakdownGrid = document.getElementById('visitorBreakdownGrid');
+    const frictionSection = document.getElementById('frictionSection');
+    const frictionTableBody = document.getElementById('frictionTableBody');
+    const frictionAdviceList = document.getElementById('frictionAdviceList');
 
     if (!checkBtn || !numOfDaysSelect || !apiStatus) {
       return;
@@ -749,6 +875,152 @@
         if (Array.isArray(data.liveInsights)) return data.liveInsights;
       }
       return [];
+    };
+
+    const frictionMetricConfig = [
+      {
+        key: 'dead click count',
+        group: 'Клики без реакции',
+        title: 'Dead Click Count',
+        translation: 'Количество «мёртвых» кликов',
+        meaning: 'Клик по элементу без ожидаемой реакции интерфейса.'
+      },
+      {
+        key: 'error click count',
+        group: 'Клики с ошибками',
+        title: 'Error Click Count',
+        translation: 'Количество кликов с ошибкой',
+        meaning: 'Клик приводит к ошибке UI/API или неуспешному действию.'
+      },
+      {
+        key: 'rage click count',
+        group: 'Клики с раздражением',
+        title: 'Rage Click Count',
+        translation: 'Количество «яростных» кликов',
+        meaning: 'Быстрые повторные клики в одной зоне — признак фрустрации.'
+      },
+      {
+        key: 'quickback click',
+        group: 'Проблемы навигации',
+        title: 'Quickback Click',
+        translation: 'Быстрый возврат назад',
+        meaning: 'Пользователь почти сразу возвращается назад после перехода.'
+      },
+      {
+        key: 'excessive scroll',
+        group: 'Проблемы поиска контента',
+        title: 'Excessive Scroll',
+        translation: 'Чрезмерная прокрутка',
+        meaning: 'Слишком много скролла: нужный контент трудно найти.'
+      },
+      {
+        key: 'script error count',
+        group: 'Техническая стабильность',
+        title: 'Script Error Count',
+        translation: 'Количество скриптовых ошибок',
+        meaning: 'На странице возникают ошибки JavaScript.'
+      }
+    ];
+
+    const renderFrictionTable = (payload) => {
+      if (!frictionSection || !frictionTableBody || !frictionAdviceList) return;
+      const rows = getLiveInsightRows(payload);
+      const valueMap = new Map();
+      const normalizeMetricKey = (value) => String(value || '')
+        .toLowerCase()
+        .replace(/[^a-z]/g, '');
+
+      const configKeyMap = new Map(
+        frictionMetricConfig.map((metric) => [normalizeMetricKey(metric.key), metric.key])
+      );
+
+      rows.forEach((row) => {
+        const metricNameRaw = String(row && row.metricName ? row.metricName : '').trim();
+        const mappedMetric = configKeyMap.get(normalizeMetricKey(metricNameRaw));
+        const information = Array.isArray(row && row.information) ? row.information : [];
+        const countSum = information.reduce((sum, item) => sum + toNumber(item && item.sessionsCount), 0);
+        if (!mappedMetric || !countSum) return;
+        valueMap.set(mappedMetric, countSum);
+      });
+
+      const scanForObjectMetrics = (value) => {
+        if (!value || typeof value !== 'object') return;
+        if (Array.isArray(value)) {
+          value.forEach(scanForObjectMetrics);
+          return;
+        }
+
+        Object.entries(value).forEach(([rawKey, rawVal]) => {
+          const mappedMetric = configKeyMap.get(normalizeMetricKey(rawKey));
+          if (mappedMetric && ['number', 'string'].includes(typeof rawVal)) {
+            const numericValue = toNumber(rawVal);
+            if (numericValue > 0) {
+              valueMap.set(mappedMetric, numericValue);
+            }
+          }
+          if (rawVal && typeof rawVal === 'object') {
+            scanForObjectMetrics(rawVal);
+          }
+        });
+      };
+
+      // Фоллбэк для payload, где метрики приходят как поля объекта (deadClickCount и т.п.),
+      // а не массив liveInsights.
+      scanForObjectMetrics(payload);
+
+      const presentMetrics = frictionMetricConfig
+        .map((metric) => ({ ...metric, value: valueMap.get(metric.key) || 0 }))
+        .filter((metric) => metric.value > 0);
+
+      if (!presentMetrics.length) {
+        frictionSection.hidden = true;
+        frictionTableBody.innerHTML = '';
+        frictionAdviceList.innerHTML = '';
+        return;
+      }
+
+      frictionTableBody.innerHTML = '';
+      presentMetrics.forEach((metric) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="friction-group">${metric.group}</td>
+          <td class="friction-metric">${metric.title}</td>
+          <td>${metric.translation}</td>
+          <td>${metric.meaning} <span class="friction-value">(${metric.value})</span></td>
+        `;
+        frictionTableBody.appendChild(tr);
+      });
+
+      const highMetrics = presentMetrics.filter((metric) => metric.value >= 10);
+      const values = highMetrics.map((metric) => metric.value);
+      const hasHighCorrelation = values.length >= 3 && values.every((value) => value === values[0]);
+
+      const advice = [];
+      advice.push(`Найдено проблемных сигналов: ${presentMetrics.length}. Сначала исправляйте зоны с максимальным значением.`);
+      if (hasHighCorrelation) {
+        advice.push('Высокая корреляция: несколько метрик имеют одинаково высокие значения. Вероятна системная проблема UX в одном и том же сценарии.');
+      }
+      if (valueMap.get('script error count') >= 1) {
+        advice.push('Есть Script Error Count: проверьте JS-консоль и backend-ответы, затем повторно измерьте метрики.');
+      }
+      if (valueMap.get('dead click count') >= 1 || valueMap.get('rage click count') >= 1) {
+        advice.push('Dead/Rage клики: проверьте кликабельность элементов, зоны тапа и визуальную обратную связь кнопок.');
+      }
+      if (valueMap.get('excessive scroll') >= 1) {
+        advice.push('Excessive Scroll: вынесите ключевой CTA/контент выше первого экрана и добавьте визуальные якоря.');
+      }
+      if (valueMap.get('quickback click') >= 1) {
+        advice.push('Quickback: проверьте релевантность посадочных страниц и соответствие заголовков/превью фактическому контенту.');
+      }
+
+      frictionAdviceList.innerHTML = '';
+      advice.forEach((text) => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        frictionAdviceList.appendChild(li);
+      });
+
+      frictionSection.hidden = false;
     };
 
     const renderVisitorData = (payload) => {
@@ -906,6 +1178,7 @@
       const text = JSON.stringify(payload, null, 2);
       renderInsights(payload);
       renderVisitorData(payload);
+      renderFrictionTable(payload);
       retryBtn.disabled = false;
       return text;
     };
@@ -935,9 +1208,11 @@
           try {
             renderInsights(JSON.parse(saved.payload));
             renderVisitorData(JSON.parse(saved.payload));
+            renderFrictionTable(JSON.parse(saved.payload));
           } catch (error) {
             renderInsights(null);
             renderVisitorData(null);
+            renderFrictionTable(null);
           }
         }
 
