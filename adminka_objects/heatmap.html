@@ -926,47 +926,14 @@
       if (!frictionSection || !frictionTableBody || !frictionAdviceList) return;
       const rows = getLiveInsightRows(payload);
       const valueMap = new Map();
-      const normalizeMetricKey = (value) => String(value || '')
-        .toLowerCase()
-        .replace(/[^a-z]/g, '');
-
-      const configKeyMap = new Map(
-        frictionMetricConfig.map((metric) => [normalizeMetricKey(metric.key), metric.key])
-      );
 
       rows.forEach((row) => {
-        const metricNameRaw = String(row && row.metricName ? row.metricName : '').trim();
-        const mappedMetric = configKeyMap.get(normalizeMetricKey(metricNameRaw));
+        const metricName = String(row && row.metricName ? row.metricName : '').toLowerCase().trim();
         const information = Array.isArray(row && row.information) ? row.information : [];
         const countSum = information.reduce((sum, item) => sum + toNumber(item && item.sessionsCount), 0);
-        if (!mappedMetric || !countSum) return;
-        valueMap.set(mappedMetric, countSum);
+        if (!metricName || !countSum) return;
+        valueMap.set(metricName, countSum);
       });
-
-      const scanForObjectMetrics = (value) => {
-        if (!value || typeof value !== 'object') return;
-        if (Array.isArray(value)) {
-          value.forEach(scanForObjectMetrics);
-          return;
-        }
-
-        Object.entries(value).forEach(([rawKey, rawVal]) => {
-          const mappedMetric = configKeyMap.get(normalizeMetricKey(rawKey));
-          if (mappedMetric && ['number', 'string'].includes(typeof rawVal)) {
-            const numericValue = toNumber(rawVal);
-            if (numericValue > 0) {
-              valueMap.set(mappedMetric, numericValue);
-            }
-          }
-          if (rawVal && typeof rawVal === 'object') {
-            scanForObjectMetrics(rawVal);
-          }
-        });
-      };
-
-      // Фоллбэк для payload, где метрики приходят как поля объекта (deadClickCount и т.п.),
-      // а не массив liveInsights.
-      scanForObjectMetrics(payload);
 
       const presentMetrics = frictionMetricConfig
         .map((metric) => ({ ...metric, value: valueMap.get(metric.key) || 0 }))
