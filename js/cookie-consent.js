@@ -1,1 +1,233 @@
-!function(){"use strict";const e="cookieConsent",n=180,t=105770392;function o(e,n){"function"==typeof ym&&ym(t,"reachGoal",e,n||{})}function i(){const n=(t=e,document.cookie.split("; ").find((e=>e.startsWith(t+"=")))?.split("=")[1]);var t;if(!n)return null;try{return JSON.parse(decodeURIComponent(n))}catch{return null}}function c(t){!function(e,n,t){const o=24*t*60*60;document.cookie=e+"="+encodeURIComponent(n)+"; max-age="+o+"; path=/; SameSite=Lax"}(e,JSON.stringify({necessary:!0,analytics:!!t.analytics,marketing:!!t.marketing,updatedAt:(new Date).toISOString()}),n)}function s(){"function"==typeof window.__applyCookieConsent&&window.__applyCookieConsent()}function a(){document.getElementById("cookieModal")?.classList.add("show")}function l(){document.getElementById("cookieModal")?.classList.remove("show"),document.getElementById("cookieSettings")?.classList.remove("open")}document.addEventListener("DOMContentLoaded",(function(){if(function(){if(document.getElementById("cookieModal"))return;const e=document.createElement("div");e.id="cookieModal",e.className="cookie-modal",e.setAttribute("role","dialog"),e.setAttribute("aria-label","Настройки cookies"),e.innerHTML='\n      <div class="cookie-top">\n        <div class="cookie-title">\n          <div class="cookie-icon" aria-hidden="true">🍪</div>\n          <div class="cookie-title-text">\n            <h2>Cookies</h2>\n            <p>Вы управляете своими настройками.</p>\n          </div>\n        </div>\n        <button class="cookie-close" id="cookieCloseBtn" type="button" aria-label="Закрыть">✕</button>\n      </div>\n\n      <div class="cookie-body">\n        <p class="cookie-desc">\n          Мы используем cookies для корректной работы сайта и аналитики.\n          <a href="/cookies-policy" target="_blank" rel="noopener noreferrer">Подробнее</a>\n        </p>\n\n        <div class="cookie-actions">\n          <button class="cookie-btn primary" id="cookieAcceptAll">Принять всё</button>\n          <button class="cookie-btn ghost" id="cookieDeclineAll">Отклонить</button>\n          <button class="cookie-btn outline" id="cookieSettingsBtn">Настроить</button>\n        </div>\n\n        <div class="cookie-settings" id="cookieSettings">\n          <div class="cookie-settings-head">\n            <h3>Настройки cookies</h3>\n            <p>Можно включить только необходимые или добавить аналитику.</p>\n          </div>\n\n          <div class="cookie-setting-row">\n            <div class="cookie-setting-text">\n              <strong>Necessary</strong>\n              <span>Нужны для работы сайта (всегда включены)</span>\n            </div>\n            <label class="cookie-switch">\n              <input type="checkbox" checked disabled />\n              <span class="cookie-slider"></span>\n            </label>\n          </div>\n\n          <div class="cookie-setting-row">\n            <div class="cookie-setting-text">\n              <strong>Analytics</strong>\n              <span>GA4 / Яндекс.Метрика</span>\n            </div>\n            <label class="cookie-switch">\n              <input type="checkbox" id="cookieAnalytics" />\n              <span class="cookie-slider"></span>\n            </label>\n          </div>\n\n          <div class="cookie-setting-row">\n            <div class="cookie-setting-text">\n              <strong>Marketing</strong>\n              <span>Реклама и ретаргетинг</span>\n            </div>\n            <label class="cookie-switch">\n              <input type="checkbox" id="cookieMarketing" />\n              <span class="cookie-slider"></span>\n            </label>\n          </div>\n\n          <div class="cookie-settings-actions">\n            <button class="cookie-btn primary" id="cookieSaveSettings">Сохранить</button>\n            <button class="cookie-btn ghost" id="cookieBackBtn">Назад</button>\n          </div>\n        </div>\n      </div>\n    ',document.body.appendChild(e)}(),!document.getElementById("cookieModal"))return;const e=document.getElementById("cookieAcceptAll"),n=document.getElementById("cookieDeclineAll"),t=document.getElementById("cookieSettingsBtn"),d=document.getElementById("cookieSaveSettings"),k=document.getElementById("cookieBackBtn"),r=document.getElementById("cookieCloseBtn"),u=document.getElementById("cookieAnalytics"),g=document.getElementById("cookieMarketing"),m=document.getElementById("cookieSettings"),p=i();p?p.analytics&&s():(a(),o("cookie_modal_shown"),e.addEventListener("click",(()=>{o("cookie_accept_all"),c({analytics:!0,marketing:!0}),s(),l()})),n.addEventListener("click",(()=>{o("cookie_decline_all"),c({analytics:!1,marketing:!1}),l()})),t.addEventListener("click",(()=>{m.classList.add("open")})),k.addEventListener("click",(()=>{m.classList.remove("open")})),d.addEventListener("click",(()=>{const e={analytics:u.checked,marketing:g.checked};o("cookie_save_settings",{analytics:e.analytics?1:0,marketing:e.marketing?1:0}),c(e),e.analytics&&s(),l()})),r.addEventListener("click",(()=>{o("cookie_decline_all"),c({analytics:!1,marketing:!1}),l()})),window.openCookieSettings=function(){a(),m.classList.add("open")})}))}();
+(function() {
+  'use strict';
+
+  const COOKIE_NAME = 'cookieConsent';
+  const COOKIE_DURATION_DAYS = 180;
+  const YANDEX_METRICA_ID = 105770392;
+
+  // Отправка целей в Яндекс.Метрику
+  function sendYandexGoal(goalName, params) {
+    if (typeof ym === 'function') {
+      ym(YANDEX_METRICA_ID, 'reachGoal', goalName, params || {});
+    }
+  }
+
+  // Чтение куки
+  function readCookie() {
+    const cookieValue = document.cookie
+      .split('; ')
+      .find(row => row.startsWith(COOKIE_NAME + '='))
+      ?.split('=')[1];
+
+    if (!cookieValue) return null;
+
+    try {
+      return JSON.parse(decodeURIComponent(cookieValue));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Сохранение куки
+  function saveCookie(settings) {
+    const maxAgeSeconds = 24 * COOKIE_DURATION_DAYS * 60 * 60;
+    const cookieData = {
+      necessary: true,
+      analytics: true, // Аналитика ВСЕГДА включена
+      marketing: !!settings.marketing,
+      updatedAt: new Date().toISOString()
+    };
+    const cookieString = encodeURIComponent(JSON.stringify(cookieData));
+    document.cookie = `${COOKIE_NAME}=${cookieString}; max-age=${maxAgeSeconds}; path=/; SameSite=Lax`;
+  }
+
+  // Применить съедобные куки
+  function applyCookieConsent() {
+    if (typeof window.__applyCookieConsent === 'function') {
+      window.__applyCookieConsent();
+    }
+  }
+
+  // Показать модалку
+  function showCookieModal() {
+    const modal = document.getElementById('cookieModal');
+    if (modal) {
+      modal.classList.add('show');
+    }
+  }
+
+  // Скрыть модалку
+  function hideCookieModal() {
+    const modal = document.getElementById('cookieModal');
+    const settings = document.getElementById('cookieSettings');
+    if (modal) modal.classList.remove('show');
+    if (settings) settings.classList.remove('open');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Создать HTML модалки
+    function createCookieModal() {
+      if (document.getElementById('cookieModal')) return;
+
+      const modal = document.createElement('div');
+      modal.id = 'cookieModal';
+      modal.className = 'cookie-modal';
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-label', 'Настройки cookies');
+
+      modal.innerHTML = `
+      <div class="cookie-top">
+        <div class="cookie-title">
+          <div class="cookie-icon" aria-hidden="true">🍪</div>
+          <div class="cookie-title-text">
+            <h2>Cookies</h2>
+            <p>Вы управляете своими настройками.</p>
+          </div>
+        </div>
+        <button class="cookie-close" id="cookieCloseBtn" type="button" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div class="cookie-body">
+        <p class="cookie-desc">
+          Мы используем cookies для корректной работы сайта, аналитики и улучшения пользовательского опыта.
+          <a href="/cookies-policy" target="_blank" rel="noopener noreferrer">Подробнее</a>
+        </p>
+
+        <div class="cookie-actions">
+          <button class="cookie-btn primary" id="cookieAcceptAll">Принять всё</button>
+          <button class="cookie-btn ghost" id="cookieDeclineAll">Отклонить</button>
+          <button class="cookie-btn outline" id="cookieSettingsBtn">Настроить</button>
+        </div>
+
+        <div class="cookie-settings" id="cookieSettings">
+          <div class="cookie-settings-head">
+            <h3>Настройки cookies</h3>
+            <p>Аналитика (GA4, Яндекс.Метрика, GTM) всегда включена. Можно управлять только маркетингом.</p>
+          </div>
+
+          <div class="cookie-setting-row">
+            <div class="cookie-setting-text">
+              <strong>Necessary</strong>
+              <span>Нужны для работы сайта (всегда включены)</span>
+            </div>
+            <label class="cookie-switch">
+              <input type="checkbox" checked disabled />
+              <span class="cookie-slider"></span>
+            </label>
+          </div>
+
+          <div class="cookie-setting-row">
+            <div class="cookie-setting-text">
+              <strong>Analytics</strong>
+              <span>GA4 / GTM / Яндекс.Метрика (всегда включены)</span>
+            </div>
+            <label class="cookie-switch">
+              <input type="checkbox" checked disabled />
+              <span class="cookie-slider"></span>
+            </label>
+          </div>
+
+          <div class="cookie-setting-row">
+            <div class="cookie-setting-text">
+              <strong>Marketing</strong>
+              <span>Реклама и ретаргетинг</span>
+            </div>
+            <label class="cookie-switch">
+              <input type="checkbox" id="cookieMarketing" />
+              <span class="cookie-slider"></span>
+            </label>
+          </div>
+
+          <div class="cookie-settings-actions">
+            <button class="cookie-btn primary" id="cookieSaveSettings">Сохранить</button>
+            <button class="cookie-btn ghost" id="cookieBackBtn">Назад</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Создать модалку
+    createCookieModal();
+
+    // Проверка наличия модалки
+    if (!document.getElementById('cookieModal')) return;
+
+    // Элементы
+    const btnAcceptAll = document.getElementById('cookieAcceptAll');
+    const btnDeclineAll = document.getElementById('cookieDeclineAll');
+    const btnSettings = document.getElementById('cookieSettingsBtn');
+    const btnSaveSettings = document.getElementById('cookieSaveSettings');
+    const btnBack = document.getElementById('cookieBackBtn');
+    const btnClose = document.getElementById('cookieCloseBtn');
+    const checkmarketing = document.getElementById('cookieMarketing');
+    const settingsContainer = document.getElementById('cookieSettings');
+
+    const existingCookie = readCookie();
+
+    // Если куки уже установлены, применить их и скрыть модалку
+    if (existingCookie) {
+      applyCookieConsent();
+      hideCookieModal();
+    } else {
+      // Показать модалку при первом визите
+      showCookieModal();
+      sendYandexGoal('cookie_modal_shown');
+
+      // Принять всё
+      btnAcceptAll.addEventListener('click', function() {
+        sendYandexGoal('cookie_accept_all');
+        saveCookie({ marketing: true });
+        applyCookieConsent();
+        hideCookieModal();
+      });
+
+      // Отклонить (но аналитика ВСЕГДА включена)
+      btnDeclineAll.addEventListener('click', function() {
+        sendYandexGoal('cookie_decline_all');
+        saveCookie({ marketing: false });
+        applyCookieConsent();
+        hideCookieModal();
+      });
+
+      // Открыть настройки
+      btnSettings.addEventListener('click', function() {
+        settingsContainer.classList.add('open');
+      });
+
+      // Закрыть настройки
+      btnBack.addEventListener('click', function() {
+        settingsContainer.classList.remove('open');
+      });
+
+      // Сохранить настройки
+      btnSaveSettings.addEventListener('click', function() {
+        const settings = {
+          marketing: checkmarketing.checked
+        };
+        sendYandexGoal('cookie_save_settings', {
+          marketing: settings.marketing ? 1 : 0
+        });
+        saveCookie(settings);
+        applyCookieConsent();
+        hideCookieModal();
+      });
+
+      // Закрыть по крестику (но аналитика ВСЕГДА включена)
+      btnClose.addEventListener('click', function() {
+        sendYandexGoal('cookie_close');
+        saveCookie({ marketing: false });
+        applyCookieConsent();
+        hideCookieModal();
+      });
+    }
+
+    // Функция для открытия настроек извне
+    window.openCookieSettings = function() {
+      showCookieModal();
+      settingsContainer.classList.add('open');
+    };
+  });
+})();
