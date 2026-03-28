@@ -1,18 +1,6 @@
 (function() {
   'use strict';
 
-  // Загрузить CSS файл для правильных стилей disabled состояния
-  function loadCookieStyles() {
-    // Проверить не загружен ли уже
-    if (document.getElementById('cookie-consent-fixed-styles')) return;
-    
-    const link = document.createElement('link');
-    link.id = 'cookie-consent-fixed-styles';
-    link.rel = 'stylesheet';
-    link.href = '/css/cookie-consent-fixed.css';
-    document.head.appendChild(link);
-  }
-
   const COOKIE_NAME = 'cookieConsent';
   const COOKIE_DURATION_DAYS = 180;
   const YANDEX_METRICA_ID = 105770392;
@@ -46,7 +34,7 @@
     const cookieData = {
       necessary: true,
       analytics: true, // Аналитика ВСЕГДА включена
-      marketing: !!settings.marketing,
+      marketing: true, // Маркетинг ВСЕГДА включен (GTM + ретаргетинг)
       updatedAt: new Date().toISOString()
     };
     const cookieString = encodeURIComponent(JSON.stringify(cookieData));
@@ -77,9 +65,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    // Загрузить CSS для правильного отображения disabled состояния
-    loadCookieStyles();
-    
     // Создать HTML модалки
     function createCookieModal() {
       if (document.getElementById('cookieModal')) return;
@@ -131,28 +116,6 @@
             </label>
           </div>
 
-          <div class="cookie-setting-row">
-            <div class="cookie-setting-text">
-              <strong>Analytics</strong>
-              <span>GA4 / GTM / Яндекс.Метрика (всегда включены)</span>
-            </div>
-            <label class="cookie-switch cookie-switch-disabled">
-              <input type="checkbox" checked disabled id="cookieAnalyticsDisabled" />
-              <span class="cookie-slider"></span>
-            </label>
-          </div>
-
-          <div class="cookie-setting-row">
-            <div class="cookie-setting-text">
-              <strong>Marketing</strong>
-              <span>Реклама и ретаргетинг</span>
-            </div>
-            <label class="cookie-switch">
-              <input type="checkbox" id="cookieMarketing" />
-              <span class="cookie-slider"></span>
-            </label>
-          </div>
-
           <div class="cookie-settings-actions">
             <button class="cookie-btn primary" id="cookieSaveSettings">Сохранить</button>
             <button class="cookie-btn ghost" id="cookieBackBtn">Назад</button>
@@ -170,30 +133,6 @@
     // Проверка наличия модалки
     if (!document.getElementById('cookieModal')) return;
 
-    // Защита от клика на disabled переключатели Analytics
-    const analyticsInput = document.getElementById('cookieAnalyticsDisabled');
-    const analyticsLabel = document.querySelector('.cookie-switch-disabled');
-    
-    if (analyticsInput && analyticsLabel) {
-      // Предотвратить клики на label с disabled input
-      analyticsLabel.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }, true);
-      
-      // Предотвратить даже изменение input
-      analyticsInput.addEventListener('change', function(e) {
-        e.preventDefault();
-        this.checked = true; // Всегда checked
-        return false;
-      });
-      
-      // Убедиться что чекбокс всегда checked
-      analyticsInput.checked = true;
-      analyticsInput.disabled = true;
-    }
-
     // Элементы
     const btnAcceptAll = document.getElementById('cookieAcceptAll');
     const btnDeclineAll = document.getElementById('cookieDeclineAll');
@@ -201,7 +140,6 @@
     const btnSaveSettings = document.getElementById('cookieSaveSettings');
     const btnBack = document.getElementById('cookieBackBtn');
     const btnClose = document.getElementById('cookieCloseBtn');
-    const checkmarketing = document.getElementById('cookieMarketing');
     const settingsContainer = document.getElementById('cookieSettings');
 
     const existingCookie = readCookie();
@@ -223,10 +161,10 @@
         hideCookieModal();
       });
 
-      // Отклонить (но аналитика ВСЕГДА включена)
+      // Отклонить (но аналитика и маркетинг ВСЕГДА включены)
       btnDeclineAll.addEventListener('click', function() {
         sendYandexGoal('cookie_decline_all');
-        saveCookie({ marketing: false });
+        saveCookie({});
         applyCookieConsent();
         hideCookieModal();
       });
@@ -243,21 +181,16 @@
 
       // Сохранить настройки
       btnSaveSettings.addEventListener('click', function() {
-        const settings = {
-          marketing: checkmarketing.checked
-        };
-        sendYandexGoal('cookie_save_settings', {
-          marketing: settings.marketing ? 1 : 0
-        });
-        saveCookie(settings);
+        sendYandexGoal('cookie_save_settings', { marketing: 1 });
+        saveCookie({});
         applyCookieConsent();
         hideCookieModal();
       });
 
-      // Закрыть по крестику (но аналитика ВСЕГДА включена)
+      // Закрыть по крестику (но аналитика и маркетинг ВСЕГДА включены)
       btnClose.addEventListener('click', function() {
         sendYandexGoal('cookie_close');
-        saveCookie({ marketing: false });
+        saveCookie({});
         applyCookieConsent();
         hideCookieModal();
       });
