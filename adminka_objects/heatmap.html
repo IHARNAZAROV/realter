@@ -302,21 +302,6 @@
       gap: 3px;
     }
 
-    .api-response {
-      white-space: pre-wrap;
-      word-break: break-word;
-      max-height: 260px;
-      overflow: auto;
-      background: rgba(0,0,0,0.35);
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 10px;
-      font-size: 12px;
-      line-height: 1.45;
-      color: #d1d5db;
-      margin-bottom: 10px;
-    }
-
     .visitor-section {
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.03);
@@ -339,11 +324,27 @@
       margin-bottom: 10px;
     }
 
-    .visitor-grid {
+    .visitor-columns {
       display: grid;
-      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      grid-template-columns: repeat(2, minmax(260px, 1fr));
       gap: 10px;
       margin-bottom: 12px;
+    }
+
+    .visitor-column {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.18);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .visitor-column-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #93c5fd;
+      margin-bottom: 10px;
+      font-weight: 600;
     }
 
     .visitor-card {
@@ -358,7 +359,23 @@
       text-transform: uppercase;
       letter-spacing: .05em;
       color: #9ca3af;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .visitor-card-help {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #d1d5db;
+      font-size: 11px;
+      line-height: 14px;
+      text-align: center;
+      cursor: help;
+      flex-shrink: 0;
     }
 
     .visitor-card-value {
@@ -366,12 +383,13 @@
       font-weight: 700;
       color: #f9fafb;
       line-height: 1.1;
+      margin-bottom: 6px;
     }
 
     .visitor-card-meta {
       font-size: 12px;
       color: #9ca3af;
-      margin-top: 4px;
+      line-height: 1.4;
     }
 
     .visitor-breakdown-grid {
@@ -459,9 +477,6 @@
         grid-template-columns: 1fr;
       }
       .insights-grid {
-        grid-template-columns: 1fr;
-      }
-      .visitor-grid {
         grid-template-columns: 1fr;
       }
       .visitor-breakdown-grid {
@@ -554,7 +569,7 @@
           Clarity Live Insights показывает агрегированную статистику сессий, а не персональные данные конкретных людей.
           Ниже — сводка по сессиям, источникам и разрезам (страны, устройства, страницы, время), если API их вернул.
         </p>
-        <div id="visitorSummaryGrid" class="visitor-grid"></div>
+        <div id="visitorSummaryColumns" class="visitor-columns"></div>
         <div id="visitorBreakdownGrid" class="visitor-breakdown-grid"></div>
       </section>
 
@@ -564,10 +579,8 @@
         <li><strong>429</strong> — превышен лимит запросов Clarity, подождите 1–2 минуты.</li>
         <li><strong>502</strong> — временная ошибка сети между сервером и Clarity API.</li>
       </ul>
-      <pre id="apiResponse" class="api-response">Нажмите «Проверить API», чтобы получить ответ.</pre>
 
       <div class="api-panel-actions">
-        <button id="copyResponseBtn" class="admin-ghost-btn" type="button" disabled>Копировать JSON</button>
         <button id="retryBtn" class="admin-ghost-btn" type="button" disabled>Повторить последний запрос</button>
       </div>
     </section>
@@ -579,10 +592,8 @@
     const STORAGE_KEY = 'clarityInsightsLastResult';
     const checkBtn = document.getElementById('checkApiBtn');
     const retryBtn = document.getElementById('retryBtn');
-    const copyResponseBtn = document.getElementById('copyResponseBtn');
     const numOfDaysSelect = document.getElementById('numOfDaysSelect');
     const apiStatus = document.getElementById('apiStatus');
-    const apiResponse = document.getElementById('apiResponse');
     const lastCheckedValue = document.getElementById('lastCheckedValue');
     const httpStatusValue = document.getElementById('httpStatusValue');
     const payloadSizeValue = document.getElementById('payloadSizeValue');
@@ -590,14 +601,13 @@
     const insightsExtra = document.getElementById('insightsExtra');
     const insightsExtraList = document.getElementById('insightsExtraList');
     const visitorSection = document.getElementById('visitorSection');
-    const visitorSummaryGrid = document.getElementById('visitorSummaryGrid');
+    const visitorSummaryColumns = document.getElementById('visitorSummaryColumns');
     const visitorBreakdownGrid = document.getElementById('visitorBreakdownGrid');
 
-    if (!checkBtn || !numOfDaysSelect || !apiStatus || !apiResponse) {
+    if (!checkBtn || !numOfDaysSelect || !apiStatus) {
       return;
     }
 
-    let lastPayload = null;
     let lastNumOfDays = Number(numOfDaysSelect.value) || 1;
 
     const formatDateTime = (value) => {
@@ -742,12 +752,12 @@
     };
 
     const renderVisitorData = (payload) => {
-      if (!visitorSection || !visitorSummaryGrid || !visitorBreakdownGrid) return;
+      if (!visitorSection || !visitorSummaryColumns || !visitorBreakdownGrid) return;
 
       const rows = getLiveInsightRows(payload);
       if (!rows.length) {
         visitorSection.hidden = true;
-        visitorSummaryGrid.innerHTML = '';
+        visitorSummaryColumns.innerHTML = '';
         visitorBreakdownGrid.innerHTML = '';
         return;
       }
@@ -774,14 +784,52 @@
       const whereToCount = rows.filter((row) => metricMatches(row.metricName, whereToKeywords)).length;
 
       const summaryCards = [
-        { label: 'Сессии (сумма по метрикам)', value: sessionsTotal, meta: 'Агрегировано из information[].sessionsCount' },
-        { label: 'Кто заходил', value: whoCount, meta: 'Доступных разрезов по типу посетителя/устройству' },
-        { label: 'Куда заходили', value: whereToCount, meta: 'Разрезы по страницам/источникам/URL' },
-        { label: 'Откуда заходили', value: whereCount, meta: 'Разрезы по стране/городу/локации' },
-        { label: 'Когда заходили', value: whenCount, meta: 'Разрезы по времени (день/час), если есть в API' }
+        {
+          label: 'Сессии (сумма по метрикам)',
+          value: sessionsTotal,
+          meta: 'Сумма sessionsCount по всем доступным разрезам Clarity.',
+          hint: 'Если значение резко падает, проверьте период numOfDays и лимиты API.',
+          column: 'overview'
+        },
+        {
+          label: 'Кто заходил',
+          value: whoCount,
+          meta: 'Сколько разрезов по аудитории доступно (устройство, ОС, браузер, тип пользователя).',
+          hint: 'Показывает разнообразие сегментов, а не число уникальных людей.',
+          column: 'audience'
+        },
+        {
+          label: 'Откуда заходили',
+          value: whereCount,
+          meta: 'Разрезы по географии (страна, город, регион), если они есть в API.',
+          hint: 'Используйте вместе с блоком Country/City ниже для детализации.',
+          column: 'audience'
+        },
+        {
+          label: 'Куда заходили',
+          value: whereToCount,
+          meta: 'Разрезы по страницам, URL и источникам переходов.',
+          hint: 'Рост значения обычно означает больше данных по страницам и каналам.',
+          column: 'behavior'
+        },
+        {
+          label: 'Когда заходили',
+          value: whenCount,
+          meta: 'Разрезы по времени (час/день), если Clarity их вернул.',
+          hint: 'Полезно для поиска пиков активности по времени суток.',
+          column: 'behavior'
+        }
       ];
 
-      visitorSummaryGrid.innerHTML = '';
+      visitorSummaryColumns.innerHTML = '';
+      const audienceColumn = document.createElement('div');
+      audienceColumn.className = 'visitor-column';
+      const behaviorColumn = document.createElement('div');
+      behaviorColumn.className = 'visitor-column';
+
+      audienceColumn.innerHTML = '<div class="visitor-column-title">Аудитория</div>';
+      behaviorColumn.innerHTML = '<div class="visitor-column-title">Поведение и трафик</div>';
+
       summaryCards.forEach((card) => {
         const article = document.createElement('article');
         article.className = 'visitor-card';
@@ -789,6 +837,14 @@
         const label = document.createElement('div');
         label.className = 'visitor-card-label';
         label.textContent = card.label;
+        if (card.hint) {
+          const help = document.createElement('span');
+          help.className = 'visitor-card-help';
+          help.setAttribute('title', card.hint);
+          help.setAttribute('aria-label', card.hint);
+          help.textContent = '?';
+          label.appendChild(help);
+        }
 
         const value = document.createElement('div');
         value.className = 'visitor-card-value';
@@ -799,8 +855,13 @@
         meta.textContent = card.meta;
 
         article.append(label, value, meta);
-        visitorSummaryGrid.appendChild(article);
+        if (card.column === 'audience' || card.column === 'overview') {
+          audienceColumn.appendChild(article);
+        } else {
+          behaviorColumn.appendChild(article);
+        }
       });
+      visitorSummaryColumns.append(audienceColumn, behaviorColumn);
 
       visitorBreakdownGrid.innerHTML = '';
       rows.forEach((row) => {
@@ -843,11 +904,8 @@
 
     const renderResponse = (payload) => {
       const text = JSON.stringify(payload, null, 2);
-      apiResponse.textContent = text;
       renderInsights(payload);
       renderVisitorData(payload);
-      lastPayload = text;
-      copyResponseBtn.disabled = false;
       retryBtn.disabled = false;
       return text;
     };
@@ -873,9 +931,6 @@
         }
 
         if (saved.payload) {
-          apiResponse.textContent = saved.payload;
-          lastPayload = saved.payload;
-          copyResponseBtn.disabled = false;
           retryBtn.disabled = false;
           try {
             renderInsights(JSON.parse(saved.payload));
@@ -908,7 +963,6 @@
       checkBtn.disabled = true;
       retryBtn.disabled = true;
       setStatus(`Запрос к ${endpoint}`, 'default');
-      apiResponse.textContent = 'Загрузка...';
 
       try {
         const response = await fetch(endpoint, {
@@ -992,19 +1046,6 @@
 
     retryBtn.addEventListener('click', async () => {
       await fetchInsights(lastNumOfDays);
-    });
-
-    copyResponseBtn.addEventListener('click', async () => {
-      if (!lastPayload) {
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(lastPayload);
-        setStatus('JSON скопирован в буфер обмена.', 'success');
-      } catch (error) {
-        setStatus('Не удалось скопировать JSON. Проверьте разрешения браузера.', 'warning');
-      }
     });
 
     restoreLastResult();
