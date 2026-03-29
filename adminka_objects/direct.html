@@ -69,7 +69,7 @@
         <div class="status-content">
           <h3>Статус подключения</h3>
           <p id="statusMessage">Яндекс Директ не подключен</p>
-          <button class="btn-primary" id="connectBtn" onclick="window.DirectAPI.showAuthForm()">
+          <button class="btn-primary" id="connectBtn">
             Подключить
           </button>
         </div>
@@ -79,7 +79,7 @@
     <!-- Authorization instructions (visible when not authenticated) -->
     <section class="direct-section" id="instructionsSection">
       <div class="instructions-card">
-        <div class="instructions-header" onclick="this.parentElement.classList.toggle('expanded')">
+        <div class="instructions-header">
           <h3>📋 Инструкция по подключению</h3>
           <span class="toggle-icon">▼</span>
         </div>
@@ -119,7 +119,7 @@
                   <label for="accountLogin">Логин кабинета (опционально):</label>
                   <input type="text" id="accountLogin" placeholder="Логин вашего Яндекс.ID">
                 </div>
-                <button class="btn-primary" onclick="window.DirectAPI.saveCredentials()">
+                <button class="btn-primary" data-action="save-credentials">
                   Сохранить учетные данные
                 </button>
               </div>
@@ -149,7 +149,7 @@
             <input type="date" id="dateFrom" placeholder="От">
             <span> — </span>
             <input type="date" id="dateTo" placeholder="До">
-            <button class="btn-secondary" onclick="window.DirectAPI.handleCustomDateRange()">Применить</button>
+            <button class="btn-secondary" data-action="apply-date-range">Применить</button>
           </div>
         </div>
 
@@ -169,7 +169,7 @@
           </select>
         </div>
 
-        <button class="btn-secondary" onclick="window.DirectAPI.refreshData()">🔄 Обновить</button>
+        <button class="btn-secondary" data-action="refresh-data">🔄 Обновить</button>
       </div>
 
       <!-- Stats cards -->
@@ -205,19 +205,19 @@
         <table class="campaigns-table">
           <thead>
             <tr>
-              <th onclick="window.DirectAPI.sortTable('name')">
+              <th data-sort="name">
                 Кампания <span class="sort-indicator">↕</span>
               </th>
-              <th onclick="window.DirectAPI.sortTable('impressions')">
+              <th data-sort="impressions">
                 Показы <span class="sort-indicator">↕</span>
               </th>
-              <th onclick="window.DirectAPI.sortTable('clicks')">
+              <th data-sort="clicks">
                 Клики <span class="sort-indicator">↕</span>
               </th>
-              <th onclick="window.DirectAPI.sortTable('ctr')">
+              <th data-sort="ctr">
                 CTR <span class="sort-indicator">↕</span>
               </th>
-              <th onclick="window.DirectAPI.sortTable('cost')">
+              <th data-sort="cost">
                 Расход <span class="sort-indicator">↕</span>
               </th>
             </tr>

@@ -544,11 +544,52 @@ const DirectAPI = (function () {
     if (periodFilter) {
       periodFilter.addEventListener('change', handlePeriodChange);
     }
+
+    // Button events
+    const connectBtn = document.getElementById('connectBtn');
+    if (connectBtn) {
+      connectBtn.addEventListener('click', showAuthForm);
+    }
+
+    const saveCredsBtn = document.querySelector('[data-action="save-credentials"]');
+    if (saveCredsBtn) {
+      saveCredsBtn.addEventListener('click', saveCredentials);
+    }
+
+    const applyDateRangeBtn = document.querySelector('[data-action="apply-date-range"]');
+    if (applyDateRangeBtn) {
+      applyDateRangeBtn.addEventListener('click', handleCustomDateRange);
+    }
+
+    const refreshBtn = document.querySelector('[data-action="refresh-data"]');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', refreshData);
+    }
+
+    const deviceSelect = document.getElementById('deviceFilter');
+    if (deviceSelect) {
+      deviceSelect.addEventListener('change', handleFilterChange);
+    }
+
+    const campaignSelect = document.getElementById('campaignFilter');
+    if (campaignSelect) {
+      campaignSelect.addEventListener('change', handleFilterChange);
+    }
+
+    // Table header clicks for sorting
+    document.querySelectorAll('.campaigns-table th[data-sort]').forEach(th => {
+      th.addEventListener('click', function() {
+        const column = this.getAttribute('data-sort');
+        if (column) {
+          sortTable(column);
+        }
+      });
+    });
   }
 
-  // =========================================================
-  // PUBLIC API
-  // =========================================================
+// =========================================================
+// PUBLIC API
+// =========================================================
   return {
     init,
     saveCredentials,
@@ -563,6 +604,9 @@ const DirectAPI = (function () {
     showAuthButton: () => updateStatusCard()
   };
 })();
+
+// Make DirectAPI available globally
+window.DirectAPI = DirectAPI;
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
