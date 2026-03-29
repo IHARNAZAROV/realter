@@ -38,6 +38,7 @@ const DirectAPI = (function () {
     setupEventListeners();
     initializeInstructions();
     handleOAuthCallback();
+    syncInitialFiltersFromUI();
     
     if (state.isAuthenticated && state.credentials?.token) {
       showAnalytics();
@@ -60,6 +61,20 @@ const DirectAPI = (function () {
       }
     } catch (e) {
       console.error('Error loading config:', e);
+    }
+  }
+
+  function syncInitialFiltersFromUI() {
+    const periodFilter = document.getElementById('periodFilter');
+    if (!periodFilter) return;
+
+    if (periodFilter.value === 'custom') {
+      return;
+    }
+
+    const parsed = parseInt(periodFilter.value, 10);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      state.filters.period = parsed;
     }
   }
 

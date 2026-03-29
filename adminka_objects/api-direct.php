@@ -55,9 +55,18 @@ function resolveDateRange($filters) {
     $today = date('Y-m-d');
 
     if (!empty($filters['dateFrom']) && !empty($filters['dateTo'])) {
+        $dateFrom = $filters['dateFrom'];
+        $dateTo = $filters['dateTo'];
+
+        if ($dateFrom > $dateTo) {
+            $tmp = $dateFrom;
+            $dateFrom = $dateTo;
+            $dateTo = $tmp;
+        }
+
         return [
-            'dateFrom' => $filters['dateFrom'],
-            'dateTo' => $filters['dateTo']
+            'dateFrom' => $dateFrom,
+            'dateTo' => $dateTo
         ];
     }
 
@@ -66,8 +75,11 @@ function resolveDateRange($filters) {
         $period = 7;
     }
 
+    // "N дней" = today + previous (N-1) full days
+    $daysBack = max(0, $period - 1);
+
     return [
-        'dateFrom' => date('Y-m-d', strtotime("-{$period} days")),
+        'dateFrom' => date('Y-m-d', strtotime("-{$daysBack} days")),
         'dateTo' => $today
     ];
 }
