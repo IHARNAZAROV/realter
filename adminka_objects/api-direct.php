@@ -507,7 +507,8 @@ function getCampaigns($token, $login, $filters) {
 
         $technicalBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Device', 'realter_technical');
         $demographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Age', 'realter_demography');
-        $geographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'RegionName', 'realter_geography');
+        // Geography in Direct reports is provided via LocationOfPresenceName
+        $geographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'LocationOfPresenceName', 'realter_geography');
 
         return [
             'campaigns' => $campaigns,
