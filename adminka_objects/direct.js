@@ -1,0 +1,570 @@
+"use strict";
+
+/* =============================================================
+   ЯНДЕКС ДИРЕКТ API - MAIN SCRIPT
+============================================================= */
+
+const DirectAPI = (function () {
+  // =========================================================
+  // STATE
+  // =========================================================
+  let state = {
+    isAuthenticated: false,
+    credentials: null,
+    campaigns: [],
+    currentData: null,
+    filters: {
+      period: 7,
+      dateFrom: null,
+      dateTo: null,
+      device: 'all',
+      campaign: ''
+    },
+    sortBy: 'name',
+    sortDir: 'asc',
+    searchQuery: ''
+  };
+
+  const CONFIG_KEY = 'directApiConfig';
+  const CACHE_KEY = 'directApiCache';
+
+  // =========================================================
+  // INITIALIZATION
+  // =========================================================
+  function init() {
+    loadConfig();
+    setupEventListeners();
+    initializeInstructions();
+    
+    if (state.isAuthenticated && state.credentials?.token) {
+      showAnalytics();
+      loadData();
+    } else {
+      showInstructions();
+    }
+  }
+
+  // =========================================================
+  // CONFIG MANAGEMENT
+  // =========================================================
+  function loadConfig() {
+    try {
+      const stored = localStorage.getItem(CONFIG_KEY);
+      if (stored) {
+        const config = JSON.parse(stored);
+        state.credentials = config;
+        state.isAuthenticated = !!(config.token && config.login);
+      }
+    } catch (e) {
+      console.error('Error loading config:', e);
+    }
+  }
+
+  function saveConfig(credentials) {
+    try {
+      state.credentials = credentials;
+      state.isAuthenticated = !!(credentials.token && credentials.login);
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(credentials));
+      updateStatusCard();
+      showAnalytics();
+      loadData();
+      showNotification('Учетные данные сохранены');
+    } catch (e) {
+      showError('Ошибка при сохранении конфигурации');
+      console.error(e);
+    }
+  }
+
+  function saveCredentials() {
+    const clientId = document.getElementById('clientId').value.trim();
+    const clientSecret = document.getElementById('clientSecret').value.trim();
+    const accountLogin = document.getElementById('accountLogin').value.trim();
+
+    if (!clientId || !clientSecret) {
+      showError('Заполните Client ID и Client Secret');
+      return;
+    }
+
+    // In production, exchange code for token via backend
+    // For now, we'll create a placeholder that will be filled by user
+    const credentials = {
+      clientId,
+      clientSecret,
+      login: accountLogin || 'unknown',
+      token: null,
+      lastSync: null
+    };
+
+    saveConfig(credentials);
+    
+    // Show authorization button
+    if (!credentials.token) {
+      showAuthButton();
+    }
+  }
+
+  // =========================================================
+  // UI UPDATES
+  // =========================================================
+  function updateStatusCard() {
+    const statusCard = document.getElementById('statusCard');
+    
+    if (!state.isAuthenticated || !state.credentials?.token) {
+      statusCard.innerHTML = `
+        <div class="status-icon">🔌</div>
+        <div class="status-content">
+          <h3>Статус подключения</h3>
+          <p>Яндекс Директ не подключен</p>
+          <button class="btn-primary" onclick="window.DirectAPI.showAuthForm()">
+            Подключить
+          </button>
+        </div>
+      `;
+    } else {
+      const lastSync = state.credentials.lastSync 
+        ? new Date(state.credentials.lastSync).toLocaleString('ru-RU')
+        : 'Никогда';
+      
+      statusCard.innerHTML = `
+        <div class="status-icon">✅</div>
+        <div class="status-content">
+          <h3>Статус подключения</h3>
+          <div class="status-details">
+            <div class="status-item">
+              <span class="label">Статус:</span>
+              <span class="value">Подключено</span>
+            </div>
+            <div class="status-item">
+              <span class="label">Логин кабинета:</span>
+              <span class="value">${state.credentials.login}</span>
+            </div>
+            <div class="status-item">
+              <span class="label">Последнее обновление:</span>
+              <span class="value">${lastSync}</span>
+            </div>
+          </div>
+          <button class="btn-secondary" onclick="window.DirectAPI.disconnect()">
+            Отключить
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  function showAnalytics() {
+    document.getElementById('statusSection').style.display = 'block';
+    document.getElementById('analyticsSection').style.display = 'block';
+    document.getElementById('instructionsSection').style.display = 'none';
+    updateStatusCard();
+  }
+
+  function showInstructions() {
+    document.getElementById('statusSection').style.display = 'block';
+    document.getElementById('analyticsSection').style.display = 'none';
+    document.getElementById('instructionsSection').style.display = 'block';
+    
+    // Auto-expand instructions if no auth
+    const instructionsCard = document.querySelector('.instructions-card');
+    if (instructionsCard && !state.isAuthenticated) {
+      instructionsCard.classList.add('expanded');
+    }
+  }
+
+  function showAuthForm() {
+    const instructionsCard = document.querySelector('.instructions-card');
+    instructionsCard.classList.add('expanded');
+    document.getElementById('clientId').focus();
+  }
+
+  // =========================================================
+  // DATA LOADING AND CACHING
+  // =========================================================
+  async function loadData() {
+    if (!state.credentials?.token) {
+      showError('Требуется авторизация');
+      return;
+    }
+
+    try {
+      // Show loading state
+      document.getElementById('campaignsTableBody').innerHTML = 
+        '<tr class="empty-row"><td colspan="5">Загрузка данных...</td></tr>';
+
+      // Call backend API
+      const response = await fetch('/adminka_objects/api-direct.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'getCampaigns',
+          token: state.credentials.token,
+          login: state.credentials.login,
+          filters: state.filters
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        showError(data.error || 'Ошибка при загрузке данных');
+        return;
+      }
+
+      state.currentData = data.data;
+      state.campaigns = data.data.campaigns || [];
+      
+      // Update UI
+      updateStatsCards();
+      renderCampaignsTable();
+      updateAnalyticsCards();
+      updateCampaignFilter();
+
+      // Update last sync time
+      if (state.credentials) {
+        state.credentials.lastSync = new Date().toISOString();
+        localStorage.setItem(CONFIG_KEY, JSON.stringify(state.credentials));
+      }
+
+      showNotification('Данные обновлены');
+    } catch (error) {
+      showError(`Ошибка: ${error.message}`);
+      console.error(error);
+    }
+  }
+
+  // =========================================================
+  // STATS CARDS UPDATE
+  // =========================================================
+  function updateStatsCards() {
+    if (!state.currentData) return;
+
+    const data = state.currentData;
+
+    // Total spent
+    const totalSpent = formatCurrency(data.totalCost);
+    document.getElementById('totalSpent').textContent = totalSpent;
+    updateChangeDiv('totalSpentChange', data.costChange);
+
+    // Total clicks
+    const totalClicks = formatNumber(data.totalClicks);
+    document.getElementById('totalClicks').textContent = totalClicks;
+    updateChangeDiv('totalClicksChange', data.clicksChange);
+
+    // Total impressions
+    const totalImpressions = formatNumber(data.totalImpressions);
+    document.getElementById('totalImpressions').textContent = totalImpressions;
+    updateChangeDiv('totalImpressionsChange', data.impressionsChange);
+
+    // Average CTR
+    const avgCtr = data.avgCtr.toFixed(2) + '%';
+    document.getElementById('avgCtr').textContent = avgCtr;
+    updateChangeDiv('avgCtrChange', data.ctrChange);
+  }
+
+  function updateChangeDiv(elementId, changePercent) {
+    const el = document.getElementById(elementId);
+    if (!changePercent) {
+      el.textContent = '';
+      return;
+    }
+
+    const isPositive = changePercent > 0;
+    const sign = isPositive ? '+' : '';
+    
+    el.className = `stat-change ${isPositive ? 'positive' : 'negative'}`;
+    el.textContent = `${sign}${changePercent.toFixed(1)}%`;
+  }
+
+  // =========================================================
+  // CAMPAIGNS TABLE
+  // =========================================================
+  function renderCampaignsTable() {
+    const tbody = document.getElementById('campaignsTableBody');
+
+    if (!state.campaigns || state.campaigns.length === 0) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Нет данных</td></tr>';
+      return;
+    }
+
+    let filtered = [...state.campaigns];
+
+    // Filter by search
+    if (state.searchQuery) {
+      const query = state.searchQuery.toLowerCase();
+      filtered = filtered.filter(c => c.name.toLowerCase().includes(query));
+    }
+
+    // Filter by campaign
+    if (state.filters.campaign) {
+      filtered = filtered.filter(c => c.id.toString() === state.filters.campaign);
+    }
+
+    // Sort
+    filtered.sort((a, b) => {
+      let aVal = a[state.sortBy];
+      let bVal = b[state.sortBy];
+
+      if (typeof aVal === 'string') {
+        aVal = aVal.toLowerCase();
+        bVal = bVal.toLowerCase();
+      }
+
+      if (state.sortDir === 'asc') {
+        return aVal > bVal ? 1 : -1;
+      } else {
+        return aVal < bVal ? 1 : -1;
+      }
+    });
+
+    tbody.innerHTML = filtered.map(campaign => `
+      <tr>
+        <td>${escapeHtml(campaign.name)}</td>
+        <td>${formatNumber(campaign.impressions)}</td>
+        <td>${formatNumber(campaign.clicks)}</td>
+        <td>${campaign.ctr.toFixed(2)}%</td>
+        <td>${formatCurrency(campaign.cost)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function updateCampaignFilter() {
+    const select = document.getElementById('campaignFilter');
+    const currentValue = select.value;
+
+    const options = ['<option value="">Все кампании</option>'];
+    if (state.campaigns) {
+      state.campaigns.forEach(c => {
+        options.push(`<option value="${c.id}">${escapeHtml(c.name)}</option>`);
+      });
+    }
+
+    select.innerHTML = options.join('');
+    select.value = currentValue;
+  }
+
+  // =========================================================
+  // ANALYTICS CARDS
+  // =========================================================
+  function updateAnalyticsCards() {
+    if (!state.campaigns || state.campaigns.length === 0) {
+      return;
+    }
+
+    // Most expensive
+    const mostExpensive = [...state.campaigns].sort((a, b) => b.cost - a.cost)[0];
+    if (mostExpensive) {
+      document.getElementById('mostExpensiveCampaign').textContent = escapeHtml(mostExpensive.name);
+      document.getElementById('mostExpensiveCost').textContent = formatCurrency(mostExpensive.cost);
+    }
+
+    // Best CTR
+    const bestCtr = [...state.campaigns].sort((a, b) => b.ctr - a.ctr)[0];
+    if (bestCtr) {
+      document.getElementById('bestCtrCampaign').textContent = escapeHtml(bestCtr.name);
+      document.getElementById('bestCtrValue').textContent = bestCtr.ctr.toFixed(2) + '%';
+    }
+
+    // Most clicks
+    const mostClicks = [...state.campaigns].sort((a, b) => b.clicks - a.clicks)[0];
+    if (mostClicks) {
+      document.getElementById('mostClicksCampaign').textContent = escapeHtml(mostClicks.name);
+      document.getElementById('mostClicksCount').textContent = formatNumber(mostClicks.clicks) + ' кликов';
+    }
+
+    // Worst performing (lowest CTR)
+    const worstPerforming = [...state.campaigns].sort((a, b) => a.ctr - b.ctr)[0];
+    if (worstPerforming) {
+      document.getElementById('worstPerformingCampaign').textContent = escapeHtml(worstPerforming.name);
+      document.getElementById('worstPerformingDetail').textContent = worstPerforming.ctr.toFixed(2) + '% CTR';
+    }
+  }
+
+  // =========================================================
+  // FILTERS AND SEARCH
+  // =========================================================
+  function handlePeriodChange() {
+    const value = document.getElementById('periodFilter').value;
+    const customRange = document.getElementById('customDateRange');
+
+    if (value === 'custom') {
+      customRange.style.display = 'flex';
+    } else {
+      customRange.style.display = 'none';
+      state.filters.period = parseInt(value);
+      state.filters.dateFrom = null;
+      state.filters.dateTo = null;
+      loadData();
+    }
+  }
+
+  function handleCustomDateRange() {
+    const from = document.getElementById('dateFrom').value;
+    const to = document.getElementById('dateTo').value;
+
+    if (!from || !to) {
+      showError('Укажите обе даты');
+      return;
+    }
+
+    state.filters.dateFrom = from;
+    state.filters.dateTo = to;
+    state.filters.period = null;
+    loadData();
+  }
+
+  function handleFilterChange() {
+    const device = document.getElementById('deviceFilter').value;
+    const campaign = document.getElementById('campaignFilter').value;
+
+    state.filters.device = device;
+    state.filters.campaign = campaign;
+
+    // Re-render table with new filters
+    renderCampaignsTable();
+  }
+
+  function setupSearchListener() {
+    const searchInput = document.getElementById('tableSearch');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        state.searchQuery = e.target.value;
+        renderCampaignsTable();
+      });
+    }
+  }
+
+  function sortTable(column) {
+    if (state.sortBy === column) {
+      state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      state.sortBy = column;
+      state.sortDir = 'asc';
+    }
+    renderCampaignsTable();
+  }
+
+  function refreshData() {
+    loadData();
+  }
+
+  // =========================================================
+  // DISCONNECT
+  // =========================================================
+  function disconnect() {
+    if (!confirm('Вы уверены? Эта кабина будет отключена.')) {
+      return;
+    }
+
+    state.isAuthenticated = false;
+    state.credentials = null;
+    localStorage.removeItem(CONFIG_KEY);
+    
+    showInstructions();
+    document.getElementById('clientId').value = '';
+    document.getElementById('clientSecret').value = '';
+    document.getElementById('accountLogin').value = '';
+    
+    showNotification('Отключено от Яндекс Директ');
+  }
+
+  // =========================================================
+  // ERROR AND NOTIFICATION HANDLING
+  // =========================================================
+  function showError(message) {
+    const container = document.getElementById('errorContainer');
+    
+    const errorEl = document.createElement('div');
+    errorEl.className = 'error-message';
+    errorEl.innerHTML = `
+      <span>⚠️ ${escapeHtml(message)}</span>
+      <button onclick="this.parentElement.remove()">✕</button>
+    `;
+    
+    container.appendChild(errorEl);
+
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      errorEl.remove();
+    }, 5000);
+  }
+
+  function showNotification(message) {
+    const notif = document.getElementById('notification');
+    notif.textContent = '✓ ' + message;
+    notif.classList.add('show');
+
+    setTimeout(() => {
+      notif.classList.remove('show');
+    }, 3000);
+  }
+
+  // =========================================================
+  // UTILITIES
+  // =========================================================
+  function formatCurrency(value) {
+    if (typeof value !== 'number') return '—';
+    return new Intl.NumberFormat('ru-RU', {
+      style: 'currency',
+      currency: 'BYN',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(value);
+  }
+
+  function formatNumber(value) {
+    if (typeof value !== 'number') return '—';
+    return new Intl.NumberFormat('ru-RU').format(value);
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function initializeInstructions() {
+    const header = document.querySelector('.instructions-header');
+    if (header) {
+      header.addEventListener('click', function() {
+        this.parentElement.classList.toggle('expanded');
+      });
+    }
+  }
+
+  function setupEventListeners() {
+    setupSearchListener();
+
+    // Period filter change
+    const periodFilter = document.getElementById('periodFilter');
+    if (periodFilter) {
+      periodFilter.addEventListener('change', handlePeriodChange);
+    }
+  }
+
+  // =========================================================
+  // PUBLIC API
+  // =========================================================
+  return {
+    init,
+    saveCredentials,
+    showAuthForm,
+    disconnect,
+    handlePeriodChange,
+    handleCustomDateRange,
+    handleFilterChange,
+    sortTable,
+    refreshData,
+    loadData,
+    showAuthButton: () => updateStatusCard()
+  };
+})();
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  DirectAPI.init();
+});
