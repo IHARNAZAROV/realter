@@ -35,6 +35,7 @@ const DirectAPI = (function () {
     loadConfig();
     setupEventListeners();
     initializeInstructions();
+    handleOAuthCallback();
     
     if (state.isAuthenticated && state.credentials?.token) {
       showAnalytics();
@@ -66,9 +67,15 @@ const DirectAPI = (function () {
       state.isAuthenticated = !!(credentials.token && credentials.login);
       localStorage.setItem(CONFIG_KEY, JSON.stringify(credentials));
       updateStatusCard();
-      showAnalytics();
-      loadData();
-      showNotification('Учетные данные сохранены');
+      
+      // Only show analytics if we have a token
+      if (state.isAuthenticated) {
+        showAnalytics();
+        loadData();
+        showNotification('Подключено к Яндекс Директ');
+      } else {
+        showNotification('Учетные данные сохранены');
+      }
     } catch (e) {
       showError('Ошибка при сохранении конфигурации');
       console.error(e);
@@ -97,9 +104,13 @@ const DirectAPI = (function () {
 
     saveConfig(credentials);
     
-    // Show authorization button
-    if (!credentials.token) {
-      showAuthButton();
+    if (credentials.token) {
+      // Already have token, show analytics
+      showAnalytics();
+      loadData();
+    } else {
+      // Need to complete oauth flow
+      updateStatusCard();
     }
   }
 
@@ -110,17 +121,44 @@ const DirectAPI = (function () {
     const statusCard = document.getElementById('statusCard');
     
     if (!state.isAuthenticated || !state.credentials?.token) {
-      statusCard.innerHTML = `
-        <div class="status-icon">🔌</div>
-        <div class="status-content">
-          <h3>Статус подключения</h3>
-          <p>Яндекс Директ не подключен</p>
-          <button class="btn-primary" onclick="window.DirectAPI.showAuthForm()">
-            Подключить
-          </button>
-        </div>
-      `;
+      // Not authenticated yet
+      if (state.credentials?.clientId && state.credentials?.clientSecret) {
+        // Have credentials, show authorize button
+        statusCard.innerHTML = `
+          <div class="status-icon">🔐</div>
+          <div class="status-content">
+            <h3>Статус подключения</h3>
+            <p>Учетные данные сохранены. Нажмите для авторизации.</p>
+            <button class="btn-primary" id="authorizeBtn">
+              🔗 Авторизоваться
+            </button>
+          </div>
+        `;
+        // Add event listener
+        const authorizeBtn = document.getElementById('authorizeBtn');
+        if (authorizeBtn) {
+          authorizeBtn.addEventListener('click', initiateOAuthFlow);
+        }
+      } else {
+        // No credentials yet
+        statusCard.innerHTML = `
+          <div class="status-icon">🔌</div>
+          <div class="status-content">
+            <h3>Статус подключения</h3>
+            <p>Яндекс Директ не подключен</p>
+            <button class="btn-primary" id="connectBtn">
+              Подключить
+            </button>
+          </div>
+        `;
+        // Ensure connect button listener is set
+        const connectBtn = document.getElementById('connectBtn');
+        if (connectBtn) {
+          connectBtn.addEventListener('click', showAuthForm);
+        }
+      }
     } else {
+      // Authenticated with token
       const lastSync = state.credentials.lastSync 
         ? new Date(state.credentials.lastSync).toLocaleString('ru-RU')
         : 'Никогда';
@@ -143,11 +181,16 @@ const DirectAPI = (function () {
               <span class="value">${lastSync}</span>
             </div>
           </div>
-          <button class="btn-secondary" onclick="window.DirectAPI.disconnect()">
+          <button class="btn-secondary" id="disconnectBtn">
             Отключить
           </button>
         </div>
       `;
+      // Add event listener
+      const disconnectBtn = document.getElementById('disconnectBtn');
+      if (disconnectBtn) {
+        disconnectBtn.addEventListener('click', disconnect);
+      }
     }
   }
 
@@ -174,6 +217,92 @@ const DirectAPI = (function () {
     const instructionsCard = document.querySelector('.instructions-card');
     instructionsCard.classList.add('expanded');
     document.getElementById('clientId').focus();
+  }
+
+  function initiateOAuthFlow() {
+    const clientId = document.getElementById('clientId').value.trim();
+    
+    if (!clientId) {
+      showError('Сначала введите и сохраните Client ID');
+      return;
+    }
+
+    // Generate authorization URL
+    const redirectUri = encodeURIComponent(window.location.origin + '/adminka_objects/direct.html');
+    const authUrl = `https://oauth.yandex.ru/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`;
+    
+    // Redirect to OAuth server
+    window.location.href = authUrl;
+  }
+
+  function handleOAuthCallback() {
+    // Check if we have authorization code in URL
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const error = params.get('error');
+
+    if (error) {
+      showError(`Ошибка авторизации: ${error}`);
+      return;
+    }
+
+    if (code) {
+      // Exchange code for token
+      const clientId = document.getElementById('clientId').value.trim();
+      const clientSecret = document.getElementById('clientSecret').value.trim();
+
+      if (!clientId || !clientSecret) {
+        showError('Введите Client ID и Client Secret');
+        return;
+      }
+
+      exchangeCodeForToken(code, clientId, clientSecret);
+    }
+  }
+
+  async function exchangeCodeForToken(code, clientId, clientSecret) {
+    try {
+      const response = await fetch('/adminka_objects/api-direct.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'exchangeCode',
+          code,
+          clientId,
+          clientSecret
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        showError(data.error || 'Ошибка при получении токена');
+        return;
+      }
+
+      // Save token
+      if (state.credentials) {
+        state.credentials.token = data.data.token;
+        state.credentials.lastSync = new Date().toISOString();
+        saveConfig(state.credentials);
+        showAnalytics();
+        loadData();
+        showNotification('Успешно подключено к Яндекс Директ');
+      }
+
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+
+    } catch (error) {
+      showError(`Ошибка: ${error.message}`);
+      console.error(error);
+    }
   }
 
   // =========================================================
@@ -545,12 +674,6 @@ const DirectAPI = (function () {
       periodFilter.addEventListener('change', handlePeriodChange);
     }
 
-    // Button events
-    const connectBtn = document.getElementById('connectBtn');
-    if (connectBtn) {
-      connectBtn.addEventListener('click', showAuthForm);
-    }
-
     const saveCredsBtn = document.querySelector('[data-action="save-credentials"]');
     if (saveCredsBtn) {
       saveCredsBtn.addEventListener('click', saveCredentials);
@@ -601,7 +724,8 @@ const DirectAPI = (function () {
     sortTable,
     refreshData,
     loadData,
-    showAuthButton: () => updateStatusCard()
+    updateStatusCard,
+    initiateOAuthFlow
   };
 })();
 
