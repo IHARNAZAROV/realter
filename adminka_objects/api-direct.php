@@ -70,9 +70,9 @@ function resolveDateRange($filters) {
         ];
     }
 
-    $period = isset($filters['period']) ? (int)$filters['period'] : 7;
+    $period = isset($filters['period']) ? (int)$filters['period'] : 1;
     if ($period <= 0) {
-        $period = 7;
+        $period = 1;
     }
 
     // "N дней" = today + previous (N-1) full days
@@ -597,7 +597,7 @@ switch ($action) {
         }
         
         $filters = $input['filters'] ?? [
-            'period' => 7,
+            'period' => 1,
             'dateFrom' => null,
             'dateTo' => null,
             'device' => 'all',

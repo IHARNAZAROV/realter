@@ -12,9 +12,10 @@ const DirectAPI = (function () {
     isAuthenticated: false,
     credentials: null,
     campaigns: [],
+    allCampaigns: [],
     currentData: null,
     filters: {
-      period: 7,
+      period: 1,
       dateFrom: null,
       dateTo: null,
       device: 'all',
@@ -415,7 +416,14 @@ const DirectAPI = (function () {
       }
 
       state.currentData = data.data;
-      state.campaigns = data.data.campaigns || [];
+
+      const campaignsFromResponse = data.data.campaigns || [];
+      if (state.filters.campaign) {
+        state.campaigns = state.allCampaigns.length ? [...state.allCampaigns] : campaignsFromResponse;
+      } else {
+        state.allCampaigns = [...campaignsFromResponse];
+        state.campaigns = [...campaignsFromResponse];
+      }
       
       // Update UI
       updateStatsCards();
@@ -477,6 +485,47 @@ const DirectAPI = (function () {
     renderBreakdown('geographyBreakdown', data.breakdowns?.geography, 'Регион');
   }
 
+
+  function formatTechnicalLabel(rawLabel) {
+    const normalized = String(rawLabel || '').trim().toUpperCase();
+    const labels = {
+      MOBILE: 'Мобильные устройства',
+      DESKTOP: 'Компьютеры',
+      TABLET: 'Планшеты',
+      SMART_TV: 'Смарт-ТВ',
+      UNKNOWN: 'Не определено'
+    };
+
+    return labels[normalized] || rawLabel || 'Не определено';
+  }
+
+  function formatAgeLabel(rawLabel) {
+    const normalized = String(rawLabel || '').trim().toUpperCase();
+    const labels = {
+      AGE_0_17: 'До 18 лет',
+      AGE_18_24: '18–24 года',
+      AGE_25_34: '25–34 года',
+      AGE_35_44: '35–44 года',
+      AGE_45_54: '45–54 года',
+      AGE_55: '55 лет и старше',
+      UNKNOWN: 'Возраст не определён'
+    };
+
+    return labels[normalized] || rawLabel || 'Не определено';
+  }
+
+  function humanizeBreakdownLabel(containerId, label) {
+    if (containerId === 'technicalBreakdown') {
+      return formatTechnicalLabel(label);
+    }
+
+    if (containerId === 'demographyBreakdown') {
+      return formatAgeLabel(label);
+    }
+
+    return label || 'Не определено';
+  }
+
   function renderBreakdown(containerId, items, fallbackTitle) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -488,7 +537,7 @@ const DirectAPI = (function () {
 
     container.innerHTML = items.map(item => `
       <div class="insight-row">
-        <strong>${escapeHtml(item.label || 'Не определено')}</strong>
+        <strong>${escapeHtml(humanizeBreakdownLabel(containerId, item.label))}</strong>
         <span>${formatNumber(item.impressions || 0)} показов</span>
         <span>${formatNumber(item.clicks || 0)} кликов</span>
         <span>${formatCurrency(Number(item.cost || 0))}</span>
@@ -529,11 +578,6 @@ const DirectAPI = (function () {
       filtered = filtered.filter(c => c.name.toLowerCase().includes(query));
     }
 
-    // Filter by campaign
-    if (state.filters.campaign) {
-      filtered = filtered.filter(c => c.id.toString() === state.filters.campaign);
-    }
-
     // Sort
     filtered.sort((a, b) => {
       let aVal = a[state.sortBy];
@@ -551,24 +595,59 @@ const DirectAPI = (function () {
       }
     });
 
-    tbody.innerHTML = filtered.map(campaign => `
-      <tr>
+    tbody.innerHTML = filtered.map(campaign => {
+      const isSelected = state.filters.campaign && state.filters.campaign === String(campaign.id);
+
+      return `
+      <tr class="campaign-row ${isSelected ? 'campaign-row--selected' : ''}" data-campaign-id="${campaign.id}" tabindex="0" role="button" aria-label="Фильтровать по кампании ${escapeHtml(campaign.name)}">
         <td>${escapeHtml(campaign.name)}</td>
         <td>${formatNumber(campaign.impressions)}</td>
         <td>${formatNumber(campaign.clicks)}</td>
         <td>${campaign.ctr.toFixed(2)}%</td>
         <td>${formatCurrency(campaign.cost)}</td>
       </tr>
-    `).join('');
+    `;
+    }).join('');
+
+    setupCampaignRowListeners();
+  }
+
+
+  function setCampaignFilterAndReload(campaignId) {
+    state.filters.campaign = campaignId;
+
+    const campaignSelect = document.getElementById('campaignFilter');
+    if (campaignSelect) {
+      campaignSelect.value = campaignId;
+    }
+
+    loadData();
+  }
+
+  function setupCampaignRowListeners() {
+    document.querySelectorAll('#campaignsTableBody tr[data-campaign-id]').forEach((row) => {
+      row.addEventListener('click', () => {
+        const campaignId = row.getAttribute('data-campaign-id') || '';
+        setCampaignFilterAndReload(campaignId);
+      });
+
+      row.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          const campaignId = row.getAttribute('data-campaign-id') || '';
+          setCampaignFilterAndReload(campaignId);
+        }
+      });
+    });
   }
 
   function updateCampaignFilter() {
     const select = document.getElementById('campaignFilter');
-    const currentValue = select.value;
+    const currentValue = state.filters.campaign || select.value;
 
     const options = ['<option value="">Все кампании</option>'];
-    if (state.campaigns) {
-      state.campaigns.forEach(c => {
+    if (state.allCampaigns) {
+      state.allCampaigns.forEach(c => {
         options.push(`<option value="${c.id}">${escapeHtml(c.name)}</option>`);
       });
     }
@@ -650,9 +729,15 @@ const DirectAPI = (function () {
   function handleFilterChange() {
     const device = document.getElementById('deviceFilter').value;
     const campaign = document.getElementById('campaignFilter').value;
+    const previousCampaign = state.filters.campaign;
 
     state.filters.device = device;
     state.filters.campaign = campaign;
+
+    if (previousCampaign !== campaign) {
+      loadData();
+      return;
+    }
 
     // Re-render table with new filters
     renderCampaignsTable();
@@ -698,6 +783,9 @@ const DirectAPI = (function () {
 
     state.isAuthenticated = false;
     state.credentials = null;
+    state.campaigns = [];
+    state.allCampaigns = [];
+    state.currentData = null;
     localStorage.removeItem(CONFIG_KEY);
     
     showInstructions();
