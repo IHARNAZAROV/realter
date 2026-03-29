@@ -278,6 +278,21 @@ function getCampaigns($token, $login, $filters) {
         $campaignsResponse = makeDirectJsonApiRequest($campaignsUrl, $campaignsRequest, $token, $login);
         $apiCampaigns = $campaignsResponse['result']['Campaigns'] ?? [];
 
+        $campaignScope = (string)($filters['campaignScope'] ?? 'all_except_archived');
+        if ($campaignScope === 'all_except_archived') {
+            $apiCampaigns = array_values(array_filter($apiCampaigns, function ($campaign) {
+                $state = strtoupper((string)($campaign['State'] ?? ''));
+                return $state !== 'ARCHIVED' && $state !== 'CONVERTED';
+            }));
+        }
+
+        $selectedCampaignId = isset($filters['campaign']) ? (int)$filters['campaign'] : 0;
+        if ($selectedCampaignId > 0) {
+            $apiCampaigns = array_values(array_filter($apiCampaigns, function ($campaign) use ($selectedCampaignId) {
+                return (int)($campaign['Id'] ?? 0) === $selectedCampaignId;
+            }));
+        }
+
         if (!is_array($apiCampaigns) || count($apiCampaigns) === 0) {
             return [
                 'campaigns' => [],
@@ -445,7 +460,8 @@ switch ($action) {
             'dateFrom' => null,
             'dateTo' => null,
             'device' => 'all',
-            'campaign' => ''
+            'campaign' => '',
+            'campaignScope' => 'all_except_archived'
         ];
         
         try {

@@ -18,7 +18,8 @@ const DirectAPI = (function () {
       dateFrom: null,
       dateTo: null,
       device: 'all',
-      campaign: ''
+      campaign: '',
+      campaignScope: 'all_except_archived'
     },
     sortBy: 'name',
     sortDir: 'asc',
@@ -611,6 +612,12 @@ const DirectAPI = (function () {
     renderCampaignsTable();
   }
 
+  function handleCampaignScopeChange() {
+    const campaignScope = document.getElementById('campaignScopeFilter').value;
+    state.filters.campaignScope = campaignScope || 'all_except_archived';
+    loadData();
+  }
+
   function setupSearchListener() {
     const searchInput = document.getElementById('tableSearch');
     if (searchInput) {
@@ -758,6 +765,12 @@ const DirectAPI = (function () {
       campaignSelect.addEventListener('change', handleFilterChange);
     }
 
+    const campaignScopeSelect = document.getElementById('campaignScopeFilter');
+    if (campaignScopeSelect) {
+      campaignScopeSelect.value = state.filters.campaignScope || 'all_except_archived';
+      campaignScopeSelect.addEventListener('change', handleCampaignScopeChange);
+    }
+
     // Table header clicks for sorting
     document.querySelectorAll('.campaigns-table th[data-sort]').forEach(th => {
       th.addEventListener('click', function() {
@@ -778,6 +791,7 @@ const DirectAPI = (function () {
     showAuthForm,
     disconnect,
     handlePeriodChange,
+    handleCampaignScopeChange,
     handleCustomDateRange,
     handleFilterChange,
     sortTable,
