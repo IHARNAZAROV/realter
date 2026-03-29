@@ -38,6 +38,7 @@ const DirectAPI = (function () {
     setupEventListeners();
     initializeInstructions();
     handleOAuthCallback();
+    syncInitialFiltersFromUI();
     
     if (state.isAuthenticated && state.credentials?.token) {
       showAnalytics();
@@ -60,6 +61,20 @@ const DirectAPI = (function () {
       }
     } catch (e) {
       console.error('Error loading config:', e);
+    }
+  }
+
+  function syncInitialFiltersFromUI() {
+    const periodFilter = document.getElementById('periodFilter');
+    if (!periodFilter) return;
+
+    if (periodFilter.value === 'custom') {
+      return;
+    }
+
+    const parsed = parseInt(periodFilter.value, 10);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      state.filters.period = parsed;
     }
   }
 
@@ -201,10 +216,10 @@ const DirectAPI = (function () {
               <span class="value">${lastSync}</span>
             </div>
           </div>
-          <button class="btn-secondary" id="disconnectBtn">
-            Отключить
-          </button>
         </div>
+        <button class="btn-secondary" id="disconnectBtn">
+            Отключить
+        </button>
       `;
       // Add event listener
       const disconnectBtn = document.getElementById('disconnectBtn');
@@ -448,6 +463,37 @@ const DirectAPI = (function () {
     const avgCtr = data.avgCtr.toFixed(2) + '%';
     document.getElementById('avgCtr').textContent = avgCtr;
     updateChangeDiv('avgCtrChange', data.ctrChange);
+
+    const avgCpc = typeof data.avgCpc === 'number' ? formatCurrency(data.avgCpc) : '—';
+    const cpm = typeof data.cpm === 'number' ? `${data.cpm.toFixed(2)} BYN` : '—';
+    document.getElementById('avgCpc').textContent = avgCpc;
+    document.getElementById('cpmValue').textContent = cpm;
+
+    const activeCount = data.statusCounts?.ON ?? 0;
+    document.getElementById('activeCampaignsCount').textContent = formatNumber(activeCount);
+
+    renderBreakdown('technicalBreakdown', data.breakdowns?.technical, 'Тех. сегмент');
+    renderBreakdown('demographyBreakdown', data.breakdowns?.demography, 'Демография');
+    renderBreakdown('geographyBreakdown', data.breakdowns?.geography, 'Регион');
+  }
+
+  function renderBreakdown(containerId, items, fallbackTitle) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      container.innerHTML = `<div class="insight-empty">${fallbackTitle}: нет данных в текущем отчёте</div>`;
+      return;
+    }
+
+    container.innerHTML = items.map(item => `
+      <div class="insight-row">
+        <strong>${escapeHtml(item.label || 'Не определено')}</strong>
+        <span>${formatNumber(item.impressions || 0)} показов</span>
+        <span>${formatNumber(item.clicks || 0)} кликов</span>
+        <span>${formatCurrency(Number(item.cost || 0))}</span>
+      </div>
+    `).join('');
   }
 
   function updateChangeDiv(elementId, changePercent) {
