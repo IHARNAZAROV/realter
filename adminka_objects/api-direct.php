@@ -271,6 +271,101 @@ function parseTsvReport($tsvBody) {
 }
 
 /**
+ * Parse TSV into grouped breakdown by dimension
+ */
+function parseBreakdownReport($tsvBody, $dimensionField) {
+    $lines = preg_split('/\r\n|\n|\r/', trim((string)$tsvBody));
+    if (!$lines || count($lines) < 2) {
+        return [];
+    }
+
+    $headers = str_getcsv(array_shift($lines), "\t");
+    $totals = [];
+
+    foreach ($lines as $line) {
+        if ($line === '') {
+            continue;
+        }
+        $columns = str_getcsv($line, "\t");
+        if (count($columns) !== count($headers)) {
+            continue;
+        }
+        $row = array_combine($headers, $columns);
+        if ($row === false) {
+            continue;
+        }
+
+        $label = trim((string)($row[$dimensionField] ?? 'Не определено'));
+        if ($label === '') {
+            $label = 'Не определено';
+        }
+
+        if (!isset($totals[$label])) {
+            $totals[$label] = [
+                'label' => $label,
+                'impressions' => 0,
+                'clicks' => 0,
+                'cost' => 0.0
+            ];
+        }
+
+        $totals[$label]['impressions'] += (int)($row['Impressions'] ?? 0);
+        $totals[$label]['clicks'] += (int)($row['Clicks'] ?? 0);
+        $totals[$label]['cost'] += (float)($row['Cost'] ?? 0);
+    }
+
+    $items = array_values($totals);
+    usort($items, function ($a, $b) {
+        return $b['clicks'] <=> $a['clicks'];
+    });
+
+    return array_slice($items, 0, 8);
+}
+
+/**
+ * Optional breakdown report; returns [] if API does not support requested dimension
+ */
+function fetchBreakdownReport($token, $login, $dateRange, $campaignIds, $dimensionField, $reportNamePrefix) {
+    if (!$campaignIds) {
+        return [];
+    }
+
+    try {
+        $request = [
+            'params' => [
+                'SelectionCriteria' => [
+                    'DateFrom' => $dateRange['dateFrom'],
+                    'DateTo' => $dateRange['dateTo'],
+                    'Filter' => [
+                        [
+                            'Field' => 'CampaignId',
+                            'Operator' => 'IN',
+                            'Values' => array_map('strval', $campaignIds)
+                        ]
+                    ]
+                ],
+                'FieldNames' => [$dimensionField, 'Impressions', 'Clicks', 'Cost'],
+                'ReportName' => $reportNamePrefix . '_' . date('Ymd_His'),
+                'ReportType' => 'CUSTOM_REPORT',
+                'DateRangeType' => 'CUSTOM_DATE',
+                'Format' => 'TSV',
+                'IncludeVAT' => 'NO',
+                'IncludeDiscount' => 'NO'
+            ]
+        ];
+
+        $reportBody = makeDirectReportRequest($request, $token, $login);
+        return parseBreakdownReport($reportBody, $dimensionField);
+    } catch (Throwable $e) {
+        logDirectDebug('Optional breakdown unavailable', [
+            'dimension' => $dimensionField,
+            'message' => $e->getMessage()
+        ]);
+        return [];
+    }
+}
+
+/**
  * Get campaigns from Yandex Direct API (real data)
  */
 function getCampaigns($token, $login, $filters) {
@@ -312,6 +407,10 @@ function getCampaigns($token, $login, $filters) {
                 'totalClicks' => 0,
                 'totalCost' => 0,
                 'avgCtr' => 0,
+                'avgCpc' => 0,
+                'cpm' => 0,
+                'statusCounts' => ['ON' => 0, 'OFF' => 0, 'SUSPENDED' => 0, 'ENDED' => 0, 'UNKNOWN' => 0],
+                'breakdowns' => ['technical' => [], 'demography' => [], 'geography' => []],
                 'impressionsChange' => 0,
                 'clicksChange' => 0,
                 'costChange' => 0,
@@ -388,6 +487,27 @@ function getCampaigns($token, $login, $filters) {
         }
 
         $avgCtr = $totalImpressions > 0 ? ($totalClicks / $totalImpressions) * 100 : 0;
+        $avgCpc = $totalClicks > 0 ? $totalCost / $totalClicks : 0;
+        $cpm = $totalImpressions > 0 ? ($totalCost / $totalImpressions) * 1000 : 0;
+
+        $statusCounts = [
+            'ON' => 0,
+            'OFF' => 0,
+            'SUSPENDED' => 0,
+            'ENDED' => 0,
+            'UNKNOWN' => 0
+        ];
+        foreach ($apiCampaigns as $campaign) {
+            $state = strtoupper((string)($campaign['State'] ?? 'UNKNOWN'));
+            if (!array_key_exists($state, $statusCounts)) {
+                $state = 'UNKNOWN';
+            }
+            $statusCounts[$state]++;
+        }
+
+        $technicalBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Device', 'realter_technical');
+        $demographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Age', 'realter_demography');
+        $geographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'RegionName', 'realter_geography');
 
         return [
             'campaigns' => $campaigns,
@@ -395,6 +515,14 @@ function getCampaigns($token, $login, $filters) {
             'totalClicks' => $totalClicks,
             'totalCost' => round($totalCost, 2),
             'avgCtr' => round($avgCtr, 2),
+            'avgCpc' => round($avgCpc, 2),
+            'cpm' => round($cpm, 2),
+            'statusCounts' => $statusCounts,
+            'breakdowns' => [
+                'technical' => $technicalBreakdown,
+                'demography' => $demographyBreakdown,
+                'geography' => $geographyBreakdown
+            ],
             'impressionsChange' => 0,
             'clicksChange' => 0,
             'costChange' => 0,

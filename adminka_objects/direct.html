@@ -64,7 +64,7 @@
 
     <!-- Status block -->
     <section class="direct-section" id="statusSection">
-      <div class="status-card" id="statusCard">
+      <div class="status-card status-card--compact" id="statusCard">
         <div class="status-icon">🔌</div>
         <div class="status-content">
           <h3>Статус подключения</h3>
@@ -212,6 +212,43 @@
           <div class="stat-value" id="avgCtr">—</div>
           <div class="stat-change" id="avgCtrChange"></div>
         </div>
+      </div>
+
+      <div class="insights-groups">
+        <section class="insight-group">
+          <h3>🧩 Технические данные</h3>
+          <div class="insight-summary">
+            <div class="mini-stat">
+              <span class="mini-stat__label">Средний CPC</span>
+              <span class="mini-stat__value" id="avgCpc">—</span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat__label">CPM</span>
+              <span class="mini-stat__value" id="cpmValue">—</span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat__label">Активные кампании</span>
+              <span class="mini-stat__value" id="activeCampaignsCount">—</span>
+            </div>
+          </div>
+          <div class="insight-list" id="technicalBreakdown">
+            <div class="insight-empty">Нет данных по устройствам</div>
+          </div>
+        </section>
+
+        <section class="insight-group">
+          <h3>👥 Демография</h3>
+          <div class="insight-list" id="demographyBreakdown">
+            <div class="insight-empty">Нет данных по полу/возрасту</div>
+          </div>
+        </section>
+
+        <section class="insight-group">
+          <h3>🌍 География</h3>
+          <div class="insight-list" id="geographyBreakdown">
+            <div class="insight-empty">Нет данных по регионам</div>
+          </div>
+        </section>
       </div>
 
       <!-- Campaigns table -->
