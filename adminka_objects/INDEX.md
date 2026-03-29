@@ -99,7 +99,6 @@ https://oauth.yandex.ru/client/new
 ```
 ✏️ index.html               — добавлена навигация
 ✏️ tasks.html               — добавлена навигация
-✏️ heatmap.html             — добавлена навигация
 ```
 
 ---
@@ -245,7 +244,6 @@ adminka_objects/
 │
 ├── 📄 index.html                    — обновлено (добавлена навигация)
 ├── 📄 tasks.html                    — обновлено (добавлена навигация)
-├── 📄 heatmap.html                  — обновлено (добавлена навигация)
 │
 ├── 🆕 direct.html                   — ГЛАВНАЯ СТРАНИЦА
 ├── 🆕 direct-stats.css              — стили

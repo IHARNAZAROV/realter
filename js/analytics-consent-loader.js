@@ -3,11 +3,9 @@
 
   const COOKIE_NAME = "cookieConsent";
   const YANDEX_METRIKA_ID = 105770392;
-  const CLARITY_PROJECT_ID = "w2cf1xtz16";
   const GTM_CONTAINER_ID = "GTM-WVJ6PL6L";
 
   let isMetrikaLoaded = false;
-  let isClarityLoaded = false;
   let isGoogleTagManagerLoaded = false;
 
   /**
@@ -99,33 +97,6 @@
   }
 
   /**
-   * Подключение Microsoft Clarity
-   */
-  function loadMicrosoftClarity() {
-    if (isClarityLoaded) {
-      return;
-    }
-
-    isClarityLoaded = true;
-
-    window.clarity =
-      window.clarity ||
-      function () {
-        (window.clarity.q = window.clarity.q || []).push(arguments);
-      };
-
-    const clarityScript = document.createElement("script");
-    clarityScript.async = true;
-    clarityScript.src =
-      "https://www.clarity.ms/tag/" +
-      encodeURIComponent(CLARITY_PROJECT_ID);
-
-    document.head.appendChild(clarityScript);
-
-    console.log("✅ Microsoft Clarity подключен");
-  }
-
-  /**
    * Подключение Google Tag Manager
    */
   function loadGoogleTagManager() {
@@ -163,7 +134,6 @@
 
     if (consentSettings.analytics) {
       loadYandexMetrika();
-      loadMicrosoftClarity();
     }
 
     if (consentSettings.marketing) {
