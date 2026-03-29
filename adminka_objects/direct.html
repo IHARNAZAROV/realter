@@ -173,6 +173,14 @@
         </div>
 
         <div class="filter-group">
+          <label for="campaignScopeFilter">Состав кампаний:</label>
+          <select id="campaignScopeFilter" onchange="window.DirectAPI.handleCampaignScopeChange()">
+            <option value="all_except_archived" selected>Все кроме архивных</option>
+            <option value="all">Все кампании</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
           <label for="campaignFilter">Кампания:</label>
           <select id="campaignFilter" onchange="window.DirectAPI.handleFilterChange()">
             <option value="">Все кампании</option>
