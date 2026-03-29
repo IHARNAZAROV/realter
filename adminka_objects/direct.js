@@ -228,7 +228,7 @@ const DirectAPI = (function () {
     }
 
     // Generate authorization URL
-    const redirectUri = encodeURIComponent(window.location.origin + '/adminka_objects/direct.html');
+    const redirectUri = encodeURIComponent('https://oauth.yandex.ru/verification_code');
     const authUrl = `https://oauth.yandex.ru/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}`;
     
     // Redirect to OAuth server
