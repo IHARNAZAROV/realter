@@ -676,6 +676,24 @@ body {
   background: rgba(255, 255, 255, 0.04);
 }
 
+
+.campaigns-table tbody tr.campaign-row {
+  cursor: pointer;
+}
+
+.campaigns-table tbody tr.campaign-row:focus {
+  outline: 1px solid rgba(56, 189, 248, 0.9);
+  outline-offset: -1px;
+}
+
+.campaigns-table tbody tr.campaign-row--selected {
+  background: rgba(56, 189, 248, 0.14);
+}
+
+.campaigns-table tbody tr.campaign-row--selected:hover {
+  background: rgba(56, 189, 248, 0.2);
+}
+
 .campaigns-table .empty-row {
   text-align: center;
   color: #6b7280;
