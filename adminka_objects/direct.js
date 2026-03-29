@@ -305,6 +305,28 @@ const DirectAPI = (function () {
     }
   }
 
+  function submitVerificationCode() {
+    const verificationCode = document.getElementById('verificationCode').value.trim();
+    const clientId = document.getElementById('clientId').value.trim();
+    const clientSecret = document.getElementById('clientSecret').value.trim();
+
+    if (!verificationCode) {
+      showError('Введите код подтверждения');
+      return;
+    }
+
+    if (!clientId || !clientSecret) {
+      showError('Сначала сохраните Client ID и Client Secret');
+      return;
+    }
+
+    // Exchange verification code for token
+    exchangeCodeForToken(verificationCode, clientId, clientSecret);
+
+    // Clear the verification code field
+    document.getElementById('verificationCode').value = '';
+  }
+
   // =========================================================
   // DATA LOADING AND CACHING
   // =========================================================
@@ -677,6 +699,11 @@ const DirectAPI = (function () {
     const saveCredsBtn = document.querySelector('[data-action="save-credentials"]');
     if (saveCredsBtn) {
       saveCredsBtn.addEventListener('click', saveCredentials);
+    }
+
+    const submitVerificationBtn = document.querySelector('[data-action="submit-verification-code"]');
+    if (submitVerificationBtn) {
+      submitVerificationBtn.addEventListener('click', submitVerificationCode);
     }
 
     const applyDateRangeBtn = document.querySelector('[data-action="apply-date-range"]');
