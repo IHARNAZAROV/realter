@@ -12,6 +12,7 @@ const DirectAPI = (function () {
     isAuthenticated: false,
     credentials: null,
     campaigns: [],
+    allCampaigns: [],
     currentData: null,
     filters: {
       period: 1,
@@ -415,7 +416,14 @@ const DirectAPI = (function () {
       }
 
       state.currentData = data.data;
-      state.campaigns = data.data.campaigns || [];
+
+      const campaignsFromResponse = data.data.campaigns || [];
+      if (state.filters.campaign) {
+        state.campaigns = state.allCampaigns.length ? [...state.allCampaigns] : campaignsFromResponse;
+      } else {
+        state.allCampaigns = [...campaignsFromResponse];
+        state.campaigns = [...campaignsFromResponse];
+      }
       
       // Update UI
       updateStatsCards();
@@ -570,11 +578,6 @@ const DirectAPI = (function () {
       filtered = filtered.filter(c => c.name.toLowerCase().includes(query));
     }
 
-    // Filter by campaign
-    if (state.filters.campaign) {
-      filtered = filtered.filter(c => c.id.toString() === state.filters.campaign);
-    }
-
     // Sort
     filtered.sort((a, b) => {
       let aVal = a[state.sortBy];
@@ -640,11 +643,11 @@ const DirectAPI = (function () {
 
   function updateCampaignFilter() {
     const select = document.getElementById('campaignFilter');
-    const currentValue = select.value;
+    const currentValue = state.filters.campaign || select.value;
 
     const options = ['<option value="">Все кампании</option>'];
-    if (state.campaigns) {
-      state.campaigns.forEach(c => {
+    if (state.allCampaigns) {
+      state.allCampaigns.forEach(c => {
         options.push(`<option value="${c.id}">${escapeHtml(c.name)}</option>`);
       });
     }
@@ -780,6 +783,9 @@ const DirectAPI = (function () {
 
     state.isAuthenticated = false;
     state.credentials = null;
+    state.campaigns = [];
+    state.allCampaigns = [];
+    state.currentData = null;
     localStorage.removeItem(CONFIG_KEY);
     
     showInstructions();
