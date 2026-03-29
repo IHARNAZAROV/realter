@@ -38,6 +38,7 @@ const DirectAPI = (function () {
     setupEventListeners();
     initializeInstructions();
     handleOAuthCallback();
+    syncInitialFiltersFromUI();
     
     if (state.isAuthenticated && state.credentials?.token) {
       showAnalytics();
@@ -60,6 +61,20 @@ const DirectAPI = (function () {
       }
     } catch (e) {
       console.error('Error loading config:', e);
+    }
+  }
+
+  function syncInitialFiltersFromUI() {
+    const periodFilter = document.getElementById('periodFilter');
+    if (!periodFilter) return;
+
+    if (periodFilter.value === 'custom') {
+      return;
+    }
+
+    const parsed = parseInt(periodFilter.value, 10);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      state.filters.period = parsed;
     }
   }
 
@@ -201,10 +216,10 @@ const DirectAPI = (function () {
               <span class="value">${lastSync}</span>
             </div>
           </div>
-          <button class="btn-secondary" id="disconnectBtn">
-            Отключить
-          </button>
         </div>
+        <button class="btn-secondary" id="disconnectBtn">
+            Отключить
+        </button>
       `;
       // Add event listener
       const disconnectBtn = document.getElementById('disconnectBtn');
@@ -448,6 +463,73 @@ const DirectAPI = (function () {
     const avgCtr = data.avgCtr.toFixed(2) + '%';
     document.getElementById('avgCtr').textContent = avgCtr;
     updateChangeDiv('avgCtrChange', data.ctrChange);
+
+    const avgCpc = typeof data.avgCpc === 'number' ? formatCurrency(data.avgCpc) : '—';
+    const cpm = typeof data.cpm === 'number' ? `${data.cpm.toFixed(2)} BYN` : '—';
+    document.getElementById('avgCpc').textContent = avgCpc;
+    document.getElementById('cpmValue').textContent = cpm;
+
+    const activeCount = data.statusCounts?.ON ?? 0;
+    document.getElementById('activeCampaignsCount').textContent = formatNumber(activeCount);
+
+    renderBreakdown('technicalBreakdown', data.breakdowns?.technical, 'Тех. сегмент');
+    renderBreakdown('demographyBreakdown', data.breakdowns?.demography, 'Демография');
+    renderBreakdown('geographyBreakdown', data.breakdowns?.geography, 'Регион');
+  }
+
+  function renderBreakdown(containerId, items, fallbackTitle) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    if (!Array.isArray(items) || items.length === 0) {
+      container.innerHTML = `<div class="insight-empty">${fallbackTitle}: нет данных в текущем отчёте</div>`;
+      return;
+    }
+
+    container.innerHTML = items.map(item => `
+      <div class="insight-row">
+        <strong>${escapeHtml(translateBreakdownLabel(containerId, item.label || 'Не определено'))}</strong>
+        <span>${formatNumber(item.impressions || 0)} показов</span>
+        <span>${formatNumber(item.clicks || 0)} кликов</span>
+        <span>${formatCurrency(Number(item.cost || 0))}</span>
+      </div>
+    `).join('');
+  }
+
+  function translateBreakdownLabel(containerId, label) {
+    const source = String(label || '').toUpperCase().trim();
+
+    if (containerId === 'technicalBreakdown') {
+      const deviceMap = {
+        MOBILE: 'Мобильные устройства',
+        DESKTOP: 'Компьютеры',
+        TABLET: 'Планшеты',
+        SMART_TV: 'Smart TV',
+        UNKNOWN: 'Не определено'
+      };
+      return deviceMap[source] || label;
+    }
+
+    if (containerId === 'demographyBreakdown') {
+      const ageGenderMap = {
+        AGE_0_17: 'До 18 лет',
+        AGE_18_24: '18–24 года',
+        AGE_25_34: '25–34 года',
+        AGE_35_44: '35–44 года',
+        AGE_45_54: '45–54 года',
+        AGE_55: '55+ лет',
+        FEMALE: 'Женщины',
+        MALE: 'Мужчины',
+        UNKNOWN: 'Не определено'
+      };
+      return ageGenderMap[source] || label;
+    }
+
+    if (containerId === 'geographyBreakdown' && source === 'UNKNOWN') {
+      return 'Не определено';
+    }
+
+    return label;
   }
 
   function updateChangeDiv(elementId, changePercent) {
