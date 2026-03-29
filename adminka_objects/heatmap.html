@@ -394,7 +394,7 @@
 
     .visitor-breakdown-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
       gap: 10px;
     }
 
@@ -410,6 +410,13 @@
       font-size: 13px;
       color: #f3f4f6;
       font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .visitor-breakdown-meta {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.35;
       margin-bottom: 8px;
     }
 
@@ -578,6 +585,12 @@
       .insights-grid {
         grid-template-columns: 1fr;
       }
+      .visitor-breakdown-grid {
+        grid-template-columns: repeat(2, minmax(160px, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
       .visitor-breakdown-grid {
         grid-template-columns: 1fr;
       }
@@ -877,6 +890,49 @@
       return [];
     };
 
+    const metricDictionary = {
+      'dead click count': {
+        label: 'Мёртвые клики',
+        description: 'Клики по элементу без ожидаемого действия интерфейса.'
+      },
+      'excessive scroll': {
+        label: 'Чрезмерная прокрутка',
+        description: 'Пользователь много скроллит, чтобы найти нужную информацию.'
+      },
+      'rage click count': {
+        label: 'Яростные клики',
+        description: 'Серия быстрых повторных кликов в одной области из-за раздражения.'
+      },
+      'quickback click': {
+        label: 'Быстрый возврат',
+        description: 'Пользователь почти сразу возвращается назад после перехода.'
+      },
+      'script error count': {
+        label: 'Ошибки скриптов',
+        description: 'Количество JS-ошибок, возникших у пользователей на странице.'
+      },
+      'error click count': {
+        label: 'Клики с ошибкой',
+        description: 'Клик приводит к ошибке или к неуспешному действию.'
+      },
+      'scroll depth': {
+        label: 'Глубина прокрутки',
+        description: 'Насколько глубоко пользователи доходят по странице.'
+      },
+      traffic: {
+        label: 'Трафик',
+        description: 'Объём и источники посещений, доступные в разрезах Clarity.'
+      }
+    };
+
+    const getMetricPresentation = (metricName) => {
+      const key = String(metricName || '').toLowerCase().trim();
+      return metricDictionary[key] || {
+        label: normalizeLabel(metricName || 'Метрика'),
+        description: 'Данные получены по API Microsoft Clarity.'
+      };
+    };
+
     const frictionMetricConfig = [
       {
         key: 'dead click count',
@@ -1104,7 +1160,8 @@
 
       visitorBreakdownGrid.innerHTML = '';
       rows.forEach((row) => {
-        const title = normalizeLabel(row && row.metricName ? row.metricName : 'Метрика');
+        const metricName = row && row.metricName ? row.metricName : 'Метрика';
+        const metricPresentation = getMetricPresentation(metricName);
         const info = Array.isArray(row && row.information) ? row.information.slice(0, 8) : [];
         if (!info.length) return;
 
@@ -1113,7 +1170,11 @@
 
         const heading = document.createElement('div');
         heading.className = 'visitor-breakdown-title';
-        heading.textContent = title;
+        heading.textContent = metricPresentation.label;
+
+        const meta = document.createElement('div');
+        meta.className = 'visitor-breakdown-meta';
+        meta.textContent = metricPresentation.description;
 
         const list = document.createElement('ul');
         list.className = 'visitor-breakdown-list';
@@ -1134,7 +1195,7 @@
           list.appendChild(item);
         });
 
-        card.append(heading, list);
+        card.append(heading, meta, list);
         visitorBreakdownGrid.appendChild(card);
       });
 
