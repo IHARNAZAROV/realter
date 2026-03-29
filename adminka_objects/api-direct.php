@@ -304,6 +304,8 @@ function getCampaigns($token, $login, $filters) {
         $reportRequest = [
             'params' => [
                 'SelectionCriteria' => [
+                    'DateFrom' => $dateRange['dateFrom'],
+                    'DateTo' => $dateRange['dateTo'],
                     'Filter' => [
                         [
                             'Field' => 'CampaignId',
@@ -316,8 +318,6 @@ function getCampaigns($token, $login, $filters) {
                 'ReportName' => 'realter_campaigns_' . date('Ymd_His'),
                 'ReportType' => 'CAMPAIGN_PERFORMANCE_REPORT',
                 'DateRangeType' => 'CUSTOM_DATE',
-                'DateFrom' => $dateRange['dateFrom'],
-                'DateTo' => $dateRange['dateTo'],
                 'Format' => 'TSV',
                 'IncludeVAT' => 'NO',
                 'IncludeDiscount' => 'NO'
