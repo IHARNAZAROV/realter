@@ -488,48 +488,12 @@ const DirectAPI = (function () {
 
     container.innerHTML = items.map(item => `
       <div class="insight-row">
-        <strong>${escapeHtml(translateBreakdownLabel(containerId, item.label || 'Не определено'))}</strong>
+        <strong>${escapeHtml(item.label || 'Не определено')}</strong>
         <span>${formatNumber(item.impressions || 0)} показов</span>
         <span>${formatNumber(item.clicks || 0)} кликов</span>
         <span>${formatCurrency(Number(item.cost || 0))}</span>
       </div>
     `).join('');
-  }
-
-  function translateBreakdownLabel(containerId, label) {
-    const source = String(label || '').toUpperCase().trim();
-
-    if (containerId === 'technicalBreakdown') {
-      const deviceMap = {
-        MOBILE: 'Мобильные устройства',
-        DESKTOP: 'Компьютеры',
-        TABLET: 'Планшеты',
-        SMART_TV: 'Smart TV',
-        UNKNOWN: 'Не определено'
-      };
-      return deviceMap[source] || label;
-    }
-
-    if (containerId === 'demographyBreakdown') {
-      const ageGenderMap = {
-        AGE_0_17: 'До 18 лет',
-        AGE_18_24: '18–24 года',
-        AGE_25_34: '25–34 года',
-        AGE_35_44: '35–44 года',
-        AGE_45_54: '45–54 года',
-        AGE_55: '55+ лет',
-        FEMALE: 'Женщины',
-        MALE: 'Мужчины',
-        UNKNOWN: 'Не определено'
-      };
-      return ageGenderMap[source] || label;
-    }
-
-    if (containerId === 'geographyBreakdown' && source === 'UNKNOWN') {
-      return 'Не определено';
-    }
-
-    return label;
   }
 
   function updateChangeDiv(elementId, changePercent) {
