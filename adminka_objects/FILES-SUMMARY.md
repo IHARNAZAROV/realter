@@ -166,7 +166,6 @@
 
 ---
 
-### 3. `heatmap.html`
 **Изменение:** Добавлена новая ссылка в навигацию
 ```html
 <a href="/adminka_objects/direct.html">Яндекс Директ</a>
@@ -187,7 +186,6 @@
 | SETUP-INSTRUCTIONS.md | Markdown | ~350 | ~13 KB | ✅ Новый |
 | index.html | HTML | +1 | Минор | ✅ Обновлен |
 | tasks.html | HTML | +1 | Минор | ✅ Обновлен |
-| heatmap.html | HTML | +1 | Минор | ✅ Обновлен |
 
 **Всего новых строк кода:** ~2800+
 
@@ -199,7 +197,6 @@
 adminka_objects/
 ├── index.html                    ← Обновлено
 ├── tasks.html                    ← Обновлено
-├── heatmap.html                  ← Обновлено
 ├── direct.html                   ← НОВЫЙ (главная страница)
 ├── admin.css
 ├── admin.js
@@ -218,7 +215,6 @@ adminka_objects/
 ├── SETUP-INSTRUCTIONS.md         ← НОВЫЙ (инструкции пользователя)
 ├── .htaccess.example
 ├── .htpasswd.example
-└── clarity-insights.php
 ```
 
 ---
