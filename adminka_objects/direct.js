@@ -33,6 +33,7 @@ const DirectAPI = (function () {
   // =========================================================
   function init() {
     loadConfig();
+    populateCredentialFields();
     setupEventListeners();
     initializeInstructions();
     handleOAuthCallback();
@@ -58,6 +59,24 @@ const DirectAPI = (function () {
       }
     } catch (e) {
       console.error('Error loading config:', e);
+    }
+  }
+
+  function populateCredentialFields() {
+    if (!state.credentials) return;
+
+    const clientIdInput = document.getElementById('clientId');
+    const clientSecretInput = document.getElementById('clientSecret');
+    const accountLoginInput = document.getElementById('accountLogin');
+
+    if (clientIdInput && state.credentials.clientId) {
+      clientIdInput.value = state.credentials.clientId;
+    }
+    if (clientSecretInput && state.credentials.clientSecret) {
+      clientSecretInput.value = state.credentials.clientSecret;
+    }
+    if (accountLoginInput && state.credentials.login && state.credentials.login !== 'unknown') {
+      accountLoginInput.value = state.credentials.login;
     }
   }
 
@@ -97,7 +116,7 @@ const DirectAPI = (function () {
     const credentials = {
       clientId,
       clientSecret,
-      login: accountLogin || 'unknown',
+      login: accountLogin || '',
       token: null,
       lastSync: null
     };
@@ -220,7 +239,7 @@ const DirectAPI = (function () {
   }
 
   function initiateOAuthFlow() {
-    const clientId = document.getElementById('clientId').value.trim();
+    const clientId = document.getElementById('clientId').value.trim() || state.credentials?.clientId || '';
     
     if (!clientId) {
       showError('Сначала введите и сохраните Client ID');
@@ -248,8 +267,8 @@ const DirectAPI = (function () {
 
     if (code) {
       // Exchange code for token
-      const clientId = document.getElementById('clientId').value.trim();
-      const clientSecret = document.getElementById('clientSecret').value.trim();
+      const clientId = document.getElementById('clientId').value.trim() || state.credentials?.clientId || '';
+      const clientSecret = document.getElementById('clientSecret').value.trim() || state.credentials?.clientSecret || '';
 
       if (!clientId || !clientSecret) {
         showError('Введите Client ID и Client Secret');
@@ -286,15 +305,28 @@ const DirectAPI = (function () {
         return;
       }
 
-      // Save token
-      if (state.credentials) {
-        state.credentials.token = data.data.token;
-        state.credentials.lastSync = new Date().toISOString();
-        saveConfig(state.credentials);
-        showAnalytics();
-        loadData();
-        showNotification('Успешно подключено к Яндекс Директ');
+      // Save token even if credentials were not explicitly saved before
+      const loginFromInput = document.getElementById('accountLogin')?.value.trim() || '';
+      const nextCredentials = state.credentials || {
+        clientId,
+        clientSecret,
+        login: loginFromInput,
+        token: null,
+        lastSync: null
+      };
+
+      nextCredentials.clientId = clientId;
+      nextCredentials.clientSecret = clientSecret;
+      if (!nextCredentials.login && loginFromInput) {
+        nextCredentials.login = loginFromInput;
       }
+      nextCredentials.token = data.data.token;
+      nextCredentials.lastSync = new Date().toISOString();
+
+      saveConfig(nextCredentials);
+      showAnalytics();
+      loadData();
+      showNotification('Успешно подключено к Яндекс Директ');
 
       // Clean URL
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -307,8 +339,8 @@ const DirectAPI = (function () {
 
   function submitVerificationCode() {
     const verificationCode = document.getElementById('verificationCode').value.trim();
-    const clientId = document.getElementById('clientId').value.trim();
-    const clientSecret = document.getElementById('clientSecret').value.trim();
+    const clientId = document.getElementById('clientId').value.trim() || state.credentials?.clientId || '';
+    const clientSecret = document.getElementById('clientSecret').value.trim() || state.credentials?.clientSecret || '';
 
     if (!verificationCode) {
       showError('Введите код подтверждения');
