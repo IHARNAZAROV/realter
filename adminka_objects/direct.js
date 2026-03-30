@@ -480,9 +480,12 @@ const DirectAPI = (function () {
     const activeCount = data.statusCounts?.ON ?? 0;
     document.getElementById('activeCampaignsCount').textContent = formatNumber(activeCount);
 
-    renderBreakdown('technicalBreakdown', data.breakdowns?.technical, 'Тех. сегмент');
-    renderBreakdown('demographyBreakdown', data.breakdowns?.demography, 'Демография');
+    renderBreakdown('technicalBreakdown', data.breakdowns?.technical, 'Устройства');
+    renderBreakdown('technicalOsBreakdown', data.breakdowns?.technicalOs, 'Операционные системы');
+    renderBreakdown('demographyBreakdown', data.breakdowns?.demography, 'Возраст');
+    renderBreakdown('demographyGenderBreakdown', data.breakdowns?.demographyGender, 'Пол');
     renderBreakdown('geographyBreakdown', data.breakdowns?.geography, 'Регион');
+    renderBreakdown('trafficSourcesBreakdown', data.breakdowns?.trafficSources, 'Источники трафика');
   }
 
 
@@ -493,6 +496,20 @@ const DirectAPI = (function () {
       DESKTOP: 'Компьютеры',
       TABLET: 'Планшеты',
       SMART_TV: 'Смарт-ТВ',
+      UNKNOWN: 'Не определено'
+    };
+
+    return labels[normalized] || rawLabel || 'Не определено';
+  }
+
+  function formatOperatingSystemLabel(rawLabel) {
+    const normalized = String(rawLabel || '').trim().toUpperCase();
+    const labels = {
+      ANDROID: 'Android',
+      IOS: 'iOS',
+      WINDOWS: 'Windows',
+      MACOS: 'macOS',
+      LINUX: 'Linux',
       UNKNOWN: 'Не определено'
     };
 
@@ -514,13 +531,54 @@ const DirectAPI = (function () {
     return labels[normalized] || rawLabel || 'Не определено';
   }
 
+  function formatGenderLabel(rawLabel) {
+    const normalized = String(rawLabel || '').trim().toUpperCase();
+    const labels = {
+      GENDER_MALE: 'Мужчины',
+      GENDER_FEMALE: 'Женщины',
+      MALE: 'Мужчины',
+      FEMALE: 'Женщины',
+      UNKNOWN: 'Пол не определён'
+    };
+
+    return labels[normalized] || rawLabel || 'Не определено';
+  }
+
+  function formatTrafficSourceLabel(rawLabel) {
+    const normalized = String(rawLabel || '').trim().toUpperCase();
+    const labels = {
+      AD: 'Переходы по рекламе',
+      ADVERTISING: 'Переходы по рекламе',
+      DIRECT: 'Прямые заходы',
+      ORGANIC: 'Переходы из поисковых систем',
+      SEARCH: 'Переходы из поисковых систем',
+      INTERNAL: 'Внутренние переходы',
+      REFERRAL: 'Переходы по ссылкам на сайтах',
+      LINKS: 'Переходы по ссылкам на сайтах'
+    };
+
+    return labels[normalized] || rawLabel || 'Не определено';
+  }
+
   function humanizeBreakdownLabel(containerId, label) {
     if (containerId === 'technicalBreakdown') {
       return formatTechnicalLabel(label);
     }
 
+    if (containerId === 'technicalOsBreakdown') {
+      return formatOperatingSystemLabel(label);
+    }
+
     if (containerId === 'demographyBreakdown') {
       return formatAgeLabel(label);
+    }
+
+    if (containerId === 'demographyGenderBreakdown') {
+      return formatGenderLabel(label);
+    }
+
+    if (containerId === 'trafficSourcesBreakdown') {
+      return formatTrafficSourceLabel(label);
     }
 
     return label || 'Не определено';
