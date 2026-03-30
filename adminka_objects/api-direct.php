@@ -366,6 +366,55 @@ function fetchBreakdownReport($token, $login, $dateRange, $campaignIds, $dimensi
 }
 
 /**
+ * Normalize optional traffic-source dimensions to UI groups
+ */
+function normalizeTrafficSources($items) {
+    if (!is_array($items) || !$items) {
+        return [];
+    }
+
+    $map = [
+        'AD' => 'Переходы по рекламе',
+        'ADVERTISING' => 'Переходы по рекламе',
+        'DIRECT' => 'Прямые заходы',
+        'ORGANIC' => 'Переходы из поисковых систем',
+        'SEARCH' => 'Переходы из поисковых систем',
+        'INTERNAL' => 'Внутренние переходы',
+        'REFERRAL' => 'Переходы по ссылкам на сайтах',
+        'LINKS' => 'Переходы по ссылкам на сайтах'
+    ];
+
+    $totals = [];
+    foreach ($items as $item) {
+        $rawLabel = strtoupper(trim((string)($item['label'] ?? 'UNKNOWN')));
+        $label = $map[$rawLabel] ?? null;
+        if ($label === null) {
+            continue;
+        }
+
+        if (!isset($totals[$label])) {
+            $totals[$label] = [
+                'label' => $label,
+                'impressions' => 0,
+                'clicks' => 0,
+                'cost' => 0.0
+            ];
+        }
+
+        $totals[$label]['impressions'] += (int)($item['impressions'] ?? 0);
+        $totals[$label]['clicks'] += (int)($item['clicks'] ?? 0);
+        $totals[$label]['cost'] += (float)($item['cost'] ?? 0);
+    }
+
+    $result = array_values($totals);
+    usort($result, function ($a, $b) {
+        return $b['clicks'] <=> $a['clicks'];
+    });
+
+    return $result;
+}
+
+/**
  * Get campaigns from Yandex Direct API (real data)
  */
 function getCampaigns($token, $login, $filters) {
@@ -410,7 +459,7 @@ function getCampaigns($token, $login, $filters) {
                 'avgCpc' => 0,
                 'cpm' => 0,
                 'statusCounts' => ['ON' => 0, 'OFF' => 0, 'SUSPENDED' => 0, 'ENDED' => 0, 'UNKNOWN' => 0],
-                'breakdowns' => ['technical' => [], 'demography' => [], 'geography' => []],
+                'breakdowns' => ['technical' => [], 'technicalOs' => [], 'demography' => [], 'demographyGender' => [], 'geography' => [], 'trafficSources' => []],
                 'impressionsChange' => 0,
                 'clicksChange' => 0,
                 'costChange' => 0,
@@ -506,9 +555,13 @@ function getCampaigns($token, $login, $filters) {
         }
 
         $technicalBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Device', 'realter_technical');
+        $technicalOsBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'OperatingSystemType', 'realter_technical_os');
         $demographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Age', 'realter_demography');
+        $demographyGenderBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Gender', 'realter_demography_gender');
         // Geography in Direct reports is provided via LocationOfPresenceName
         $geographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'LocationOfPresenceName', 'realter_geography');
+        $trafficSourcesBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'TrafficSource', 'realter_traffic_sources');
+        $trafficSourcesBreakdown = normalizeTrafficSources($trafficSourcesBreakdown);
 
         return [
             'campaigns' => $campaigns,
@@ -521,8 +574,11 @@ function getCampaigns($token, $login, $filters) {
             'statusCounts' => $statusCounts,
             'breakdowns' => [
                 'technical' => $technicalBreakdown,
+                'technicalOs' => $technicalOsBreakdown,
                 'demography' => $demographyBreakdown,
-                'geography' => $geographyBreakdown
+                'demographyGender' => $demographyGenderBreakdown,
+                'geography' => $geographyBreakdown,
+                'trafficSources' => $trafficSourcesBreakdown
             ],
             'impressionsChange' => 0,
             'clicksChange' => 0,
