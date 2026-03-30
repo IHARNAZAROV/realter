@@ -374,14 +374,12 @@ function normalizeTrafficSources($items) {
     }
 
     $map = [
+        // Available in Direct Reports API via AdNetworkType segmentation
+        'AD_NETWORK' => 'Переходы по рекламе',
         'AD' => 'Переходы по рекламе',
         'ADVERTISING' => 'Переходы по рекламе',
-        'DIRECT' => 'Прямые заходы',
-        'ORGANIC' => 'Переходы из поисковых систем',
         'SEARCH' => 'Переходы из поисковых систем',
-        'INTERNAL' => 'Внутренние переходы',
-        'REFERRAL' => 'Переходы по ссылкам на сайтах',
-        'LINKS' => 'Переходы по ссылкам на сайтах'
+        'ORGANIC' => 'Переходы из поисковых систем'
     ];
 
     $totals = [];
@@ -555,12 +553,12 @@ function getCampaigns($token, $login, $filters) {
         }
 
         $technicalBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Device', 'realter_technical');
-        $technicalOsBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'OperatingSystemType', 'realter_technical_os');
+        $technicalOsBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'MobilePlatform', 'realter_technical_os');
         $demographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Age', 'realter_demography');
         $demographyGenderBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'Gender', 'realter_demography_gender');
         // Geography in Direct reports is provided via LocationOfPresenceName
         $geographyBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'LocationOfPresenceName', 'realter_geography');
-        $trafficSourcesBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'TrafficSource', 'realter_traffic_sources');
+        $trafficSourcesBreakdown = fetchBreakdownReport($token, $login, $dateRange, $campaignIds, 'AdNetworkType', 'realter_traffic_sources');
         $trafficSourcesBreakdown = normalizeTrafficSources($trafficSourcesBreakdown);
 
         return [

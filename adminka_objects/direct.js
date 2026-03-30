@@ -507,9 +507,11 @@ const DirectAPI = (function () {
     const labels = {
       ANDROID: 'Android',
       IOS: 'iOS',
+      WINDOWS_PHONE: 'Windows Phone',
       WINDOWS: 'Windows',
       MACOS: 'macOS',
       LINUX: 'Linux',
+      OTHER: 'Другая ОС',
       UNKNOWN: 'Не определено'
     };
 
@@ -547,14 +549,11 @@ const DirectAPI = (function () {
   function formatTrafficSourceLabel(rawLabel) {
     const normalized = String(rawLabel || '').trim().toUpperCase();
     const labels = {
+      AD_NETWORK: 'Переходы по рекламе',
       AD: 'Переходы по рекламе',
       ADVERTISING: 'Переходы по рекламе',
-      DIRECT: 'Прямые заходы',
       ORGANIC: 'Переходы из поисковых систем',
-      SEARCH: 'Переходы из поисковых систем',
-      INTERNAL: 'Внутренние переходы',
-      REFERRAL: 'Переходы по ссылкам на сайтах',
-      LINKS: 'Переходы по ссылкам на сайтах'
+      SEARCH: 'Переходы из поисковых систем'
     };
 
     return labels[normalized] || rawLabel || 'Не определено';
