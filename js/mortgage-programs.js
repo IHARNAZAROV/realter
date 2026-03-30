@@ -1,1 +1,114 @@
-window.MORTGAGE_PROGRAMS=[{bankName:"Беларусбанк",bankSlug:"belarusbank",bankLogo:"ББ",programName:"Ипотека Экспресс (вторичный рынок)",interestRate:17.5,maxTermYears:20,minDownPaymentPercent:10,description:"Стандартный ипотечный кредит на покупку квартиры на вторичном рынке."},{bankName:"Беларусбанк",bankSlug:"belarusbank",bankLogo:"ББ",programName:"Партнёрская новостройка",interestRate:16.9,maxTermYears:25,minDownPaymentPercent:15,description:"Льготная ставка при покупке жилья у аккредитованных застройщиков-партнёров."},{bankName:"Банк БелВЭБ",bankSlug:"belveb",bankLogo:"ВЭБ",programName:"Кредит на приобретение недвижимости",interestRate:18.4,maxTermYears:20,minDownPaymentPercent:15,description:"Классический кредит на покупку квартиры с аннуитетным погашением."},{bankName:"Белгазпромбанк",bankSlug:"belgazprombank",bankLogo:"БГПБ",programName:"Скоро новоселье",interestRate:17.99,maxTermYears:20,minDownPaymentPercent:10,description:"Популярная программа на готовое и строящееся жильё у партнёров банка."},{bankName:"Белинвестбанк",bankSlug:"belinvestbank",bankLogo:"БИБ",programName:"Недвижимость в кредит",interestRate:18.75,maxTermYears:25,minDownPaymentPercent:15,description:"Финансирование покупки квартиры на первичном и вторичном рынке."},{bankName:"БТА Банк",bankSlug:"bta",bankLogo:"BTA",programName:"Кредит на покупку жилья",interestRate:19.5,maxTermYears:15,minDownPaymentPercent:20,description:"Базовый жилищный кредит с повышенным первоначальным взносом."},{bankName:"Приорбанк",bankSlug:"priorbank",bankLogo:"PB",programName:"Недвижимость в кредит",interestRate:18.9,maxTermYears:20,minDownPaymentPercent:20,description:"Стандартная ипотечная программа на покупку квартиры в BYN."},{bankName:"Приорбанк",bankSlug:"priorbank",bankLogo:"PB",programName:"Недвижимость у партнёров",interestRate:17.8,maxTermYears:20,minDownPaymentPercent:15,description:"Сниженная ставка при покупке объектов из партнёрской сети банка."}];
+window.MORTGAGE_PROGRAMS = [
+  {
+    bankName: "Беларусбанк",
+    bankSlug: "belarusbank",
+    bankLogo: "ББ",
+    programName: "Ипотека Экспресс (вторичный рынок)",
+    interestRate: 18.5,
+    maxTermYears: 20,
+    minDownPaymentPercent: 10,
+    description:
+      "Кредит на покупку квартиры на вторичном рынке. Ставка зависит от категории заемщика и составляет до 18.5%."
+  },
+
+  {
+    bankName: "Беларусбанк",
+    bankSlug: "belarusbank",
+    bankLogo: "ББ",
+    programName: "Партнёрская новостройка",
+    interestRate: 16.75,
+    graceInterestRate: {
+      min: 3.75,
+      max: 10.25,
+      periodMonths: 12
+    },
+    maxTermYears: 20,
+    minDownPaymentPercent: 10,
+    description:
+      "Кредит на покупку жилья у аккредитованных застройщиков. Первые 12 месяцев действует льготная ставка, затем применяется основная."
+  },
+
+  {
+    bankName: "Банк БелВЭБ",
+    bankSlug: "belveb",
+    bankLogo: "ВЭБ",
+    programName: "Кредит на приобретение недвижимости",
+    interestRate: 16.8,
+    maxTermYears: 20,
+    minDownPaymentPercent: 10,
+    description:
+      "Кредит на покупку или строительство жилья. Финансирование до 90% стоимости объекта."
+  },
+
+  {
+    bankName: "Белгазпромбанк",
+    bankSlug: "belgazprombank",
+    bankLogo: "БГПБ",
+    programName: "Скоро новоселье",
+    interestRate: 16.75,
+    graceInterestRate: {
+      value: 14.75,
+      periodMonths: 6
+    },
+    maxTermYears: 20,
+    minDownPaymentPercent: 10,
+    description:
+      "Кредит на покупку готового или строящегося жилья у партнёров банка. Первые 6 месяцев действует сниженная ставка."
+  },
+
+  {
+    bankName: "Белинвестбанк",
+    bankSlug: "belinvestbank",
+    bankLogo: "БИБ",
+    programName: "Недвижимость в кредит",
+    interestRate: 18.11,
+    maxTermYears: 20,
+    minDownPaymentPercent: 15,
+    description:
+      "Кредит на покупку жилья на первичном и вторичном рынке."
+  },
+
+  {
+    bankName: "БТА Банк",
+    bankSlug: "bta",
+    bankLogo: "BTA",
+    programName: "Кредит на покупку жилья",
+    interestRate: 19.5,
+    maxTermYears: 15,
+    minDownPaymentPercent: 20,
+    description:
+      "Базовый жилищный кредит с повышенным первоначальным взносом."
+  },
+
+  {
+    bankName: "Приорбанк",
+    bankSlug: "priorbank",
+    bankLogo: "PB",
+    programName: "Недвижимость в кредит",
+    interestRate: 16,
+    graceInterestRate: {
+      value: 14,
+      periodMonths: 18
+    },
+    maxTermYears: 20,
+    minDownPaymentPercent: 20,
+    description:
+      "Кредит на покупку квартиры. Первые 18 месяцев ставка 14%, затем 16%."
+  },
+
+  {
+    bankName: "Приорбанк",
+    bankSlug: "priorbank",
+    bankLogo: "PB",
+    programName: "Недвижимость у партнёров",
+    interestRate: 16,
+    graceInterestRate: {
+      value: 14,
+      periodMonths: 18
+    },
+    maxTermYears: 20,
+    minDownPaymentPercent: 15,
+    description:
+      "Кредит на покупку недвижимости у партнёров банка. Первые 18 месяцев ставка 14%, затем 16%."
+  }
+];
