@@ -136,9 +136,23 @@
   }
 
   function buildMap(districtsGeoJson, infrastructure, pricesBySlug) {
+    const osmRasterStyle = {
+      version: 8,
+      sources: {
+        osm: {
+          type: 'raster',
+          tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+          tileSize: 256,
+          attribution:
+            '© OpenStreetMap contributors'
+        }
+      },
+      layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
+    };
+
     const map = new maplibregl.Map({
       container: 'lidaMap',
-      style: 'https://demotiles.maplibre.org/style.json',
+      style: osmRasterStyle,
       center: [25.309, 53.894],
       zoom: 12
     });
@@ -210,6 +224,15 @@
         map.getCanvas().style.cursor = '';
         popup.remove();
       });
+
+      const bounds = new maplibregl.LngLatBounds();
+      districts.features.forEach((feature) => {
+        const coords = feature.geometry?.coordinates?.[0] || [];
+        coords.forEach(([lng, lat]) => bounds.extend([lng, lat]));
+      });
+      if (!bounds.isEmpty()) {
+        map.fitBounds(bounds, { padding: 36, duration: 0 });
+      }
     });
 
     return map;
