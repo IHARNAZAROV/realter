@@ -1,0 +1,456 @@
+{
+  "city": "Лида",
+  "updated_at": "2026-03-16",
+  "features": [
+    {
+      "name": "Школа №16",
+      "type": "school",
+      "coordinates": [
+        25.2853,
+        53.8746
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-masherova-15-2"
+    },
+    {
+      "name": "Детский сад",
+      "type": "kindergarten",
+      "coordinates": [
+        25.2853,
+        53.8746
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-masherova-15-2"
+    },
+    {
+      "name": "Остановка общественного транспорта",
+      "type": "transport",
+      "coordinates": [
+        25.2853,
+        53.8746
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-masherova-15-2"
+    },
+    {
+      "name": "Остановка общественного транспорта рядом",
+      "type": "transport",
+      "coordinates": [
+        25.3392,
+        53.8757
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-yuzhnyy-gorodok"
+    },
+    {
+      "name": "Сады и школа в пешей доступности",
+      "type": "school",
+      "coordinates": [
+        25.3392,
+        53.8757
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-yuzhnyy-gorodok"
+    },
+    {
+      "name": "Поликлиника рядом",
+      "type": "clinic",
+      "coordinates": [
+        25.3392,
+        53.8757
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-yuzhnyy-gorodok"
+    },
+    {
+      "name": "Школа рядом",
+      "type": "school",
+      "coordinates": [
+        25.328278,
+        53.875023
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-zarechnaya-39"
+    },
+    {
+      "name": "Детский сад рядом",
+      "type": "kindergarten",
+      "coordinates": [
+        25.328278,
+        53.875023
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-zarechnaya-39"
+    },
+    {
+      "name": "Детские площадки",
+      "type": "kindergarten",
+      "coordinates": [
+        25.2877,
+        53.8624
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-urickogo-60"
+    },
+    {
+      "name": "Детские сады рядом",
+      "type": "kindergarten",
+      "coordinates": [
+        25.2877,
+        53.8624
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-urickogo-60"
+    },
+    {
+      "name": "Школы рядом",
+      "type": "school",
+      "coordinates": [
+        25.2877,
+        53.8624
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-urickogo-60"
+    },
+    {
+      "name": "Общеобразовательные школы рядом",
+      "type": "school",
+      "coordinates": [
+        25.2598,
+        53.898
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-tuhachevskogo-65-k1"
+    },
+    {
+      "name": "Три детских сада рядом",
+      "type": "kindergarten",
+      "coordinates": [
+        25.2598,
+        53.898
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-tuhachevskogo-65-k1"
+    },
+    {
+      "name": "Автобусная остановка рядом",
+      "type": "transport",
+      "coordinates": [
+        25.2598,
+        53.898
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-tuhachevskogo-65-k1"
+    },
+    {
+      "name": "Детские сады",
+      "type": "kindergarten",
+      "coordinates": [
+        25.277,
+        53.8907
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-nevskogo-20-cheshka"
+    },
+    {
+      "name": "Школы",
+      "type": "school",
+      "coordinates": [
+        25.277,
+        53.8907
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-nevskogo-20-cheshka"
+    },
+    {
+      "name": "Остановка общественного транспорта",
+      "type": "transport",
+      "coordinates": [
+        25.277,
+        53.8907
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-nevskogo-20-cheshka"
+    },
+    {
+      "name": "2 школы рядом",
+      "type": "school",
+      "coordinates": [
+        25.2827,
+        53.879
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-varshavskaya-44"
+    },
+    {
+      "name": "Детские сады рядом",
+      "type": "kindergarten",
+      "coordinates": [
+        25.2827,
+        53.879
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-varshavskaya-44"
+    },
+    {
+      "name": "Аптека рядом",
+      "type": "pharmacy",
+      "coordinates": [
+        25.2827,
+        53.879
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-varshavskaya-44"
+    },
+    {
+      "name": "Остановки общественного транспорта рядом",
+      "type": "transport",
+      "coordinates": [
+        25.2904,
+        53.8902
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-kosmonavtov"
+    },
+    {
+      "name": "Аптека",
+      "type": "pharmacy",
+      "coordinates": [
+        25.2683,
+        53.8891
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-nevskogo-44-severny"
+    },
+    {
+      "name": "Остановки общественного транспорта рядом",
+      "type": "transport",
+      "coordinates": [
+        25.3007,
+        53.8969
+      ],
+      "district_slug": "center",
+      "source_object_slug": "kvartira-lida-ul-sovetskaya-36"
+    },
+    {
+      "name": "Школа рядом",
+      "type": "school",
+      "coordinates": [
+        25.2602,
+        53.8985
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-tukhachevskogo-65"
+    },
+    {
+      "name": "Детский сад рядом",
+      "type": "kindergarten",
+      "coordinates": [
+        25.2602,
+        53.8985
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-tukhachevskogo-65"
+    },
+    {
+      "name": "Остановки общественного транспорта рядом",
+      "type": "transport",
+      "coordinates": [
+        25.2683,
+        53.9307
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-prolygina-4"
+    },
+    {
+      "name": "Школы рядом",
+      "type": "school",
+      "coordinates": [
+        25.2683,
+        53.9307
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-prolygina-4"
+    },
+    {
+      "name": "Аптека",
+      "type": "pharmacy",
+      "coordinates": [
+        25.3332,
+        53.8729
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-yuzhnyy-gorodok-24"
+    },
+    {
+      "name": "Школы и объекты инфраструктуры рядом",
+      "type": "school",
+      "coordinates": [
+        25.298732,
+        53.885846
+      ],
+      "district_slug": "center",
+      "source_object_slug": "kvartira-lida-knyazya-gedimina-7"
+    },
+    {
+      "name": "Аптеки",
+      "type": "pharmacy",
+      "coordinates": [
+        25.2793,
+        53.88
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-kommunisticheskaya-49"
+    },
+    {
+      "name": "Школы",
+      "type": "school",
+      "coordinates": [
+        25.3007,
+        53.8969
+      ],
+      "district_slug": "center",
+      "source_object_slug": "kvartira-lida-ul-sovetskaya-36-stalinka"
+    },
+    {
+      "name": "Детские сады",
+      "type": "kindergarten",
+      "coordinates": [
+        25.3007,
+        53.8969
+      ],
+      "district_slug": "center",
+      "source_object_slug": "kvartira-lida-ul-sovetskaya-36-stalinka"
+    },
+    {
+      "name": "Остановка общественного транспорта",
+      "type": "transport",
+      "coordinates": [
+        25.3007,
+        53.8969
+      ],
+      "district_slug": "center",
+      "source_object_slug": "kvartira-lida-ul-sovetskaya-36-stalinka"
+    },
+    {
+      "name": "Школа №9 рядом",
+      "type": "school",
+      "coordinates": [
+        25.330658,
+        53.876462
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-letnaya-8"
+    },
+    {
+      "name": "Магазины и аптеки рядом",
+      "type": "pharmacy",
+      "coordinates": [
+        25.330658,
+        53.876462
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-letnaya-8"
+    },
+    {
+      "name": "Школы №17 и №15 рядом",
+      "type": "school",
+      "coordinates": [
+        25.2583,
+        53.8982
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-tuhachevskogo"
+    },
+    {
+      "name": "2 школы рядом",
+      "type": "school",
+      "coordinates": [
+        25.283272,
+        53.875671
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-masherova"
+    },
+    {
+      "name": "Несколько детских садов рядом",
+      "type": "kindergarten",
+      "coordinates": [
+        25.283272,
+        53.875671
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-masherova"
+    },
+    {
+      "name": "Аптека рядом",
+      "type": "pharmacy",
+      "coordinates": [
+        25.283272,
+        53.875671
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-masherova"
+    },
+    {
+      "name": "Автобусная остановка рядом",
+      "type": "transport",
+      "coordinates": [
+        25.283272,
+        53.875671
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-masherova"
+    },
+    {
+      "name": "Школа",
+      "type": "school",
+      "coordinates": [
+        25.3083,
+        53.8979
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero"
+    },
+    {
+      "name": "Детский сад",
+      "type": "kindergarten",
+      "coordinates": [
+        25.3083,
+        53.8979
+      ],
+      "district_slug": "severny",
+      "source_object_slug": "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero"
+    },
+    {
+      "name": "Аптеки и банки рядом",
+      "type": "pharmacy",
+      "coordinates": [
+        25.310696,
+        53.894794
+      ],
+      "district_slug": "yuzhny",
+      "source_object_slug": "kvartira-lida-ul-tavlaya-25a"
+    },
+    {
+      "name": "Школа",
+      "type": "school",
+      "coordinates": [
+        25.300493,
+        53.896846
+      ],
+      "district_slug": "center",
+      "source_object_slug": "kvartira-lida-ul-sovetskaya-5-center"
+    },
+    {
+      "name": "Детский сад",
+      "type": "kindergarten",
+      "coordinates": [
+        25.300493,
+        53.896846
+      ],
+      "district_slug": "center",
+      "source_object_slug": "kvartira-lida-ul-sovetskaya-5-center"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Районы Лиды — карта, инфраструктура и динамика цен</title>
+    <meta
+      name="description"
+      content="Интерактивный блок по районам Лиды: карта, инфраструктура и динамика цен на покупку и аренду."
+    />
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="libs/maplibre/maplibre-gl.css" />
+    <link rel="stylesheet" href="css/lida-districts.css" />
+  </head>
+  <body class="lida-districts-page">
+    <main id="lidaDistrictsRoot" class="lida-districts-wrapper">
+      <header class="lida-districts-header">
+        <h1>Районы Лиды: карта, инфраструктура и цены</h1>
+        <p>Данные собраны из реальных карточек объектов. Обновлено: <strong id="updatedAt">—</strong></p>
+      </header>
+
+      <section class="lida-districts-layout" aria-label="Интерактивная карта и инфраструктура районов Лиды">
+        <article class="card-surface">
+          <div id="lidaMap" role="img" aria-label="Карта районов Лиды"></div>
+        </article>
+
+        <aside class="sidebar card-surface">
+          <section>
+            <h2 class="h5">Фильтры инфраструктуры</h2>
+            <div class="filter-list" role="group" aria-label="Фильтры инфраструктуры">
+              <label class="filter-item"><input class="infra-filter" type="checkbox" value="school" checked /> Школы</label>
+              <label class="filter-item"><input class="infra-filter" type="checkbox" value="kindergarten" checked /> Детсады</label>
+              <label class="filter-item"><input class="infra-filter" type="checkbox" value="clinic" checked /> Поликлиники</label>
+              <label class="filter-item"><input class="infra-filter" type="checkbox" value="pharmacy" checked /> Аптеки</label>
+              <label class="filter-item"><input class="infra-filter" type="checkbox" value="transport" checked /> Остановки</label>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="h5">Легенда цен ($/м²)</h2>
+            <div id="priceLegend" class="legend"></div>
+          </section>
+
+          <section>
+            <h2 class="h5">Инфраструктура (в выбранных типах)</h2>
+            <div id="infraCounters" class="kpi-grid"></div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="prices-section card-surface" aria-label="Таблица динамики цен по районам Лиды">
+        <h2 class="h4">Динамика цен по районам</h2>
+        <div class="table-wrap">
+          <table class="prices-table">
+            <thead>
+              <tr>
+                <th>Район</th>
+                <th>Продажа $/м²</th>
+                <th>Аренда $/м²</th>
+                <th>1 месяц</th>
+                <th>12 месяцев</th>
+                <th>Тренд</th>
+              </tr>
+            </thead>
+            <tbody id="priceTableBody"></tbody>
+          </table>
+        </div>
+
+        <div id="insights" class="insights"></div>
+
+        <a class="cta" href="index.html">Подобрать квартиру в этом районе</a>
+      </section>
+    </main>
+
+    <script src="libs/maplibre/maplibre-gl.js"></script>
+    <script src="js/lida-districts.js"></script>
+  </body>
+</html>

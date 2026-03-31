@@ -1,0 +1,8 @@
+{
+  "city": "Лида",
+  "version": "1.1.0",
+  "updated_at": "2026-03-16",
+  "source": "Агрегация реальных карточек из data/objects/*.json (city=Лида, type=Квартира)",
+  "objects_total": 30,
+  "method": "Цены: средний priceUSD/areaTotal по району; динамика: помесячные срезы по publishedAt; инфраструктура: извлечение сущностей из поля infrastructure."
+}

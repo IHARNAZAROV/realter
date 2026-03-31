@@ -1,0 +1,61 @@
+{
+  "updated_at": "2026-03-16",
+  "city": "Лида",
+  "districts": [
+    {
+      "slug": "severny",
+      "name": "Северный",
+      "sale_price_m2": 828,
+      "rent_price_m2": null,
+      "change_1m": -18.8,
+      "change_3m": 1.8,
+      "change_6m": 1.8,
+      "change_12m": 3.6,
+      "trend": [
+        747,
+        833,
+        736,
+        846,
+        922,
+        749
+      ],
+      "objects_count": 11
+    },
+    {
+      "slug": "center",
+      "name": "Центр",
+      "sale_price_m2": 1085,
+      "rent_price_m2": null,
+      "change_1m": -27.3,
+      "change_3m": -27.3,
+      "change_6m": -27.3,
+      "change_12m": -54.6,
+      "trend": [
+        897,
+        1262,
+        918
+      ],
+      "objects_count": 4
+    },
+    {
+      "slug": "yuzhny",
+      "name": "Южный",
+      "sale_price_m2": 786,
+      "rent_price_m2": null,
+      "change_1m": -11.2,
+      "change_3m": -40.5,
+      "change_6m": -0.7,
+      "change_12m": -1.4,
+      "trend": [
+        763,
+        533,
+        684,
+        1275,
+        813,
+        854,
+        758
+      ],
+      "objects_count": 15
+    }
+  ]
+}
