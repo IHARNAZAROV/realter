@@ -52,6 +52,15 @@
     return inside;
   }
 
+  // Перевод координат GeoJSON [lon, lat] -> Yandex [lat, lon]
+  function geoJsonToYandexCoords(coordinates) {
+    if (!Array.isArray(coordinates)) return coordinates;
+    if (typeof coordinates[0] === "number" && typeof coordinates[1] === "number") {
+      return [coordinates[1], coordinates[0]];
+    }
+    return coordinates.map(geoJsonToYandexCoords);
+  }
+
   function getDistrictByPoint(lat, lng) {
     for (const district of state.districtsBySlug.values()) {
       const ring = district.geometry.coordinates[0];
@@ -156,7 +165,7 @@
     clusterer.add(placemarks);
     clusterer.events.add("click", function (event) {
       const target = event.get("target");
-      const bounds = target.getBounds();
+      const bounds = typeof target.getBounds === "function" ? target.getBounds() : null;
       if (bounds) {
         state.map.setBounds(bounds, { checkZoomRange: true, duration: 300 });
       }
@@ -201,9 +210,17 @@
     renderDistrictObjectsPanel(districtSlug);
 
     if (districtSlug) {
-      const district = state.districtsBySlug.get(districtSlug);
       if (moveMap) {
-        state.map.setBounds(ymaps.geoQuery(district).getBounds(), { checkZoomRange: true, duration: 350 });
+        let districtPolygon = null;
+        state.districtCollection.each((polygon) => {
+          if (polygon.properties.get("slug") === districtSlug) {
+            districtPolygon = polygon;
+          }
+        });
+        const bounds = districtPolygon ? districtPolygon.geometry.getBounds() : null;
+        if (bounds) {
+          state.map.setBounds(bounds, { checkZoomRange: true, duration: 350 });
+        }
       }
       history.replaceState(null, "", `?district=${districtSlug}`);
     } else {
@@ -218,7 +235,8 @@
       state.districtsBySlug.set(feature.properties.slug, feature);
       state.districtToObjects.set(feature.properties.slug, []);
 
-      const polygon = new ymaps.Polygon(feature.geometry.coordinates, {
+      const polygonCoordinates = geoJsonToYandexCoords(feature.geometry.coordinates);
+      const polygon = new ymaps.Polygon(polygonCoordinates, {
         hintContent: feature.properties.name,
         districtName: feature.properties.name,
         slug: feature.properties.slug
