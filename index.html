@@ -69,6 +69,7 @@
 
     <!-- Основные стили -->
     <link rel="stylesheet" href="/css/style.css" data-versioned>
+    <link rel="stylesheet" href="/css/lida-district-map.css" data-versioned>
 
     <!-- ==============================================
        8. NON-CRITICAL CSS (АСИНХРОННО)
@@ -848,6 +849,30 @@
                 </div>
             </div>
             <!-- OUR SERVICES END -->
+
+            <!-- SECTION: Недвижимость по районам Лиды -->
+            <section class="lida-map-section">
+                <div class="container">
+                    <header class="section-head section-head--bracket m-b30">
+                        <h2 class="section-title">Недвижимость по районам Лиды</h2>
+                        <p>Выберите район на карте, чтобы увидеть доступные объекты</p>
+                    </header>
+
+                    <div class="lida-map-layout">
+                        <div class="lida-map-shell">
+                            <div id="lidaDistrictMap" aria-label="Интерактивная карта районов Лиды"></div>
+                        </div>
+
+                        <aside class="lida-map-panel">
+                            <p class="lida-map-panel__badge">Выбранный район</p>
+                            <h3 id="lidaDistrictTitle">Выберите район</h3>
+                            <p id="lidaDistrictStats">Выберите район на карте, чтобы увидеть список объектов</p>
+                            <ul class="lida-objects-list" id="lidaDistrictObjects"></ul>
+                        </aside>
+                    </div>
+                </div>
+            </section>
+
             <!-- SECTION: Market analytics -->
             <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
                 <div class="container">
@@ -1388,6 +1413,8 @@
     <script src="/js/live-price.js?v=20260319-2" defer></script>
     <script src="/js/market-analytics.js?v=20260319-1" defer></script>
     <script src="/js/blog-smart-badge.js" defer></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" defer></script>
+    <script src="/js/lida-district-map.js" defer></script>
     <script src="/js/objects-smart-badge.js" defer></script>
 </body>
 
