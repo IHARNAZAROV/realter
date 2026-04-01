@@ -92,6 +92,7 @@ const previewImages = {
   "dom-lida-ul-poselkovaya-industrialny":"images/objects/pic49.webp",
   "kvartira-lida-ul-kommunisticheskaya-49":"images/objects/pic50.webp",
   "kvartira-shchuchin-ul-ostrovskogo-22":"images/objects/pic51.webp",
+  "kvartira-lida-yuzhny-gorodok-13-stary-yuzhny":"images/objects/pic52.webp",
 };
 
 /* =========================================================
