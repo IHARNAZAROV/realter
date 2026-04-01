@@ -1,0 +1,126 @@
+/* Секция интерактивной карты Лиды */
+.lida-map-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, #f8f5f2 0%, #ffffff 100%);
+}
+
+.lida-map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.lida-map-shell {
+  background: #fff;
+  border: 1px solid #e8dfd8;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(21, 89, 69, 0.1);
+}
+
+#lidaDistrictMap {
+  width: 100%;
+  min-height: 560px;
+}
+
+.lida-map-panel {
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #e8dfd8;
+  box-shadow: 0 18px 45px rgba(21, 89, 69, 0.1);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lida-map-panel__badge {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6f7a74;
+  margin-bottom: 0;
+}
+
+#lidaDistrictTitle {
+  margin: 0;
+  font-size: 24px;
+}
+
+#lidaDistrictStats {
+  margin: 0;
+  font-size: 14px;
+  color: #66726c;
+}
+
+.lida-objects-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 430px;
+  overflow: auto;
+}
+
+.lida-objects-list__item {
+  border: 1px solid #ece4dd;
+  border-radius: 14px;
+  padding: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lida-objects-list__item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(21, 89, 69, 0.13);
+}
+
+.lida-objects-list__title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: #1e2d26;
+}
+
+.lida-objects-list__meta {
+  margin: 0;
+  color: #607069;
+  font-size: 13px;
+}
+
+.lida-objects-list__link {
+  margin-top: 8px;
+  display: inline-flex;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 13px;
+}
+
+.lida-objects-empty {
+  border: 1px dashed #d4c6bc;
+  border-radius: 14px;
+  padding: 16px;
+  background: #fdf9f6;
+  color: #6f6d69;
+}
+
+@media (max-width: 992px) {
+  .lida-map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #lidaDistrictMap {
+    min-height: 430px;
+  }
+}
+
+@media (max-width: 576px) {
+  .lida-map-section {
+    padding: 50px 0;
+  }
+
+  .lida-map-panel {
+    padding: 18px;
+  }
+}
