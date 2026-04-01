@@ -1,4 +1,3 @@
-
 (function () {
   const STORAGE_KEY = "mortgageCalculatorBank";
   const DEFAULT_BANK_SLUG = "belarusbank";
@@ -9,13 +8,13 @@
     }
 
     if (selectElement.dataset.customReady === "1") {
-      const customSelect = selectElement.nextElementSibling;
+      const customSelectElement = selectElement.nextElementSibling;
 
       if (
-        customSelect &&
-        customSelect.classList.contains("filter-select-ui")
+        customSelectElement &&
+        customSelectElement.classList.contains("filter-select-ui")
       ) {
-        customSelect.remove();
+        customSelectElement.remove();
       }
 
       delete selectElement.dataset.customReady;
@@ -25,29 +24,29 @@
     window.initCustomSelectUI(selectElement);
   }
 
-  function formatMoney(value) {
-    return `${Math.round(value).toLocaleString("ru-RU")}`;
+  function formatMoney(amount) {
+    return Math.round(amount).toLocaleString("ru-RU");
   }
 
-  function calculateAnnuityPayment(loanAmount, annualRate, monthsCount) {
+  function calculateAnnuityPayment(loanAmount, annualInterestRate, monthsCount) {
     if (loanAmount <= 0 || monthsCount <= 0) {
       return 0;
     }
 
-    const monthlyRate = annualRate / 100 / 12;
+    const monthlyInterestRate = annualInterestRate / 100 / 12;
 
-    if (monthlyRate === 0) {
+    if (monthlyInterestRate === 0) {
       return loanAmount / monthsCount;
     }
 
-    return (
-      loanAmount *
-      ((monthlyRate * Math.pow(1 + monthlyRate, monthsCount)) /
-        (Math.pow(1 + monthlyRate, monthsCount) - 1))
-    );
+    const coefficient =
+      (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, monthsCount)) /
+      (Math.pow(1 + monthlyInterestRate, monthsCount) - 1);
+
+    return loanAmount * coefficient;
   }
 
-  function calculateMortgageWithGracePeriod({
+  function calculateMortgage({
     propertyPrice,
     downPayment,
     years,
@@ -57,7 +56,17 @@
     const loanAmount = Math.max(propertyPrice - downPayment, 0);
     const totalMonths = years * 12;
 
-    if (!graceInterestRate || loanAmount <= 0) {
+    if (loanAmount <= 0 || totalMonths <= 0) {
+      return {
+        loanAmount: 0,
+        firstMonthlyPayment: 0,
+        secondMonthlyPayment: null,
+        totalPayment: 0,
+        overpayment: 0
+      };
+    }
+
+    if (!graceInterestRate) {
       const monthlyPayment = calculateAnnuityPayment(
         loanAmount,
         baseInterestRate,
@@ -80,35 +89,64 @@
       totalMonths
     );
 
-    const firstPeriodRate =
+    const graceRate =
       typeof graceInterestRate.value === "number"
         ? graceInterestRate.value
         : typeof graceInterestRate.min === "number"
           ? graceInterestRate.min
           : baseInterestRate;
 
+    const remainingMonths = Math.max(totalMonths - graceMonths, 0);
+
+    // Белагропромбанк и другие программы с отсрочкой основного долга
+    if (graceInterestRate.interestOnly) {
+      const firstMonthlyPayment =
+        (loanAmount * (graceRate / 100)) / 12;
+
+      const secondMonthlyPayment =
+        remainingMonths > 0
+          ? calculateAnnuityPayment(
+              loanAmount,
+              baseInterestRate,
+              remainingMonths
+            )
+          : null;
+
+      const totalPayment =
+        firstMonthlyPayment * graceMonths +
+        (secondMonthlyPayment || 0) * remainingMonths;
+
+      return {
+        loanAmount,
+        firstMonthlyPayment,
+        secondMonthlyPayment,
+        totalPayment,
+        overpayment: Math.max(totalPayment - loanAmount, 0)
+      };
+    }
+
+    // Обычная льготная ставка, когда кредит продолжает погашаться
     const firstMonthlyPayment = calculateAnnuityPayment(
       loanAmount,
-      firstPeriodRate,
+      graceRate,
       totalMonths
     );
 
-    let remainingLoan = loanAmount;
-    const firstPeriodMonthlyRate = firstPeriodRate / 100 / 12;
+    let remainingLoanAmount = loanAmount;
+    const monthlyGraceRate = graceRate / 100 / 12;
 
-    for (let monthIndex = 0; monthIndex < graceMonths; monthIndex++) {
-      const interestPart = remainingLoan * firstPeriodMonthlyRate;
+    for (let monthIndex = 0; monthIndex < graceMonths; monthIndex += 1) {
+      const interestPart = remainingLoanAmount * monthlyGraceRate;
       const principalPart = firstMonthlyPayment - interestPart;
 
-      remainingLoan -= principalPart;
+      remainingLoanAmount -= principalPart;
+      remainingLoanAmount = Math.max(remainingLoanAmount, 0);
     }
-
-    const remainingMonths = totalMonths - graceMonths;
 
     const secondMonthlyPayment =
       remainingMonths > 0
         ? calculateAnnuityPayment(
-            remainingLoan,
+            remainingLoanAmount,
             baseInterestRate,
             remainingMonths
           )
@@ -116,7 +154,7 @@
 
     const totalPayment =
       firstMonthlyPayment * graceMonths +
-      (secondMonthlyPayment ? secondMonthlyPayment * remainingMonths : 0);
+      (secondMonthlyPayment || 0) * remainingMonths;
 
     return {
       loanAmount,
@@ -127,26 +165,35 @@
     };
   }
 
-  function getRateLabel(program) {
+  function getProgramRateLabel(program) {
     if (!program.graceInterestRate) {
       return `${program.interestRate}%`;
     }
 
-    if (typeof program.graceInterestRate.value === "number") {
-      return `${program.graceInterestRate.value}% → ${program.interestRate}%`;
-    }
+    const graceRateLabel =
+      typeof program.graceInterestRate.value === "number"
+        ? `${program.graceInterestRate.value}%`
+        : `${program.graceInterestRate.min}%–${program.graceInterestRate.max}%`;
 
-    return `${program.graceInterestRate.min}-${program.graceInterestRate.max}% → ${program.interestRate}%`;
+    return `${graceRateLabel} → ${program.interestRate}%`;
   }
 
   function buildProgramDescription(program) {
-    let description = `${program.description} Мин. взнос: ${program.minDownPaymentPercent}%. Макс. срок: ${program.maxTermYears} лет.`;
+    let description = program.description;
+
+    description += ` Минимальный первоначальный взнос — ${program.minDownPaymentPercent}%.`;
+    description += ` Максимальный срок — ${program.maxTermYears} лет.`;
 
     if (program.graceInterestRate) {
-      if (typeof program.graceInterestRate.value === "number") {
-        description += ` Льготная ставка ${program.graceInterestRate.value}% на ${program.graceInterestRate.periodMonths} мес., затем ${program.interestRate}%.`;
-      } else {
-        description += ` Льготная ставка ${program.graceInterestRate.min}-${program.graceInterestRate.max}% на ${program.graceInterestRate.periodMonths} мес., затем ${program.interestRate}%.`;
+      const graceRateText =
+        typeof program.graceInterestRate.value === "number"
+          ? `${program.graceInterestRate.value}%`
+          : `${program.graceInterestRate.min}%–${program.graceInterestRate.max}%`;
+
+      description += ` Льготная ставка ${graceRateText} действует ${program.graceInterestRate.periodMonths} мес., затем ${program.interestRate}%.`;
+
+      if (program.graceInterestRate.interestOnly) {
+        description += " В течение льготного периода погашаются только проценты без уменьшения основного долга.";
       }
     }
 
@@ -154,30 +201,60 @@
   }
 
   window.initMultiBankMortgageCalculator = function (realEstateObject) {
-    const calculator = document.querySelector("[data-mortgage-calculator]");
+    const calculatorElement = document.querySelector(
+      "[data-mortgage-calculator]"
+    );
 
-    if (!calculator || !Array.isArray(window.MORTGAGE_PROGRAMS)) {
+    if (
+      !calculatorElement ||
+      !Array.isArray(window.MORTGAGE_PROGRAMS) ||
+      !window.MORTGAGE_PROGRAMS.length
+    ) {
       return;
     }
 
-    const bankSelect = calculator.querySelector("[data-mortgage-bank]");
-    const calculatorTitle = calculator.querySelector("[data-mortgage-bank-title]");
-    const programSelect = calculator.querySelector("[data-mortgage-program]");
-    const descriptionElement = calculator.querySelector("[data-mortgage-description]");
+    const bankSelectElement = calculatorElement.querySelector(
+      "[data-mortgage-bank]"
+    );
+    const titleElement = calculatorElement.querySelector(
+      "[data-mortgage-bank-title]"
+    );
+    const programSelectElement = calculatorElement.querySelector(
+      "[data-mortgage-program]"
+    );
+    const descriptionElement = calculatorElement.querySelector(
+      "[data-mortgage-description]"
+    );
 
-    const propertyPriceInput = calculator.querySelector("[data-mortgage-price]");
-    const downPaymentInput = calculator.querySelector("[data-mortgage-down-payment]");
-    const termInput = calculator.querySelector("[data-mortgage-term]");
-    const rateInput = calculator.querySelector("[data-mortgage-rate]");
+    const propertyPriceInput = calculatorElement.querySelector(
+      "[data-mortgage-price]"
+    );
+    const downPaymentInput = calculatorElement.querySelector(
+      "[data-mortgage-down-payment]"
+    );
+    const termInput = calculatorElement.querySelector(
+      "[data-mortgage-term]"
+    );
+    const rateInput = calculatorElement.querySelector(
+      "[data-mortgage-rate]"
+    );
 
-    const loanAmountElement = calculator.querySelector("[data-mortgage-loan]");
-    const monthlyPaymentElement = calculator.querySelector("[data-mortgage-payment]");
-    const overpaymentElement = calculator.querySelector("[data-mortgage-overpay]");
-    const totalPaymentElement = calculator.querySelector("[data-mortgage-total]");
+    const loanAmountElement = calculatorElement.querySelector(
+      "[data-mortgage-loan]"
+    );
+    const monthlyPaymentElement = calculatorElement.querySelector(
+      "[data-mortgage-payment]"
+    );
+    const overpaymentElement = calculatorElement.querySelector(
+      "[data-mortgage-overpay]"
+    );
+    const totalPaymentElement = calculatorElement.querySelector(
+      "[data-mortgage-total]"
+    );
 
     if (
-      !bankSelect ||
-      !programSelect ||
+      !bankSelectElement ||
+      !programSelectElement ||
       !propertyPriceInput ||
       !downPaymentInput ||
       !termInput ||
@@ -186,33 +263,34 @@
       return;
     }
 
-    const banksMap = {};
+    const banksBySlug = {};
 
     window.MORTGAGE_PROGRAMS.forEach((program) => {
-      if (!banksMap[program.bankSlug]) {
-        banksMap[program.bankSlug] = {
-          bankName: program.bankName,
+      if (!banksBySlug[program.bankSlug]) {
+        banksBySlug[program.bankSlug] = {
           bankSlug: program.bankSlug,
+          bankName: program.bankName,
           bankLogo: program.bankLogo,
           programs: []
         };
       }
 
-      banksMap[program.bankSlug].programs.push(program);
+      banksBySlug[program.bankSlug].programs.push(program);
     });
 
-    const banks = Object.values(banksMap);
+    const banks = Object.values(banksBySlug);
 
-    bankSelect.innerHTML = banks
-      .map(
-        (bank) =>
-          `<option value="${bank.bankSlug}">${bank.bankName}</option>`
-      )
+    bankSelectElement.innerHTML = banks
+      .map((bank) => {
+        return `<option value="${bank.bankSlug}">${bank.bankName}</option>`;
+      })
       .join("");
 
     function getPropertyPrice() {
       if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
-        const livePrice = window.RealterPrice.getLiveBynPriceSync(realEstateObject);
+        const livePrice = window.RealterPrice.getLiveBynPriceSync(
+          realEstateObject
+        );
 
         if (typeof livePrice === "number" && livePrice > 0) {
           return livePrice;
@@ -231,27 +309,30 @@
 
     function renderPrograms(bankSlug) {
       const selectedBank =
-        banksMap[bankSlug] ||
-        banksMap[DEFAULT_BANK_SLUG] ||
+        banksBySlug[bankSlug] ||
+        banksBySlug[DEFAULT_BANK_SLUG] ||
         banks[0];
 
-      programSelect.innerHTML = selectedBank.programs
-        .map(
-          (program, index) =>
-            `<option value="${index}">${program.programName} · ${getRateLabel(program)}</option>`
-        )
+      programSelectElement.innerHTML = selectedBank.programs
+        .map((program, index) => {
+          return `
+            <option value="${index}">
+              ${program.programName} · ${getProgramRateLabel(program)}
+            </option>
+          `;
+        })
         .join("");
 
-      rebuildCustomSelect(programSelect);
+      rebuildCustomSelect(programSelectElement);
 
-      if (calculatorTitle) {
-        calculatorTitle.textContent = `Ипотечный калькулятор — ${selectedBank.bankName}`;
+      if (titleElement) {
+        titleElement.textContent = `Ипотечный калькулятор — ${selectedBank.bankName}`;
       }
     }
 
     function getSelectedProgram() {
-      const selectedBank = banksMap[bankSelect.value] || banks[0];
-      const selectedProgramIndex = Number(programSelect.value) || 0;
+      const selectedBank = banksBySlug[bankSelectElement.value] || banks[0];
+      const selectedProgramIndex = Number(programSelectElement.value) || 0;
 
       return (
         selectedBank.programs[selectedProgramIndex] ||
@@ -266,10 +347,13 @@
         return;
       }
 
-      const propertyPrice = Math.max(Number(propertyPriceInput.value) || 0, 0);
+      const propertyPrice = Math.max(
+        Number(propertyPriceInput.value) || 0,
+        0
+      );
 
       const minimumDownPayment = Math.round(
-        (propertyPrice * selectedProgram.minDownPaymentPercent) / 100
+        propertyPrice * (selectedProgram.minDownPaymentPercent / 100)
       );
 
       downPaymentInput.min = String(minimumDownPayment);
@@ -301,7 +385,7 @@
 
       rateInput.value = String(selectedProgram.interestRate);
 
-      const calculation = calculateMortgageWithGracePeriod({
+      const calculationResult = calculateMortgage({
         propertyPrice,
         downPayment,
         years: Number(termInput.value),
@@ -310,70 +394,80 @@
       });
 
       if (descriptionElement) {
-        descriptionElement.textContent = buildProgramDescription(selectedProgram);
+        descriptionElement.textContent =
+          buildProgramDescription(selectedProgram);
       }
 
       if (loanAmountElement) {
-        loanAmountElement.textContent = formatMoney(calculation.loanAmount);
+        loanAmountElement.textContent = formatMoney(
+          calculationResult.loanAmount
+        );
       }
 
       if (monthlyPaymentElement) {
-        if (calculation.secondMonthlyPayment) {
-          monthlyPaymentElement.textContent = `${formatMoney(calculation.firstMonthlyPayment)} → ${formatMoney(calculation.secondMonthlyPayment)}`;
+        if (calculationResult.secondMonthlyPayment) {
+          monthlyPaymentElement.textContent =
+            `${formatMoney(calculationResult.firstMonthlyPayment)} → ${formatMoney(calculationResult.secondMonthlyPayment)}`;
         } else {
-          monthlyPaymentElement.textContent = formatMoney(calculation.firstMonthlyPayment);
+          monthlyPaymentElement.textContent = formatMoney(
+            calculationResult.firstMonthlyPayment
+          );
         }
       }
 
       if (overpaymentElement) {
-        overpaymentElement.textContent = formatMoney(calculation.overpayment);
+        overpaymentElement.textContent = formatMoney(
+          calculationResult.overpayment
+        );
       }
 
       if (totalPaymentElement) {
-        totalPaymentElement.textContent = formatMoney(calculation.totalPayment);
+        totalPaymentElement.textContent = formatMoney(
+          calculationResult.totalPayment
+        );
       }
     }
 
     propertyPriceInput.value = String(getPropertyPrice());
 
-    bankSelect.addEventListener("change", () => {
-      renderPrograms(bankSelect.value);
-      programSelect.value = "0";
+    bankSelectElement.addEventListener("change", () => {
+      renderPrograms(bankSelectElement.value);
+      programSelectElement.value = "0";
 
-      localStorage.setItem(STORAGE_KEY, bankSelect.value);
+      localStorage.setItem(STORAGE_KEY, bankSelectElement.value);
 
       updateCalculator();
     });
 
-    programSelect.addEventListener("change", updateCalculator);
+    programSelectElement.addEventListener("change", updateCalculator);
 
     [
       propertyPriceInput,
       downPaymentInput,
       termInput,
       rateInput
-    ].forEach((input) => {
-      input.addEventListener("input", updateCalculator);
-      input.addEventListener("change", updateCalculator);
+    ].forEach((inputElement) => {
+      inputElement.addEventListener("input", updateCalculator);
+      inputElement.addEventListener("change", updateCalculator);
     });
 
     const savedBankSlug = localStorage.getItem(STORAGE_KEY);
-    const initialBankSlug = banksMap[savedBankSlug]
+
+    const initialBankSlug = banksBySlug[savedBankSlug]
       ? savedBankSlug
       : DEFAULT_BANK_SLUG;
 
-    bankSelect.value = banksMap[initialBankSlug]
+    bankSelectElement.value = banksBySlug[initialBankSlug]
       ? initialBankSlug
       : banks[0].bankSlug;
 
-    renderPrograms(bankSelect.value);
+    renderPrograms(bankSelectElement.value);
 
-    programSelect.value = "0";
+    programSelectElement.value = "0";
 
-    rebuildCustomSelect(bankSelect);
-    rebuildCustomSelect(programSelect);
+    rebuildCustomSelect(bankSelectElement);
+    rebuildCustomSelect(programSelectElement);
 
     updateCalculator();
   };
 })();
-

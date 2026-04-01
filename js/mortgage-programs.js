@@ -58,16 +58,47 @@ window.MORTGAGE_PROGRAMS = [
 
   {
     bankName: "Белинвестбанк",
-    bankSlug: "belinvestbank",
-    bankLogo: "БИБ",
-    programName: "Недвижимость в кредит",
-    interestRate: 18.11,
-    maxTermYears: 20,
-    minDownPaymentPercent: 15,
-    description:
-      "Кредит на покупку жилья на первичном и вторичном рынке."
+  bankSlug: "belinvestbank",
+  bankLogo: "БИБ",
+  programName: "Недвижимость в кредит",
+  interestRate: 17.5,
+  maxTermYears: 20,
+  minDownPaymentPercent: 15,
+  description:
+    "Кредит на покупку жилья на вторичном рынке и готовых квартир от застройщиков."
   },
-
+{
+  bankName: "Белагропромбанк",
+  bankSlug: "belagroprombank",
+  bankLogo: "БАПБ",
+  programName: "Покупка недвижимости на вторичном рынке",
+  interestRate: 16.75,
+  graceInterestRate: {
+    value: 14.5,
+    periodMonths: 6,
+    interestOnly: true
+  },
+  maxTermYears: 20,
+  minDownPaymentPercent: 10,
+  description:
+    "Первые 180 дней ставка 14.5% с отсрочкой погашения основного долга, затем 16.75%."
+},
+{
+  bankName: "Белагропромбанк",
+  bankSlug: "belagroprombank",
+  bankLogo: "БАПБ",
+  programName: "Рефинансирование кредита на недвижимость",
+  interestRate: 16.75,
+  graceInterestRate: {
+    value: 14.5,
+    periodMonths: 6,
+    interestOnly: true
+  },
+  maxTermYears: 20,
+  minDownPaymentPercent: 0,
+  description:
+    "Рефинансирование ипотечного кредита из другого банка. Первые 180 дней — 14.5%, затем 16.75%."
+},
   {
     bankName: "БТА Банк",
     bankSlug: "bta",
