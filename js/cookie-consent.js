@@ -33,8 +33,8 @@
     const maxAgeSeconds = 24 * COOKIE_DURATION_DAYS * 60 * 60;
     const cookieData = {
       necessary: true,
-      analytics: true, // Аналитика ВСЕГДА включена
-      marketing: true, // Маркетинг ВСЕГДА включен (GTM + ретаргетинг)
+      analytics: settings.analytics !== false, // Можно управлять
+      marketing: settings.marketing === true, // Включается только при явном согласии
       updatedAt: new Date().toISOString()
     };
     const cookieString = encodeURIComponent(JSON.stringify(cookieData));
@@ -102,16 +102,38 @@
         <div class="cookie-settings" id="cookieSettings">
           <div class="cookie-settings-head">
             <h3>Настройки cookies</h3>
-            <p>Аналитика (GA4, Яндекс.Метрика, GTM) всегда включена. Можно управлять только маркетингом.</p>
+            <p>Necessary куки необходимы для работы сайта. Вы можете управлять аналитикой и маркетингом.</p>
           </div>
 
           <div class="cookie-setting-row">
             <div class="cookie-setting-text">
               <strong>Necessary</strong>
-              <span>Нужны для работы сайта (всегда включены)</span>
+              <span>Обязательны для работы сайта</span>
             </div>
             <label class="cookie-switch">
               <input type="checkbox" checked disabled />
+              <span class="cookie-slider"></span>
+            </label>
+          </div>
+
+          <div class="cookie-setting-row">
+            <div class="cookie-setting-text">
+              <strong>Analytics (GA4, Яндекс.Метрика, GTM)</strong>
+              <span>Помогает улучшать сайт через аналитику</span>
+            </div>
+            <label class="cookie-switch">
+              <input type="checkbox" id="analyticsToggle" checked />
+              <span class="cookie-slider"></span>
+            </label>
+          </div>
+
+          <div class="cookie-setting-row">
+            <div class="cookie-setting-text">
+              <strong>Marketing</strong>
+              <span>Для релевантной рекламы и ретаргетинга</span>
+            </div>
+            <label class="cookie-switch">
+              <input type="checkbox" id="marketingToggle" />
               <span class="cookie-slider"></span>
             </label>
           </div>
@@ -156,15 +178,15 @@
       // Принять всё
       btnAcceptAll.addEventListener('click', function() {
         sendYandexGoal('cookie_accept_all');
-        saveCookie({ marketing: true });
+        saveCookie({ analytics: true, marketing: true });
         applyCookieConsent();
         hideCookieModal();
       });
 
-      // Отклонить (но аналитика и маркетинг ВСЕГДА включены)
+      // Отклонить (только необходимые куки)
       btnDeclineAll.addEventListener('click', function() {
         sendYandexGoal('cookie_decline_all');
-        saveCookie({});
+        saveCookie({ analytics: false, marketing: false });
         applyCookieConsent();
         hideCookieModal();
       });
@@ -181,16 +203,25 @@
 
       // Сохранить настройки
       btnSaveSettings.addEventListener('click', function() {
-        sendYandexGoal('cookie_save_settings', { marketing: 1 });
-        saveCookie({});
+        const analyticsToggle = document.getElementById('analyticsToggle');
+        const marketingToggle = document.getElementById('marketingToggle');
+        const settings = {
+          analytics: analyticsToggle ? analyticsToggle.checked : true,
+          marketing: marketingToggle ? marketingToggle.checked : false
+        };
+        sendYandexGoal('cookie_save_settings', { 
+          analytics: settings.analytics ? 1 : 0,
+          marketing: settings.marketing ? 1 : 0
+        });
+        saveCookie(settings);
         applyCookieConsent();
         hideCookieModal();
       });
 
-      // Закрыть по крестику (но аналитика и маркетинг ВСЕГДА включены)
+      // Закрыть по крестику (только необходимые куки)
       btnClose.addEventListener('click', function() {
         sendYandexGoal('cookie_close');
-        saveCookie({});
+        saveCookie({ analytics: false, marketing: false });
         applyCookieConsent();
         hideCookieModal();
       });

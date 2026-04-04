@@ -1320,8 +1320,7 @@
 
             <div class="cookie-body">
                 <p class="cookie-desc">
-                    Мы используем cookies для корректной работы сайта и аналитики. Вы
-                    можете принять все cookies или настроить категории.
+                    Мы используем cookies для корректной работы сайта, аналитики и улучшения пользовательского опыта.
                     <a href="/cookies-policy" target="_blank" rel="noopener noreferrer">Подробнее</a>
                 </p>
 
@@ -1343,17 +1342,41 @@
                 <div class="cookie-settings" id="cookieSettings">
                     <div class="cookie-settings-head">
                         <h3>Настройки cookies</h3>
-                        <p>Можно включить только необходимые или добавить аналитику.</p>
+                        <p>Necessary куки необходимы для работы сайта. Вы можете управлять аналитикой и маркетингом.</p>
                     </div>
 
                     <div class="cookie-setting-row">
                         <div class="cookie-setting-text">
-                            <strong>Необходимые</strong>
-                            <span>Нужны для работы сайта (всегда включены)</span>
+                            <strong>Necessary</strong>
+                            <span>Обязательны для работы сайта</span>
                         </div>
 
                         <label class="cookie-switch">
                             <input type="checkbox" checked disabled />
+                            <span class="cookie-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="cookie-setting-row">
+                        <div class="cookie-setting-text">
+                            <strong>Analytics (GA4, Яндекс.Метрика, GTM)</strong>
+                            <span>Помогает улучшать сайт через аналитику</span>
+                        </div>
+
+                        <label class="cookie-switch">
+                            <input type="checkbox" id="analyticsToggle" checked />
+                            <span class="cookie-slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="cookie-setting-row">
+                        <div class="cookie-setting-text">
+                            <strong>Marketing</strong>
+                            <span>Для релевантной рекламы и ретаргетинга</span>
+                        </div>
+
+                        <label class="cookie-switch">
+                            <input type="checkbox" id="marketingToggle" />
                             <span class="cookie-slider"></span>
                         </label>
                     </div>
