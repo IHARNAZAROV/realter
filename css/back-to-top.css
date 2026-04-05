@@ -1,0 +1,144 @@
+/* ================================================================
+   BACK-TO-TOP BUTTON
+   Плавающая кнопка в правом нижнем углу для прокрутки наверх
+================================================================ */
+
+.back-to-top {
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  width: 3.2rem;
+  height: 3.2rem;
+  background: linear-gradient(135deg, #006064 0%, #00838f 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 96, 100, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 10001;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  visibility: hidden;
+  padding: 0;
+  line-height: 1;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Контейнер иконки */
+.back-to-top-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Гарантируем правильное отображение иконки */
+.back-to-top i {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  color: #ffffff !important;
+  font-size: 1.4rem !important;
+  font-weight: 900 !important;
+  font-family: "Font Awesome 7 Free" !important;
+  font-style: normal !important;
+  text-rendering: auto !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  white-space: normal !important;
+  direction: ltr !important;
+  word-break: normal !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Резервная иконка если FontAwesome не загружена */
+.back-to-top-icon::before {
+  content: "↑";
+  position: absolute;
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-weight: bold;
+  display: none;
+}
+
+/* Показать резервную иконку если <i> пуста */
+.back-to-top i:empty::after {
+  content: "↑";
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-weight: bold;
+  display: inline-block;
+}
+.back-to-top.show {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  animation: slideInUp 0.3s ease-out;
+}
+
+/* Hover эффект */
+.back-to-top:hover {
+  background: linear-gradient(135deg, #004d4f 0%, #00626c 100%);
+  box-shadow: 0 10px 30px rgba(0, 96, 100, 0.6);
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Active (нажатие) */
+.back-to-top:active {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 96, 100, 0.3);
+}
+
+/* Анимация появления */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* На планшетах */
+@media (max-width: 768px) {
+  .back-to-top {
+    bottom: 4rem;
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1rem;
+  }
+}
+
+/* На очень маленьких экранах (смартфоны) */
+@media (max-width: 480px) {
+  .back-to-top {
+    bottom: 3rem;
+    right: 0.75rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Отключаем на печать */
+@media print {
+  .back-to-top {
+    display: none !important;
+  }
+}

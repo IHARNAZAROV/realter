@@ -82,10 +82,11 @@
     <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.rel='stylesheet'">
-    <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.rel='stylesheet'">
 
     <!-- Icons -->
     <link rel="preload" href="/css/flaticon.min.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css">
 
     <!-- Blog -->
     <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.rel='stylesheet'">
@@ -158,6 +159,12 @@
           ]
         }
     </script>
+
+    <!-- FontAwesome Solid (для Back-to-Top иконки) -->
+    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css">
+    
+    <!-- Back-to-Top Button Styles -->
+    <link rel="stylesheet" href="/css/back-to-top.css">
 
 </head>
 
@@ -1435,6 +1442,19 @@
     <script src="/js/market-analytics.js?v=20260319-1" defer></script>
     <script src="/js/blog-smart-badge.js" defer></script>
     <script src="/js/objects-smart-badge.js" defer></script>
+
+    <!-- ================================================================
+         Back-to-Top Button
+    ================================================================ -->
+    <button class="back-to-top" aria-label="Прокрутить вверх" title="Вернуться в начало страницы">
+        <span class="back-to-top-icon">
+            <i class="fa-solid fa-chevron-up"></i>
+        </span>
+    </button>
+
+    <!-- Back-to-Top Button Script -->
+    <script src="/js/back-to-top.js" defer></script>
+
 </body>
 
 </html>

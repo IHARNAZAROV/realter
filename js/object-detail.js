@@ -360,7 +360,8 @@
     const firstImage = Array.isArray(obj.images) && obj.images.length
       ? (obj.images[0].startsWith("http") ? obj.images[0] : `https://turko.by${obj.images[0]}`)
       : "https://turko.by/images/main-slider/2.webp";
-    const desc = obj.cardDescription
+    const desc = obj.metaDescription
+      || obj.cardDescription
       || (obj.description ? obj.description.slice(0, 160).trimEnd() + "…" : "")
       || "Объект недвижимости — Ольга Турко, риэлтер в Лиде";
     const url = `https://turko.by/object/${obj.slug}`;
@@ -438,7 +439,7 @@ if (desc && obj.description) {
       (src) => `
       
         <div class="object-hero-image">
-          <img loading="lazy" decoding="async" src="${src}" alt="">
+          <img loading="lazy" decoding="async" src="${src}" alt="${obj.title}">
         </div>
    
     `,
