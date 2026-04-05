@@ -430,7 +430,7 @@ function renderContentBlock(container, block) {
       list = document.createElement("ul");
       list.className = "sx-checklist";
     } else if (block.style === "numbered") {
-      list = document.createElement("ol");
+      list = document.createElement("ul");
       list.className = "sx-numbered-list";
     } else {
       list = document.createElement("ul");
