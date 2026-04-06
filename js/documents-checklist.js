@@ -14,34 +14,106 @@
 
   const DEAL_DOCUMENTS = {
     purchase: [
-      "Паспорт покупателя",
-      "Свидетельство о браке или разводе",
-      "Нотариальное согласие супруга",
-      "Справка о доходах",
-      "Кредитное решение банка или подтверждение наличия средств",
-      "Предварительный договор или задаток",
-      "ИНН / идентификационный номер",
-      "Реквизиты для расчёта"
+      {
+        name: "Паспорт покупателя",
+        hint: "Подтверждает личность и используется для проверки данных в договоре."
+      },
+      {
+        name: "Свидетельство о браке или разводе",
+        hint: "Нужно для подтверждения семейного статуса при оформлении сделки."
+      },
+      {
+        name: "Нотариальное согласие супруга",
+        hint: "Требуется, если имущество приобретается в браке и действует режим совместной собственности."
+      },
+      {
+        name: "Справка о доходах",
+        hint: "Помогает подтвердить платёжеспособность при покупке с кредитом."
+      },
+      {
+        name: "Кредитное решение банка или подтверждение наличия средств",
+        hint: "Подтверждает источник финансирования и готовность выйти на сделку."
+      },
+      {
+        name: "Предварительный договор или задаток",
+        hint: "Фиксирует ключевые условия и серьёзность намерений сторон."
+      },
+      {
+        name: "ИНН / идентификационный номер",
+        hint: "Используется для корректного оформления документов и расчётов."
+      },
+      {
+        name: "Реквизиты для расчёта",
+        hint: "Нужны для безопасного и корректного перечисления денежных средств."
+      }
     ],
     sale: [
-      "Паспорт собственника",
-      "Документ, подтверждающий право собственности",
-      "Технический паспорт объекта",
-      "Выписка о зарегистрированных лицах",
-      "Справка об отсутствии задолженности по коммунальным платежам",
-      "Свидетельство о браке или нотариальное согласие супруга",
-      "Документы-основания приобретения недвижимости",
-      "Доверенность, если продажу проводит представитель"
+      {
+        name: "Паспорт собственника",
+        hint: "Основной документ, подтверждающий личность продавца."
+      },
+      {
+        name: "Документ, подтверждающий право собственности",
+        hint: "Подтверждает законное право распоряжаться объектом."
+      },
+      {
+        name: "Технический паспорт объекта",
+        hint: "Содержит технические характеристики и планировку недвижимости."
+      },
+      {
+        name: "Выписка о зарегистрированных лицах",
+        hint: "Показывает, кто зарегистрирован в объекте на момент сделки."
+      },
+      {
+        name: "Справка об отсутствии задолженности по коммунальным платежам",
+        hint: "Подтверждает отсутствие коммунальных долгов перед покупателем."
+      },
+      {
+        name: "Свидетельство о браке или нотариальное согласие супруга",
+        hint: "Нужно для соблюдения семейно-правовых требований при продаже."
+      },
+      {
+        name: "Документы-основания приобретения недвижимости",
+        hint: "Подтверждают историю возникновения права собственности."
+      },
+      {
+        name: "Доверенность, если продажу проводит представитель",
+        hint: "Подтверждает полномочия представителя действовать от имени собственника."
+      }
     ],
     exchange: [
-      "Паспорт обеих сторон",
-      "Документы на оба объекта недвижимости",
-      "Технические паспорта обоих объектов",
-      "Выписки о зарегистрированных лицах",
-      "Согласие супругов обеих сторон",
-      "Документы-основания собственности",
-      "Справки об отсутствии задолженности",
-      "Предварительное соглашение об обмене"
+      {
+        name: "Паспорт обеих сторон",
+        hint: "Подтверждает личности всех участников сделки обмена."
+      },
+      {
+        name: "Документы на оба объекта недвижимости",
+        hint: "Подтверждают права сторон на обмениваемые объекты."
+      },
+      {
+        name: "Технические паспорта обоих объектов",
+        hint: "Нужны для сверки площади, характеристик и состояния объектов."
+      },
+      {
+        name: "Выписки о зарегистрированных лицах",
+        hint: "Показывают актуальный состав зарегистрированных в каждом объекте."
+      },
+      {
+        name: "Согласие супругов обеих сторон",
+        hint: "Требуется, если объекты относятся к совместной собственности супругов."
+      },
+      {
+        name: "Документы-основания собственности",
+        hint: "Подтверждают юридическую чистоту происхождения права."
+      },
+      {
+        name: "Справки об отсутствии задолженности",
+        hint: "Подтверждают отсутствие долгов по обязательным платежам."
+      },
+      {
+        name: "Предварительное соглашение об обмене",
+        hint: "Фиксирует условия обмена до подписания основного договора."
+      }
     ]
   };
 
@@ -58,6 +130,7 @@
     const progressBarElement = section.querySelector(".documents-checklist__progress-bar");
     const progressFillElement = section.querySelector(".documents-checklist__progress-fill");
     const telegramButton = section.querySelector(".documents-checklist__telegram-btn");
+    const consultationButton = section.querySelector(".documents-checklist__cta-btn");
 
     if (
       !dealTypeSelect ||
@@ -65,7 +138,8 @@
       !progressTextElement ||
       !progressBarElement ||
       !progressFillElement ||
-      !telegramButton
+      !telegramButton ||
+      !consultationButton
     ) {
       return;
     }
@@ -108,9 +182,13 @@
       const checkedIndexes = checkedByDealType[dealType] || [];
       const preparedDocuments = documents.filter(function (_, index) {
         return checkedIndexes.includes(index);
+      }).map(function (documentItem) {
+        return documentItem.name;
       });
       const missingDocuments = documents.filter(function (_, index) {
         return !checkedIndexes.includes(index);
+      }).map(function (documentItem) {
+        return documentItem.name;
       });
 
       const preparedList = preparedDocuments.length
@@ -153,12 +231,13 @@
         emptyState.textContent = "Выберите тип сделки, чтобы увидеть чеклист документов.";
         listElement.appendChild(emptyState);
         telegramButton.disabled = true;
+        toggleConsultationButton(false);
         updateProgress(0, 8);
         progressBarElement.setAttribute("aria-valuenow", "0");
         return;
       }
 
-      documents.forEach(function (documentName, index) {
+      documents.forEach(function (documentItem, index) {
         const itemElement = document.createElement("div");
         itemElement.className = "documents-checklist__item";
 
@@ -175,7 +254,25 @@
 
         const textElement = document.createElement("span");
         textElement.className = "documents-checklist__checkbox-text";
-        textElement.textContent = documentName;
+        textElement.textContent = documentItem.name;
+
+        const hintWrapperElement = document.createElement("span");
+        hintWrapperElement.className = "documents-checklist__doc-hint";
+
+        const hintButtonElement = document.createElement("button");
+        hintButtonElement.type = "button";
+        hintButtonElement.className = "documents-checklist__doc-hint-btn";
+        hintButtonElement.setAttribute("aria-label", "Описание документа");
+        hintButtonElement.textContent = "i";
+
+        const tooltipElement = document.createElement("span");
+        tooltipElement.className = "documents-checklist__tooltip";
+        tooltipElement.textContent = documentItem.hint;
+
+        hintButtonElement.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        });
 
         inputElement.addEventListener("change", function () {
           const currentCheckedIndexes = checkedByDealType[dealType] || [];
@@ -199,18 +296,23 @@
           checkedByDealType[dealType] = currentCheckedIndexes;
           saveCheckedIndexes(dealType, currentCheckedIndexes);
           updateProgress(currentCheckedIndexes.length, documents.length);
+          toggleConsultationButton(currentCheckedIndexes.length === documents.length);
           progressBarElement.setAttribute("aria-valuenow", String(currentCheckedIndexes.length));
         });
 
+        hintWrapperElement.appendChild(hintButtonElement);
+        hintWrapperElement.appendChild(tooltipElement);
         labelElement.appendChild(inputElement);
         labelElement.appendChild(markElement);
         labelElement.appendChild(textElement);
+        labelElement.appendChild(hintWrapperElement);
         itemElement.appendChild(labelElement);
         listElement.appendChild(itemElement);
       });
 
       telegramButton.disabled = false;
       updateProgress(checkedIndexes.length, documents.length);
+      toggleConsultationButton(checkedIndexes.length === documents.length);
       progressBarElement.setAttribute("aria-valuenow", String(checkedIndexes.length));
       progressBarElement.setAttribute("aria-valuemax", String(documents.length));
     }
@@ -222,6 +324,12 @@
       progressTextElement.textContent = "Собрано: " + checkedCount + " из " + safeTotalCount + " документов";
       progressFillElement.style.width = progressPercent + "%";
       progressFillElement.classList.toggle("is-complete", safeTotalCount > 0 && checkedCount === safeTotalCount);
+    }
+
+    function toggleConsultationButton(isVisible) {
+      consultationButton.classList.toggle("is-visible", isVisible);
+      consultationButton.setAttribute("aria-hidden", isVisible ? "false" : "true");
+      consultationButton.tabIndex = isVisible ? 0 : -1;
     }
 
     function loadCheckedIndexes(storageKey) {
