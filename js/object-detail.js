@@ -1327,6 +1327,89 @@ function initObjectMap(obj) {
   ===================================================== */
   let _initCompleted = false;
 
+  /* =====================================================
+     SHARE BLOCK
+  ===================================================== */
+  function initShareBlock(obj) {
+    const block = document.getElementById("object-share-block");
+    if (!block) return;
+
+    const pageUrl = `https://turko.by/objects/${obj.slug}`;
+    const title = obj.title || "Объект недвижимости в Лиде";
+    const shareText = `${title} — ${pageUrl}`;
+
+    const viberBtn = document.getElementById("share-viber");
+    if (viberBtn) {
+      viberBtn.href = `viber://forward?text=${encodeURIComponent(shareText)}`;
+    }
+
+    const tgBtn = document.getElementById("share-telegram");
+    if (tgBtn) {
+      tgBtn.href = `https://t.me/share/url?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(title)}`;
+    }
+
+    const copyBtn = document.getElementById("share-copy");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(pageUrl).then(() => {
+          const svgIcon = copyBtn.querySelector("svg");
+          if (svgIcon) svgIcon.style.display = "none";
+          const checkMark = document.createElement("span");
+          checkMark.textContent = "✓";
+          checkMark.style.cssText = "font-size:15px;line-height:1;flex-shrink:0";
+          checkMark.className = "share-check-tmp";
+          copyBtn.insertBefore(checkMark, copyBtn.firstChild);
+          copyBtn.classList.add("copied");
+          const textNode = Array.from(copyBtn.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
+          if (textNode) textNode.textContent = " Скопировано!";
+          setTimeout(() => {
+            copyBtn.classList.remove("copied");
+            if (svgIcon) svgIcon.style.display = "";
+            const tmp = copyBtn.querySelector(".share-check-tmp");
+            if (tmp) tmp.remove();
+            if (textNode) textNode.textContent = " Скопировать";
+          }, 2200);
+        }).catch(() => {
+          const ta = document.createElement("textarea");
+          ta.value = pageUrl;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        });
+      });
+    }
+
+    const qrBtn = document.getElementById("share-qr");
+    const qrModal = document.getElementById("share-qr-modal");
+    const qrImg = document.getElementById("share-qr-img");
+    const qrUrlEl = document.getElementById("share-qr-url");
+    const qrClose = document.getElementById("share-qr-close");
+
+    if (qrBtn && qrModal && qrImg) {
+      qrBtn.addEventListener("click", () => {
+        const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=10&data=${encodeURIComponent(pageUrl)}`;
+        qrImg.src = qrSrc;
+        if (qrUrlEl) qrUrlEl.textContent = pageUrl;
+        qrModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      });
+
+      const closeQr = () => {
+        qrModal.classList.remove("active");
+        document.body.style.overflow = "";
+      };
+
+      if (qrClose) qrClose.addEventListener("click", closeQr);
+      qrModal.addEventListener("click", (e) => { if (e.target === qrModal) closeQr(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && qrModal.classList.contains("active")) closeQr(); });
+    }
+
+    block.style.display = "";
+  }
+
   async function init() {
     if (_initCompleted) return;
     _initCompleted = true;
@@ -1396,6 +1479,7 @@ function initObjectMap(obj) {
     generateObjectSchema(enrichedObj);
     initObjectMap(enrichedObj);
     initMortgageCalculator(enrichedObj);
+    initShareBlock(enrichedObj);
     initRevealBlocks();
 
   } catch (e) {
