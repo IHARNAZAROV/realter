@@ -17,6 +17,26 @@
     <meta name="robots" content="index, follow" />
     <!-- Canonical Link (SEO) -->
     <link rel="canonical" href="https://turko.by/blog" />
+    <script>
+      (function setBlogCanonicalEarly() {
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) return;
+
+        const { pathname, search } = window.location;
+        const cleanPath = pathname.replace(/\/+$/, "");
+        const pathMatch = cleanPath.match(/^\/blog\/([^/?#]+)/);
+
+        if (pathMatch && pathMatch[1]) {
+          canonical.href = `https://turko.by/blog/${decodeURIComponent(pathMatch[1])}`;
+          return;
+        }
+
+        const slug = new URLSearchParams(search).get("slug");
+        if (slug) {
+          canonical.href = `https://turko.by/blog/${slug}`;
+        }
+      })();
+    </script>
     <!-- =========================================
        3. ICONS & FONTS
        ========================================= -->

@@ -364,7 +364,7 @@
       || obj.cardDescription
       || (obj.description ? obj.description.slice(0, 160).trimEnd() + "…" : "")
       || "Объект недвижимости — Ольга Турко, риэлтер в Лиде";
-    const url = `https://turko.by/object/${obj.slug}`;
+    const url = `https://turko.by/objects/${obj.slug}`;
 
     document.title = title;
     

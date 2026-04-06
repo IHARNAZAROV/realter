@@ -16,7 +16,27 @@
       name="description"
       content="Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко."
     />
-    <link rel="canonical" href="https://turko.by/object" />
+    <link rel="canonical" href="https://turko.by/objects" />
+    <script>
+      (function setObjectCanonicalEarly() {
+        const canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) return;
+
+        const { pathname, search } = window.location;
+        const cleanPath = pathname.replace(/\/+$/, "");
+        const pathMatch = cleanPath.match(/^\/objects?\/([^/?#]+)/);
+
+        if (pathMatch && pathMatch[1]) {
+          canonical.href = `https://turko.by/objects/${decodeURIComponent(pathMatch[1])}`;
+          return;
+        }
+
+        const slug = new URLSearchParams(search).get("slug");
+        if (slug) {
+          canonical.href = `https://turko.by/objects/${encodeURIComponent(slug)}`;
+        }
+      })();
+    </script>
     <!-- Open Graph (Facebook/Instagram) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Объект недвижимости в Лиде — Ольга Турко" />
@@ -24,7 +44,7 @@
       property="og:description"
       content="Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко."
     />
-    <meta property="og:url" content="https://turko.by/object" />
+    <meta property="og:url" content="https://turko.by/objects" />
     <meta
       property="og:image"
       content="https://turko.by/images/main-slider/2.webp"
