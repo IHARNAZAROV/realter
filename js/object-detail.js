@@ -1334,7 +1334,7 @@ function initObjectMap(obj) {
     const block = document.getElementById("object-share-block");
     if (!block) return;
 
-    const pageUrl = `https://turko.by/object/${obj.slug}`;
+    const pageUrl = `https://turko.by/objects/${obj.slug}`;
     const title = obj.title || "Объект недвижимости в Лиде";
     const shareText = `${title} — ${pageUrl}`;
 
