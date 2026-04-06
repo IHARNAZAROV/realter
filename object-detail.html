@@ -334,10 +334,41 @@
       <i class="fa-brands fa-telegram"></i> Telegram
     </a>
     <button class="share-btn share-btn--copy" id="share-copy" type="button" aria-label="Скопировать ссылку">
-      <i class="fa-regular fa-copy"></i> Скопировать
+      <svg class="share-copy-icon" viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <rect x="7" y="1" width="11" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="2" y="5" width="11" height="14" rx="1.5"/>
+        <rect x="3.5" y="6.5" width="8" height="1.5" rx=".75" fill="white"/>
+        <rect x="3.5" y="9.5" width="8" height="1.5" rx=".75" fill="white"/>
+        <rect x="3.5" y="12.5" width="5" height="1.5" rx=".75" fill="white"/>
+      </svg> Скопировать
     </button>
     <button class="share-btn share-btn--qr" id="share-qr" type="button" aria-label="Показать QR-код">
-      <i class="fa-solid fa-qrcode"></i> QR-код
+      <svg class="share-qr-icon" viewBox="0 0 20 20" fill="currentColor" width="15" height="15" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="7" height="7" rx="1"/>
+        <rect x="2.5" y="2.5" width="4" height="4" rx=".5" fill="white"/>
+        <rect x="12" y="1" width="7" height="7" rx="1"/>
+        <rect x="13.5" y="2.5" width="4" height="4" rx=".5" fill="white"/>
+        <rect x="1" y="12" width="7" height="7" rx="1"/>
+        <rect x="2.5" y="13.5" width="4" height="4" rx=".5" fill="white"/>
+        <rect x="10" y="1" width="1.5" height="1.5"/>
+        <rect x="10" y="4" width="1.5" height="1.5"/>
+        <rect x="10" y="7" width="1.5" height="1.5"/>
+        <rect x="1" y="10" width="1.5" height="1.5"/>
+        <rect x="4" y="10" width="1.5" height="1.5"/>
+        <rect x="7" y="10" width="1.5" height="1.5"/>
+        <rect x="10" y="10" width="1.5" height="1.5"/>
+        <rect x="12.5" y="10" width="1.5" height="1.5"/>
+        <rect x="15" y="10" width="1.5" height="1.5"/>
+        <rect x="17.5" y="10" width="1.5" height="1.5"/>
+        <rect x="12.5" y="12.5" width="1.5" height="1.5"/>
+        <rect x="15" y="12.5" width="1.5" height="1.5"/>
+        <rect x="17.5" y="12.5" width="1.5" height="1.5"/>
+        <rect x="12.5" y="15" width="1.5" height="1.5"/>
+        <rect x="17.5" y="15" width="1.5" height="1.5"/>
+        <rect x="12.5" y="17.5" width="1.5" height="1.5"/>
+        <rect x="15" y="17.5" width="1.5" height="1.5"/>
+        <rect x="17.5" y="17.5" width="1.5" height="1.5"/>
+      </svg> QR-код
     </button>
   </div>
 </div>
@@ -806,7 +837,34 @@
     <div class="share-qr-modal" id="share-qr-modal" role="dialog" aria-modal="true" aria-label="QR-код объекта">
       <div class="share-qr-box">
         <button class="share-qr-close" id="share-qr-close" aria-label="Закрыть">×</button>
-        <div class="share-qr-box__icon"><i class="fa-solid fa-qrcode"></i></div>
+        <div class="share-qr-box__icon">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="28" height="28" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="1" width="7" height="7" rx="1"/>
+            <rect x="2.5" y="2.5" width="4" height="4" rx=".5" fill="white"/>
+            <rect x="12" y="1" width="7" height="7" rx="1"/>
+            <rect x="13.5" y="2.5" width="4" height="4" rx=".5" fill="white"/>
+            <rect x="1" y="12" width="7" height="7" rx="1"/>
+            <rect x="2.5" y="13.5" width="4" height="4" rx=".5" fill="white"/>
+            <rect x="10" y="1" width="1.5" height="1.5"/>
+            <rect x="10" y="4" width="1.5" height="1.5"/>
+            <rect x="10" y="7" width="1.5" height="1.5"/>
+            <rect x="1" y="10" width="1.5" height="1.5"/>
+            <rect x="4" y="10" width="1.5" height="1.5"/>
+            <rect x="7" y="10" width="1.5" height="1.5"/>
+            <rect x="10" y="10" width="1.5" height="1.5"/>
+            <rect x="12.5" y="10" width="1.5" height="1.5"/>
+            <rect x="15" y="10" width="1.5" height="1.5"/>
+            <rect x="17.5" y="10" width="1.5" height="1.5"/>
+            <rect x="12.5" y="12.5" width="1.5" height="1.5"/>
+            <rect x="15" y="12.5" width="1.5" height="1.5"/>
+            <rect x="17.5" y="12.5" width="1.5" height="1.5"/>
+            <rect x="12.5" y="15" width="1.5" height="1.5"/>
+            <rect x="17.5" y="15" width="1.5" height="1.5"/>
+            <rect x="12.5" y="17.5" width="1.5" height="1.5"/>
+            <rect x="15" y="17.5" width="1.5" height="1.5"/>
+            <rect x="17.5" y="17.5" width="1.5" height="1.5"/>
+          </svg>
+        </div>
         <div class="share-qr-box__title">Сканируйте QR-код</div>
         <div class="share-qr-box__hint">Откроет страницу объекта<br>на любом устройстве</div>
         <div class="share-qr-img-wrap">

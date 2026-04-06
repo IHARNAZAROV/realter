@@ -1352,16 +1352,22 @@ function initObjectMap(obj) {
     if (copyBtn) {
       copyBtn.addEventListener("click", () => {
         navigator.clipboard.writeText(pageUrl).then(() => {
-          const icon = copyBtn.querySelector("i");
-          const originalClass = icon ? icon.className : "";
+          const svgIcon = copyBtn.querySelector("svg");
+          if (svgIcon) svgIcon.style.display = "none";
+          const checkMark = document.createElement("span");
+          checkMark.textContent = "✓";
+          checkMark.style.cssText = "font-size:15px;line-height:1;flex-shrink:0";
+          checkMark.className = "share-check-tmp";
+          copyBtn.insertBefore(checkMark, copyBtn.firstChild);
           copyBtn.classList.add("copied");
-          copyBtn.querySelector("i") && (copyBtn.querySelector("i").className = "fa-solid fa-check");
-          const originalText = copyBtn.childNodes[copyBtn.childNodes.length - 1];
-          if (originalText && originalText.nodeType === 3) originalText.textContent = " Скопировано!";
+          const textNode = Array.from(copyBtn.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
+          if (textNode) textNode.textContent = " Скопировано!";
           setTimeout(() => {
             copyBtn.classList.remove("copied");
-            if (icon) icon.className = originalClass;
-            if (originalText && originalText.nodeType === 3) originalText.textContent = " Скопировать";
+            if (svgIcon) svgIcon.style.display = "";
+            const tmp = copyBtn.querySelector(".share-check-tmp");
+            if (tmp) tmp.remove();
+            if (textNode) textNode.textContent = " Скопировать";
           }, 2200);
         }).catch(() => {
           const ta = document.createElement("textarea");
