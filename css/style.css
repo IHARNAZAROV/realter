@@ -211,11 +211,18 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
   position: relative;
   width: min(1100px, 100%);
   max-height: min(90vh, 860px);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   background: #fff;
   border-radius: 16px;
   padding: 20px;
   z-index: 1;
+}
+.compare-modal__table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
 }
 .compare-modal__close {
   position: absolute;
@@ -297,6 +304,9 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
     max-height: 88vh;
     border-radius: 14px 14px 0 0;
     padding: 14px 12px 12px;
+  }
+  .compare-modal__table-wrap {
+    max-width: 100%;
   }
   .compare-modal__dialog h3 {
     font-size: 26px;
