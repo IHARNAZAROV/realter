@@ -396,43 +396,97 @@
 
 @media (max-width: 767px) {
   .documents-checklist__inner {
-    border-radius: 14px;
-    padding: 20px 16px;
+    border-radius: 12px;
+    padding: 14px 12px;
   }
 
   .documents-checklist-modal {
-    align-items: flex-end;
-    padding: 8px;
+    align-items: center;
+    padding: 4px;
   }
 
   .documents-checklist-modal__dialog {
-    border-radius: 14px 14px 0 0;
+    max-height: calc(100vh - 10px);
+    overflow-y: auto;
+    border-radius: 12px;
   }
 
   .documents-checklist-modal__close {
-    top: 10px;
-    right: 10px;
+    top: 6px;
+    right: 6px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
   }
 
   .documents-checklist__select .filter-item {
     max-width: 100%;
   }
 
+  .documents-checklist__select {
+    margin-bottom: 12px;
+  }
+
+  .documents-checklist__progress {
+    margin-bottom: 12px;
+  }
+
+  .documents-checklist__progress-text {
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  .documents-checklist__list {
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .documents-checklist__item {
+    border-radius: 10px;
+  }
+
   .documents-checklist__checkbox {
-    padding: 12px;
+    padding: 9px 10px;
+    gap: 10px;
+  }
+
+  .documents-checklist__checkbox-mark {
+    width: 20px;
+    height: 20px;
+  }
+
+  .documents-checklist__checkbox-mark::after {
+    left: 5px;
+    top: 1px;
+  }
+
+  .documents-checklist__checkbox-text {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .documents-checklist__doc-hint-btn {
+    width: 22px;
+    height: 22px;
+    font-size: 12px;
   }
 
   .documents-checklist__telegram-btn {
     width: 100%;
     text-align: center;
+    font-size: 14px;
+    padding: 11px 14px;
   }
 
   .documents-checklist__actions {
     flex-direction: column;
+    gap: 8px;
   }
 
   .documents-checklist__cta-btn {
     width: 100%;
     text-align: center;
+    font-size: 14px;
+    padding: 11px 14px;
   }
 }
