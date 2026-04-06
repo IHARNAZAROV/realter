@@ -36,6 +36,8 @@ const FAVORITES_VIEW_KEY = "favoritesViewMode";
 ========================================================= */
 let cachedViewButtons = null;
 let favoriteCounter = null;
+const COMPARE_MAX_ITEMS = 3;
+const COMPARE_MIN_ITEMS = 2;
 
 /* =========================================================
    PREVIEW IMAGES (static mapping)
@@ -210,6 +212,8 @@ function getObjectArea(obj) {
 const debouncedApply = debounce(applyFiltersAndSort);
 
 document.addEventListener("DOMContentLoaded", () => {
+  initCompareUI();
+
   fetch("/data/objects.json")
     .then((r) => r.json())
     .then(async (data) => {
@@ -224,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateRoomsState();
       loadFiltersFromStorage();
       applyFiltersAndSort();
+      updateCompareBar();
     });
 
   bindEvents();
@@ -758,6 +763,7 @@ if (objectsList) {
     void btn.offsetWidth; // reflow
     btn.classList.add("is-pulse");
     updateFavoritesFilterCounter(true);
+    updateCompareBar();
   });
 }
 
@@ -804,6 +810,238 @@ function initFavoritesCounter() {
 
   // Обновляем счетчик при инициализации
   updateFavoritesFilterCounter();
+  updateCompareBar();
+}
+
+/* =========================================================
+   COMPARE PANEL + TABLE
+========================================================= */
+let compareBarEl = null;
+let compareItemsEl = null;
+let compareActionBtn = null;
+let compareModalEl = null;
+let compareTableWrapEl = null;
+
+function initCompareUI() {
+  if (compareBarEl) return;
+
+  compareBarEl = document.createElement("aside");
+  compareBarEl.className = "compare-bar";
+  compareBarEl.setAttribute("aria-live", "polite");
+  compareBarEl.innerHTML = `
+    <div class="compare-bar__items" id="compareItems"></div>
+    <button type="button" class="compare-bar__action" id="compareActionBtn" disabled>
+      Сравнить
+    </button>
+  `;
+  document.body.appendChild(compareBarEl);
+
+  compareItemsEl = compareBarEl.querySelector("#compareItems");
+  compareActionBtn = compareBarEl.querySelector("#compareActionBtn");
+
+  compareModalEl = document.createElement("div");
+  compareModalEl.className = "compare-modal";
+  compareModalEl.hidden = true;
+  compareModalEl.innerHTML = `
+    <div class="compare-modal__backdrop" data-close-compare="true"></div>
+    <div class="compare-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="compareModalTitle">
+      <button type="button" class="compare-modal__close" data-close-compare="true" aria-label="Закрыть сравнение">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h3 id="compareModalTitle">Сравнение объектов</h3>
+      <div class="compare-modal__table-wrap" id="compareTableWrap"></div>
+    </div>
+  `;
+  document.body.appendChild(compareModalEl);
+
+  compareTableWrapEl = compareModalEl.querySelector("#compareTableWrap");
+
+  compareActionBtn?.addEventListener("click", openCompareModal);
+  compareModalEl.addEventListener("click", (event) => {
+    if (event.target.closest("[data-close-compare='true']")) {
+      closeCompareModal();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && compareModalEl && !compareModalEl.hidden) {
+      closeCompareModal();
+    }
+  });
+}
+
+function getCompareObjects() {
+  const favoriteSlugs = getFavorites().slice(0, COMPARE_MAX_ITEMS);
+  if (!favoriteSlugs.length || !allObjects.length) return [];
+
+  return favoriteSlugs
+    .map((slug) => allObjects.find((obj) => obj.slug === slug))
+    .filter(Boolean);
+}
+
+function getConditionLabel(obj) {
+  if (obj?.condition) return String(obj.condition);
+
+  const sources = [
+    obj?.saleTerms,
+    obj?.description,
+    ...(Array.isArray(obj?.features) ? obj.features : []),
+  ]
+    .filter(Boolean)
+    .map((item) => String(item).toLowerCase());
+
+  const text = sources.join(" ");
+  if (!text) return "—";
+  if (text.includes("евроремонт")) return "Евроремонт";
+  if (text.includes("под ремонт")) return "Под ремонт";
+  if (text.includes("косметичес")) return "Косметический ремонт";
+  if (text.includes("хорош")) return "Хорошее";
+  if (text.includes("жил")) return "Жилое";
+  return "—";
+}
+
+function getComparableFields(obj) {
+  const area = getObjectArea(obj);
+  const objectPrice = getObjectPriceByn(obj);
+  const pricePerMeter = area && objectPrice > 0 ? Math.round(objectPrice / area) : null;
+  const rooms = Number(obj?.rooms);
+
+  return {
+    type: obj?.type || "—",
+    rooms: Number.isFinite(rooms) && rooms > 0 ? String(rooms) : "—",
+    area: area ? `${formatPrice(area)} м²` : "—",
+    areaLiving: obj?.areaLiving ? `${formatPrice(obj.areaLiving)} м²` : "—",
+    areaKitchen: obj?.areaKitchen ? `${formatPrice(obj.areaKitchen)} м²` : "—",
+    areaPlot: obj?.areaPlot ? `${formatPrice(obj.areaPlot)} сот.` : "—",
+    floor:
+      obj?.floor && obj?.floorsTotal
+        ? `${obj.floor}/${obj.floorsTotal}`
+        : obj?.floor
+          ? String(obj.floor)
+          : "—",
+    floorsTotal: obj?.floorsTotal ? String(obj.floorsTotal) : "—",
+    pricePerMeter: pricePerMeter ? `${formatPrice(pricePerMeter)} BYN` : "—",
+    price: objectPrice > 0 ? `${formatPrice(objectPrice)} BYN` : "—",
+    district: obj?.district || obj?.city || "—",
+    address: obj?.address || "—",
+    yearBuilt: obj?.yearBuilt ? String(obj.yearBuilt) : "—",
+    condition: getConditionLabel(obj),
+    houseMaterial: obj?.houseMaterial || "—",
+    heating: obj?.heating || "—",
+    gas: obj?.gas || "—",
+    water: obj?.water || "—",
+    sewerage: obj?.sewerage || "—",
+    electricity: obj?.electricity || "—",
+  };
+}
+
+function updateCompareBar() {
+  if (!compareBarEl || !compareItemsEl || !compareActionBtn) return;
+
+  const compareObjects = getCompareObjects();
+  const count = compareObjects.length;
+
+  compareBarEl.classList.toggle("is-visible", count > 0);
+  if (!count) {
+    compareItemsEl.innerHTML = "";
+    compareActionBtn.disabled = true;
+    compareActionBtn.textContent = "Сравнить";
+    return;
+  }
+
+  compareItemsEl.innerHTML = compareObjects
+    .map((obj) => {
+      const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
+      return `
+        <article class="compare-chip">
+          <img src="${imgSrc}" alt="${obj.title}" loading="lazy" />
+          <div class="compare-chip__meta">
+            <strong>${formatPrice(getObjectPriceByn(obj))} BYN</strong>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+
+  compareActionBtn.disabled = count < COMPARE_MIN_ITEMS;
+  compareActionBtn.textContent = `Сравнить (${count})`;
+}
+
+function openCompareModal() {
+  const compareObjects = getCompareObjects();
+  if (compareObjects.length < COMPARE_MIN_ITEMS || !compareTableWrapEl || !compareModalEl) {
+    return;
+  }
+
+  const rows = [
+    { key: "type", label: "Тип" },
+    { key: "rooms", label: "Комнаты" },
+    { key: "area", label: "Площадь" },
+    { key: "areaLiving", label: "Жилая площадь" },
+    { key: "areaKitchen", label: "Кухня" },
+    { key: "areaPlot", label: "Участок" },
+    { key: "floor", label: "Этаж" },
+    { key: "floorsTotal", label: "Этажность дома" },
+    { key: "price", label: "Цена" },
+    { key: "pricePerMeter", label: "Цена за м²" },
+    { key: "district", label: "Район" },
+    { key: "address", label: "Адрес" },
+    { key: "yearBuilt", label: "Год постройки" },
+    { key: "condition", label: "Состояние" },
+    { key: "houseMaterial", label: "Материал дома" },
+    { key: "heating", label: "Отопление" },
+    { key: "gas", label: "Газ" },
+    { key: "water", label: "Вода" },
+    { key: "sewerage", label: "Канализация" },
+    { key: "electricity", label: "Электричество" },
+  ];
+
+  const valuesByObject = compareObjects.map((obj) => getComparableFields(obj));
+  const visibleRows = rows.filter((row) => {
+    const values = valuesByObject.map((item) => String(item[row.key] || "—").trim());
+    return values.some((value) => value !== "—");
+  });
+  const isDifferent = (key) => {
+    const normalized = valuesByObject.map((item) =>
+      String(item[key] || "—").trim().toLowerCase(),
+    );
+    return new Set(normalized).size > 1;
+  };
+
+  const header = `
+    <tr>
+      <th>Параметр</th>
+      ${compareObjects
+        .map((obj) => `<th><a href="/objects/${obj.slug}">${obj.title}</a></th>`)
+        .join("")}
+    </tr>
+  `;
+
+  const body = visibleRows
+    .map((row) => {
+      const diff = isDifferent(row.key);
+      const cells = valuesByObject
+        .map((item) => `<td class="${diff ? "is-diff" : ""}">${item[row.key]}</td>`)
+        .join("");
+      return `<tr><th>${row.label}</th>${cells}</tr>`;
+    })
+    .join("");
+
+  compareTableWrapEl.innerHTML = `
+    <table class="compare-table">
+      <thead>${header}</thead>
+      <tbody>${body}</tbody>
+    </table>
+  `;
+
+  compareModalEl.hidden = false;
+  document.body.classList.add("compare-modal-open");
+}
+
+function closeCompareModal() {
+  if (!compareModalEl) return;
+  compareModalEl.hidden = true;
+  document.body.classList.remove("compare-modal-open");
 }
 
 /* =========================================================
