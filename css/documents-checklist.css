@@ -16,6 +16,20 @@
 
 .documents-checklist-launch__btn {
   width: 100%;
+  background: linear-gradient(135deg, var(--accent-color) 0%, #c99574 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 12px 28px rgba(215, 179, 154, 0.35);
+  animation: documentsChecklistPulse 2s ease-in-out infinite;
+}
+
+.documents-checklist-launch__btn:hover {
+  color: #fff;
+  box-shadow: 0 14px 34px rgba(215, 179, 154, 0.46);
+}
+
+.documents-checklist-launch__btn::after {
+  background: rgba(21, 89, 69, 0.95);
 }
 
 .documents-checklist-modal {
@@ -43,8 +57,8 @@
   position: relative;
   z-index: 1;
   width: min(920px, 100%);
-  max-height: calc(100vh - 36px);
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
   border-radius: 16px;
 }
 
@@ -69,6 +83,18 @@
 
 .documents-checklist-modal .documents-checklist__inner {
   min-height: auto;
+}
+
+@keyframes documentsChecklistPulse {
+  0%,
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 12px 28px rgba(215, 179, 154, 0.34);
+  }
+  50% {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 36px rgba(215, 179, 154, 0.5);
+  }
 }
 
 .documents-checklist__header {
@@ -380,7 +406,6 @@
   }
 
   .documents-checklist-modal__dialog {
-    max-height: 92vh;
     border-radius: 14px 14px 0 0;
   }
 
