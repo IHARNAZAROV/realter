@@ -69,6 +69,7 @@
 
     <!-- Основные стили -->
     <link rel="stylesheet" href="/css/style.css" data-versioned>
+    <link rel="stylesheet" href="/css/documents-checklist.css" data-versioned>
 
     <!-- ==============================================
        8. NON-CRITICAL CSS (АСИНХРОННО)
@@ -218,6 +219,11 @@
                                 </div>
                                 <div class="contact-slide-show">
                                     <a href="javascript:;" class="get-in-touch-btn from-top">Я всегда на связи</a>
+                                </div>
+                                <div class="contact-slide-show documents-checklist-launch">
+                                    <button type="button" class="get-in-touch-btn from-top documents-checklist-launch__btn" data-documents-checklist-open aria-haspopup="dialog" aria-controls="documentsChecklistModal">
+                                        Чеклист документов
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -1331,6 +1337,48 @@
            FOOTER END
       =============================================== -->
 
+        <div class="documents-checklist-modal" id="documentsChecklistModal" role="dialog" aria-modal="true" aria-label="Чеклист документов по типу сделки" hidden>
+            <div class="documents-checklist-modal__backdrop" data-documents-checklist-close></div>
+            <div class="documents-checklist-modal__dialog">
+                <button type="button" class="documents-checklist-modal__close" data-documents-checklist-close aria-label="Закрыть окно чеклиста">×</button>
+                <section class="documents-checklist section-full mobile-page-padding bg-gray p-t30 p-b30 bg-repeat" style="background-image: url(images/background/bg-5.png)">
+                    <div class="container">
+                        <div class="documents-checklist__inner">
+                            <div class="documents-checklist__select objects-filters">
+                                <div class="filter-item">
+                                    <label class="documents-checklist__label" for="dealTypeSelect">Тип сделки</label>
+                                    <select id="dealTypeSelect" class="documents-checklist__native-select">
+                                        <option value="">Выберите тип сделки</option>
+                                        <option value="purchase">Покупка</option>
+                                        <option value="sale">Продажа</option>
+                                        <option value="exchange">Обмен</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="documents-checklist__progress" aria-live="polite">
+                                <div class="documents-checklist__progress-text">Собрано: 0 из 8 документов</div>
+                                <div class="documents-checklist__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">
+                                    <div class="documents-checklist__progress-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="documents-checklist__list" id="documentsChecklistList"></div>
+
+                            <div class="documents-checklist__actions">
+                                <button type="button" class="documents-checklist__telegram-btn" disabled>
+                                    Отправить список себе в Telegram
+                                </button>
+                                <a href="tel:+375291809516" class="documents-checklist__cta-btn" aria-hidden="true" tabindex="-1">
+                                    Позвонить и записаться на консультацию
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
         <!-- Cookie Modal -->
         <div class="cookie-modal" id="cookieModal" role="dialog" aria-modal="true" aria-label="Настройки cookies">
             <div class="cookie-top">
@@ -1442,6 +1490,8 @@
     <script src="/js/market-analytics.js?v=20260319-1" defer></script>
     <script src="/js/blog-smart-badge.js" defer></script>
     <script src="/js/objects-smart-badge.js" defer></script>
+    <script src="/js/filters-custom-select.js" defer></script>
+    <script src="/js/documents-checklist.js" defer></script>
 
     <!-- ================================================================
          Back-to-Top Button
