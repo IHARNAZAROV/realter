@@ -220,6 +220,11 @@
                                 <div class="contact-slide-show">
                                     <a href="javascript:;" class="get-in-touch-btn from-top">Я всегда на связи</a>
                                 </div>
+                                <div class="contact-slide-show documents-checklist-launch">
+                                    <button type="button" class="get-in-touch-btn from-top documents-checklist-launch__btn" data-documents-checklist-open aria-haspopup="dialog" aria-controls="documentsChecklistModal">
+                                        Чеклист документов для сделки с недвижимостью
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <!-- Main Navigation -->
@@ -628,46 +633,6 @@
                 </div>
             </div>
         </div>
-        <section class="documents-checklist section-full mobile-page-padding bg-gray p-t80 p-b80 bg-repeat" style="background-image: url(images/background/bg-5.png)">
-            <div class="container">
-                <div class="documents-checklist__inner">
-                    <header class="documents-checklist__header section-head section-head--bracket">
-                        <h2 class="documents-checklist__title section-title">Чеклист документов по типу сделки</h2>
-                        <p class="documents-checklist__subtitle">Выберите тип сделки и отметьте документы, которые уже подготовлены</p>
-                    </header>
-
-                    <div class="documents-checklist__select objects-filters">
-                        <div class="filter-item">
-                            <label class="documents-checklist__label" for="dealTypeSelect">Тип сделки</label>
-                            <select id="dealTypeSelect" class="documents-checklist__native-select">
-                                <option value="">Выберите тип сделки</option>
-                                <option value="purchase">Покупка</option>
-                                <option value="sale">Продажа</option>
-                                <option value="exchange">Обмен</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="documents-checklist__progress" aria-live="polite">
-                        <div class="documents-checklist__progress-text">Собрано: 0 из 8 документов</div>
-                        <div class="documents-checklist__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">
-                            <div class="documents-checklist__progress-fill"></div>
-                        </div>
-                    </div>
-
-                    <div class="documents-checklist__list" id="documentsChecklistList"></div>
-
-                    <div class="documents-checklist__actions">
-                        <button type="button" class="documents-checklist__telegram-btn" disabled>
-                            Отправить список себе в Telegram
-                        </button>
-                        <a href="tel:+375291809516" class="documents-checklist__cta-btn" aria-hidden="true" tabindex="-1">
-                            Позвонить и записаться на консультацию
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
         <!-- SECTION: Facts & Testimonials -->
         <div class="section-full container-fluid">
             <div class="section-content">
@@ -1371,6 +1336,53 @@
         <!-- ==============================================
            FOOTER END
       =============================================== -->
+
+        <div class="documents-checklist-modal" id="documentsChecklistModal" role="dialog" aria-modal="true" aria-labelledby="documentsChecklistModalTitle" hidden>
+            <div class="documents-checklist-modal__backdrop" data-documents-checklist-close></div>
+            <div class="documents-checklist-modal__dialog">
+                <button type="button" class="documents-checklist-modal__close" data-documents-checklist-close aria-label="Закрыть окно чеклиста">×</button>
+                <section class="documents-checklist section-full mobile-page-padding bg-gray p-t80 p-b80 bg-repeat" style="background-image: url(images/background/bg-5.png)">
+                    <div class="container">
+                        <div class="documents-checklist__inner">
+                            <header class="documents-checklist__header section-head section-head--bracket">
+                                <h2 class="documents-checklist__title section-title" id="documentsChecklistModalTitle">Чеклист документов по типу сделки</h2>
+                                <p class="documents-checklist__subtitle">Выберите тип сделки и отметьте документы, которые уже подготовлены</p>
+                            </header>
+
+                            <div class="documents-checklist__select objects-filters">
+                                <div class="filter-item">
+                                    <label class="documents-checklist__label" for="dealTypeSelect">Тип сделки</label>
+                                    <select id="dealTypeSelect" class="documents-checklist__native-select">
+                                        <option value="">Выберите тип сделки</option>
+                                        <option value="purchase">Покупка</option>
+                                        <option value="sale">Продажа</option>
+                                        <option value="exchange">Обмен</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="documents-checklist__progress" aria-live="polite">
+                                <div class="documents-checklist__progress-text">Собрано: 0 из 8 документов</div>
+                                <div class="documents-checklist__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">
+                                    <div class="documents-checklist__progress-fill"></div>
+                                </div>
+                            </div>
+
+                            <div class="documents-checklist__list" id="documentsChecklistList"></div>
+
+                            <div class="documents-checklist__actions">
+                                <button type="button" class="documents-checklist__telegram-btn" disabled>
+                                    Отправить список себе в Telegram
+                                </button>
+                                <a href="tel:+375291809516" class="documents-checklist__cta-btn" aria-hidden="true" tabindex="-1">
+                                    Позвонить и записаться на консультацию
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
 
         <!-- Cookie Modal -->
         <div class="cookie-modal" id="cookieModal" role="dialog" aria-modal="true" aria-label="Настройки cookies">

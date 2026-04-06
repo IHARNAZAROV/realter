@@ -119,6 +119,9 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     const section = document.querySelector(".documents-checklist");
+    const modalElement = document.querySelector("#documentsChecklistModal");
+    const modalOpenButton = document.querySelector("[data-documents-checklist-open]");
+    const modalCloseButtons = document.querySelectorAll("[data-documents-checklist-close]");
 
     if (!section) {
       return;
@@ -143,6 +146,8 @@
     ) {
       return;
     }
+
+    setupModal();
 
     const checkedByDealType = {
       purchase: loadCheckedIndexes(STORAGE_KEYS.purchase),
@@ -362,6 +367,34 @@
       }
 
       localStorage.setItem(storageKey, JSON.stringify(checkedIndexes));
+    }
+
+    function setupModal() {
+      if (!modalElement || !modalOpenButton || !modalCloseButtons.length) {
+        return;
+      }
+
+      modalOpenButton.addEventListener("click", function () {
+        modalElement.hidden = false;
+        document.body.style.overflow = "hidden";
+      });
+
+      modalCloseButtons.forEach(function (closeButton) {
+        closeButton.addEventListener("click", function () {
+          closeModal();
+        });
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !modalElement.hidden) {
+          closeModal();
+        }
+      });
+    }
+
+    function closeModal() {
+      modalElement.hidden = true;
+      document.body.style.overflow = "";
     }
   });
 })();
