@@ -69,6 +69,7 @@
 
     <!-- Основные стили -->
     <link rel="stylesheet" href="/css/style.css" data-versioned>
+    <link rel="stylesheet" href="/css/documents-checklist.css" data-versioned>
 
     <!-- ==============================================
        8. NON-CRITICAL CSS (АСИНХРОННО)
@@ -627,6 +628,41 @@
                 </div>
             </div>
         </div>
+        <section class="documents-checklist section-full mobile-page-padding bg-gray p-t80 p-b80 bg-repeat" style="background-image: url(images/background/bg-5.png)">
+            <div class="container">
+                <div class="documents-checklist__inner">
+                    <header class="documents-checklist__header section-head section-head--bracket">
+                        <h2 class="documents-checklist__title section-title">Чеклист документов по типу сделки</h2>
+                        <p class="documents-checklist__subtitle">Выберите тип сделки и отметьте документы, которые уже подготовлены</p>
+                    </header>
+
+                    <div class="documents-checklist__select objects-filters">
+                        <div class="filter-item">
+                            <label class="documents-checklist__label" for="dealTypeSelect">Тип сделки</label>
+                            <select id="dealTypeSelect" class="documents-checklist__native-select">
+                                <option value="">Выберите тип сделки</option>
+                                <option value="purchase">Покупка</option>
+                                <option value="sale">Продажа</option>
+                                <option value="exchange">Обмен</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="documents-checklist__progress" aria-live="polite">
+                        <div class="documents-checklist__progress-text">Собрано: 0 из 8 документов</div>
+                        <div class="documents-checklist__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0">
+                            <div class="documents-checklist__progress-fill"></div>
+                        </div>
+                    </div>
+
+                    <div class="documents-checklist__list" id="documentsChecklistList"></div>
+
+                    <button type="button" class="documents-checklist__telegram-btn" disabled>
+                        Отправить список себе в Telegram
+                    </button>
+                </div>
+            </div>
+        </section>
         <!-- SECTION: Facts & Testimonials -->
         <div class="section-full container-fluid">
             <div class="section-content">
@@ -1442,6 +1478,8 @@
     <script src="/js/market-analytics.js?v=20260319-1" defer></script>
     <script src="/js/blog-smart-badge.js" defer></script>
     <script src="/js/objects-smart-badge.js" defer></script>
+    <script src="/js/filters-custom-select.js" defer></script>
+    <script src="/js/documents-checklist.js" defer></script>
 
     <!-- ================================================================
          Back-to-Top Button
