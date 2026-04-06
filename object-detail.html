@@ -82,6 +82,7 @@
     <!-- Main Styles -->
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned/>
     <link rel="stylesheet" href="/css/back-to-top.css" />
+    <link rel="stylesheet" href="/css/object-share.css" />
 
 
   
@@ -320,6 +321,25 @@
   <button type="button" class="booking-open-btn" data-open-booking-modal>
     Записаться на просмотр
   </button>
+</div>
+
+<!-- SHARE BLOCK -->
+<div class="object-share" id="object-share-block" style="display:none">
+  <div class="object-share__label">Поделиться объектом</div>
+  <div class="object-share__buttons">
+    <a class="share-btn share-btn--viber" id="share-viber" href="#" target="_blank" rel="noopener" aria-label="Отправить в Viber">
+      <i class="fa-brands fa-viber"></i> Viber
+    </a>
+    <a class="share-btn share-btn--telegram" id="share-telegram" href="#" target="_blank" rel="noopener" aria-label="Отправить в Telegram">
+      <i class="fa-brands fa-telegram"></i> Telegram
+    </a>
+    <button class="share-btn share-btn--copy" id="share-copy" type="button" aria-label="Скопировать ссылку">
+      <i class="fa-regular fa-copy"></i> Скопировать
+    </button>
+    <button class="share-btn share-btn--qr" id="share-qr" type="button" aria-label="Показать QR-код">
+      <i class="fa-solid fa-qrcode"></i> QR-код
+    </button>
+  </div>
 </div>
 
               </div>
@@ -781,6 +801,20 @@
     <script src="/js/viewing-booking.js" defer></script>
    <script src="/libs/maplibre/maplibre-gl.js"></script>
        <script src="/js/objects-smart-badge.js" defer></script>
+
+    <!-- QR MODAL -->
+    <div class="share-qr-modal" id="share-qr-modal" role="dialog" aria-modal="true" aria-label="QR-код объекта">
+      <div class="share-qr-box">
+        <button class="share-qr-close" id="share-qr-close" aria-label="Закрыть">×</button>
+        <div class="share-qr-box__icon"><i class="fa-solid fa-qrcode"></i></div>
+        <div class="share-qr-box__title">Сканируйте QR-код</div>
+        <div class="share-qr-box__hint">Откроет страницу объекта<br>на любом устройстве</div>
+        <div class="share-qr-img-wrap">
+          <img id="share-qr-img" src="" alt="QR-код объекта" width="180" height="180" />
+        </div>
+        <div class="share-qr-box__url" id="share-qr-url"></div>
+      </div>
+    </div>
 
     <!-- Back-to-Top Button -->
     <button class="back-to-top" aria-label="Прокрутить вверх" title="Вернуться в начало страницы">

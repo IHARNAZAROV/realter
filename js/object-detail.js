@@ -1327,6 +1327,83 @@ function initObjectMap(obj) {
   ===================================================== */
   let _initCompleted = false;
 
+  /* =====================================================
+     SHARE BLOCK
+  ===================================================== */
+  function initShareBlock(obj) {
+    const block = document.getElementById("object-share-block");
+    if (!block) return;
+
+    const pageUrl = `https://turko.by/object/${obj.slug}`;
+    const title = obj.title || "Объект недвижимости в Лиде";
+    const shareText = `${title} — ${pageUrl}`;
+
+    const viberBtn = document.getElementById("share-viber");
+    if (viberBtn) {
+      viberBtn.href = `viber://forward?text=${encodeURIComponent(shareText)}`;
+    }
+
+    const tgBtn = document.getElementById("share-telegram");
+    if (tgBtn) {
+      tgBtn.href = `https://t.me/share/url?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(title)}`;
+    }
+
+    const copyBtn = document.getElementById("share-copy");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(pageUrl).then(() => {
+          const icon = copyBtn.querySelector("i");
+          const originalClass = icon ? icon.className : "";
+          copyBtn.classList.add("copied");
+          copyBtn.querySelector("i") && (copyBtn.querySelector("i").className = "fa-solid fa-check");
+          const originalText = copyBtn.childNodes[copyBtn.childNodes.length - 1];
+          if (originalText && originalText.nodeType === 3) originalText.textContent = " Скопировано!";
+          setTimeout(() => {
+            copyBtn.classList.remove("copied");
+            if (icon) icon.className = originalClass;
+            if (originalText && originalText.nodeType === 3) originalText.textContent = " Скопировать";
+          }, 2200);
+        }).catch(() => {
+          const ta = document.createElement("textarea");
+          ta.value = pageUrl;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        });
+      });
+    }
+
+    const qrBtn = document.getElementById("share-qr");
+    const qrModal = document.getElementById("share-qr-modal");
+    const qrImg = document.getElementById("share-qr-img");
+    const qrUrlEl = document.getElementById("share-qr-url");
+    const qrClose = document.getElementById("share-qr-close");
+
+    if (qrBtn && qrModal && qrImg) {
+      qrBtn.addEventListener("click", () => {
+        const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&margin=10&data=${encodeURIComponent(pageUrl)}`;
+        qrImg.src = qrSrc;
+        if (qrUrlEl) qrUrlEl.textContent = pageUrl;
+        qrModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      });
+
+      const closeQr = () => {
+        qrModal.classList.remove("active");
+        document.body.style.overflow = "";
+      };
+
+      if (qrClose) qrClose.addEventListener("click", closeQr);
+      qrModal.addEventListener("click", (e) => { if (e.target === qrModal) closeQr(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && qrModal.classList.contains("active")) closeQr(); });
+    }
+
+    block.style.display = "";
+  }
+
   async function init() {
     if (_initCompleted) return;
     _initCompleted = true;
@@ -1396,6 +1473,7 @@ function initObjectMap(obj) {
     generateObjectSchema(enrichedObj);
     initObjectMap(enrichedObj);
     initMortgageCalculator(enrichedObj);
+    initShareBlock(enrichedObj);
     initRevealBlocks();
 
   } catch (e) {
