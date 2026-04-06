@@ -150,6 +150,10 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2px;
 }
 .compare-chip {
   display: flex;
@@ -159,6 +163,7 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 10px;
   padding: 6px 9px;
+  flex: 0 0 auto;
 }
 .compare-chip img {
   width: 44px;
@@ -221,6 +226,14 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
   border: none;
   border-radius: 50%;
   background: #f0f4f8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
 }
 .compare-modal__dialog h3 {
   margin: 0 0 16px;
@@ -256,14 +269,71 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
   .compare-bar {
     width: calc(100% - 12px);
     bottom: 8px;
-    padding: 8px;
+    padding: 8px 8px 10px;
     gap: 8px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .compare-bar__items {
+    width: 100%;
+  }
+  .compare-chip {
+    min-width: 120px;
   }
   .compare-chip__meta strong {
     font-size: 12px;
   }
   .compare-bar__action {
-    padding: 8px 12px;
+    width: 100%;
+    padding: 10px 12px;
     font-size: 13px;
+  }
+  .compare-modal {
+    padding: 8px;
+    align-items: flex-end;
+  }
+  .compare-modal__dialog {
+    width: 100%;
+    max-height: 88vh;
+    border-radius: 14px 14px 0 0;
+    padding: 14px 12px 12px;
+  }
+  .compare-modal__dialog h3 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    padding-right: 36px;
+  }
+  .compare-modal__close {
+    top: 6px;
+    right: 6px;
+    width: 32px;
+    height: 32px;
+    font-size: 26px;
+  }
+  .compare-table {
+    min-width: 540px;
+  }
+  .compare-table th,
+  .compare-table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 480px) {
+  .compare-chip {
+    min-width: 108px;
+  }
+  .compare-chip img {
+    width: 36px;
+    height: 28px;
+  }
+  .compare-chip__meta strong {
+    font-size: 11px;
+  }
+  .compare-modal__dialog h3 {
+    font-size: 22px;
+  }
+  .compare-table {
+    min-width: 460px;
   }
 }

@@ -846,7 +846,7 @@ function initCompareUI() {
     <div class="compare-modal__backdrop" data-close-compare="true"></div>
     <div class="compare-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="compareModalTitle">
       <button type="button" class="compare-modal__close" data-close-compare="true" aria-label="Закрыть сравнение">
-        <i class="fa-solid fa-xmark"></i>
+        <span aria-hidden="true">&times;</span>
       </button>
       <h3 id="compareModalTitle">Сравнение объектов</h3>
       <div class="compare-modal__table-wrap" id="compareTableWrap"></div>
@@ -904,19 +904,34 @@ function getComparableFields(obj) {
   const area = getObjectArea(obj);
   const objectPrice = getObjectPriceByn(obj);
   const pricePerMeter = area && objectPrice > 0 ? Math.round(objectPrice / area) : null;
+  const rooms = Number(obj?.rooms);
 
   return {
+    type: obj?.type || "—",
+    rooms: Number.isFinite(rooms) && rooms > 0 ? String(rooms) : "—",
     area: area ? `${formatPrice(area)} м²` : "—",
+    areaLiving: obj?.areaLiving ? `${formatPrice(obj.areaLiving)} м²` : "—",
+    areaKitchen: obj?.areaKitchen ? `${formatPrice(obj.areaKitchen)} м²` : "—",
+    areaPlot: obj?.areaPlot ? `${formatPrice(obj.areaPlot)} сот.` : "—",
     floor:
       obj?.floor && obj?.floorsTotal
         ? `${obj.floor}/${obj.floorsTotal}`
         : obj?.floor
           ? String(obj.floor)
           : "—",
+    floorsTotal: obj?.floorsTotal ? String(obj.floorsTotal) : "—",
     pricePerMeter: pricePerMeter ? `${formatPrice(pricePerMeter)} BYN` : "—",
+    price: objectPrice > 0 ? `${formatPrice(objectPrice)} BYN` : "—",
     district: obj?.district || obj?.city || "—",
+    address: obj?.address || "—",
     yearBuilt: obj?.yearBuilt ? String(obj.yearBuilt) : "—",
     condition: getConditionLabel(obj),
+    houseMaterial: obj?.houseMaterial || "—",
+    heating: obj?.heating || "—",
+    gas: obj?.gas || "—",
+    water: obj?.water || "—",
+    sewerage: obj?.sewerage || "—",
+    electricity: obj?.electricity || "—",
   };
 }
 
@@ -959,15 +974,33 @@ function openCompareModal() {
   }
 
   const rows = [
+    { key: "type", label: "Тип" },
+    { key: "rooms", label: "Комнаты" },
     { key: "area", label: "Площадь" },
+    { key: "areaLiving", label: "Жилая площадь" },
+    { key: "areaKitchen", label: "Кухня" },
+    { key: "areaPlot", label: "Участок" },
     { key: "floor", label: "Этаж" },
+    { key: "floorsTotal", label: "Этажность дома" },
+    { key: "price", label: "Цена" },
     { key: "pricePerMeter", label: "Цена за м²" },
     { key: "district", label: "Район" },
+    { key: "address", label: "Адрес" },
     { key: "yearBuilt", label: "Год постройки" },
     { key: "condition", label: "Состояние" },
+    { key: "houseMaterial", label: "Материал дома" },
+    { key: "heating", label: "Отопление" },
+    { key: "gas", label: "Газ" },
+    { key: "water", label: "Вода" },
+    { key: "sewerage", label: "Канализация" },
+    { key: "electricity", label: "Электричество" },
   ];
 
   const valuesByObject = compareObjects.map((obj) => getComparableFields(obj));
+  const visibleRows = rows.filter((row) => {
+    const values = valuesByObject.map((item) => String(item[row.key] || "—").trim());
+    return values.some((value) => value !== "—");
+  });
   const isDifferent = (key) => {
     const normalized = valuesByObject.map((item) =>
       String(item[key] || "—").trim().toLowerCase(),
@@ -984,7 +1017,7 @@ function openCompareModal() {
     </tr>
   `;
 
-  const body = rows
+  const body = visibleRows
     .map((row) => {
       const diff = isDifferent(row.key);
       const cells = valuesByObject
