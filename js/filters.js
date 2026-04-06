@@ -406,6 +406,118 @@ function applyFiltersAndSort() {
 }
 
 /* =========================================================
+   NO-RESULTS LEAD CAPTURE
+========================================================= */
+function buildFiltersDescription() {
+  const parts = [];
+  if (typeSelect.value !== "all") parts.push(typeSelect.value);
+  if (roomsSelect.value !== "all") {
+    parts.push(roomsSelect.value === "4" ? "4+ комнаты" : roomsSelect.value + "-комн.");
+  }
+  const from = parsePrice(priceFromInput.value);
+  const to   = parsePrice(priceToInput.value);
+  if (from || to) {
+    const p = [
+      from ? "от " + from.toLocaleString("ru") + " р." : "",
+      to   ? "до " + to.toLocaleString("ru")   + " р." : "",
+    ].filter(Boolean).join(" ");
+    parts.push(p);
+  }
+  if (locationSelect.value !== "all") {
+    const loc = { lida: "Лида", district: "Лидский район", other: "Другой город" };
+    parts.push(loc[locationSelect.value] || locationSelect.value);
+  }
+  return parts.length ? parts.join(", ") : "без фильтров";
+}
+
+function buildNoResultsLead() {
+  return `<li class="no-results-lead-wrap">
+    <div class="no-results-lead">
+      <div class="no-results-lead__body">
+        <div class="no-results-lead__icon">
+          <i class="fa-solid fa-house-circle-xmark"></i>
+        </div>
+        <div class="no-results-lead__copy">
+          <h3 class="no-results-lead__title">Пока нет подходящих вариантов</h3>
+          <p class="no-results-lead__text">
+            Оставьте контакт — я свяжусь, как только появится подходящий объект
+          </p>
+        </div>
+      </div>
+      <div class="no-results-lead__right">
+        <form class="no-results-lead__form" id="noResultsLeadForm" novalidate>
+          <div class="no-results-lead__field-wrap">
+            <input
+              type="text"
+              id="noResultsContact"
+              class="no-results-lead__input"
+              placeholder="Telegram @username или телефон"
+              autocomplete="off"
+              maxlength="80"
+            />
+            <button type="submit" class="no-results-lead__btn">Отправить</button>
+          </div>
+          <p class="no-results-lead__error" id="noResultsError" hidden>
+            Пожалуйста, введите Telegram-аккаунт или номер телефона
+          </p>
+        </form>
+        <div class="no-results-lead__success" id="noResultsSuccess" hidden>
+          <i class="fa-solid fa-circle-check"></i>
+          Спасибо! Я свяжусь с вами, как только появится подходящий вариант.
+        </div>
+      </div>
+    </div>
+  </li>`;
+}
+
+function initNoResultsLead() {
+  const form = document.getElementById("noResultsLeadForm");
+  if (!form) return;
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input     = document.getElementById("noResultsContact");
+    const errorEl   = document.getElementById("noResultsError");
+    const successEl = document.getElementById("noResultsSuccess");
+    const contact   = input.value.trim();
+
+    if (contact.length < 5) {
+      errorEl.hidden = false;
+      input.focus();
+      return;
+    }
+    errorEl.hidden = true;
+
+    const btn = form.querySelector(".no-results-lead__btn");
+    btn.disabled    = true;
+    btn.textContent = "Отправляем...";
+
+    try {
+      const res = await fetch("/api/lead-no-result.php", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ contact, filters: buildFiltersDescription() }),
+      });
+
+      if (res.ok) {
+        form.hidden       = true;
+        successEl.hidden  = false;
+      } else {
+        btn.disabled          = false;
+        btn.textContent       = "Отправить";
+        errorEl.textContent   = "Ошибка отправки. Попробуйте ещё раз.";
+        errorEl.hidden        = false;
+      }
+    } catch {
+      btn.disabled        = false;
+      btn.textContent     = "Отправить";
+      errorEl.textContent = "Ошибка сети. Попробуйте ещё раз.";
+      errorEl.hidden      = false;
+    }
+  });
+}
+
+/* =========================================================
    RENDER (оптимизированная версия)
 ========================================================= */
 function renderObjects(list) {
@@ -413,10 +525,10 @@ function renderObjects(list) {
      EMPTY STATE
   ========================================= */
   if (!list.length) {
-    objectsList.innerHTML =
-      "<li class='object-item'><p>Объекты не найдены</p></li>";
+    objectsList.innerHTML = buildNoResultsLead();
     updateShownCounter(0, 0);
     toggleLoadMore(false);
+    initNoResultsLead();
     return;
   }
 
