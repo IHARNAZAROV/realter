@@ -433,32 +433,38 @@ function buildFiltersDescription() {
 function buildNoResultsLead() {
   return `<li class="no-results-lead-wrap">
     <div class="no-results-lead">
-      <div class="no-results-lead__icon">
-        <i class="fa-regular fa-face-sad-tear"></i>
-      </div>
-      <h3 class="no-results-lead__title">Пока нет подходящих вариантов</h3>
-      <p class="no-results-lead__text">
-        Оставьте контакт — я свяжусь, как только появится подходящий объект
-      </p>
-      <form class="no-results-lead__form" id="noResultsLeadForm" novalidate>
-        <div class="no-results-lead__field-wrap">
-          <input
-            type="text"
-            id="noResultsContact"
-            class="no-results-lead__input"
-            placeholder="Telegram @username или телефон"
-            autocomplete="off"
-            maxlength="80"
-          />
-          <button type="submit" class="no-results-lead__btn">Отправить</button>
+      <div class="no-results-lead__body">
+        <div class="no-results-lead__icon">
+          <i class="fa-solid fa-house-circle-xmark"></i>
         </div>
-        <p class="no-results-lead__error" id="noResultsError" hidden>
-          Пожалуйста, введите Telegram-аккаунт или номер телефона
-        </p>
-      </form>
-      <div class="no-results-lead__success" id="noResultsSuccess" hidden>
-        <i class="fa-solid fa-circle-check"></i>
-        Спасибо! Я свяжусь с вами, как только появится подходящий вариант.
+        <div class="no-results-lead__copy">
+          <h3 class="no-results-lead__title">Пока нет подходящих вариантов</h3>
+          <p class="no-results-lead__text">
+            Оставьте контакт — я свяжусь, как только появится подходящий объект
+          </p>
+        </div>
+      </div>
+      <div class="no-results-lead__right">
+        <form class="no-results-lead__form" id="noResultsLeadForm" novalidate>
+          <div class="no-results-lead__field-wrap">
+            <input
+              type="text"
+              id="noResultsContact"
+              class="no-results-lead__input"
+              placeholder="Telegram @username или телефон"
+              autocomplete="off"
+              maxlength="80"
+            />
+            <button type="submit" class="no-results-lead__btn">Отправить</button>
+          </div>
+          <p class="no-results-lead__error" id="noResultsError" hidden>
+            Пожалуйста, введите Telegram-аккаунт или номер телефона
+          </p>
+        </form>
+        <div class="no-results-lead__success" id="noResultsSuccess" hidden>
+          <i class="fa-solid fa-circle-check"></i>
+          Спасибо! Я свяжусь с вами, как только появится подходящий вариант.
+        </div>
       </div>
     </div>
   </li>`;
