@@ -4,14 +4,16 @@
  * по актуальному курсу USD→BYN с API Национального банка Беларуси.
  *
  * API: https://api.nbrb.by/exrates/rates/431
+ * Запуск: node scripts/update-prices-byn.cjs
  */
 
 const fs = require('fs');
 const path = require('path');
 
+const ROOT = path.join(__dirname, '..');
 const NBRB_URL = 'https://api.nbrb.by/exrates/rates/431';
-const OBJECTS_FILE = path.join(__dirname, 'data', 'objects.json');
-const LIST_FILE = path.join(__dirname, 'data', 'objects-list.json');
+const OBJECTS_FILE = path.join(ROOT, 'data', 'objects.json');
+const LIST_FILE = path.join(ROOT, 'data', 'objects-list.json');
 
 async function fetchRate() {
   const res = await fetch(NBRB_URL, { cache: 'no-store' });

@@ -8,10 +8,11 @@
  *   5. update-prices-byn.cjs       — пересчитывает цены BYN по курсу НБРБ
  *   6. generate-sitemap.cjs        — генерирует sitemap.xml
  *
- * Использование: node update-all.cjs
+ * Использование: node scripts/update-all.cjs
  */
 
 const { execSync } = require('child_process');
+const path = require('path');
 
 const scripts = [
   'backup-objects.cjs',
@@ -27,7 +28,7 @@ console.log('=== Запуск обновления ===\n');
 for (const script of scripts) {
   console.log(`▶ ${script}...`);
   try {
-    execSync(`node ${script}`, { stdio: 'inherit' });
+    execSync(`node ${path.join(__dirname, script)}`, { stdio: 'inherit' });
     console.log(`✓ ${script} выполнен\n`);
   } catch (err) {
     console.error(`\n✗ Ошибка в ${script}. Остановка.`);

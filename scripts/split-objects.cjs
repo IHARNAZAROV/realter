@@ -4,7 +4,7 @@
  *   - data/objects-list.json  (лёгкий список для главной, виджетов)
  *   - data/objects/{slug}.json (полный файл каждого объекта)
  *
- * Запуск: node split-objects.cjs
+ * Запуск: node scripts/split-objects.cjs
  */
 
 "use strict";
@@ -12,9 +12,10 @@
 const fs = require("fs");
 const path = require("path");
 
-const SRC = path.join(__dirname, "data", "objects.json");
-const LIST_OUT = path.join(__dirname, "data", "objects-list.json");
-const OBJECTS_DIR = path.join(__dirname, "data", "objects");
+const ROOT = path.join(__dirname, "..");
+const SRC = path.join(ROOT, "data", "objects.json");
+const LIST_OUT = path.join(ROOT, "data", "objects-list.json");
+const OBJECTS_DIR = path.join(ROOT, "data", "objects");
 
 // Из id вида "obj-42" извлекаем число и строим путь images/objects/pic42.webp
 function getPreviewImage(obj) {

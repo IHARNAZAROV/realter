@@ -3,14 +3,15 @@
  * Создаёт резервную копию data/objects.json в папке backups/
  * с именем вида: objects_2026-04-07_14-30-00.json
  *
- * Хранит последние 30 копий, старые удаляет автоматически.
+ * Хранит последние 3 копии, старые удаляет автоматически.
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const SOURCE = path.join(__dirname, 'data', 'objects.json');
-const BACKUP_DIR = path.join(__dirname, 'backups');
+const ROOT = path.join(__dirname, '..');
+const SOURCE = path.join(ROOT, 'data', 'objects.json');
+const BACKUP_DIR = path.join(ROOT, 'backups');
 const MAX_BACKUPS = 3;
 
 function pad(n) {

@@ -12,7 +12,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const FILE = path.join(__dirname, 'data', 'objects.json');
+const FILE = path.join(__dirname, '..', 'data', 'objects.json');
 
 const REQUIRED_FIELDS = ['id', 'slug', 'title', 'type', 'dealType', 'priceUSD', 'images'];
 

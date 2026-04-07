@@ -1,8 +1,17 @@
+/**
+ * generate-sitemap.cjs
+ * Генерирует sitemap.xml в корне проекта на основе статических страниц
+ * и данных из JSON-файлов (objects, services, blog-articles).
+ *
+ * Запуск: node scripts/generate-sitemap.cjs
+ */
+
 const fs = require("fs");
 const path = require("path");
 
+const ROOT = path.join(__dirname, "..");
 const SITE_URL = "https://turko.by";
-const OUTPUT_SITEMAP = path.join(__dirname, "sitemap.xml");
+const OUTPUT_SITEMAP = path.join(ROOT, "sitemap.xml");
 
 /* ===================== Статические страницы ===================== */
 
@@ -19,21 +28,21 @@ const STATIC_PAGES = [
 
 const SOURCES = [
   {
-    file: path.join(__dirname, "data", "objects.json"),
+    file: path.join(ROOT, "data", "objects.json"),
     buildUrl: (slug) => `${SITE_URL}/objects/${encodeURIComponent(slug)}`,
     priority: "0.8",
     changefreq: "weekly",
     dateField: null,
   },
   {
-    file: path.join(__dirname, "data", "services.json"),
+    file: path.join(ROOT, "data", "services.json"),
     buildUrl: (slug) => `${SITE_URL}/services/${encodeURIComponent(slug)}`,
     priority: "0.7",
     changefreq: "monthly",
     dateField: null,
   },
   {
-    file: path.join(__dirname, "data", "blog-articles.json"),
+    file: path.join(ROOT, "data", "blog-articles.json"),
     buildUrl: (slug) => `${SITE_URL}/blog/${encodeURIComponent(slug)}`,
     priority: "0.7",
     changefreq: "monthly",
@@ -69,7 +78,6 @@ function isoNow() {
   return new Date().toISOString().replace(/\.\d+Z$/, "+00:00");
 }
 
-// Парсит дату формата "DD.MM.YYYY" → ISO строка
 function parseDate(str) {
   if (!str || typeof str !== "string") return null;
   const match = str.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
@@ -105,7 +113,6 @@ function generateSitemap() {
   const now = isoNow();
   const entries = [];
 
-  // 1. Статические страницы
   STATIC_PAGES.forEach(({ loc, priority, changefreq }) => {
     entries.push(buildUrlEntry({
       loc: `${SITE_URL}${loc}`,
@@ -115,7 +122,6 @@ function generateSitemap() {
     }));
   });
 
-  // 2. Динамические страницы из JSON
   SOURCES.forEach(({ file, buildUrl, priority, changefreq, dateField }) => {
     if (!fs.existsSync(file)) {
       console.warn(`⚠️  Файл не найден: ${file}`);
