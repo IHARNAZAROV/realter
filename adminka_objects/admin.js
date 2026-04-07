@@ -352,6 +352,7 @@ const previewImages = {
    "kvartira-shchuchin-ul-ostrovskogo-22":"/images/objects/pic51.webp",
    "kvartira-lida-yuzhny-gorodok-13-stary-yuzhny":"/images/objects/pic52.webp",
    "dom-lida-ul-urickogo-chast-doma":"/images/objects/pic53.webp",
+    "kvartira-lida-ul-gastello-65":"/images/objects/pic54.webp",
 };
 
 /* ======================================================
