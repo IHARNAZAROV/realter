@@ -1,9 +1,12 @@
 /**
  * update-all.cjs
  * Запускает все обслуживающие скрипты в правильном порядке:
- *   1. split-objects.cjs       — разбивает objects.json на отдельные файлы
- *   2. update-meta-descriptions.cjs — обновляет мета-описания
- *   3. generate-sitemap.cjs    — генерирует sitemap.xml
+ *   1. backup-objects.cjs          — резервная копия objects.json
+ *   2. validate-objects.cjs        — проверка данных перед обработкой
+ *   3. split-objects.cjs           — разбивает objects.json на отдельные файлы
+ *   4. update-meta-descriptions.cjs — обновляет мета-описания
+ *   5. update-prices-byn.cjs       — пересчитывает цены BYN по курсу НБРБ
+ *   6. generate-sitemap.cjs        — генерирует sitemap.xml
  *
  * Использование: node update-all.cjs
  */
@@ -11,8 +14,11 @@
 const { execSync } = require('child_process');
 
 const scripts = [
+  'backup-objects.cjs',
+  'validate-objects.cjs',
   'split-objects.cjs',
   'update-meta-descriptions.cjs',
+  'update-prices-byn.cjs',
   'generate-sitemap.cjs',
 ];
 
@@ -24,7 +30,7 @@ for (const script of scripts) {
     execSync(`node ${script}`, { stdio: 'inherit' });
     console.log(`✓ ${script} выполнен\n`);
   } catch (err) {
-    console.error(`✗ Ошибка в ${script}. Остановка.`);
+    console.error(`\n✗ Ошибка в ${script}. Остановка.`);
     process.exit(1);
   }
 }
