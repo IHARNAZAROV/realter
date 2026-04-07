@@ -700,6 +700,10 @@
     "address": "ул. Садовая",
     "priceBYN": 365513,
     "priceUSD": 125000,
+    "status": {
+      "type": "sold",
+      "date": "2026-04-07"
+    },
     "recommended": true,
     "publishedAt": "2025-12-05",
     "areaTotal": 138,
@@ -719,6 +723,10 @@
     "address": "ул. Урицкого, 60",
     "priceBYN": 124859,
     "priceUSD": 42700,
+    "status": {
+      "type": "sold",
+      "date": "2026-04-07"
+    },
     "recommended": true,
     "publishedAt": "2026-03-05",
     "rooms": 2,

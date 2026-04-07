@@ -63,5 +63,9 @@
   ],
   "publishedAt": "2026-03-05",
   "contractNumber": "Договор № 50/4 от 05.03.2026",
-  "livePriceBYN": 126614
+  "livePriceBYN": 124859,
+  "status": {
+    "type": "sold",
+    "date": "2026-04-07"
+  }
 }

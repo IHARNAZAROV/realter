@@ -60,7 +60,7 @@
     ],
     "publishedAt": "2025-09-08",
     "contractNumber": "Договор № 122/1 от 08.09.2025",
-    "livePriceBYN": 103782
+    "livePriceBYN": 102344
   },
   {
     "id": "obj-2",
@@ -119,7 +119,7 @@
     ],
     "publishedAt": "2025-08-23",
     "contractNumber": "Договор № 100/1 от 23.08.2025",
-    "livePriceBYN": 112678
+    "livePriceBYN": 111116
   },
   {
     "id": "obj-3",
@@ -176,7 +176,7 @@
     ],
     "publishedAt": "2025-08-27",
     "contractNumber": "Договор № 104/1 от 27.08.2025",
-    "livePriceBYN": 121573
+    "livePriceBYN": 119888
   },
   {
     "id": "obj-4",
@@ -232,7 +232,7 @@
     ],
     "publishedAt": "2025-10-13",
     "contractNumber": "Договор № 183/1 от 13.10.2025",
-    "livePriceBYN": 207564
+    "livePriceBYN": 204687
   },
   {
     "id": "obj-5",
@@ -284,7 +284,7 @@
     ],
     "publishedAt": "2025-12-08",
     "contractNumber": "Договор № 64/4 от 08.12.2025",
-    "livePriceBYN": 114160
+    "livePriceBYN": 112578
   },
   {
     "id": "obj-6",
@@ -344,7 +344,7 @@
     ],
     "publishedAt": "2025-10-30",
     "contractNumber": "Договор № 14/4 от 30.10.2025",
-    "livePriceBYN": 207564
+    "livePriceBYN": 204687
   },
   {
     "id": "obj-7",
@@ -408,7 +408,7 @@
     ],
     "publishedAt": "2025-08-18",
     "contractNumber": "Договор № 93/1 от 18.08.2025",
-    "livePriceBYN": 163086
+    "livePriceBYN": 160826
   },
   {
     "id": "obj-8",
@@ -462,7 +462,7 @@
     ],
     "publishedAt": "2025-08-18",
     "contractNumber": "Договор № 94/1 от 18.08.2025",
-    "livePriceBYN": 14529
+    "livePriceBYN": 14328
   },
   {
     "id": "obj-9",
@@ -527,7 +527,7 @@
       "type": "sold",
       "date": "2026-02-13"
     },
-    "livePriceBYN": 171982
+    "livePriceBYN": 169598
   },
   {
     "id": "obj-10",
@@ -589,7 +589,7 @@
     ],
     "publishedAt": "2025-08-30",
     "contractNumber": "Договор № 106/1 от 30.08.2025",
-    "livePriceBYN": 74130
+    "livePriceBYN": 73103
   },
   {
     "id": "obj-11",
@@ -651,7 +651,7 @@
     ],
     "publishedAt": "2025-11-24",
     "contractNumber": "Договор № 35/4 от 24.11.2025",
-    "livePriceBYN": 152115
+    "livePriceBYN": 150006
   },
   {
     "id": "obj-12",
@@ -711,7 +711,7 @@
     ],
     "publishedAt": "2025-11-01",
     "contractNumber": "Договор № 18/4 от 01.11.2025",
-    "livePriceBYN": 157156,
+    "livePriceBYN": 154977,
     "status": {
       "type": "sold",
       "date": "2026-03-19"
@@ -779,7 +779,7 @@
       "type": "sold",
       "date": "2026-02-20"
     },
-    "livePriceBYN": 133434
+    "livePriceBYN": 131585
   },
   {
     "id": "obj-14",
@@ -851,7 +851,7 @@
       "type": "sold",
       "date": "2026-02-25"
     },
-    "livePriceBYN": 143015
+    "livePriceBYN": 141032
   },
   {
     "id": "obj-15",
@@ -912,7 +912,7 @@
     ],
     "publishedAt": "2025-10-13",
     "contractNumber": "Договор № 182/1 от 13.10.2025",
-    "livePriceBYN": 133434
+    "livePriceBYN": 131585
   },
   {
     "id": "obj-16",
@@ -972,7 +972,7 @@
     ],
     "publishedAt": "2026-01-27",
     "contractNumber": "Договор № 38/4 от 25.11.2025",
-    "livePriceBYN": 192738
+    "livePriceBYN": 190067
   },
   {
     "id": "obj-17",
@@ -1038,7 +1038,7 @@
       "type": "sold",
       "date": "2026-03-06"
     },
-    "livePriceBYN": 108230
+    "livePriceBYN": 106730
   },
   {
     "id": "obj-18",
@@ -1105,7 +1105,7 @@
       "type": "sold",
       "date": "2026-03-06"
     },
-    "livePriceBYN": 174650
+    "livePriceBYN": 172229
   },
   {
     "id": "obj-19",
@@ -1171,7 +1171,7 @@
     ],
     "publishedAt": "2026-02-04",
     "contractNumber": "Договор № 68/4 от 10.12.2025",
-    "livePriceBYN": 272798,
+    "livePriceBYN": 269017,
     "status": {
       "type": "sold",
       "date": "2026-03-19"
@@ -1239,7 +1239,7 @@
     ],
     "publishedAt": "2026-02-04",
     "contractNumber": "Договор № 154/1 от 22.09.2025",
-    "livePriceBYN": 53077
+    "livePriceBYN": 52341
   },
   {
     "id": "obj-21",
@@ -1302,7 +1302,7 @@
     ],
     "publishedAt": "2026-02-09",
     "contractNumber": "Договор № 10/4 от 27.01.2026",
-    "livePriceBYN": 169016
+    "livePriceBYN": 166674
   },
   {
     "id": "obj-22",
@@ -1365,7 +1365,7 @@
     ],
     "publishedAt": "2026-02-09",
     "contractNumber": "Договор № 19/4 от 09.02.2026",
-    "livePriceBYN": 16309
+    "livePriceBYN": 16083
   },
   {
     "id": "obj-23",
@@ -1429,7 +1429,7 @@
     ],
     "publishedAt": "2026-02-09",
     "contractNumber": "Договор № 79/4 от 17.12.2025",
-    "livePriceBYN": 14826
+    "livePriceBYN": 14621
   },
   {
     "id": "obj-25",
@@ -1493,7 +1493,7 @@
       "type": "sold",
       "date": "2026-03-06"
     },
-    "livePriceBYN": 133137
+    "livePriceBYN": 131292
   },
   {
     "id": "obj-24",
@@ -1557,7 +1557,7 @@
       "type": "sold",
       "date": "2026-03-05"
     },
-    "livePriceBYN": 62269
+    "livePriceBYN": 61406
   },
   {
     "id": "obj-26",
@@ -1623,7 +1623,7 @@
     ],
     "publishedAt": "2026-02-20",
     "contractNumber": "Договор № 67/4 от 09.12.2025",
-    "livePriceBYN": 252042
+    "livePriceBYN": 248549
   },
   {
     "id": "obj-27",
@@ -1688,7 +1688,7 @@
     ],
     "publishedAt": "2026-02-23",
     "contractNumber": "Договор № 36/4 от 19.02.2026",
-    "livePriceBYN": 69682
+    "livePriceBYN": 68716
   },
   {
     "id": "obj-28",
@@ -1752,7 +1752,7 @@
     ],
     "publishedAt": "2026-02-23",
     "contractNumber": "Договор № 1/4 от 05.01.2026",
-    "livePriceBYN": 88066
+    "livePriceBYN": 86846
   },
   {
     "id": "obj-29",
@@ -1827,7 +1827,7 @@
       "type": "sold",
       "date": "2026-03-06"
     },
-    "livePriceBYN": 103782
+    "livePriceBYN": 102344
   },
   {
     "id": "obj-30",
@@ -1892,7 +1892,7 @@
     ],
     "publishedAt": "2026-03-02",
     "contractNumber": "Договор № 44/4 от 02.03.2026",
-    "livePriceBYN": 56339
+    "livePriceBYN": 55558
   },
   {
     "id": "obj-31",
@@ -1957,7 +1957,7 @@
     ],
     "publishedAt": "2026-02-13",
     "contractNumber": "Договор № 22/4 от 13.02.2026",
-    "livePriceBYN": 263903
+    "livePriceBYN": 260245
   },
   {
     "id": "obj-32",
@@ -2021,7 +2021,7 @@
     ],
     "publishedAt": "2026-02-19",
     "contractNumber": "Договор № 35/4 от 19.02.2026",
-    "livePriceBYN": 229803
+    "livePriceBYN": 226618
   },
   {
     "id": "obj-33",
@@ -2085,7 +2085,7 @@
     ],
     "publishedAt": "2026-03-05",
     "contractNumber": "Договор № 48/4 от 05.03.2026",
-    "livePriceBYN": 177912,
+    "livePriceBYN": 175446,
     "status": {
       "type": "sold",
       "date": "2026-03-19"
@@ -2157,7 +2157,7 @@
     ],
     "publishedAt": "2026-03-05",
     "contractNumber": "Договор № 49/4 от 05.03.2026",
-    "livePriceBYN": 173464
+    "livePriceBYN": 171060
   },
   {
     "id": "obj-35",
@@ -2223,7 +2223,11 @@
     ],
     "publishedAt": "2025-12-05",
     "contractNumber": "Договор № 60/4 от 05.12.2025",
-    "livePriceBYN": 370650
+    "livePriceBYN": 365513,
+    "status": {
+      "type": "sold",
+      "date": "2026-04-07"
+    }
   },
   {
     "id": "obj-36",
@@ -2290,7 +2294,11 @@
     ],
     "publishedAt": "2026-03-05",
     "contractNumber": "Договор № 50/4 от 05.03.2026",
-    "livePriceBYN": 126614
+    "livePriceBYN": 124859,
+    "status": {
+      "type": "sold",
+      "date": "2026-04-07"
+    }
   },
   {
     "id": "obj-37",
@@ -2352,7 +2360,7 @@
     ],
     "publishedAt": "2026-03-03",
     "contractNumber": "Договор № 46/4 от 03.03.2026",
-    "livePriceBYN": 91921
+    "livePriceBYN": 90647
   },
   {
     "id": "obj-38",
@@ -2413,7 +2421,7 @@
     ],
     "publishedAt": "2026-02-23",
     "contractNumber": "Договор № 37/4 от 23.02.2026",
-    "livePriceBYN": 127504
+    "livePriceBYN": 125736
   },
   {
     "id": "obj-39",
@@ -2477,7 +2485,7 @@
     ],
     "publishedAt": "2025-12-01",
     "contractNumber": "Договор № 50/4 от 01.12.2025",
-    "livePriceBYN": 222390
+    "livePriceBYN": 219308
   },
   {
     "id": "obj-40",
@@ -2543,7 +2551,7 @@
     ],
     "publishedAt": "2025-08-19",
     "contractNumber": "Договор № 95/1 от 19.08.2025",
-    "livePriceBYN": 174947
+    "livePriceBYN": 172522
   },
   {
     "id": "obj-41",
@@ -2607,7 +2615,7 @@
     ],
     "publishedAt": "2025-12-22",
     "contractNumber": "Договор № 81/4 от 22.12.2025",
-    "livePriceBYN": 118608
+    "livePriceBYN": 116964
   },
   {
     "id": "obj-42",
@@ -2667,7 +2675,7 @@
     ],
     "publishedAt": "2025-09-20",
     "contractNumber": "Договор № 150/1 от 20.09.2025",
-    "livePriceBYN": 130469
+    "livePriceBYN": 128660
   },
   {
     "id": "obj-43",
@@ -2738,7 +2746,7 @@
     ],
     "publishedAt": "2026-03-11",
     "contractNumber": "Договор № 53/4 от 11.03.2026",
-    "livePriceBYN": 145295
+    "livePriceBYN": 143281
   },
   {
     "id": "obj-44",
@@ -2805,7 +2813,7 @@
     ],
     "publishedAt": "2026-03-12",
     "contractNumber": "Договор № 57/4 от 12.03.2026",
-    "livePriceBYN": 94886
+    "livePriceBYN": 93571
   },
   {
     "id": "obj-45",
@@ -2868,7 +2876,7 @@
     ],
     "publishedAt": "2026-03-13",
     "contractNumber": "Договор № 47/4 от 03.03.2026",
-    "livePriceBYN": 115613
+    "livePriceBYN": 114011
   },
   {
     "id": "obj-46",
@@ -2927,7 +2935,7 @@
     ],
     "publishedAt": "2025-12-01",
     "contractNumber": "Договор № 51/4 от 01.12.2025",
-    "livePriceBYN": 88956
+    "livePriceBYN": 87723
   },
   {
     "id": "obj-47",
@@ -2992,7 +3000,7 @@
     ],
     "publishedAt": "2026-03-14",
     "contractNumber": "Договор № 60/4 от 14.03.2026",
-    "livePriceBYN": 94886
+    "livePriceBYN": 93571
   },
   {
     "id": "obj-48",
@@ -3050,7 +3058,7 @@
     ],
     "publishedAt": "2026-03-16",
     "contractNumber": "Договор № 63/4 от 16.03.2026",
-    "livePriceBYN": 97852,
+    "livePriceBYN": 96495,
     "status": {
       "type": "sold",
       "date": "2026-03-27"
@@ -3119,7 +3127,7 @@
     ],
     "publishedAt": "2026-03-19",
     "contractNumber": "Договор № 71/4 от 19.03.2026",
-    "livePriceBYN": 257972
+    "livePriceBYN": 254397
   },
   {
     "id": "obj-50",
@@ -3183,7 +3191,7 @@
     ],
     "publishedAt": "2026-03-15",
     "contractNumber": "Договор № 61/4 от 15.03.2026",
-    "livePriceBYN": 118311
+    "livePriceBYN": 116672
   },
   {
     "id": "obj-51",
@@ -3245,7 +3253,7 @@
     ],
     "publishedAt": "2026-03-17",
     "contractNumber": "Договор № 67/4 от 17.03.2026",
-    "livePriceBYN": 66717
+    "livePriceBYN": 65792
   },
   {
     "id": "obj-52",
@@ -3306,7 +3314,8 @@
       "/images/objects/pic52-4.webp"
     ],
     "publishedAt": "2026-03-26",
-    "contractNumber": "Договор № 73/4 от 26.03.2026"
+    "contractNumber": "Договор № 73/4 от 26.03.2026",
+    "livePriceBYN": 81875
   },
   {
     "id": "obj-53",
@@ -3373,7 +3382,8 @@
       "/images/objects/pic53-4.webp"
     ],
     "publishedAt": "2026-04-02",
-    "contractNumber": "Договор № 78/4 от 02.04.2026"
+    "contractNumber": "Договор № 78/4 от 02.04.2026",
+    "livePriceBYN": 49710
   },
   {
     "id": "obj-54",
@@ -3436,6 +3446,7 @@
       "/images/objects/pic54-4.webp"
     ],
     "publishedAt": "2026-04-02",
-    "contractNumber": "Договор № 76/4 от 02.04.2026"
+    "contractNumber": "Договор № 76/4 от 02.04.2026",
+    "livePriceBYN": 135971
   }
 ]
