@@ -192,6 +192,8 @@ function readArticles() {
 }
 
 function normalizeAndFilterArticles(articles) {
+  const now = new Date();
+
   return articles
     .map((article) => {
       const contentText = extractContentText(article.content).trim();
@@ -203,7 +205,14 @@ function normalizeAndFilterArticles(articles) {
         parsedDate,
       };
     })
-    .filter((article) => article.title && article.slug && article.contentText && article.parsedDate)
+    .filter(
+      (article) =>
+        article.title &&
+        article.slug &&
+        article.contentText &&
+        article.parsedDate &&
+        article.parsedDate.getTime() <= now.getTime(),
+    )
     .sort((a, b) => b.parsedDate.getTime() - a.parsedDate.getTime());
 }
 
@@ -231,12 +240,14 @@ function generateRss() {
   const articles = readArticles();
   const normalized = normalizeAndFilterArticles(articles);
   const { xml, includedCount } = trimToMaxSize(normalized);
+  const skippedCount = articles.length - normalized.length;
 
   fs.writeFileSync(outputPath, xml, 'utf8');
 
   const sizeKb = (Buffer.byteLength(xml, 'utf8') / 1024).toFixed(2);
   console.log(`rss.xml успешно создан: ${outputPath}`);
   console.log(`Статей обработано: ${articles.length}, включено в RSS: ${includedCount}`);
+  console.log(`Пропущено статей (невалидные поля или дата в будущем): ${skippedCount}`);
   console.log(`Размер rss.xml: ${sizeKb} KB`);
 }
 
