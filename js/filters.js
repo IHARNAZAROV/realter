@@ -601,7 +601,7 @@ function renderObjects(list) {
             class="compare-btn ${isInCompare(obj.slug) ? "is-active" : ""}"
             data-slug="${obj.slug}"
             aria-label="${isInCompare(obj.slug) ? "Удалить из сравнения" : "Добавить в сравнение"}"
-            title="${isInCompare(obj.slug) ? "Удалить из сравнения" : "Добавить в сравнение"}"
+            data-tooltip="${isInCompare(obj.slug) ? "Удалить из сравнения" : "Добавить в сравнение"}"
           >
             <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
           </button>
@@ -852,8 +852,11 @@ function initCompareUI() {
   compareBarEl.className = "compare-bar";
   compareBarEl.setAttribute("aria-live", "polite");
   compareBarEl.innerHTML = `
-    <div class="compare-bar__main">
-      <div class="compare-bar__items" id="compareItems"></div>
+    <div class="compare-bar__items" id="compareItems"></div>
+    <div class="compare-bar__controls">
+      <button type="button" class="compare-bar__action" id="compareActionBtn" disabled>
+        Сравнить
+      </button>
       <button
         type="button"
         class="compare-bar__clear"
@@ -863,9 +866,6 @@ function initCompareUI() {
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <button type="button" class="compare-bar__action" id="compareActionBtn" disabled>
-      Сравнить
-    </button>
   `;
   document.body.appendChild(compareBarEl);
 
@@ -1068,7 +1068,6 @@ function renderComparePanel() {
           <img src="${imgSrc}" alt="${obj.title}" loading="lazy" />
           <div class="compare-chip__meta">
             <strong>${formatPrice(getObjectPriceByn(obj))} BYN</strong>
-            <span>${obj.title}</span>
           </div>
         </article>
       `;
@@ -1086,7 +1085,7 @@ function syncCompareButtonsState() {
     btn.classList.toggle("is-active", isActive);
     const label = isActive ? "Удалить из сравнения" : "Добавить в сравнение";
     btn.setAttribute("aria-label", label);
-    btn.setAttribute("title", label);
+    btn.dataset.tooltip = label;
   });
 }
 
