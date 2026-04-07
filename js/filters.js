@@ -590,6 +590,11 @@ function renderObjects(list) {
                 ? "Убрать из избранного"
                 : "Добавить в избранное"
             }"
+            data-tooltip="${
+              isFavorite(obj.slug)
+                ? "Убрать из избранного"
+                : "Добавить в избранное"
+            }"
           >
             <i class="fa-${
               isFavorite(obj.slug) ? "solid" : "regular"
@@ -772,6 +777,9 @@ if (objectsList) {
         ? "Убрать из избранного"
         : "Добавить в избранное",
     );
+    btn.dataset.tooltip = btn.classList.contains("is-active")
+      ? "Убрать из избранного"
+      : "Добавить в избранное";
     
     const icon = btn.querySelector("i");
     if (icon) {

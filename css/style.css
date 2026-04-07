@@ -140,11 +140,12 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
   transition:transform .2s ease,background-color .2s ease,color .2s ease;
 }
 .image-effect-one .compare-btn:hover{transform:translateY(-1px)}
+.image-effect-one .favorite-btn::after,
 .image-effect-one .compare-btn::after{
   content:attr(data-tooltip);
   position:absolute;
   right:0;
-  bottom:calc(100% + 8px);
+  top:calc(100% + 8px);
   background:#23252d;
   color:#fff;
   font-size:12px;
@@ -156,7 +157,9 @@ a,h1,h2,h3,h4,h5,h6{color:var(--color-primary)}address,table,ul{margin-bottom:1.
   pointer-events:none;
   transform:translateY(4px);
   transition:opacity .2s ease,transform .2s ease;
+  z-index:5;
 }
+.image-effect-one .favorite-btn:hover::after,
 .image-effect-one .compare-btn:hover::after{
   opacity:1;
   transform:translateY(0);
