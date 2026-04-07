@@ -11,7 +11,7 @@ const path = require('path');
 
 const SOURCE = path.join(__dirname, 'data', 'objects.json');
 const BACKUP_DIR = path.join(__dirname, 'backups');
-const MAX_BACKUPS = 30;
+const MAX_BACKUPS = 3;
 
 function pad(n) {
   return String(n).padStart(2, '0');
