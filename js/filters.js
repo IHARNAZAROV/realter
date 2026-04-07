@@ -30,6 +30,7 @@ const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
 const VIEW_STORAGE_KEY = "objectsViewMode";
 const FAVORITES_VIEW_KEY = "favoritesViewMode";
+const COMPARE_STORAGE_KEY = "compareItems";
 
 /* =========================================================
    CACHED DOM ELEMENTS
@@ -230,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateRoomsState();
       loadFiltersFromStorage();
       applyFiltersAndSort();
-      updateCompareBar();
+      renderComparePanel();
     });
 
   bindEvents();
@@ -595,6 +596,16 @@ function renderObjects(list) {
             } fa-heart"></i>
           </div>
 
+          <button
+            type="button"
+            class="compare-btn ${isInCompare(obj.slug) ? "is-active" : ""}"
+            data-slug="${obj.slug}"
+            aria-label="${isInCompare(obj.slug) ? "Удалить из сравнения" : "Добавить в сравнение"}"
+            title="${isInCompare(obj.slug) ? "Удалить из сравнения" : "Добавить в сравнение"}"
+          >
+            <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+          </button>
+
           ${badgesHTML}
 
           <img loading="lazy" src="${imgSrc}" alt="${obj.title}">
@@ -737,6 +748,14 @@ function isNewObject(obj, days = 7) {
 ========================================================= */
 if (objectsList) {
   objectsList.addEventListener("click", (e) => {
+    const compareBtn = e.target.closest(".compare-btn");
+    if (compareBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleCompare(compareBtn.dataset.slug);
+      return;
+    }
+
     const btn = e.target.closest(".favorite-btn");
     if (!btn) return;
 
@@ -765,7 +784,7 @@ if (objectsList) {
     void btn.offsetWidth; // reflow
     btn.classList.add("is-pulse");
     updateFavoritesFilterCounter(true);
-    updateCompareBar();
+    renderComparePanel();
   });
 }
 
@@ -812,7 +831,7 @@ function initFavoritesCounter() {
 
   // Обновляем счетчик при инициализации
   updateFavoritesFilterCounter();
-  updateCompareBar();
+  renderComparePanel();
 }
 
 /* =========================================================
@@ -821,8 +840,10 @@ function initFavoritesCounter() {
 let compareBarEl = null;
 let compareItemsEl = null;
 let compareActionBtn = null;
+let compareClearBtn = null;
 let compareModalEl = null;
 let compareTableWrapEl = null;
+let compareNoticeEl = null;
 
 function initCompareUI() {
   if (compareBarEl) return;
@@ -831,7 +852,17 @@ function initCompareUI() {
   compareBarEl.className = "compare-bar";
   compareBarEl.setAttribute("aria-live", "polite");
   compareBarEl.innerHTML = `
-    <div class="compare-bar__items" id="compareItems"></div>
+    <div class="compare-bar__main">
+      <div class="compare-bar__items" id="compareItems"></div>
+      <button
+        type="button"
+        class="compare-bar__clear"
+        id="compareClearBtn"
+        aria-label="Закрыть панель сравнения и очистить список"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <button type="button" class="compare-bar__action" id="compareActionBtn" disabled>
       Сравнить
     </button>
@@ -840,6 +871,7 @@ function initCompareUI() {
 
   compareItemsEl = compareBarEl.querySelector("#compareItems");
   compareActionBtn = compareBarEl.querySelector("#compareActionBtn");
+  compareClearBtn = compareBarEl.querySelector("#compareClearBtn");
 
   compareModalEl = document.createElement("div");
   compareModalEl.className = "compare-modal";
@@ -857,8 +889,14 @@ function initCompareUI() {
   document.body.appendChild(compareModalEl);
 
   compareTableWrapEl = compareModalEl.querySelector("#compareTableWrap");
+  compareNoticeEl = document.createElement("div");
+  compareNoticeEl.className = "compare-notice";
+  compareNoticeEl.setAttribute("role", "status");
+  compareNoticeEl.setAttribute("aria-live", "polite");
+  document.body.appendChild(compareNoticeEl);
 
   compareActionBtn?.addEventListener("click", openCompareModal);
+  compareClearBtn?.addEventListener("click", clearCompare);
   compareModalEl.addEventListener("click", (event) => {
     if (event.target.closest("[data-close-compare='true']")) {
       closeCompareModal();
@@ -870,15 +908,85 @@ function initCompareUI() {
       closeCompareModal();
     }
   });
+
+  renderComparePanel();
+}
+
+function getCompareItems() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(COMPARE_STORAGE_KEY) || "[]");
+    if (!Array.isArray(raw)) return [];
+    return raw.filter((item) => typeof item === "string");
+  } catch {
+    return [];
+  }
+}
+
+function saveCompareItems(items) {
+  localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(items));
 }
 
 function getCompareObjects() {
-  const favoriteSlugs = getFavorites().slice(0, COMPARE_MAX_ITEMS);
-  if (!favoriteSlugs.length || !allObjects.length) return [];
+  const compareSlugs = getCompareItems();
+  if (!compareSlugs.length || !allObjects.length) return [];
 
-  return favoriteSlugs
+  return compareSlugs
     .map((slug) => allObjects.find((obj) => obj.slug === slug))
     .filter(Boolean);
+}
+
+function isInCompare(slug) {
+  return getCompareItems().includes(slug);
+}
+
+function addToCompare(id) {
+  const compareItems = getCompareItems();
+  if (compareItems.includes(id)) return true;
+
+  if (compareItems.length >= COMPARE_MAX_ITEMS) {
+    showCompareNotice(`Можно сравнить не более ${COMPARE_MAX_ITEMS} объектов`);
+    return false;
+  }
+
+  compareItems.push(id);
+  saveCompareItems(compareItems);
+  renderComparePanel();
+  return true;
+}
+
+function removeFromCompare(id) {
+  const compareItems = getCompareItems().filter((item) => item !== id);
+  saveCompareItems(compareItems);
+  renderComparePanel();
+}
+
+function toggleCompare(id) {
+  if (isInCompare(id)) {
+    removeFromCompare(id);
+    return;
+  }
+
+  addToCompare(id);
+}
+
+function clearCompare() {
+  saveCompareItems([]);
+  closeCompareModal();
+  renderComparePanel();
+}
+
+function showCompareNotice(message) {
+  if (!compareNoticeEl) return;
+
+  compareNoticeEl.textContent = message;
+  compareNoticeEl.classList.remove("is-visible");
+  void compareNoticeEl.offsetWidth;
+  compareNoticeEl.classList.add("is-visible");
+
+  clearTimeout(showCompareNotice.timerId);
+  showCompareNotice.timerId = setTimeout(() => {
+    compareNoticeEl?.classList.remove("is-visible");
+  }, 2300);
 }
 
 function getConditionLabel(obj) {
@@ -937,7 +1045,7 @@ function getComparableFields(obj) {
   };
 }
 
-function updateCompareBar() {
+function renderComparePanel() {
   if (!compareBarEl || !compareItemsEl || !compareActionBtn) return;
 
   const compareObjects = getCompareObjects();
@@ -948,6 +1056,7 @@ function updateCompareBar() {
     compareItemsEl.innerHTML = "";
     compareActionBtn.disabled = true;
     compareActionBtn.textContent = "Сравнить";
+    syncCompareButtonsState();
     return;
   }
 
@@ -959,6 +1068,7 @@ function updateCompareBar() {
           <img src="${imgSrc}" alt="${obj.title}" loading="lazy" />
           <div class="compare-chip__meta">
             <strong>${formatPrice(getObjectPriceByn(obj))} BYN</strong>
+            <span>${obj.title}</span>
           </div>
         </article>
       `;
@@ -967,6 +1077,17 @@ function updateCompareBar() {
 
   compareActionBtn.disabled = count < COMPARE_MIN_ITEMS;
   compareActionBtn.textContent = `Сравнить (${count})`;
+  syncCompareButtonsState();
+}
+
+function syncCompareButtonsState() {
+  document.querySelectorAll(".compare-btn").forEach((btn) => {
+    const isActive = isInCompare(btn.dataset.slug);
+    btn.classList.toggle("is-active", isActive);
+    const label = isActive ? "Удалить из сравнения" : "Добавить в сравнение";
+    btn.setAttribute("aria-label", label);
+    btn.setAttribute("title", label);
+  });
 }
 
 function openCompareModal() {
