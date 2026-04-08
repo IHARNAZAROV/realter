@@ -61,7 +61,7 @@ window.MORTGAGE_PROGRAMS = [
   bankSlug: "belinvestbank",
   bankLogo: "БИБ",
   programName: "Недвижимость в кредит",
-  interestRate: 17.5,
+  interestRate: 16.5,
   maxTermYears: 20,
   minDownPaymentPercent: 15,
   description:
