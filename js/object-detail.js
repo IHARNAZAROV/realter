@@ -225,107 +225,251 @@
   /* =====================================================
      JSON-LD SCHEMA (DYNAMIC)
   ===================================================== */
-  function insertSchema(schema) {
-    const s = document.createElement("script");
-    s.type = "application/ld+json";
-    s.textContent = JSON.stringify(schema, null, 2);
-    document.head.appendChild(s);
+  function cleanObject(obj) {
+    if (Array.isArray(obj)) {
+      const cleanedArray = obj
+        .map((item) => cleanObject(item))
+        .filter(
+          (item) =>
+            item !== undefined &&
+            item !== null &&
+            !(typeof item === "string" && item.trim() === "") &&
+            !(Array.isArray(item) && item.length === 0) &&
+            !(typeof item === "object" && !Array.isArray(item) && Object.keys(item).length === 0)
+        );
+      return cleanedArray.length ? cleanedArray : undefined;
+    }
+
+    if (obj && typeof obj === "object") {
+      const cleanedObj = Object.entries(obj).reduce((acc, [key, value]) => {
+        const cleanedValue = cleanObject(value);
+        if (
+          cleanedValue !== undefined &&
+          cleanedValue !== null &&
+          !(typeof cleanedValue === "string" && cleanedValue.trim() === "") &&
+          !(Array.isArray(cleanedValue) && cleanedValue.length === 0) &&
+          !(typeof cleanedValue === "object" && !Array.isArray(cleanedValue) && Object.keys(cleanedValue).length === 0)
+        ) {
+          acc[key] = cleanedValue;
+        }
+        return acc;
+      }, {});
+
+      return Object.keys(cleanedObj).length ? cleanedObj : undefined;
+    }
+
+    if (typeof obj === "string") {
+      const trimmed = obj.trim();
+      return trimmed === "" ? undefined : trimmed;
+    }
+
+    return obj;
+  }
+
+  function toAbsoluteUrl(url) {
+    if (!isFilled(url)) return null;
+    return String(url).startsWith("http") ? String(url) : `https://turko.by${url}`;
+  }
+
+  function normalizeType(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/ё/g, "е")
+      .trim();
+  }
+
+  function detectPropertySchemaType(obj) {
+    const typeRaw = normalizeType(obj.type || obj.category || obj.objectCategory);
+
+    if (typeRaw.includes("квартир")) {
+      return { specificType: "Apartment", residenceType: "Residence" };
+    }
+
+    if (typeRaw.includes("дом") || typeRaw.includes("коттедж") || typeRaw.includes("таунхаус")) {
+      return { specificType: "SingleFamilyResidence", residenceType: "House" };
+    }
+
+    if (
+      typeRaw.includes("коммер") ||
+      typeRaw.includes("офис") ||
+      typeRaw.includes("склад") ||
+      typeRaw.includes("бизн")
+    ) {
+      return { specificType: "CommercialProperty", residenceType: "Place" };
+    }
+
+    if (typeRaw.includes("участ")) {
+      return { specificType: "Landform", residenceType: "Place" };
+    }
+
+    return { specificType: "Residence", residenceType: "Residence" };
+  }
+
+  function upsertObjectSchema(schema) {
+    document
+      .querySelectorAll('script[type="application/ld+json"][data-schema="object-detail"]')
+      .forEach((node) => node.remove());
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.setAttribute("data-schema", "object-detail");
+    script.textContent = JSON.stringify(schema, null, 2);
+    document.head.appendChild(script);
   }
 
   function generateObjectSchema(obj) {
     if (!obj) return;
 
-    const isFlat = String(obj.type).toLowerCase() === "квартира";
+    const canonicalUrl = `https://turko.by/objects/${obj.slug}`;
+    const pageUrl = window.location.href;
+    const schemaPrice = getDisplayBynPrice(obj) || obj.priceBYN;
     const area = getObjectArea(obj);
+    const lat = obj.location?.lat ?? obj.lat;
+    const lng = obj.location?.lng ?? obj.lng;
 
-    const images =
-      Array.isArray(obj.images) && obj.images.length
-        ? obj.images.slice(0, 5)
-        : ["https://example.com/images/objects/placeholder.webp"];
+    const images = (Array.isArray(obj.images) ? obj.images : [])
+      .filter((src) => isFilled(src))
+      .slice(0, 15)
+      .map((src, index) => ({
+        "@type": "ImageObject",
+        contentUrl: toAbsoluteUrl(src),
+        url: toAbsoluteUrl(src),
+        position: index + 1,
+      }));
 
-    const schemaPrice = getDisplayBynPrice(obj);
+    const { specificType, residenceType } = detectPropertySchemaType(obj);
 
-    const schema = {
-      "@context": "https://schema.org",
+    const offer = {
       "@type": "Offer",
-      name: obj.title,
-      url: window.location.href,
-      image: images,
-      price: String(schemaPrice || obj.priceBYN || ""),
+      "@id": `${canonicalUrl}#offer`,
+      url: pageUrl,
+      price: schemaPrice ? String(schemaPrice) : undefined,
       priceCurrency: "BYN",
-      priceValidUntil: "2030-12-31",
       availability: "https://schema.org/InStock",
-      datePosted: obj.publishedAt || new Date().toISOString().split("T")[0],
-
+      itemCondition: "https://schema.org/UsedCondition",
       seller: {
         "@type": "RealEstateAgent",
         name: "Ольга Турко",
         url: "https://turko.by",
+        telephone: "+375291416605",
+        areaServed: "BY",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Лида",
           addressCountry: "BY",
         },
       },
+      validFrom: obj.publishedAt || undefined,
+      priceValidUntil: "2030-12-31",
+    };
 
-      itemOffered: {
-        "@type": isFlat ? "Apartment" : "House",
-        name: obj.title,
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: obj.city || "Лида",
-          addressCountry: "BY",
-        },
+    const address = {
+      "@type": "PostalAddress",
+      streetAddress: obj.address,
+      addressLocality: obj.city || "Лида",
+      addressRegion: obj.district,
+      addressCountry: "BY",
+    };
+
+    const place = {
+      "@type": "Place",
+      name: obj.title,
+      address,
+      geo:
+        lat && lng
+          ? {
+              "@type": "GeoCoordinates",
+              latitude: Number(lat),
+              longitude: Number(lng),
+            }
+          : undefined,
+    };
+
+    const property = {
+      "@type": [specificType, residenceType, "Product"],
+      "@id": `${canonicalUrl}#property`,
+      name: obj.title,
+      description: obj.description || obj.cardDescription,
+      category: obj.type || obj.category || obj.objectCategory,
+      url: pageUrl,
+      image: images,
+      additionalProperty: [
+        obj.houseType
+          ? {
+              "@type": "PropertyValue",
+              name: "Тип дома",
+              value: obj.houseType,
+            }
+          : undefined,
+        obj.layout
+          ? {
+              "@type": "PropertyValue",
+              name: "Планировка",
+              value: obj.layout,
+            }
+          : undefined,
+        obj.renovation
+          ? {
+              "@type": "PropertyValue",
+              name: "Ремонт",
+              value: obj.renovation,
+            }
+          : undefined,
+        obj.dealType
+          ? {
+              "@type": "PropertyValue",
+              name: "Тип сделки",
+              value: obj.dealType,
+            }
+          : undefined,
+        obj.contractNumber
+          ? {
+              "@type": "PropertyValue",
+              name: "Номер договора",
+              value: obj.contractNumber,
+            }
+          : undefined,
+      ],
+      floorSize: area
+        ? {
+            "@type": "QuantitativeValue",
+            value: area,
+            unitCode: "MTK",
+            unitText: "кв.м",
+          }
+        : undefined,
+      numberOfRooms: obj.rooms ? Number(obj.rooms) : undefined,
+      numberOfBathroomsTotal: obj.bathroom ? 1 : undefined,
+      floorLevel: obj.floor ? Number(obj.floor) : undefined,
+      numberOfFloors: obj.floorsTotal ? Number(obj.floorsTotal) : undefined,
+      yearBuilt: obj.yearBuilt ? Number(obj.yearBuilt) : undefined,
+      accommodationFloorPlan: obj.layout,
+      address,
+      geo: place.geo,
+      containsPlace: place,
+      offers: offer,
+    };
+
+    const listing = {
+      "@type": "RealEstateListing",
+      "@id": `${canonicalUrl}#listing`,
+      name: obj.title,
+      description: obj.cardDescription || obj.description,
+      datePosted: obj.publishedAt || new Date().toISOString().split("T")[0],
+      url: pageUrl,
+      image: images,
+      offers: offer,
+      mainEntity: property,
+      itemOffered: property,
+      address,
+      geo: place.geo,
+      potentialAction: {
+        "@type": "ViewAction",
+        target: pageUrl,
       },
     };
 
-    // Площадь
-    if (area) {
-      schema.itemOffered.floorSize = {
-        "@type": "QuantitativeValue",
-        value: area,
-        unitCode: "MTK",
-      };
-    }
-
-    // Комнаты
-    if (isFlat && obj.rooms) {
-      schema.itemOffered.numberOfRooms = obj.rooms;
-    }
-
-    // Описание
-    if (obj.description) {
-      schema.itemOffered.description = obj.description;
-    }
-
-    // Адрес улицы
-    if (obj.address) {
-      schema.itemOffered.address.streetAddress = obj.address;
-    }
-
-    // Гео-координаты (если есть)
-    const lat = obj.location?.lat ?? obj.lat;
-    const lng = obj.location?.lng ?? obj.lng;
-    if (lat && lng) {
-      schema.itemOffered.geo = {
-        "@type": "GeoCoordinates",
-        latitude: lat,
-        longitude: lng,
-      };
-    }
-
-    // Абсолютные URL для изображений (Schema.org требует полный путь)
-    schema.image = schema.image.map((src) =>
-      src.startsWith("http") ? src : `https://turko.by${src}`
-    );
-
-    insertSchema(schema);
-
-    /* =========================
-     BREADCRUMBS
-  ========================= */
     const breadcrumbs = {
-      "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: [
         {
@@ -344,48 +488,91 @@
           "@type": "ListItem",
           position: 3,
           name: obj.title,
-          item: window.location.href,
+          item: pageUrl,
         },
       ],
     };
 
-    insertSchema(breadcrumbs);
+    const payload = cleanObject({
+      "@context": "https://schema.org",
+      "@graph": [listing, breadcrumbs],
+    });
+
+    if (payload) {
+      upsertObjectSchema(payload);
+    }
   }
 
   /* =====================================================
      DYNAMIC PAGE META (og:*, description, canonical)
   ===================================================== */
+  function upsertMetaTag({ attr, key, content }) {
+    const selector = `meta[${attr}="${key}"]`;
+    let tag = document.querySelector(selector);
+
+    if (!tag) {
+      tag = document.createElement("meta");
+      tag.setAttribute(attr, key);
+      document.head.appendChild(tag);
+    }
+
+    tag.setAttribute("content", content);
+  }
+
   function updatePageMeta(obj) {
+    const AGENT_PHONE = "+375291809516";
     const title = `${obj.title} — Ольга Турко`;
     const firstImage = Array.isArray(obj.images) && obj.images.length
       ? (obj.images[0].startsWith("http") ? obj.images[0] : `https://turko.by${obj.images[0]}`)
       : "https://turko.by/images/main-slider/2.webp";
-    const desc = obj.metaDescription
+
+    const shortDescription = obj.metaDescription
       || obj.cardDescription
-      || (obj.description ? obj.description.slice(0, 160).trimEnd() + "…" : "")
-      || "Объект недвижимости — Ольга Турко, риэлтер в Лиде";
+      || (obj.description ? obj.description.slice(0, 140).trimEnd() + "…" : "")
+      || "Объект недвижимости в Лиде";
+
+    const bynPrice = getDisplayBynPrice(obj);
+    const priceText = typeof bynPrice === "number" ? `${formatPrice(bynPrice)} BYN` : "Цена по запросу";
+    const desc = `${shortDescription}. Цена: ${priceText}. Телефон: ${AGENT_PHONE}`;
     const url = `https://turko.by/objects/${obj.slug}`;
 
     document.title = title;
-    
-    const metaMap = {
-      'meta[name="description"]': { attr: "content", val: desc },
-      'meta[property="og:title"]': { attr: "content", val: title },
-      'meta[property="og:description"]': { attr: "content", val: desc },
-      'meta[property="og:image"]': { attr: "content", val: firstImage },
-      'meta[property="og:url"]': { attr: "content", val: url },
-      'meta[name="twitter:title"]': { attr: "content", val: title },
-      'meta[name="twitter:description"]': { attr: "content", val: desc },
-      'meta[name="twitter:image"]': { attr: "content", val: firstImage },
-    };
-    
-    Object.entries(metaMap).forEach(([sel, {attr, val}]) => {
-      const el = document.querySelector(sel);
-      if (el) el.setAttribute(attr, val);
-    });
 
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute("href", url);
+    const metaEntries = [
+      { attr: "name", key: "description", content: desc },
+
+      { attr: "property", key: "og:type", content: "product" },
+      { attr: "property", key: "og:title", content: title },
+      { attr: "property", key: "og:description", content: desc },
+      { attr: "property", key: "og:image", content: firstImage },
+      { attr: "property", key: "og:image:alt", content: obj.title },
+      { attr: "property", key: "og:url", content: url },
+      { attr: "property", key: "og:site_name", content: "turko.by" },
+      { attr: "property", key: "og:phone_number", content: AGENT_PHONE },
+      { attr: "property", key: "product:price:amount", content: typeof bynPrice === "number" ? String(bynPrice) : "" },
+      { attr: "property", key: "product:price:currency", content: "BYN" },
+
+      { attr: "name", key: "twitter:card", content: "summary_large_image" },
+      { attr: "name", key: "twitter:title", content: title },
+      { attr: "name", key: "twitter:description", content: desc },
+      { attr: "name", key: "twitter:image", content: firstImage },
+      { attr: "name", key: "twitter:label1", content: "Цена" },
+      { attr: "name", key: "twitter:data1", content: priceText },
+      { attr: "name", key: "twitter:label2", content: "Телефон" },
+      { attr: "name", key: "twitter:data2", content: AGENT_PHONE },
+    ];
+
+    metaEntries
+      .filter((entry) => isFilled(entry.content))
+      .forEach(upsertMetaTag);
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", url);
   }
 
   /* =====================================================
