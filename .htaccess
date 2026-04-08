@@ -28,8 +28,8 @@ RewriteRule \.json$ - [L]
 # LEGACY URL REDIRECTS
 # -------------------------------------------------
 
-RewriteCond %{THE_REQUEST} \s/+object-detail(?:\.html)?\?slug=([^\s&]+) [NC]
-RewriteRule ^object-detail(?:\.html)?$ https://turko.by/objects/%1? [R=301,L,NE]
+RewriteCond %{THE_REQUEST} \s/+object-detail(?:\.(?:html|php))?\?slug=([^\s&]+) [NC]
+RewriteRule ^object-detail(?:\.(?:html|php))?$ https://turko.by/objects/%1? [R=301,L,NE]
 
 RewriteCond %{THE_REQUEST} \s/+blog-detail(?:\.html)?\?slug=([^\s&]+) [NC]
 RewriteRule ^blog-detail(?:\.html)?$ https://turko.by/blog/%1? [R=301,L,NE]
@@ -41,7 +41,7 @@ RewriteRule ^services-detail(?:\.html)?$ https://turko.by/services/%1? [R=301,L,
 # PRETTY ROUTES
 # -------------------------------------------------
 
-RewriteRule ^objects/([^/]+)/?$ /object-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^objects/([^/]+)/?$ /object-detail.php?slug=$1 [L,QSA,NC]
 RewriteRule ^blog/([^/]+)/?$ /blog-detail.html?slug=$1 [L,QSA,NC]
 RewriteRule ^services/([^/]+)/?$ /services-detail.html?slug=$1 [L,QSA,NC]
 
