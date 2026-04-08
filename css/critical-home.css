@@ -1,0 +1,27 @@
+:root {
+  --color-primary: #006064;
+  --color-white: #fff;
+  --color-text: #1f2430;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Inter", "Montserrat", Arial, sans-serif;
+  color: var(--color-text);
+  background: #fff;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+.container { width: min(100% - 30px, 1200px); margin-inline: auto; }
+.page-wraper { min-height: 100vh; }
+.site-header { position: relative; z-index: 20; }
+.main-bar { background: rgba(255,255,255,.96); }
+.logo-header { min-height: 72px; display: flex; align-items: center; }
+.site-logo { width: 170px; height: auto; }
+.section__slider { min-height: clamp(420px, 80vh, 760px); background: #edf4f4; }
+.hero-wrapper, .main-slider, .main-swiper { min-height: inherit; }
+.deferred-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}

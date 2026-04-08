@@ -90,21 +90,30 @@
          RESOURCE HINTS (Performance)
     =============================================== -->
     <!-- Libraries -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-    <link rel="stylesheet" href="/css/swiper-bundle.css" />
-    <link rel="stylesheet" href="/css/swiper.css" />
+    <link rel="stylesheet" href="/css/critical-detail.css" data-versioned />
+    <link rel="preload" href="/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'" />
+    <link rel="preload" href="/css/flaticon.min.css" as="style" onload="this.rel='stylesheet'" />
+    <link rel="preload" href="/css/swiper-bundle.css" as="style" onload="this.rel='stylesheet'" />
+    <link rel="preload" href="/css/swiper.css" as="style" onload="this.rel='stylesheet'" />
     <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
 <link rel="stylesheet" href="/libs/maplibre/maplibre-gl.css" />
     <!-- Main Styles -->
-    <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned/>
-    <link rel="stylesheet" href="/css/object-share.css" />
+    <link rel="preload" href="/css/style.css" as="style" data-versioned onload="this.rel='stylesheet'" />
+    <link rel="preload" href="/css/object-share.css" as="style" onload="this.rel='stylesheet'" />
 
 
   
+    <noscript>
+      <link rel="stylesheet" href="/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/css/flaticon.min.css" />
+      <link rel="stylesheet" href="/css/swiper-bundle.css" />
+      <link rel="stylesheet" href="/css/swiper.css" />
+      <link rel="stylesheet" href="/css/style.css" />
+      <link rel="stylesheet" href="/css/object-share.css" />
+    </noscript>
 </head>
 
   <body id="bg">
@@ -271,7 +280,7 @@
 
         <!-- INNER PAGE BANNER END -->
         <!-- SECTION CONTENT START -->
-        <div class="section-full p-tb80 inner-page-padding stick_in_parent">
+        <div class="section-full deferred-section p-tb80 inner-page-padding stick_in_parent">
           <div class="container">
             <div class="row">
               <div class="col-lg-8 col-md-12">
@@ -676,7 +685,7 @@
   </div>
 </div>
 
-      <footer class="site-footer footer-large footer-dark footer-wide">
+      <footer class="site-footer footer-large footer-dark footer-wide deferred-section">
         <div class="footer-top overlay-wraper">
           <div class="overlay-main"></div>
           <div class="container">

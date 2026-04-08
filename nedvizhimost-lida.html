@@ -42,13 +42,19 @@
     <!-- =========================================
        4. STYLESHEETS
        ========================================= -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned />
+    <link rel="stylesheet" href="/css/critical-list.css" data-versioned />
+    <link rel="preload" href="/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'" />
+    <link rel="preload" href="/css/flaticon.min.css" as="style" onload="this.rel='stylesheet'" />
+    <link rel="preload" href="/css/style.css" as="style" data-versioned onload="this.rel='stylesheet'" />
     <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
     <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
+    <noscript>
+      <link rel="stylesheet" href="/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/css/flaticon.min.css" />
+      <link rel="stylesheet" href="/css/style.css" />
+    </noscript>
 </head>
   <body>
     <div class="page-wraper">
@@ -193,7 +199,7 @@
         </section>
 
         <!-- Section Content -->
-        <div class="section-full p-tb80 bg-white inner-page-padding">
+        <div class="section-full deferred-section p-tb80 bg-white inner-page-padding">
           <div class="container">
             <!-- SORT -->
             <div class="objects-filters">
@@ -299,7 +305,7 @@
       <!-- =========================================
            FOOTER START
            ========================================= -->
-      <footer class="site-footer footer-large footer-dark footer-wide">
+      <footer class="site-footer footer-large footer-dark footer-wide deferred-section">
         <div class="footer-top overlay-wraper">
           <div class="overlay-main"></div>
           <div class="container">

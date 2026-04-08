@@ -65,11 +65,12 @@
   =============================================== -->
 
     <!-- Bootstrap пока оставляем -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/critical-home.css" data-versioned>
 
-    <!-- Основные стили -->
-    <link rel="stylesheet" href="/css/style.css" data-versioned>
-    <link rel="stylesheet" href="/css/documents-checklist.css" data-versioned>
+    <!-- Основные стили (deferred) -->
+    <link rel="preload" href="/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="/css/style.css" as="style" data-versioned onload="this.rel='stylesheet'">
+    <link rel="preload" href="/css/documents-checklist.css" as="style" data-versioned onload="this.rel='stylesheet'">
 
     <!-- ==============================================
        8. NON-CRITICAL CSS (АСИНХРОННО)
@@ -94,6 +95,9 @@
 
     <!-- fallback -->
     <noscript>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/documents-checklist.css">
         <link rel="stylesheet" href="/css/swiper-bundle.css">
         <link rel="stylesheet" href="/css/swiper.css">
         <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css">
@@ -474,7 +478,7 @@
             </div>
         </section>
         <!-- SECTION: About Me -->
-        <div class="section-full mobile-page-padding p-t80 p-b80 bg-white bg-no-repeat bg-bottom-left" style="background-image: url(images/background/bg-4.webp)">
+        <div class="section-full deferred-section mobile-page-padding p-t80 p-b80 bg-white bg-no-repeat bg-bottom-left" style="background-image: url(images/background/bg-4.webp)">
             <div class="container">
                 <header class="section-head section-head--bracket">
                     <h2 class="section-title">Обо мне</h2>
@@ -554,7 +558,7 @@
             </div>
         </div>
         <!-- SECTION: What We Do -->
-        <div class="section-full mobile-page-padding bg-white p-t80 p-b30 bg-repeat overflow-hide" style="background-image: url(images/background/bg-5.png)">
+        <div class="section-full deferred-section mobile-page-padding bg-white p-t80 p-b30 bg-repeat overflow-hide" style="background-image: url(images/background/bg-5.png)">
             <div class="container right-half-bg-image-outer">
                 <div class="right-half-bg-image bg-parallax bg-fixed bg-top-right" data-stellar-background-ratio="0" style="background-image: url(images/background/bg-2.webp)"></div>
 
@@ -630,7 +634,7 @@
             </div>
         </div>
         <!-- SECTION: Facts & Testimonials -->
-        <div class="section-full container-fluid">
+        <div class="section-full deferred-section container-fluid">
             <div class="section-content">
                 <div class="row">
                     <!-- Left: Facts -->
@@ -848,7 +852,7 @@
             </div>
         </div>
         <!-- OUR SERVICES START -->
-        <div class="section-full mobile-page-padding p-t80 bg-white bg-change-section">
+        <div class="section-full deferred-section mobile-page-padding p-t80 bg-white bg-change-section">
             <div class="container">
                 <!-- TITLE START -->
 
@@ -881,7 +885,7 @@
             </div>
             <!-- OUR SERVICES END -->
             <!-- SECTION: Market analytics -->
-            <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
+            <div class="section-full deferred-section mobile-page-padding p-t80 p-b50 bg-gray">
                 <div class="container">
                     <header class="section-head section-head--bracket m-b30">
                         <h2 class="section-title">Средние цены недвижимости в Лиде</h2>
@@ -933,7 +937,7 @@
                 </div>
             </div>
             <!-- SECTION: All Services -->
-            <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
+            <div class="section-full deferred-section mobile-page-padding p-t80 p-b50 bg-gray">
                 <div class="section-content">
                     <div class="container">
                         <header class="section-head section-head--bracket">
@@ -1113,7 +1117,7 @@
         <!-- ==============================================
            FOOTER START
       =============================================== -->
-        <footer class="site-footer footer-large footer-dark footer-wide">
+        <footer class="site-footer footer-large footer-dark footer-wide deferred-section">
             <div class="footer-top overlay-wraper">
                 <div class="overlay-main"></div>
                 <div class="container">
@@ -1337,7 +1341,7 @@
             <div class="documents-checklist-modal__backdrop" data-documents-checklist-close></div>
             <div class="documents-checklist-modal__dialog">
                 <button type="button" class="documents-checklist-modal__close" data-documents-checklist-close aria-label="Закрыть окно чеклиста">×</button>
-                <section class="documents-checklist section-full mobile-page-padding bg-gray p-t30 p-b30 bg-repeat" style="background-image: url(images/background/bg-5.png)">
+                <section class="documents-checklist section-full deferred-section mobile-page-padding bg-gray p-t30 p-b30 bg-repeat" style="background-image: url(images/background/bg-5.png)">
                     <div class="container">
                         <div class="documents-checklist__inner">
                             <div class="documents-checklist__select objects-filters">

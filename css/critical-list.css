@@ -1,0 +1,19 @@
+:root {
+  --color-primary: #006064;
+  --color-white: #fff;
+  --color-text: #1f2430;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: "Inter", "Montserrat", Arial, sans-serif; color: var(--color-text); }
+.container { width: min(100% - 30px, 1200px); margin-inline: auto; }
+.page-wraper { min-height: 100vh; background: #fff; }
+.main-bar { background: rgba(16, 31, 40, .92); }
+.logo-header { min-height: 72px; display: flex; align-items: center; }
+.page-intro {
+  padding: clamp(36px, 8vw, 72px) 0;
+  background: linear-gradient(180deg, #0f2b36 0%, #19485a 100%);
+  color: #fff;
+}
+.page-intro-title { margin: 12px 0; font-size: clamp(1.8rem, 4.2vw, 3rem); line-height: 1.12; }
+.deferred-section { content-visibility: auto; contain-intrinsic-size: 1px 1000px; }
