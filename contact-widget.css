@@ -1,27 +1,20 @@
-/*
-  Contact widget styles (BEM)
-  - Без сторонних библиотек
-  - Оптимизация анимаций через transform/opacity
-  - Учёт safe-area для iOS
-*/
-
 :root {
   --cw-z: 2147481000;
-  --cw-fab-size-desktop: 64px;
-  --cw-fab-size-mobile: 56px;
-  --cw-fab-offset: 16px;
-  --cw-fab-bg: #1f6fff;
-  --cw-fab-bg-hover: #155ee8;
-  --cw-text: #101828;
-  --cw-muted: #475467;
-  --cw-surface: #ffffff;
-  --cw-overlay: rgba(15, 23, 42, 0.48);
+  --cw-fab-size-desktop: 68px;
+  --cw-fab-size-mobile: 58px;
+  --cw-fab-offset: 18px;
+  --cw-brand: #0c4f67;
+  --cw-brand-2: #1e8db5;
+  --cw-accent: #7fb9e8;
+  --cw-panel: #dce3f1;
+  --cw-text: #2a3340;
+  --cw-muted: #5d6b7d;
+  --cw-overlay: rgba(17, 29, 52, 0.48);
   --cw-radius-xl: 24px;
-  --cw-shadow-fab: 0 10px 24px rgba(17, 24, 39, 0.22);
-  --cw-shadow-modal: 0 20px 50px rgba(2, 6, 23, 0.26);
+  --cw-shadow-fab: 0 14px 28px rgba(7, 27, 52, 0.34);
+  --cw-shadow-modal: 0 28px 55px rgba(12, 27, 51, 0.3);
 }
 
-/* Блокируем горизонтальный скролл вокруг виджета */
 .cw {
   position: fixed;
   inset: 0;
@@ -32,7 +25,6 @@
 
 .cw__fab {
   --cw-fab-size: var(--cw-fab-size-desktop);
-
   position: fixed;
   right: calc(var(--cw-fab-offset) + env(safe-area-inset-right, 0px));
   bottom: calc(var(--cw-fab-offset) + env(safe-area-inset-bottom, 0px));
@@ -40,7 +32,7 @@
   height: var(--cw-fab-size);
   border: 0;
   border-radius: 999px;
-  background: var(--cw-fab-bg);
+  background: radial-gradient(circle at 30% 25%, #48b6e5 0%, #1f8fbe 42%, #0d5a77 100%);
   color: #fff;
   box-shadow: var(--cw-shadow-fab);
   display: inline-flex;
@@ -48,55 +40,49 @@
   justify-content: center;
   cursor: pointer;
   pointer-events: auto;
-
-  /* Изначально скрыта до delayed init */
   opacity: 0;
   visibility: hidden;
-  transform: translate3d(0, 12px, 0) scale(1);
-  transition:
-    opacity 220ms ease,
-    transform 220ms ease,
-    visibility 220ms step-end,
-    background-color 180ms ease;
+  transform: translate3d(0, 16px, 0) scale(0.96);
+  transition: opacity 260ms ease, transform 260ms ease, visibility 260ms step-end;
   will-change: transform, opacity;
+}
+
+.cw__fab::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: inherit;
+  border: 2px solid rgba(72, 182, 229, 0.5);
+  animation: cw-pulse 2.4s ease-out infinite;
+}
+
+@keyframes cw-pulse {
+  0% { transform: scale(0.95); opacity: 0.75; }
+  70% { transform: scale(1.22); opacity: 0; }
+  100% { transform: scale(1.22); opacity: 0; }
 }
 
 .cw__fab--visible {
   opacity: 1;
   visibility: visible;
   transform: translate3d(0, 0, 0) scale(1);
-  transition:
-    opacity 220ms ease,
-    transform 220ms ease,
-    visibility 0s;
+  transition: opacity 260ms ease, transform 260ms ease, visibility 0s;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .cw__fab:hover {
-    background: var(--cw-fab-bg-hover);
-    transform: translate3d(0, 0, 0) scale(1.04);
-  }
+  .cw__fab:hover { transform: translate3d(0, 0, 0) scale(1.08); }
 }
 
 .cw__fab:focus-visible,
 .cw__close:focus-visible,
 .cw__action:focus-visible,
 .cw__phone:focus-visible {
-  outline: 3px solid color-mix(in srgb, #1f6fff 55%, #ffffff);
+  outline: 3px solid color-mix(in srgb, #53a9da 65%, #fff);
   outline-offset: 2px;
 }
 
-.cw__fab-icon {
-  display: inline-flex;
-  width: 28px;
-  height: 28px;
-}
-
-.cw__fab-icon svg {
-  width: 100%;
-  height: 100%;
-  fill: currentColor;
-}
+.cw__fab-icon { width: 32px; height: 32px; display: inline-flex; }
+.cw__fab-icon svg { width: 100%; height: 100%; fill: currentColor; }
 
 .cw__overlay {
   position: fixed;
@@ -106,90 +92,113 @@
   place-items: center;
   padding: 16px;
   pointer-events: auto;
-
   opacity: 0;
   transition: opacity 220ms ease;
 }
 
-.cw__overlay--open {
-  opacity: 1;
-}
+.cw__overlay--open { opacity: 1; }
 
 .cw__modal {
-  width: min(100%, 360px);
-  max-width: 360px;
-  max-height: min(90dvh, 720px);
+  width: min(100%, 760px);
+  max-width: 760px;
+  max-height: min(92dvh, 860px);
   overflow: auto;
-  background: var(--cw-surface);
+  background: linear-gradient(155deg, #dfe6f5 0%, #d4ddf0 100%);
   color: var(--cw-text);
-  border-radius: var(--cw-radius-xl);
-  padding: 22px 18px 18px;
+  border-radius: 26px;
+  padding: 26px 24px 22px;
   box-shadow: var(--cw-shadow-modal);
   position: relative;
-
-  transform: translate3d(0, 16px, 0) scale(0.98);
+  transform: translate3d(0, 20px, 0) scale(0.98);
   opacity: 0;
-  transition: transform 240ms ease, opacity 240ms ease;
-  will-change: transform, opacity;
+  transition: transform 250ms ease, opacity 250ms ease;
 }
 
-.cw__overlay--open .cw__modal {
-  transform: translate3d(0, 0, 0) scale(1);
-  opacity: 1;
-}
+.cw__overlay--open .cw__modal { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
 
 .cw__close {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   width: 40px;
   height: 40px;
   border: 0;
   border-radius: 999px;
-  background: #f2f4f7;
-  color: #344054;
+  background: rgba(255, 255, 255, 0.75);
+  color: #41546b;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  line-height: 1;
+  font-size: 28px;
   cursor: pointer;
 }
 
-.cw__title {
-  margin: 0;
-  padding-right: 42px;
-  font-size: 24px;
-  line-height: 1.2;
-}
+.cw__title { margin: 0; text-align: center; font-size: clamp(32px, 4vw, 52px); line-height: 1.1; font-weight: 800; }
+.cw__subtitle { margin: 14px auto 0; text-align: center; color: var(--cw-muted); font-size: clamp(18px, 2.4vw, 24px); line-height: 1.35; max-width: 660px; }
 
-.cw__subtitle {
-  margin: 10px 0 0;
-  color: var(--cw-muted);
-  font-size: 15px;
-  line-height: 1.45;
-}
-
-.cw__actions {
-  margin-top: 18px;
+.cw__content {
+  margin-top: 22px;
   display: grid;
-  gap: 10px;
+  grid-template-columns: minmax(250px, 1fr) minmax(250px, 1fr);
+  gap: 18px;
 }
 
-.cw__action,
-.cw__phone {
-  min-height: 48px;
+.cw__qr,
+.cw__actions {
+  background: rgba(255, 255, 255, 0.42);
+  border-radius: 24px;
+  padding: 16px;
+}
+
+.cw__qr-title {
+  margin: 0 0 12px;
+  font-size: 18px;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--cw-brand);
+  background: #b9d8f7;
+  padding: 10px 8px;
+  border-radius: 12px;
+}
+
+.cw__qr-frame {
+  border: 3px solid #b4d5f8;
   border-radius: 14px;
+  padding: 8px;
+  background: #fff;
+}
+
+.cw__qr-image { width: 100%; height: auto; display: block; border-radius: 8px; }
+
+.cw__actions { display: grid; gap: 14px; align-content: center; }
+
+.cw__action {
+  min-height: 56px;
+  border-radius: 14px;
+  color: #fff;
   text-decoration: none;
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  align-items: center;
+  font-size: 34px;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.cw__action-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.14);
 }
 
-.cw__action {
-  color: #fff;
-  padding: 12px 14px;
+.cw__action-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(28px, 2.5vw, 38px);
+  line-height: 1;
 }
 
 .cw__action--whatsapp { background: #25d366; }
@@ -197,23 +206,43 @@
 .cw__action--viber { background: #7360f2; }
 
 .cw__phone {
-  margin-top: 12px;
-  background: #f2f4f7;
-  color: #1d2939;
-  padding: 12px 14px;
+  margin-top: 18px;
+  min-height: 92px;
+  background: rgba(255, 255, 255, 0.44);
+  border-radius: 22px;
+  text-decoration: none;
+  color: var(--cw-text);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 16px 20px;
 }
 
-/* Body scroll lock */
-body.cw-scroll-lock {
-  overflow: hidden;
-  touch-action: none;
+.cw__phone-caption {
+  text-align: center;
+  color: #62758a;
+  font-size: clamp(20px, 2.1vw, 32px);
+  line-height: 1.2;
 }
 
-/* Mobile first fine-tuning 320-480 */
+.cw__phone-number {
+  text-align: center;
+  font-size: clamp(34px, 3.3vw, 50px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+body.cw-scroll-lock { overflow: hidden; touch-action: none; }
+
+@media (max-width: 880px) {
+  .cw__modal { width: min(100%, 560px); }
+  .cw__content { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 480px) {
-  .cw__fab {
-    --cw-fab-size: var(--cw-fab-size-mobile);
-  }
+  .cw__fab { --cw-fab-size: var(--cw-fab-size-mobile); }
+  .cw__fab::after { inset: -4px; }
 
   .cw__overlay {
     align-items: end;
@@ -225,28 +254,40 @@ body.cw-scroll-lock {
     max-width: 100%;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    transform: translate3d(0, 22px, 0);
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    padding: 20px 14px 14px;
+    transform: translate3d(0, 24px, 0);
   }
 
-  .cw__title {
-    font-size: 22px;
+  .cw__qr,
+  .cw__actions { border-radius: 18px; }
+
+  .cw__action {
+    min-height: 52px;
+    grid-template-columns: 56px 1fr;
   }
+
+  .cw__phone {
+    grid-template-columns: 1fr;
+    min-height: 68px;
+    gap: 4px;
+    padding: 12px;
+  }
+
+  .cw__phone-caption,
+  .cw__phone-number { font-size: 28px; }
 }
 
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .cw__fab,
   .cw__overlay,
-  .cw__modal {
+  .cw__modal,
+  .cw__fab::after {
     transition: none;
     animation: none;
   }
 
-  .cw__fab {
-    transform: none;
-  }
-
-  .cw__modal {
-    transform: none;
-  }
+  .cw__fab,
+  .cw__modal { transform: none; }
 }
