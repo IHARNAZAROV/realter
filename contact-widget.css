@@ -22,7 +22,7 @@
   height: var(--cw-fab-size);
   border: 0;
   border-radius: 999px;
-  background: radial-gradient(circle at 30% 25%, #4db7e3 0%, #218db9 45%, #0e5c7a 100%);
+  background: radial-gradient(circle at 30% 25%, #46cc6e 0%, #1fa64f 45%, #11703a 100%);
   color: #fff;
   box-shadow: var(--cw-shadow-fab);
   display: inline-flex;
@@ -45,6 +45,23 @@
   border: 2px solid rgba(72, 182, 229, 0.45);
   animation: cw-pulse 2.4s ease-out infinite;
 }
+
+.cw__fab--whatsapp {
+  background: radial-gradient(circle at 30% 25%, #44d66f 0%, #25d366 45%, #1b9851 100%);
+}
+
+.cw__fab--telegram {
+  background: radial-gradient(circle at 30% 25%, #50b9ef 0%, #229ed9 45%, #1a6ea6 100%);
+}
+
+.cw__fab--viber {
+  background: radial-gradient(circle at 30% 25%, #9485ff 0%, #7360f2 45%, #5542c0 100%);
+}
+
+.cw__fab--whatsapp::after { border-color: rgba(37, 211, 102, 0.45); }
+.cw__fab--telegram::after { border-color: rgba(34, 158, 217, 0.45); }
+.cw__fab--viber::after { border-color: rgba(115, 96, 242, 0.45); }
+
 
 @keyframes cw-pulse {
   0% { transform: scale(0.95); opacity: 0.72; }
