@@ -30,6 +30,9 @@
   display: grid;
   place-items: center;
   padding: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
 }
 
 .client-quiz-modal[hidden] {
@@ -41,6 +44,8 @@
   inset: 0;
   background: rgba(11, 20, 22, 0.62);
   backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.22s ease;
 }
 
 .client-quiz-modal__dialog {
@@ -53,6 +58,23 @@
   background: #fff;
   box-shadow: 0 25px 70px rgba(13, 22, 24, 0.25);
   padding: 26px 22px 22px;
+  transform: translateY(22px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
+.client-quiz-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.client-quiz-modal.is-open .client-quiz-modal__backdrop {
+  opacity: 1;
+}
+
+.client-quiz-modal.is-open .client-quiz-modal__dialog {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .client-quiz-modal__close {

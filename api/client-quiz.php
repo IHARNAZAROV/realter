@@ -51,18 +51,53 @@ if (empty($recipients)) {
     exit;
 }
 
+$fieldLabels = [
+    'goal' => 'Цель',
+    'buy_type' => 'Покупка: тип недвижимости',
+    'buy_budget' => 'Покупка: бюджет',
+    'buy_timeline' => 'Покупка: сроки',
+    'buy_district' => 'Покупка: локация',
+    'sale_object' => 'Продажа: тип объекта',
+    'sale_status' => 'Продажа: текущий этап',
+    'sale_timeline' => 'Продажа: сроки',
+    'sale_offer' => 'Продажа: приоритеты',
+    'exchange_format' => 'Обмен: формат',
+    'exchange_object' => 'Обмен: текущий объект',
+    'exchange_timeline' => 'Обмен: сроки',
+    'exchange_priority' => 'Обмен: приоритет',
+    'consult_topic' => 'Консультация: тема',
+    'consult_stage' => 'Консультация: этап',
+    'consult_time' => 'Консультация: когда связаться',
+    'consult_offer' => 'Консультация: формат',
+];
+
 $lines = [
     "🔔 Новый лид из квиза",
     "Имя: " . ($name !== '' ? $name : 'не указано'),
     "Телефон: {$phone}",
-    "Цель: " . (trim((string)($data['goal'] ?? '')) ?: 'не указано'),
-    "Тип недвижимости: " . (is_array($data['type'] ?? null) ? implode(', ', $data['type']) : (trim((string)($data['type'] ?? '')) ?: 'не указано')),
-    "Бюджет: " . (trim((string)($data['budget'] ?? '')) ?: 'не указано'),
-    "Сроки: " . (trim((string)($data['timeline'] ?? '')) ?: 'не указано'),
-    "Локация: " . (trim((string)($data['district'] ?? '')) ?: 'не указано'),
-    "Комментарий: " . ($comment !== '' ? $comment : 'нет'),
-    "Источник: " . (trim((string)($data['source'] ?? '')) ?: 'site'),
 ];
+
+foreach ($fieldLabels as $field => $label) {
+    if (!array_key_exists($field, $data)) {
+        continue;
+    }
+
+    $value = $data[$field];
+    if (is_array($value)) {
+        $value = implode(', ', array_filter(array_map('trim', $value)));
+    } else {
+        $value = trim((string)$value);
+    }
+
+    if ($value === '') {
+        $value = 'не указано';
+    }
+
+    $lines[] = "{$label}: {$value}";
+}
+
+$lines[] = "Комментарий: " . ($comment !== '' ? $comment : 'нет');
+$lines[] = "Источник: " . (trim((string)($data['source'] ?? '')) ?: 'site');
 
 $text = implode("\n", $lines);
 $errors = [];
