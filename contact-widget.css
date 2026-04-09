@@ -33,7 +33,8 @@
   opacity: 0;
   visibility: hidden;
   transform: translate3d(0, 14px, 0) scale(0.97);
-  transition: opacity 220ms ease, transform 220ms ease, visibility 220ms step-end;
+  transition: opacity 220ms ease, transform 220ms ease, visibility 220ms step-end, filter 560ms cubic-bezier(0.22, 1, 0.36, 1);
+  filter: hue-rotate(0deg) saturate(1);
   will-change: transform, opacity;
 }
 
@@ -44,19 +45,14 @@
   border-radius: inherit;
   border: 2px solid rgba(72, 182, 229, 0.45);
   animation: cw-pulse 2.4s ease-out infinite;
+  transition: border-color 560ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cw__fab--whatsapp {
-  background: radial-gradient(circle at 30% 25%, #44d66f 0%, #25d366 45%, #1b9851 100%);
-}
+.cw__fab--whatsapp { filter: hue-rotate(0deg) saturate(1); }
 
-.cw__fab--telegram {
-  background: radial-gradient(circle at 30% 25%, #50b9ef 0%, #229ed9 45%, #1a6ea6 100%);
-}
+.cw__fab--telegram { filter: hue-rotate(155deg) saturate(1.08); }
 
-.cw__fab--viber {
-  background: radial-gradient(circle at 30% 25%, #9485ff 0%, #7360f2 45%, #5542c0 100%);
-}
+.cw__fab--viber { filter: hue-rotate(235deg) saturate(1.12) brightness(1.02); }
 
 .cw__fab--whatsapp::after { border-color: rgba(37, 211, 102, 0.45); }
 .cw__fab--telegram::after { border-color: rgba(34, 158, 217, 0.45); }
@@ -85,6 +81,9 @@
 
 .cw__fab-icon { width: 30px; height: 30px; display: inline-flex; }
 .cw__fab-icon svg { width: 100%; height: 100%; fill: currentColor; }
+.cw__fab-icon { transition: opacity 180ms ease, transform 180ms ease; }
+.cw__fab-icon--fade-out { opacity: 0; transform: scale(0.82) rotate(-8deg); }
+.cw__fab-icon--fade-in { opacity: 1; transform: scale(1) rotate(0deg); }
 
 .cw__overlay {
   position: fixed;

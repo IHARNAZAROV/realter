@@ -84,11 +84,19 @@
     fab.classList.add(theme.modifier);
     fab.setAttribute('aria-label', `Открыть способы связи (${theme.label})`);
 
-    fabIcon.innerHTML = `
-      <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
-        <path d="${theme.svgPath}" />
-      </svg>
-    `;
+    fabIcon.classList.remove('cw__fab-icon--fade-in');
+    fabIcon.classList.add('cw__fab-icon--fade-out');
+
+    window.setTimeout(() => {
+      fabIcon.innerHTML = `
+        <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+          <path d="${theme.svgPath}" />
+        </svg>
+      `;
+
+      fabIcon.classList.remove('cw__fab-icon--fade-out');
+      fabIcon.classList.add('cw__fab-icon--fade-in');
+    }, 120);
   }
 
   function rotateFabTheme() {
