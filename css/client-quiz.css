@@ -304,6 +304,21 @@
 }
 
 @media (max-width: 991px) {
+  .extra-nav {
+    float: none !important;
+    display: block !important;
+    clear: both;
+    width: 100%;
+    height: auto;
+    margin-top: 8px;
+  }
+
+  .extra-nav .extra-cell {
+    display: block;
+    width: 100%;
+    padding-left: 0 !important;
+  }
+
   .header-quick-actions {
     display: flex !important;
     flex-direction: column;
@@ -317,6 +332,7 @@
   .header-quick-actions .contact-slide-show,
   .header-quick-actions__btn {
     width: 100%;
+    min-width: 0;
   }
 
   .header-quick-actions .client-quiz-launch {
