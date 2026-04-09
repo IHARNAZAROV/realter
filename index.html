@@ -52,7 +52,6 @@
     =============================================== -->
 
     <!-- Раннее соединение с внешними сервисами -->
-    <link rel="preconnect" href="https://cdn.qform.io">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
     <!-- Главная hero-картинка -->
@@ -69,6 +68,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css" data-versioned>
     <link rel="stylesheet" href="/css/documents-checklist.css" data-versioned>
+    <link rel="stylesheet" href="/css/client-quiz.css" data-versioned>
 
     <!-- ==============================================
        8. NON-CRITICAL CSS
@@ -107,16 +107,6 @@
     <!-- ==============================================
        9. EXTERNAL SCRIPTS
     =============================================== -->
-
-    <!-- QForm: загружаем после полной загрузки страницы -->
-    <script>
-        window.addEventListener('load', function () {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.qform.io/forms.js?v=' + Date.now();
-            script.async = true;
-            document.body.appendChild(script);
-        });
-    </script>
 
 
     <!-- ==============================================
@@ -216,15 +206,17 @@
                         </button>
                         <!-- Extra Nav (CTA) -->
                         <div class="extra-nav">
-                            <div class="extra-cell">
+                            <div class="extra-cell header-quick-actions">
                                 <div class="header-center">
-                                    <div data-formid="form_lGTlLgJlSCZuReuk2-doSJeQYQDaOjli"></div>
+                                    <button type="button" class="client-quiz-launch header-quick-actions__btn" data-client-quiz-open aria-haspopup="dialog" aria-controls="clientQuizModal">
+                                        Подберу решение
+                                    </button>
                                 </div>
                                 <div class="contact-slide-show">
-                                    <a href="javascript:;" class="get-in-touch-btn from-top">Я всегда на связи</a>
+                                    <a href="javascript:;" class="get-in-touch-btn client-quiz-launch client-quiz-launch--featured header-quick-actions__btn">Я всегда на связи</a>
                                 </div>
                                 <div class="contact-slide-show documents-checklist-launch">
-                                    <button type="button" class="get-in-touch-btn from-top documents-checklist-launch__btn" data-documents-checklist-open aria-haspopup="dialog" aria-controls="documentsChecklistModal">
+                                    <button type="button" class="get-in-touch-btn documents-checklist-launch__btn client-quiz-launch header-quick-actions__btn" data-documents-checklist-open aria-haspopup="dialog" aria-controls="documentsChecklistModal">
                                         Чеклист документов
                                     </button>
                                 </div>
@@ -1382,6 +1374,33 @@
             </div>
         </div>
 
+        <div class="client-quiz-modal" id="clientQuizModal" role="dialog" aria-modal="true" aria-labelledby="clientQuizTitle" hidden>
+            <div class="client-quiz-modal__backdrop" data-client-quiz-close></div>
+            <div class="client-quiz-modal__dialog">
+                <button type="button" class="client-quiz-modal__close" data-client-quiz-close aria-label="Закрыть квиз">×</button>
+                <form class="client-quiz" id="clientQuizForm">
+                    <div class="client-quiz__progress">
+                        <div class="client-quiz__progress-line">
+                            <div class="client-quiz__progress-fill" data-client-quiz-progress-fill></div>
+                        </div>
+                        <div class="client-quiz__progress-label" data-client-quiz-progress-label>Шаг 1 из 6</div>
+                    </div>
+
+                    <h2 class="client-quiz__step-title" id="clientQuizTitle" data-client-quiz-step-title>Шаг 1. Цель обращения</h2>
+                    <p class="client-quiz__step-hint" data-client-quiz-step-hint>Что для вас сейчас актуальнее?</p>
+
+                    <div class="client-quiz__choices" data-client-quiz-choices></div>
+
+                    <p class="client-quiz__feedback" data-client-quiz-feedback aria-live="polite"></p>
+
+                    <div class="client-quiz__actions">
+                        <button type="button" class="client-quiz__btn client-quiz__btn--ghost" data-client-quiz-back>Назад</button>
+                        <button type="submit" class="client-quiz__btn client-quiz__btn--primary" data-client-quiz-next>Далее</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Cookie Modal -->
         <div class="cookie-modal" id="cookieModal" role="dialog" aria-modal="true" aria-label="Настройки cookies">
             <div class="cookie-top">
@@ -1495,6 +1514,7 @@
     <script src="/js/objects-smart-badge.js" defer></script>
     <script src="/js/filters-custom-select.js" defer></script>
     <script src="/js/documents-checklist.js" defer></script>
+    <script src="/js/client-quiz.js" defer></script>
 
     <!-- Contact widget -->
     <div class="cw" data-cw-root>
