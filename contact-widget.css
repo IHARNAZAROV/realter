@@ -1,0 +1,252 @@
+/*
+  Contact widget styles (BEM)
+  - Без сторонних библиотек
+  - Оптимизация анимаций через transform/opacity
+  - Учёт safe-area для iOS
+*/
+
+:root {
+  --cw-z: 2147481000;
+  --cw-fab-size-desktop: 64px;
+  --cw-fab-size-mobile: 56px;
+  --cw-fab-offset: 16px;
+  --cw-fab-bg: #1f6fff;
+  --cw-fab-bg-hover: #155ee8;
+  --cw-text: #101828;
+  --cw-muted: #475467;
+  --cw-surface: #ffffff;
+  --cw-overlay: rgba(15, 23, 42, 0.48);
+  --cw-radius-xl: 24px;
+  --cw-shadow-fab: 0 10px 24px rgba(17, 24, 39, 0.22);
+  --cw-shadow-modal: 0 20px 50px rgba(2, 6, 23, 0.26);
+}
+
+/* Блокируем горизонтальный скролл вокруг виджета */
+.cw {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: var(--cw-z);
+  overflow-x: clip;
+}
+
+.cw__fab {
+  --cw-fab-size: var(--cw-fab-size-desktop);
+
+  position: fixed;
+  right: calc(var(--cw-fab-offset) + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--cw-fab-offset) + env(safe-area-inset-bottom, 0px));
+  width: var(--cw-fab-size);
+  height: var(--cw-fab-size);
+  border: 0;
+  border-radius: 999px;
+  background: var(--cw-fab-bg);
+  color: #fff;
+  box-shadow: var(--cw-shadow-fab);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto;
+
+  /* Изначально скрыта до delayed init */
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 12px, 0) scale(1);
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    visibility 220ms step-end,
+    background-color 180ms ease;
+  will-change: transform, opacity;
+}
+
+.cw__fab--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0, 0, 0) scale(1);
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease,
+    visibility 0s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cw__fab:hover {
+    background: var(--cw-fab-bg-hover);
+    transform: translate3d(0, 0, 0) scale(1.04);
+  }
+}
+
+.cw__fab:focus-visible,
+.cw__close:focus-visible,
+.cw__action:focus-visible,
+.cw__phone:focus-visible {
+  outline: 3px solid color-mix(in srgb, #1f6fff 55%, #ffffff);
+  outline-offset: 2px;
+}
+
+.cw__fab-icon {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+}
+
+.cw__fab-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.cw__overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--cw-overlay);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  pointer-events: auto;
+
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.cw__overlay--open {
+  opacity: 1;
+}
+
+.cw__modal {
+  width: min(100%, 360px);
+  max-width: 360px;
+  max-height: min(90dvh, 720px);
+  overflow: auto;
+  background: var(--cw-surface);
+  color: var(--cw-text);
+  border-radius: var(--cw-radius-xl);
+  padding: 22px 18px 18px;
+  box-shadow: var(--cw-shadow-modal);
+  position: relative;
+
+  transform: translate3d(0, 16px, 0) scale(0.98);
+  opacity: 0;
+  transition: transform 240ms ease, opacity 240ms ease;
+  will-change: transform, opacity;
+}
+
+.cw__overlay--open .cw__modal {
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+}
+
+.cw__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: #f2f4f7;
+  color: #344054;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cw__title {
+  margin: 0;
+  padding-right: 42px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.cw__subtitle {
+  margin: 10px 0 0;
+  color: var(--cw-muted);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.cw__actions {
+  margin-top: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.cw__action,
+.cw__phone {
+  min-height: 48px;
+  border-radius: 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.cw__action {
+  color: #fff;
+  padding: 12px 14px;
+}
+
+.cw__action--whatsapp { background: #25d366; }
+.cw__action--telegram { background: #229ed9; }
+.cw__action--viber { background: #7360f2; }
+
+.cw__phone {
+  margin-top: 12px;
+  background: #f2f4f7;
+  color: #1d2939;
+  padding: 12px 14px;
+}
+
+/* Body scroll lock */
+body.cw-scroll-lock {
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Mobile first fine-tuning 320-480 */
+@media (max-width: 480px) {
+  .cw__fab {
+    --cw-fab-size: var(--cw-fab-size-mobile);
+  }
+
+  .cw__overlay {
+    align-items: end;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cw__modal {
+    width: 100%;
+    max-width: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+
+  .cw__title {
+    font-size: 22px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .cw__fab,
+  .cw__overlay,
+  .cw__modal {
+    transition: none;
+    animation: none;
+  }
+
+  .cw__fab {
+    transform: none;
+  }
+
+  .cw__modal {
+    transform: none;
+  }
+}
