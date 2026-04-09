@@ -2,20 +2,26 @@
   Contact widget behavior (vanilla JS)
   - Появление FAB через 3 секунды после window.load
   - requestIdleCallback + fallback setTimeout
-  - Модальное окно открывается только по клику на FAB
+  - FAB меняет иконку и цвет каждые 10 секунд (WA -> TG -> Viber)
+  - Модалка открывается по клику + авто-триггерам поведения
+  - Авто-триггеры: 70% scroll, exit intent, inactivity timer
   - Закрытие: кнопка, клик по подложке, Escape
   - Scroll lock через CSS-класс
   - localStorage: время ручного закрытия (TTL 24ч)
-  - FAB меняет иконку и градиент каждые 10 секунд (WA -> TG -> Viber)
 */
 
 (function contactWidget() {
   'use strict';
 
   const STORAGE_KEY_LAST_MANUAL_CLOSE = 'cw:lastManualCloseAt';
+  const SESSION_KEY_AUTO_SHOWN = 'cw:autoShownInSession';
+
   const MANUAL_CLOSE_TTL_MS = 24 * 60 * 60 * 1000;
   const DELAY_AFTER_LOAD_MS = 3000;
   const FAB_ROTATE_MS = 10000;
+
+  const SCROLL_TRIGGER_RATIO = 0.7;
+  const INACTIVITY_TRIGGER_MS = 45000;
 
   const FAB_THEMES = [
     {
@@ -41,6 +47,7 @@
   let domReady = false;
   let pageLoaded = false;
   let widgetInitialized = false;
+  let autoShown = false;
 
   let fab;
   let overlay;
@@ -71,6 +78,29 @@
     } catch (_) {
       return false;
     }
+  }
+
+  function hasSessionAutoShown() {
+    try {
+      return sessionStorage.getItem(SESSION_KEY_AUTO_SHOWN) === '1';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function markSessionAutoShown() {
+    try {
+      sessionStorage.setItem(SESSION_KEY_AUTO_SHOWN, '1');
+    } catch (_) {
+      // безопасно игнорируем
+    }
+  }
+
+  function canAutoOpen() {
+    if (autoShown || hasSessionAutoShown()) return false;
+    if (isManualCloseStillActive()) return false;
+    if (isOpen()) return false;
+    return true;
   }
 
   function isOpen() {
@@ -109,19 +139,29 @@
     window.setInterval(rotateFabTheme, FAB_ROTATE_MS);
   }
 
-  function openModal() {
+  function openModal(options) {
     if (!overlay || !modal || !fab || isOpen()) return;
 
-    isManualCloseStillActive();
+    const { source = 'manual' } = options || {};
 
     overlay.hidden = false;
 
     requestAnimationFrame(() => {
       overlay.classList.add('cw__overlay--open');
+      modal.classList.add('cw__modal--animated');
       document.body.classList.add('cw-scroll-lock');
       fab.setAttribute('aria-expanded', 'true');
       modal.focus({ preventScroll: true });
+
+      window.setTimeout(() => {
+        modal.classList.remove('cw__modal--animated');
+      }, 420);
     });
+
+    if (source !== 'manual') {
+      autoShown = true;
+      markSessionAutoShown();
+    }
   }
 
   function closeModal(options) {
@@ -160,13 +200,74 @@
     }
   }
 
+  function triggerAutoOpen(source) {
+    if (!canAutoOpen()) return;
+    openModal({ source });
+  }
+
+  function setupScrollTrigger() {
+    const onScroll = () => {
+      if (!canAutoOpen()) {
+        window.removeEventListener('scroll', onScroll);
+        return;
+      }
+
+      const doc = document.documentElement;
+      const scrollable = doc.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+
+      const ratio = window.scrollY / scrollable;
+      if (ratio >= SCROLL_TRIGGER_RATIO) {
+        triggerAutoOpen('scroll_70');
+        window.removeEventListener('scroll', onScroll);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  function setupExitIntentTrigger() {
+    const onMouseOut = (event) => {
+      if (!canAutoOpen()) {
+        document.removeEventListener('mouseout', onMouseOut);
+        return;
+      }
+
+      const leavingViewportTop = event.clientY <= 8;
+      const leavingDocument = !event.relatedTarget && !event.toElement;
+
+      if (leavingViewportTop && leavingDocument) {
+        triggerAutoOpen('exit_intent');
+        document.removeEventListener('mouseout', onMouseOut);
+      }
+    };
+
+    document.addEventListener('mouseout', onMouseOut);
+  }
+
+  function setupInactivityTrigger() {
+    window.setTimeout(() => {
+      triggerAutoOpen('inactivity_45s');
+    }, INACTIVITY_TRIGGER_MS);
+  }
+
   function bindEvents() {
     if (!fab || !overlay || !modal || !closeBtn) return;
 
-    fab.addEventListener('click', openModal);
+    fab.addEventListener('click', () => openModal({ source: 'manual' }));
     closeBtn.addEventListener('click', () => closeModal({ manual: true }));
     overlay.addEventListener('click', handleOverlayClick);
     document.addEventListener('keydown', handleKeydown);
+  }
+
+  function setupBehaviorTriggers() {
+    // Три сильных поведенческих триггера:
+    // 1) глубина скролла 70%
+    // 2) exit intent (курсор уходит вверх)
+    // 3) длительная неактивность
+    setupScrollTrigger();
+    setupExitIntentTrigger();
+    setupInactivityTrigger();
   }
 
   function showFab() {
@@ -186,6 +287,7 @@
     if (!fab || !overlay || !closeBtn || !modal || !fabIcon) return;
 
     bindEvents();
+    setupBehaviorTriggers();
     startFabThemeRotation();
     showFab();
     widgetInitialized = true;
