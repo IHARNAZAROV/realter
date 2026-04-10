@@ -182,14 +182,18 @@
     document.body.classList.remove('cw-scroll-lock');
     fab.setAttribute('aria-expanded', 'false');
 
-    const onTransitionEnd = () => {
+    let settled = false;
+    const settleClose = () => {
+      if (settled) return;
+      settled = true;
       if (!isOpen()) {
         overlay.hidden = true;
       }
-      overlay.removeEventListener('transitionend', onTransitionEnd);
+      overlay.removeEventListener('transitionend', settleClose);
     };
 
-    overlay.addEventListener('transitionend', onTransitionEnd);
+    overlay.addEventListener('transitionend', settleClose, { once: true });
+    window.setTimeout(settleClose, 260);
     fab.focus({ preventScroll: true });
   }
 
