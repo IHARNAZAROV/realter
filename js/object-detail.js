@@ -338,6 +338,9 @@
       }));
 
     const { specificType, residenceType } = detectPropertySchemaType(obj);
+    const priceValidUntil = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
 
     const offer = {
       "@type": "Offer",
@@ -360,7 +363,7 @@
         },
       },
       validFrom: obj.publishedAt || undefined,
-      priceValidUntil: "2030-12-31",
+      priceValidUntil,
     };
 
     const address = {
@@ -386,11 +389,12 @@
     };
 
     const property = {
-      "@type": [specificType, residenceType, "Product"],
+      "@type": specificType,
       "@id": `${canonicalUrl}#property`,
       name: obj.title,
       description: obj.description || obj.cardDescription,
       category: obj.type || obj.category || obj.objectCategory,
+      additionalType: [residenceType, "Product"],
       url: pageUrl,
       image: images,
       additionalProperty: [
@@ -450,6 +454,27 @@
       offers: offer,
     };
 
+    const offerCatalog = {
+      "@type": "OfferCatalog",
+      "@id": `${canonicalUrl}#catalog`,
+      name: `Каталог предложения: ${obj.title}`,
+      url: pageUrl,
+      itemListElement: [
+        {
+          "@type": "Offer",
+          "@id": `${canonicalUrl}#catalog-offer`,
+          itemOffered: {
+            "@id": `${canonicalUrl}#property`,
+          },
+          price: schemaPrice ? String(schemaPrice) : undefined,
+          priceCurrency: "BYN",
+          availability: "https://schema.org/InStock",
+          url: pageUrl,
+          seller: offer.seller,
+        },
+      ],
+    };
+
     const listing = {
       "@type": "RealEstateListing",
       "@id": `${canonicalUrl}#listing`,
@@ -495,7 +520,7 @@
 
     const payload = cleanObject({
       "@context": "https://schema.org",
-      "@graph": [listing, breadcrumbs],
+      "@graph": [offerCatalog, property, offer, listing, breadcrumbs],
     });
 
     if (payload) {

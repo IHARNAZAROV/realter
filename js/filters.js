@@ -215,7 +215,31 @@ function getObjectArea(obj) {
 ========================================================= */
 const debouncedApply = debounce(applyFiltersAndSort);
 
+function enforceListingSeoForQueryParams() {
+  const hasQueryParams = window.location.search.length > 1;
+  if (!hasQueryParams) return;
+
+  const baseListingUrl = `${window.location.origin}/nedvizhimost-lida`;
+
+  let canonicalTag = document.querySelector('link[rel="canonical"]');
+  if (!canonicalTag) {
+    canonicalTag = document.createElement("link");
+    canonicalTag.setAttribute("rel", "canonical");
+    document.head.appendChild(canonicalTag);
+  }
+  canonicalTag.setAttribute("href", baseListingUrl);
+
+  let robotsMeta = document.querySelector('meta[name="robots"]');
+  if (!robotsMeta) {
+    robotsMeta = document.createElement("meta");
+    robotsMeta.setAttribute("name", "robots");
+    document.head.appendChild(robotsMeta);
+  }
+  robotsMeta.setAttribute("content", "noindex, follow");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  enforceListingSeoForQueryParams();
   initCompareUI();
 
   fetch("/data/objects.json")
