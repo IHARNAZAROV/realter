@@ -163,22 +163,6 @@
       ? housePrices.reduce((sum, price) => sum + price, 0) / housePrices.length
       : null;
 
-    const locationCounts = new Map();
-    objects.forEach((item) => {
-      const location = getLocationBucket(item);
-      if (!location) return;
-      locationCounts.set(location, (locationCounts.get(location) || 0) + 1);
-    });
-
-    let topLocation = null;
-    let topLocationCount = 0;
-    locationCounts.forEach((count, location) => {
-      if (count > topLocationCount) {
-        topLocation = location;
-        topLocationCount = count;
-      }
-    });
-
     const newIn30Days = withDates.filter((entry) => {
       const diffDays = (now.getTime() - entry.date.getTime()) / (1000 * 60 * 60 * 24);
       return diffDays >= 0 && diffDays <= 30;
@@ -209,51 +193,52 @@
     return [
       {
         key: 'active-now',
-        icon: '🏠',
+        icon: 'fa-solid fa-house',
         value: activeCount,
         numericValue: activeCount,
         label: 'Сейчас в продаже',
-        hint: 'Объекты со статусом “активно/в продаже” и без отметки о продаже.'
+        hint: 'Актуальные объекты в листинге.'
       },
       {
         key: 'last-addition',
-        icon: '🕒',
+        icon: 'fa-regular fa-clock',
         value: daysSinceLatest === null ? 'Нет данных' : getPluralDays(daysSinceLatest),
         numericValue: daysSinceLatest,
         label: 'Последнее добавление',
         hint: latestObject ? hoursAgoText(hoursSinceLatest) : 'Нет данных о дате публикации.'
       },
       {
+        key: 'new-objects',
+        icon: 'fa-solid fa-calendar-plus',
+        value: Number.isFinite(newIn30Days) ? newIn30Days : 'Нет данных',
+        numericValue: Number.isFinite(newIn30Days) ? newIn30Days : null,
+        label: 'Новых объектов за 30 дней'
+      },
+      {
+        key: 'lida-vs-suburb',
+        icon: 'fa-solid fa-location-dot',
+        value: inLidaCount || suburbCount !== null
+          ? `Лида: ${inLidaCount} • Пригород: ${suburbCount}`
+          : 'Нет данных',
+        label: 'Лида и пригород'
+      },
+      {
         key: 'average-price-apartment',
-        icon: '💰',
+        icon: 'fa-solid fa-building',
         value: avgApartmentPrice === null ? 'Нет данных' : BYN_FORMATTER.format(avgApartmentPrice),
         numericValue: avgApartmentPrice,
         label: 'Средняя цена квартиры'
       },
       {
         key: 'average-price-house',
-        icon: '🏡',
+        icon: 'fa-solid fa-house-chimney',
         value: avgHousePrice === null ? 'Нет данных' : BYN_FORMATTER.format(avgHousePrice),
         numericValue: avgHousePrice,
         label: 'Средняя цена дома'
       },
       {
-        key: 'top-district',
-        icon: '📍',
-        value: topLocation || 'Нет данных',
-        label: 'Самый популярный район',
-        hint: topLocation ? `${topLocationCount} объектов` : 'Нет данных по локации.'
-      },
-      {
-        key: 'new-objects',
-        icon: '✨',
-        value: Number.isFinite(newIn30Days) ? newIn30Days : 'Нет данных',
-        numericValue: Number.isFinite(newIn30Days) ? newIn30Days : null,
-        label: 'Новых объектов за 30 дней'
-      },
-      {
         key: 'max-price',
-        icon: '👑',
+        icon: 'fa-solid fa-gem',
         value: mostExpensive ? BYN_FORMATTER.format(mostExpensive.price) : 'Нет данных',
         numericValue: mostExpensive?.price ?? null,
         label: 'Самая дорогая недвижимость',
@@ -261,20 +246,12 @@
       },
       {
         key: 'rooms-distribution',
-        icon: '🧩',
+        icon: 'fa-solid fa-layer-group',
         value: apartments.length
           ? `${roomCounts[1]} / ${roomCounts[2]} / ${roomCounts[3]}`
           : 'Нет данных',
-        label: '1к / 2к / 3к квартиры',
-        hint: apartments.length ? 'Распределение по количеству комнат.' : 'Нет квартир в выборке.'
-      },
-      {
-        key: 'lida-vs-suburb',
-        icon: '🌍',
-        value: inLidaCount || suburbCount !== null
-          ? `Лида: ${inLidaCount} • Пригород: ${suburbCount}`
-          : 'Нет данных',
-        label: 'Лида и пригород'
+        label: 'Распределение по комнатам',
+        hint: apartments.length ? '1к / 2к / 3к квартиры' : 'Нет квартир в выборке.'
       }
     ];
   }
@@ -301,7 +278,7 @@
 
         return `
           <article class="market-digest__card" data-metric="${metric.key}" data-digest-index="${index}">
-            <div class="market-digest__icon" aria-hidden="true">${metric.icon || '•'}</div>
+            <div class="market-digest__icon" aria-hidden="true"><i class="${metric.icon || 'fa-solid fa-chart-line'}"></i></div>
             <div class="market-digest__value" ${counterAttrs}>${metric?.value ?? 'Нет данных'}</div>
             <h3 class="market-digest__label">${metric?.label || 'Метрика'}</h3>
             <div class="market-digest__meta">${pulse}${hint}</div>
