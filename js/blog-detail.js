@@ -160,7 +160,9 @@ function renderArticle(article) {
    5. META & SEO
    ========================================================= */
 function renderMeta(article) {
-  document.title = article.title || document.title;
+  if (article.title) {
+    document.title = `${article.title} — Ольга Турко`;
+  }
 
   const description = document.querySelector('meta[name="description"]');
   if (description && article.metaDescription) {
@@ -170,6 +172,31 @@ function renderMeta(article) {
   const canonical = document.querySelector('link[rel="canonical"]');
   if (canonical && article.slug) {
     canonical.href = `https://turko.by/blog/${article.slug}`;
+  }
+
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle && article.title) {
+    ogTitle.setAttribute("content", `${article.title} — Ольга Турко`);
+  }
+
+  const ogDescription = document.querySelector('meta[property="og:description"]');
+  if (ogDescription && article.metaDescription) {
+    ogDescription.setAttribute("content", article.metaDescription);
+  }
+
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl && article.slug) {
+    ogUrl.setAttribute("content", `https://turko.by/blog/${article.slug}`);
+  }
+
+  const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+  if (twitterTitle && article.title) {
+    twitterTitle.setAttribute("content", `${article.title} — Ольга Турко`);
+  }
+
+  const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+  if (twitterDescription && article.metaDescription) {
+    twitterDescription.setAttribute("content", article.metaDescription);
   }
 }
 
