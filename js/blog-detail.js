@@ -271,12 +271,16 @@ function renderSchema(article) {
   // Проверяем, не добавлен ли уже schema (во избежание дублирования)
   const existingSchema = document.querySelector('script[data-schema="blog-posting"]');
   if (existingSchema) existingSchema.remove();
+  const existingBreadcrumbSchema = document.querySelector(
+    'script[data-schema="blog-breadcrumb"]',
+  );
+  if (existingBreadcrumbSchema) existingBreadcrumbSchema.remove();
 
   const schema = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": ["Article", "BlogPosting"],
     headline: article.title,
-    description: article.metaDescription || article.conclusion || "",
+    description: article.lead || article.metaDescription || article.conclusion || "",
     author: {
       "@type": "Person",
       name: article.author || "Ольга Турко",
@@ -292,12 +296,13 @@ function renderSchema(article) {
       "@type": "WebPage",
       "@id": `https://turko.by/blog/${article.slug}`,
     },
+    url: `https://turko.by/blog/${article.slug}`,
     publisher: {
       "@type": "Organization",
-      name: "Ольга Турко — недвижимость в Лиде",
+      name: "turko.by",
       logo: {
         "@type": "ImageObject",
-        url: "https://turko.by/images/logo-light.webp",
+        url: "https://turko.by/images/logo-dark.svg",
       },
     },
   };
@@ -313,6 +318,37 @@ function renderSchema(article) {
   script.setAttribute("data-schema", "blog-posting");
 
   document.head.appendChild(script);
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Главная",
+        item: "https://turko.by/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Блог",
+        item: "https://turko.by/blog",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.title || "Статья",
+        item: `https://turko.by/blog/${article.slug}`,
+      },
+    ],
+  };
+
+  const breadcrumbScript = document.createElement("script");
+  breadcrumbScript.type = "application/ld+json";
+  breadcrumbScript.textContent = JSON.stringify(breadcrumbSchema);
+  breadcrumbScript.setAttribute("data-schema", "blog-breadcrumb");
+  document.head.appendChild(breadcrumbScript);
 }
 
 /* =========================================================
