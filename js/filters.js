@@ -1384,7 +1384,7 @@ if (loadMoreBtn) {
       window.requestAnimationFrame(onScroll);
       ticking = true;
     }
-  });
+  }, { passive: true });
 })();
 
 function isSold(obj) {

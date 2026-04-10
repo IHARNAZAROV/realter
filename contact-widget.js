@@ -55,6 +55,7 @@
   let closeBtn;
   let fabIcon;
   let fabThemeIndex = 0;
+  let fabThemeRotationIntervalId = null;
 
   function getNow() {
     return Date.now();
@@ -136,7 +137,12 @@
 
   function startFabThemeRotation() {
     renderFabTheme(FAB_THEMES[fabThemeIndex]);
-    window.setInterval(rotateFabTheme, FAB_ROTATE_MS);
+
+    if (fabThemeRotationIntervalId) {
+      window.clearInterval(fabThemeRotationIntervalId);
+    }
+
+    fabThemeRotationIntervalId = window.setInterval(rotateFabTheme, FAB_ROTATE_MS);
   }
 
   function openModal(options) {
@@ -319,5 +325,12 @@
   window.addEventListener('load', () => {
     pageLoaded = true;
     trySchedule();
+  });
+
+  window.addEventListener('beforeunload', () => {
+    if (fabThemeRotationIntervalId) {
+      window.clearInterval(fabThemeRotationIntervalId);
+      fabThemeRotationIntervalId = null;
+    }
   });
 })();

@@ -1507,6 +1507,17 @@ function initObjectMap(obj) {
       window._objectMap.remove();
       window._objectMap = null;
     }
+
+    // Очистка share block listeners
+    if (window._shareAbortController) {
+      window._shareAbortController.abort();
+      window._shareAbortController = null;
+    }
+
+    const shareBlock = document.getElementById("object-share-block");
+    if (shareBlock) {
+      shareBlock.dataset.bound = "0";
+    }
     
     // Очистка слайдера сайдбара
     if (window._sidebarSliderCleanup) {
@@ -1560,6 +1571,19 @@ function initObjectMap(obj) {
       tgBtn.href = `https://t.me/share/url?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(title)}`;
     }
 
+    if (block.dataset.bound === "1") {
+      block.style.display = "";
+      return;
+    }
+
+    block.dataset.bound = "1";
+
+    if (window._shareAbortController) {
+      window._shareAbortController.abort();
+    }
+    const shareAbortController = new AbortController();
+    window._shareAbortController = shareAbortController;
+
     const copyBtn = document.getElementById("share-copy");
     if (copyBtn) {
       copyBtn.addEventListener("click", () => {
@@ -1591,7 +1615,7 @@ function initObjectMap(obj) {
           document.execCommand("copy");
           document.body.removeChild(ta);
         });
-      });
+      }, { signal: shareAbortController.signal });
     }
 
     const qrBtn = document.getElementById("share-qr");
@@ -1607,16 +1631,16 @@ function initObjectMap(obj) {
         if (qrUrlEl) qrUrlEl.textContent = pageUrl;
         qrModal.classList.add("active");
         document.body.style.overflow = "hidden";
-      });
+      }, { signal: shareAbortController.signal });
 
       const closeQr = () => {
         qrModal.classList.remove("active");
         document.body.style.overflow = "";
       };
 
-      if (qrClose) qrClose.addEventListener("click", closeQr);
-      qrModal.addEventListener("click", (e) => { if (e.target === qrModal) closeQr(); });
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && qrModal.classList.contains("active")) closeQr(); });
+      if (qrClose) qrClose.addEventListener("click", closeQr, { signal: shareAbortController.signal });
+      qrModal.addEventListener("click", (e) => { if (e.target === qrModal) closeQr(); }, { signal: shareAbortController.signal });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && qrModal.classList.contains("active")) closeQr(); }, { signal: shareAbortController.signal });
     }
 
     block.style.display = "";
