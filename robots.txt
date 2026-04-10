@@ -16,6 +16,10 @@ Allow: /favicon.ico
 Disallow: /cgi-bin/
 Disallow: /search/
 Disallow: /?s=
+Disallow: /adminka_objects/
+Disallow: /api/
+Disallow: /backups/
+Disallow: /scripts/
 
 # Карта сайта
 Sitemap: https://turko.by/sitemap.xml

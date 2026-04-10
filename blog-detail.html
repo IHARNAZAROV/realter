@@ -71,6 +71,10 @@
          SITE VERSION (AUTO CACHE BUSTING)
     =============================================== -->
     <script src="/site-version.js"></script>
+    <link rel="preconnect" href="https://api.qrserver.com" crossorigin />
+    <link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/montserrat/Montserrat-Bold.woff2" as="font" type="font/woff2" crossorigin />
     <!-- =========================================
        4. STYLESHEETS (CSS)
        ========================================= -->
@@ -525,10 +529,10 @@
        ========================================= -->
     <!-- 4. Page Specific Init -->
     <script src="/js/optimize.js" defer data-versioned></script>
-    <script src="/js/blog-tags.js"></script>
+    <script src="/js/blog-tags.js" defer></script>
       <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
-    <script src="/js/blog-detail.js?v=20260304"></script>
+    <script src="/js/blog-detail.js" defer data-versioned></script>
     <script src="/js/footer-post.js" defer></script>
         <script src="/js/blog-smart-badge.js" defer></script>
       <!-- Contact widget -->
