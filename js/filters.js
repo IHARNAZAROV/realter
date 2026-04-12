@@ -99,6 +99,7 @@ const previewImages = {
   "dom-lida-ul-urickogo-chast-doma":"images/objects/pic53.webp",
   "kvartira-lida-ul-gastello-65":"images/objects/pic54.webp",
   "kvartira-lida-ul-kommunisticheskaya-39k1":"images/objects/pic55.webp",
+  "dom-lida-ul-kievskaya":"images/objects/pic56.webp",
 };
 
 /* =========================================================
