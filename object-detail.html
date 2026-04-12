@@ -86,18 +86,22 @@
          SITE VERSION (AUTO CACHE BUSTING)
     =============================================== -->
     <script src="/site-version.js"></script>
+    <!-- Preload шрифты -->
+    <link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/inter/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/montserrat/Montserrat-Bold.woff2" as="font" type="font/woff2" crossorigin>
     <!-- ==============================================
          RESOURCE HINTS (Performance)
     =============================================== -->
     <!-- Libraries -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
-    <link rel="stylesheet" href="/css/swiper-bundle.css" />
-    <link rel="stylesheet" href="/css/swiper.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
-    <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
+    <link rel="preload" href="/css/swiper-bundle.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/swiper.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="stylesheet" href="/libs/maplibre/maplibre-gl.css" />
     <!-- Main Styles -->
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned/>

@@ -1,3 +1,10 @@
+/* Защита от повторной инициализации для предотвращения утечек памяти */
+if (window.__optimizeInit) {
+  console.warn("optimize.js already initialized, skipping...");
+} else {
+  window.__optimizeInit = true;
+  window.__optimizeListeners = [];
+}
 "use strict";
 function initMenuActiveAndUnderline() {
   const e = document.querySelectorAll(".header-nav .navbar-nav li a");
@@ -222,24 +229,6 @@ function initServiceCardsAnimation() {
   );
   e.forEach((e) => t.observe(e));
 }
-function getFavorites() {
-  try {
-    return JSON.parse(localStorage.getItem("favoriteObjects")) || [];
-  } catch {
-    return [];
-  }
-}
-function saveFavorites(e) {
-  localStorage.setItem("favoriteObjects", JSON.stringify(e));
-}
-function isFavorite(e) {
-  return getFavorites().includes(e);
-}
-function toggleFavorite(e) {
-  const t = getFavorites(),
-    n = t.indexOf(e);
-  return (n >= 0 ? t.splice(n, 1) : t.push(e), saveFavorites(t), t.includes(e));
-}
 (document.addEventListener("DOMContentLoaded", function () {
   (document.body.classList.add("loaded"),
     initMenuActiveAndUnderline(),
@@ -280,10 +269,14 @@ function toggleFavorite(e) {
     (document.addEventListener("shown.bs.modal", (t) => {
       t.target.classList.contains("modal") && e(t.target);
     }),
-      window.addEventListener("resize", () => {
+      /* Предотвращение утечек памяти: сохраняем обработчик */
+      (window.__optimizeListeners = window.__optimizeListeners || {}),
+      window.__optimizeListeners.modalResize && window.removeEventListener("resize", window.__optimizeListeners.modalResize),
+      (window.__optimizeListeners.modalResize = () => {
         const t = document.querySelector(".modal.show");
         t && e(t);
-      }));
+      }),
+      window.addEventListener("resize", window.__optimizeListeners.modalResize));
   })(),
   document.querySelectorAll(".service-hover-card").forEach((e) => {
     const t = e.querySelector(".service-bg img");
@@ -363,9 +356,12 @@ function toggleFavorite(e) {
         const e = r - i;
         ((t.style.transform = ""), e > 80 && s());
       }),
-      window.addEventListener("resize", () => {
+      (window.__optimizeListeners = window.__optimizeListeners || {}),
+      window.__optimizeListeners.mobileResize && window.removeEventListener("resize", window.__optimizeListeners.mobileResize),
+      (window.__optimizeListeners.mobileResize = () => {
         window.innerWidth > 991 && s();
-      }));
+      }),
+      window.addEventListener("resize", window.__optimizeListeners.mobileResize));
   })(),
   (function () {
     const steps = document.querySelectorAll(".turko-step"),
@@ -688,5 +684,8 @@ function toggleFavorite(e) {
       }, INIT_DELAY);
     }
     
-    window.addEventListener("resize", debouncedResize);
+    (window.__optimizeListeners = window.__optimizeListeners || {}),
+    window.__optimizeListeners.diagramResize && window.removeEventListener("resize", window.__optimizeListeners.diagramResize),
+    (window.__optimizeListeners.diagramResize = debouncedResize),
+    window.addEventListener("resize", window.__optimizeListeners.diagramResize);
   })());
