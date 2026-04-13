@@ -1504,11 +1504,49 @@ function initObjectMap(obj) {
     });
     map.controls.add(searchControl);
 
-    const CATEGORY_PRESETS = {
-      "школа":                { preset: "islands#darkOrangeCircleDotIcon" },
-      "детский сад":          { preset: "islands#yellowCircleDotIcon" },
-      "продуктовый магазин":  { preset: "islands#greenCircleDotIcon" },
-      "поликлиника":          { preset: "islands#redCircleDotIcon" }
+    function svgUri(svgContent) {
+      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgContent);
+    }
+
+    const CATEGORY_CONFIG = {
+      "школа": {
+        href: svgUri(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
+          '<circle cx="19" cy="19" r="19" fill="#E65100"/>' +
+          '<polygon points="19,9 30,15 19,21 8,15" fill="white"/>' +
+          '<rect x="17" y="21" width="4" height="5" rx="1" fill="white"/>' +
+          '<rect x="12" y="26" width="14" height="3" rx="1.5" fill="white"/>' +
+          '</svg>'
+        )
+      },
+      "детский сад": {
+        href: svgUri(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
+          '<circle cx="19" cy="19" r="19" fill="#F9A825"/>' +
+          '<circle cx="19" cy="13" r="4" fill="white"/>' +
+          '<path d="M11 28c0-4.418 3.582-8 8-8s8 3.582 8 8" fill="white"/>' +
+          '</svg>'
+        )
+      },
+      "продуктовый магазин": {
+        href: svgUri(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
+          '<circle cx="19" cy="19" r="19" fill="#388E3C"/>' +
+          '<path d="M9 14h3l3 10h8l3-10h3" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '<circle cx="15" cy="27" r="1.8" fill="white"/>' +
+          '<circle cx="23" cy="27" r="1.8" fill="white"/>' +
+          '</svg>'
+        )
+      },
+      "поликлиника": {
+        href: svgUri(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
+          '<circle cx="19" cy="19" r="19" fill="#C62828"/>' +
+          '<rect x="17" y="10" width="4" height="18" rx="2" fill="white"/>' +
+          '<rect x="10" y="17" width="18" height="4" rx="2" fill="white"/>' +
+          '</svg>'
+        )
+      }
     };
 
     let activeCategory = null;
@@ -1516,7 +1554,7 @@ function initObjectMap(obj) {
     searchControl.events.add("load", function () {
       nearbyCollection.removeAll();
       const count = searchControl.getResultsCount();
-      const catOptions = CATEGORY_PRESETS[activeCategory] || { preset: "islands#whiteCircleDotIcon" };
+      const catCfg = CATEGORY_CONFIG[activeCategory] || null;
 
       for (let i = 0; i < count; i++) {
         searchControl.getResult(i).then(function (result) {
@@ -1528,11 +1566,18 @@ function initObjectMap(obj) {
             coords[1]
           );
           if (distance <= 1.5) {
+            const iconOptions = catCfg
+              ? {
+                  iconLayout: "default#image",
+                  iconImageHref: catCfg.href,
+                  iconImageSize: [34, 34],
+                  iconImageOffset: [-17, -17]
+                }
+              : { preset: "islands#whiteCircleDotIcon" };
+
             const placemark = new ymaps.Placemark(coords, {
               balloonContent: result.properties.get("name") || ""
-            }, {
-              preset: catOptions.preset
-            });
+            }, iconOptions);
             nearbyCollection.add(placemark);
           }
         });
