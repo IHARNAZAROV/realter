@@ -1504,7 +1504,7 @@ function initObjectMap(obj) {
     });
     map.controls.add(searchControl);
 
-    searchControl.events.on("load", function () {
+    searchControl.events.add("load", function () {
       nearbyCollection.removeAll();
       const count = searchControl.getResultsCount();
       for (let i = 0; i < count; i++) {
