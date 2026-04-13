@@ -1493,17 +1493,6 @@ function initObjectMap(obj) {
     const nearbyCollection = new ymaps.GeoObjectCollection();
     map.geoObjects.add(nearbyCollection);
 
-    const searchControl = new ymaps.control.SearchControl({
-      options: {
-        provider: "yandex#search",
-        noPlacemark: true,
-        noCentering: true,
-        resultsPerPage: 20,
-        visible: false
-      }
-    });
-    map.controls.add(searchControl);
-
     function svgUri(svgContent) {
       return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgContent);
     }
@@ -1551,13 +1540,28 @@ function initObjectMap(obj) {
 
     let activeCategory = null;
 
-    searchControl.events.add("load", function () {
+    function searchNearby(category) {
+      activeCategory = category;
       nearbyCollection.removeAll();
-      const count = searchControl.getResultsCount();
-      const catCfg = CATEGORY_CONFIG[activeCategory] || null;
 
-      for (let i = 0; i < count; i++) {
-        searchControl.getResult(i).then(function (result) {
+      const cityHint = obj.city || obj.district || "Лида";
+      const addressHint = obj.address ? obj.address + ", " + cityHint : cityHint;
+      const query = category + " " + addressHint;
+      const catCfg = CATEGORY_CONFIG[category] || null;
+
+      ymaps.geocode(query, {
+        boundedBy: [
+          [lat - 0.02, lng - 0.03],
+          [lat + 0.02, lng + 0.03]
+        ],
+        strictBounds: false,
+        results: 20
+      }).then(function (res) {
+        const geoObjects = res.geoObjects;
+        const count = geoObjects.getLength();
+
+        for (let i = 0; i < count; i++) {
+          const result = geoObjects.get(i);
           const coords = result.geometry.getCoordinates();
           const distance = getDistance(
             objectCoords[0],
@@ -1565,6 +1569,7 @@ function initObjectMap(obj) {
             coords[0],
             coords[1]
           );
+
           if (distance <= 1.5) {
             const iconOptions = catCfg
               ? {
@@ -1575,26 +1580,16 @@ function initObjectMap(obj) {
                 }
               : { preset: "islands#whiteCircleDotIcon" };
 
+            const name = result.properties.get("name") ||
+                         result.properties.get("text") || "";
             const placemark = new ymaps.Placemark(coords, {
-              balloonContent: result.properties.get("name") || ""
+              balloonContent: name
             }, iconOptions);
             nearbyCollection.add(placemark);
           }
-        });
-      }
-    });
-
-    function searchNearby(category) {
-      activeCategory = category;
-      nearbyCollection.removeAll();
-      const cityHint = obj.city || obj.district || "Лида";
-      const addressHint = obj.address ? obj.address + ", " + cityHint : cityHint;
-      searchControl.search(category + " " + addressHint, {
-        boundedBy: [
-          [lat - 0.02, lng - 0.03],
-          [lat + 0.02, lng + 0.03]
-        ],
-        strictBounds: false
+        }
+      }).catch(function (err) {
+        console.warn("Поиск объектов на карте не выполнен:", err);
       });
     }
 
