@@ -1504,9 +1504,20 @@ function initObjectMap(obj) {
     });
     map.controls.add(searchControl);
 
+    const CATEGORY_PRESETS = {
+      "школа":                { preset: "islands#darkOrangeCircleDotIcon" },
+      "детский сад":          { preset: "islands#yellowCircleDotIcon" },
+      "продуктовый магазин":  { preset: "islands#greenCircleDotIcon" },
+      "поликлиника":          { preset: "islands#redCircleDotIcon" }
+    };
+
+    let activeCategory = null;
+
     searchControl.events.add("load", function () {
       nearbyCollection.removeAll();
       const count = searchControl.getResultsCount();
+      const catOptions = CATEGORY_PRESETS[activeCategory] || { preset: "islands#whiteCircleDotIcon" };
+
       for (let i = 0; i < count; i++) {
         searchControl.getResult(i).then(function (result) {
           const coords = result.geometry.getCoordinates();
@@ -1520,8 +1531,7 @@ function initObjectMap(obj) {
             const placemark = new ymaps.Placemark(coords, {
               balloonContent: result.properties.get("name") || ""
             }, {
-              preset: "islands#whiteCircleDotIcon",
-              iconColor: "#246bfd"
+              preset: catOptions.preset
             });
             nearbyCollection.add(placemark);
           }
@@ -1530,6 +1540,7 @@ function initObjectMap(obj) {
     });
 
     function searchNearby(category) {
+      activeCategory = category;
       nearbyCollection.removeAll();
       const addressHint = obj.address ? obj.address + ", Лида" : "Лида";
       searchControl.search(category + " " + addressHint, {
@@ -1544,16 +1555,17 @@ function initObjectMap(obj) {
     const categoryBtns = document.querySelectorAll(".property-map-category");
     categoryBtns.forEach(function (btn) {
       btn.addEventListener("click", function () {
+        if (btn.classList.contains("is-active")) {
+          btn.classList.remove("is-active");
+          nearbyCollection.removeAll();
+          activeCategory = null;
+          return;
+        }
         categoryBtns.forEach(function (b) { b.classList.remove("is-active"); });
         btn.classList.add("is-active");
         searchNearby(btn.dataset.category);
       });
     });
-
-    const shopsBtn = document.querySelector('.property-map-category[data-category="продуктовый магазин"]');
-    if (shopsBtn) {
-      shopsBtn.click();
-    }
 
     window._objectMap = map;
   });
