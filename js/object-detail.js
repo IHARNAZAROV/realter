@@ -3,6 +3,7 @@
 
   const OBJECT_URL = (slug) => `/data/objects/${encodeURIComponent(slug)}.json`;
   const LIST_URL = "/data/objects-list.json";
+  const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
 
   /* =====================================================
      HELPERS
@@ -1452,164 +1453,47 @@ function initObjectMap(obj) {
     return;
   }
 
-  if (typeof ymaps === "undefined") {
-    console.warn("Яндекс Карты API не загружен");
-    return;
-  }
-
   const { lat, lng } = obj.location;
-  const objectCoords = [lat, lng];
 
-  function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  }
-
-  ymaps.ready(function () {
-    const map = new ymaps.Map(mapEl, {
-      center: objectCoords,
-      zoom: 15,
-      controls: ["zoomControl", "fullscreenControl"]
-    });
-
-    map.behaviors.disable("scrollZoom");
-
-    const objectPlacemark = new ymaps.Placemark(objectCoords, {
-      balloonContent: obj.title || "Объект"
-    }, {
-      preset: "islands#blueDotIcon",
-      iconColor: "#246bfd"
-    });
-    map.geoObjects.add(objectPlacemark);
-
-    const nearbyCollection = new ymaps.GeoObjectCollection();
-    map.geoObjects.add(nearbyCollection);
-
-    function svgUri(svgContent) {
-      return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgContent);
-    }
-
-    const CATEGORY_CONFIG = {
-      "школа": {
-        href: svgUri(
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
-          '<circle cx="19" cy="19" r="19" fill="#E65100"/>' +
-          '<polygon points="19,9 30,15 19,21 8,15" fill="white"/>' +
-          '<rect x="17" y="21" width="4" height="5" rx="1" fill="white"/>' +
-          '<rect x="12" y="26" width="14" height="3" rx="1.5" fill="white"/>' +
-          '</svg>'
-        )
-      },
-      "детский сад": {
-        href: svgUri(
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
-          '<circle cx="19" cy="19" r="19" fill="#F9A825"/>' +
-          '<circle cx="19" cy="13" r="4" fill="white"/>' +
-          '<path d="M11 28c0-4.418 3.582-8 8-8s8 3.582 8 8" fill="white"/>' +
-          '</svg>'
-        )
-      },
-      "продуктовый магазин": {
-        href: svgUri(
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
-          '<circle cx="19" cy="19" r="19" fill="#388E3C"/>' +
-          '<path d="M9 14h3l3 10h8l3-10h3" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
-          '<circle cx="15" cy="27" r="1.8" fill="white"/>' +
-          '<circle cx="23" cy="27" r="1.8" fill="white"/>' +
-          '</svg>'
-        )
-      },
-      "поликлиника": {
-        href: svgUri(
-          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38">' +
-          '<circle cx="19" cy="19" r="19" fill="#C62828"/>' +
-          '<rect x="17" y="10" width="4" height="18" rx="2" fill="white"/>' +
-          '<rect x="10" y="17" width="18" height="4" rx="2" fill="white"/>' +
-          '</svg>'
-        )
-      }
-    };
-
-    let activeCategory = null;
-
-    function searchNearby(category) {
-      activeCategory = category;
-      nearbyCollection.removeAll();
-
-      const cityHint = obj.city || obj.district || "Лида";
-      const addressHint = obj.address ? obj.address + ", " + cityHint : cityHint;
-      const query = category + " " + addressHint;
-      const catCfg = CATEGORY_CONFIG[category] || null;
-
-      ymaps.geocode(query, {
-        boundedBy: [
-          [lat - 0.02, lng - 0.03],
-          [lat + 0.02, lng + 0.03]
-        ],
-        strictBounds: false,
-        results: 20
-      }).then(function (res) {
-        const geoObjects = res.geoObjects;
-        const count = geoObjects.getLength();
-
-        for (let i = 0; i < count; i++) {
-          const result = geoObjects.get(i);
-          const coords = result.geometry.getCoordinates();
-          const distance = getDistance(
-            objectCoords[0],
-            objectCoords[1],
-            coords[0],
-            coords[1]
-          );
-
-          if (distance <= 1.5) {
-            const iconOptions = catCfg
-              ? {
-                  iconLayout: "default#image",
-                  iconImageHref: catCfg.href,
-                  iconImageSize: [34, 34],
-                  iconImageOffset: [-17, -17]
-                }
-              : { preset: "islands#whiteCircleDotIcon" };
-
-            const name = result.properties.get("name") ||
-                         result.properties.get("text") || "";
-            const placemark = new ymaps.Placemark(coords, {
-              balloonContent: name
-            }, iconOptions);
-            nearbyCollection.add(placemark);
-          }
-        }
-      }).catch(function (err) {
-        console.warn("Поиск объектов на карте не выполнен:", err);
-      });
-    }
-
-    const categoryBtns = document.querySelectorAll(".property-map-category");
-    categoryBtns.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        if (btn.classList.contains("is-active")) {
-          btn.classList.remove("is-active");
-          nearbyCollection.removeAll();
-          activeCategory = null;
-          return;
-        }
-        categoryBtns.forEach(function (b) { b.classList.remove("is-active"); });
-        btn.classList.add("is-active");
-        searchNearby(btn.dataset.category);
-      });
-    });
-
-    window._objectMap = map;
+  const map = new maplibregl.Map({
+    container: mapEl,
+    style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
+    center: [lng, lat],
+    zoom: 15,
+    attributionControl: true
   });
+
+  map.on("load", () => {
+    const layers = map.getStyle().layers;
+    layers.forEach(layer => {
+      if (
+        layer.type === "symbol" &&
+        layer.layout &&
+        layer.layout["text-field"]
+      ) {
+        map.setLayoutProperty(layer.id, "text-field", [
+          "coalesce",
+          ["get", "name:ru"],
+          ["get", "name"]
+        ]);
+      }
+    });
+  });
+
+  map.addControl(new maplibregl.NavigationControl(), "top-right");
+  map.scrollZoom.disable();
+  map.dragRotate.disable();
+  map.touchZoomRotate.disableRotation();
+
+  new maplibregl.Marker({
+    color: "var(--color-primary)", 
+    scale: 1.1
+  })
+    .setLngLat([lng, lat])
+    .addTo(map);
+  
+  // Сохраняем инстанс для возможной очистки при переходе
+  window._objectMap = map;
 }
 
 
@@ -1618,9 +1502,9 @@ function initObjectMap(obj) {
      CLEANUP (для переходов между страницами)
   ===================================================== */
   function cleanupResources() {
-    // Очистка карты (Яндекс Карты)
+    // Очистка карты
     if (window._objectMap) {
-      window._objectMap.destroy();
+      window._objectMap.remove();
       window._objectMap = null;
     }
 

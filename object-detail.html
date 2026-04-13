@@ -102,7 +102,7 @@
     <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<script src="https://api-maps.yandex.ru/2.1/?apikey=613aca14-ec21-445b-a479-e5b6f6d0cde0&lang=ru_RU" type="text/javascript"></script>
+<link rel="stylesheet" href="/libs/maplibre/maplibre-gl.css" />
     <!-- Main Styles -->
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned/>
     <link rel="stylesheet" href="/css/object-share.css" />
@@ -609,15 +609,7 @@
 
 <div class="object-map">
   <h4 class="object-map-title">Расположение на карте</h4>
-  <div class="object-map-frame">
-    <div id="objectMap"></div>
-    <div class="property-map-categories">
-      <button class="property-map-category" data-category="школа">Школы</button>
-      <button class="property-map-category" data-category="детский сад">Детсады</button>
-      <button class="property-map-category" data-category="продуктовый магазин">Магазины</button>
-      <button class="property-map-category" data-category="поликлиника">Поликлиники</button>
-    </div>
-  </div>
+  <div id="objectMap"></div>
 </div>
 
 </div>
@@ -862,7 +854,8 @@
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
     <script src="/js/viewing-booking.js" defer></script>
-    <script src="/js/objects-smart-badge.js" defer></script>
+   <script src="/libs/maplibre/maplibre-gl.js"></script>
+       <script src="/js/objects-smart-badge.js" defer></script>
 
     <!-- QR MODAL -->
     <div class="share-qr-modal" id="share-qr-modal" role="dialog" aria-modal="true" aria-label="QR-код объекта">
