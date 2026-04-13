@@ -1587,7 +1587,8 @@ function initObjectMap(obj) {
     function searchNearby(category) {
       activeCategory = category;
       nearbyCollection.removeAll();
-      const addressHint = obj.address ? obj.address + ", Лида" : "Лида";
+      const cityHint = obj.city || obj.district || "Лида";
+      const addressHint = obj.address ? obj.address + ", " + cityHint : cityHint;
       searchControl.search(category + " " + addressHint, {
         boundedBy: [
           [lat - 0.02, lng - 0.03],
