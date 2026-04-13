@@ -3,7 +3,6 @@
 
   const OBJECT_URL = (slug) => `/data/objects/${encodeURIComponent(slug)}.json`;
   const LIST_URL = "/data/objects-list.json";
-  const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
 
   /* =====================================================
      HELPERS
@@ -1441,6 +1440,19 @@ function initMortgageCalculator(obj) {
 }
 
 
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 function initObjectMap(obj) {
   if (!obj || !obj.location || !obj.location.lat || !obj.location.lng) {
     console.warn("Координаты объекта не найдены");
@@ -1453,47 +1465,81 @@ function initObjectMap(obj) {
     return;
   }
 
+  if (typeof ymaps === "undefined") {
+    console.warn("Яндекс Карты API не загружены");
+    return;
+  }
+
   const { lat, lng } = obj.location;
+  const objectCoords = [lat, lng];
 
-  const map = new maplibregl.Map({
-    container: mapEl,
-    style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
-    center: [lng, lat],
-    zoom: 15,
-    attributionControl: true
-  });
+  ymaps.ready(function () {
+    const map = new ymaps.Map(mapEl, {
+      center: objectCoords,
+      zoom: 15,
+      controls: ["zoomControl", "fullscreenControl"]
+    });
 
-  map.on("load", () => {
-    const layers = map.getStyle().layers;
-    layers.forEach(layer => {
-      if (
-        layer.type === "symbol" &&
-        layer.layout &&
-        layer.layout["text-field"]
-      ) {
-        map.setLayoutProperty(layer.id, "text-field", [
-          "coalesce",
-          ["get", "name:ru"],
-          ["get", "name"]
-        ]);
+    map.behaviors.disable("scrollZoom");
+
+    const objectPlacemark = new ymaps.Placemark(objectCoords, {}, {
+      preset: "islands#blueDotIcon",
+      iconColor: "#246bfd"
+    });
+    map.geoObjects.add(objectPlacemark);
+
+    const nearbyCollection = new ymaps.GeoObjectCollection();
+    map.geoObjects.add(nearbyCollection);
+
+    const searchControl = new ymaps.control.SearchControl({
+      options: {
+        provider: "yandex#search",
+        noPlacemark: true,
+        noCentering: true,
+        resultsPerPage: 20
       }
     });
+
+    function searchNearby(category) {
+      nearbyCollection.removeAll();
+      searchControl.search(category + " " + lat + "," + lng).then(function () {
+        const results = searchControl.getResultsArray();
+        results.forEach(function (result) {
+          const coords = result.geometry.getCoordinates();
+          const distance = getDistance(
+            objectCoords[0], objectCoords[1],
+            coords[0], coords[1]
+          );
+          if (distance <= 1.5) {
+            const placemark = new ymaps.Placemark(coords, {
+              balloonContent: result.properties.get("name") || ""
+            }, {
+              preset: "islands#whiteCircleDotIcon",
+              iconColor: "#246bfd"
+            });
+            nearbyCollection.add(placemark);
+          }
+        });
+      });
+    }
+
+    const categoryButtons = document.querySelectorAll(".property-map-category");
+    categoryButtons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        categoryButtons.forEach(function (b) { b.classList.remove("is-active"); });
+        btn.classList.add("is-active");
+        searchNearby(btn.dataset.category);
+      });
+    });
+
+    const activeBtn = document.querySelector(".property-map-category.is-active");
+    if (activeBtn) {
+      searchNearby(activeBtn.dataset.category);
+    }
+
+    window._objectMap = map;
+    window._objectMapSearchControl = searchControl;
   });
-
-  map.addControl(new maplibregl.NavigationControl(), "top-right");
-  map.scrollZoom.disable();
-  map.dragRotate.disable();
-  map.touchZoomRotate.disableRotation();
-
-  new maplibregl.Marker({
-    color: "var(--color-primary)", 
-    scale: 1.1
-  })
-    .setLngLat([lng, lat])
-    .addTo(map);
-  
-  // Сохраняем инстанс для возможной очистки при переходе
-  window._objectMap = map;
 }
 
 
@@ -1504,8 +1550,11 @@ function initObjectMap(obj) {
   function cleanupResources() {
     // Очистка карты
     if (window._objectMap) {
-      window._objectMap.remove();
+      window._objectMap.destroy();
       window._objectMap = null;
+    }
+    if (window._objectMapSearchControl) {
+      window._objectMapSearchControl = null;
     }
 
     // Очистка share block listeners

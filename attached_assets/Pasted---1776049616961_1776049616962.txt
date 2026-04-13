@@ -1,0 +1,197 @@
+Проанализируй мой проект и полностью замени текущую реализацию карты объекта на странице карточки недвижимости: вместо MapLibre необходимо использовать Яндекс Карты API 2.1.
+
+API key Яндекс Карт:
+e48677ae-1e3f-4ac4-bf8b-dd6ce1b59deb
+
+Требования:
+
+1. Найди весь код, связанный с MapLibre:
+- подключение maplibre-gl.js и maplibre-gl.css;
+- создание экземпляра карты;
+- добавление маркера объекта;
+- любые обработчики, стили, импорты и инициализацию.
+
+2. Полностью удали зависимость от MapLibre:
+- убрать script и link;
+- удалить весь JS, относящийся к maplibre;
+- удалить неиспользуемые CSS-классы.
+
+3. Подключи Яндекс Карты API 2.1 через:
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=e48677ae-1e3f-4ac4-bf8b-dd6ce1b59deb"></script>
+
+4. Используй существующий контейнер карты. Если контейнер называется иначе — не переименовывай без необходимости. Нужно сохранить текущую структуру карточки объекта и существующую верстку.
+
+5. Координаты объекта бери из уже существующих данных объекта. Например, если сейчас используется что-то вроде:
+object.lat
+object.lng
+или
+object.coordinates
+
+используй их без изменения структуры данных.
+
+6. Реализуй карту Яндекс со следующими параметрами:
+- центр карты = координаты объекта;
+- zoom: 15;
+- controls: ['zoomControl', 'fullscreenControl'];
+- большая синяя метка для объекта;
+- карта должна иметь такой же размер, как сейчас;
+- не ломать адаптивность.
+
+7. Под картой или поверх карты снизу справа добавь панель кнопок категорий:
+
+- Школы
+- Детсады
+- Магазины
+- Поликлиники
+
+HTML должен быть примерно таким:
+
+<div class="property-map-categories">
+    <button class="property-map-category is-active" data-category="школа">
+        Школы
+    </button>
+
+    <button class="property-map-category" data-category="детский сад">
+        Детсады
+    </button>
+
+    <button class="property-map-category" data-category="продуктовый магазин">
+        Магазины
+    </button>
+
+    <button class="property-map-category" data-category="поликлиника">
+        Поликлиники
+    </button>
+</div>
+
+8. Кнопки должны:
+- отображаться поверх карты;
+- иметь современный стиль;
+- быть похожими на интерфейс Kufar:
+  - полупрозрачный белый фон;
+  - blur;
+  - скругление;
+  - активная кнопка синяя;
+  - на мобильных переноситься на несколько строк.
+
+Пример CSS:
+
+.property-map-categories {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: calc(100% - 32px);
+    padding: 10px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.9);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    z-index: 10;
+}
+
+.property-map-category {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: transparent;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .25s ease;
+}
+
+.property-map-category:hover {
+    background: rgba(36,107,253,.08);
+}
+
+.property-map-category.is-active {
+    background: #246bfd;
+    color: #fff;
+}
+
+9. Реализуй поиск ближайших объектов выбранной категории через ymaps.control.SearchControl.
+
+Создай SearchControl:
+
+const searchControl = new ymaps.control.SearchControl({
+    options: {
+        provider: 'yandex#search',
+        noPlacemark: true,
+        noCentering: true,
+        resultsPerPage: 20
+    }
+});
+
+10. При клике на кнопку:
+- очистить старые найденные точки;
+- выполнить поиск выбранной категории рядом с объектом;
+- показать найденные объекты как маленькие точки;
+- оставить только объекты в радиусе до 1.5 км от квартиры/дома.
+
+Используй отдельную GeoObjectCollection:
+
+const nearbyCollection = new ymaps.GeoObjectCollection();
+
+11. Для вычисления расстояния используй функцию:
+
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+И фильтрацию:
+
+const distance = getDistance(
+    objectCoords[0],
+    objectCoords[1],
+    coords[0],
+    coords[1]
+);
+
+if (distance <= 1.5) {
+    nearbyCollection.add(placemark);
+}
+
+12. Метки найденных объектов:
+- маленькие;
+- белый круг с синей обводкой;
+- отличаются от основной метки объекта.
+
+Используй preset:
+
+preset: 'islands#whiteCircleDotIcon',
+iconColor: '#246bfd'
+
+13. После загрузки карты автоматически активируй категорию «Магазины».
+
+14. Не переписывай остальную страницу. Нельзя ломать:
+- галерею;
+- описание;
+- характеристики;
+- кнопки;
+- breadcrumb;
+- sticky блоки;
+- существующий JS карточки.
+
+15. Если логика карты находится в отдельном модуле или файле, сохрани существующую архитектуру проекта и внеси изменения только в нужный модуль.
+
+16. В конце покажи:
+- какие файлы изменены;
+- полный diff;
+- итоговый HTML;
+- итоговый CSS;
+- итоговый JS без сокращений и без placeholder’ов.
