@@ -3,7 +3,6 @@
 
   const OBJECT_URL = (slug) => `/data/objects/${encodeURIComponent(slug)}.json`;
   const LIST_URL = "/data/objects-list.json";
-  const MAPTILER_KEY = "ZSZnUbPl4oOTpdLavjmE"
 
   /* =====================================================
      HELPERS
@@ -1453,47 +1452,111 @@ function initObjectMap(obj) {
     return;
   }
 
+  if (typeof ymaps === "undefined") {
+    console.warn("Яндекс Карты API не загружен");
+    return;
+  }
+
   const { lat, lng } = obj.location;
+  const objectCoords = [lat, lng];
 
-  const map = new maplibregl.Map({
-    container: mapEl,
-    style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
-    center: [lng, lat],
-    zoom: 15,
-    attributionControl: true
-  });
+  function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
 
-  map.on("load", () => {
-    const layers = map.getStyle().layers;
-    layers.forEach(layer => {
-      if (
-        layer.type === "symbol" &&
-        layer.layout &&
-        layer.layout["text-field"]
-      ) {
-        map.setLayoutProperty(layer.id, "text-field", [
-          "coalesce",
-          ["get", "name:ru"],
-          ["get", "name"]
-        ]);
+  ymaps.ready(function () {
+    const map = new ymaps.Map(mapEl, {
+      center: objectCoords,
+      zoom: 15,
+      controls: ["zoomControl", "fullscreenControl"]
+    });
+
+    map.behaviors.disable("scrollZoom");
+
+    const objectPlacemark = new ymaps.Placemark(objectCoords, {
+      balloonContent: obj.title || "Объект"
+    }, {
+      preset: "islands#blueDotIcon",
+      iconColor: "#246bfd"
+    });
+    map.geoObjects.add(objectPlacemark);
+
+    const nearbyCollection = new ymaps.GeoObjectCollection();
+    map.geoObjects.add(nearbyCollection);
+
+    const searchControl = new ymaps.control.SearchControl({
+      options: {
+        provider: "yandex#search",
+        noPlacemark: true,
+        noCentering: true,
+        resultsPerPage: 20,
+        visible: false
       }
     });
+    map.controls.add(searchControl);
+
+    searchControl.events.on("load", function () {
+      nearbyCollection.removeAll();
+      const count = searchControl.getResultsCount();
+      for (let i = 0; i < count; i++) {
+        searchControl.getResult(i).then(function (result) {
+          const coords = result.geometry.getCoordinates();
+          const distance = getDistance(
+            objectCoords[0],
+            objectCoords[1],
+            coords[0],
+            coords[1]
+          );
+          if (distance <= 1.5) {
+            const placemark = new ymaps.Placemark(coords, {
+              balloonContent: result.properties.get("name") || ""
+            }, {
+              preset: "islands#whiteCircleDotIcon",
+              iconColor: "#246bfd"
+            });
+            nearbyCollection.add(placemark);
+          }
+        });
+      }
+    });
+
+    function searchNearby(category) {
+      nearbyCollection.removeAll();
+      const addressHint = obj.address ? obj.address + ", Лида" : "Лида";
+      searchControl.search(category + " " + addressHint, {
+        boundedBy: [
+          [lat - 0.02, lng - 0.03],
+          [lat + 0.02, lng + 0.03]
+        ],
+        strictBounds: false
+      });
+    }
+
+    const categoryBtns = document.querySelectorAll(".property-map-category");
+    categoryBtns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        categoryBtns.forEach(function (b) { b.classList.remove("is-active"); });
+        btn.classList.add("is-active");
+        searchNearby(btn.dataset.category);
+      });
+    });
+
+    const shopsBtn = document.querySelector('.property-map-category[data-category="продуктовый магазин"]');
+    if (shopsBtn) {
+      shopsBtn.click();
+    }
+
+    window._objectMap = map;
   });
-
-  map.addControl(new maplibregl.NavigationControl(), "top-right");
-  map.scrollZoom.disable();
-  map.dragRotate.disable();
-  map.touchZoomRotate.disableRotation();
-
-  new maplibregl.Marker({
-    color: "var(--color-primary)", 
-    scale: 1.1
-  })
-    .setLngLat([lng, lat])
-    .addTo(map);
-  
-  // Сохраняем инстанс для возможной очистки при переходе
-  window._objectMap = map;
 }
 
 
@@ -1502,9 +1565,9 @@ function initObjectMap(obj) {
      CLEANUP (для переходов между страницами)
   ===================================================== */
   function cleanupResources() {
-    // Очистка карты
+    // Очистка карты (Яндекс Карты)
     if (window._objectMap) {
-      window._objectMap.remove();
+      window._objectMap.destroy();
       window._objectMap = null;
     }
 
