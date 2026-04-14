@@ -19,9 +19,9 @@ if (mb_strlen($contact) < 5) {
     exit;
 }
 
-$botToken = getenv('TELEGRAM_BOT_TOKEN') ?: '8603985787:AAFvGsv7-wlUQBQVXBc3deckmUK1RcT1_UM';
-$chatIdsEnv = getenv('TELEGRAM_CHAT_IDS') ?: '281486249,920099484';
-$usernamesEnv = getenv('TELEGRAM_USERNAMES') ?: '@y_tery,@TurkoOlga';
+$botToken = getenv('TELEGRAM_BOT_TOKEN') ?: '';
+$chatIdsEnv = getenv('TELEGRAM_CHAT_IDS') ?: '';
+$usernamesEnv = getenv('TELEGRAM_USERNAMES') ?: '';
 
 if ($botToken === '') {
     http_response_code(500);
