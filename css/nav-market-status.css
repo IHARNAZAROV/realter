@@ -1,16 +1,16 @@
 .nav-market-status-li {
-    display: flex;
-    align-items: center;
+    list-style: none;
     padding: 0;
-    margin-left: 8px;
+    margin-left: 14px;
+    align-self: center;
+    margin-top: 8px;
 }
 
 .nav-market-status {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 0 14px;
-    height: 36px;
+    padding: 5px 14px;
     border-radius: 8px;
     background: rgba(61, 214, 176, 0.07);
     border: 1px solid rgba(61, 214, 176, 0.25);
@@ -45,7 +45,7 @@
 .status-text-wrapper {
     position: relative;
     height: 20px;
-    min-width: 200px;
+    min-width: 310px;
     overflow: hidden;
 }
 

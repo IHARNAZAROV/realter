@@ -94,7 +94,7 @@
 
     <!-- Стили блога -->
     <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/nav-market-status.css?v=3" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/nav-market-status.css?v=8" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
     <!-- Fallback для пользователей без JS -->
     <noscript>
@@ -112,8 +112,9 @@
     </noscript>
     <link rel="stylesheet" href="/css/contact-widget.css">
     <style>
-        .nav-market-status-li{display:flex;align-items:center;padding:0;margin-left:8px}
-        .nav-market-status{background:rgba(61,214,176,.07)!important;border:1px solid rgba(61,214,176,.25)!important;height:36px!important;align-items:center!important}
+        .nav-market-status-li{list-style:none;padding:0;margin-left:14px;align-self:center!important;margin-top:8px!important}
+        .nav-market-status{display:flex!important;align-items:center!important;padding:5px 14px!important;background:rgba(61,214,176,.07)!important;border:1px solid rgba(61,214,176,.25)!important}
+        .status-text-wrapper{min-width:310px!important}
         .status-text{color:#2a3a33!important;text-transform:none!important}
         @media(max-width:1024px){.nav-market-status-li{display:none!important}}
     </style>
