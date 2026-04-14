@@ -3,7 +3,7 @@
  * Стратегии:
  *   - App Shell (fonts, icons, logos): Cache First, precache при установке
  *   - CSS / JS: Cache First, lazy caching при первом запросе
- *   - /data/*.json: Stale-While-Revalidate
+ *   - /data/*.json: Network First (всегда свежие данные, кеш — запасной вариант)
  *   - /images/*, /media/*: Cache First, lazy caching
  *   - /api/*, *.php, /adminka_objects/*: Network Only (не кешируем)
  */
@@ -80,9 +80,9 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  /* Stale-While-Revalidate: JSON данные */
+  /* Network First: JSON данные — всегда свежие, кеш только как запасной вариант */
   if (url.pathname.startsWith('/data/') && url.pathname.endsWith('.json')) {
-    event.respondWith(staleWhileRevalidate(request, CACHE_DATA));
+    event.respondWith(networkFirst(request, CACHE_DATA));
     return;
   }
 
@@ -132,17 +132,17 @@ async function cacheFirst(request, cacheName) {
   }
 }
 
-/* ─── Стратегия: Stale-While-Revalidate ─── */
-async function staleWhileRevalidate(request, cacheName) {
+/* ─── Стратегия: Network First (с кешем как запасным вариантом) ─── */
+async function networkFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
-
-  const networkFetch = fetch(request).then(response => {
+  try {
+    const response = await fetch(request);
     if (response.ok) {
       cache.put(request, response.clone());
     }
     return response;
-  }).catch(() => null);
-
-  return cached || await networkFetch;
+  } catch {
+    const cached = await cache.match(request);
+    return cached || new Response('', { status: 503 });
+  }
 }
