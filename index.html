@@ -109,6 +109,7 @@
         <link rel="stylesheet" href="/css/blog-badge.css">
     </noscript>
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <link rel="stylesheet" href="/css/header-objects-counter.css">
     <!-- ==============================================
        9. EXTERNAL SCRIPTS
     =============================================== -->
@@ -224,6 +225,11 @@
                         </button>
                         <!-- Extra Nav (CTA) -->
                         <div class="extra-nav">
+                            <div class="extra-cell objects-counter-cell d-none d-lg-inline-block" id="headerObjectsCounter" aria-live="polite">
+                                <span class="objects-counter__count"><span id="counterCount">—</span> <span class="objects-counter__label">в продаже</span></span>
+                                <span class="objects-counter__sep" aria-hidden="true">·</span>
+                                <span class="objects-counter__age" id="counterAge"></span>
+                            </div>
                             <div class="extra-cell header-quick-actions">
                                 <div class="header-center">
                                     <button type="button" class="client-quiz-launch header-quick-actions__btn" data-client-quiz-open aria-haspopup="dialog" aria-controls="clientQuizModal">
@@ -1612,6 +1618,7 @@
     </div>
     <script src="/js/sw-register.js" defer></script>
     <script src="contact-widget.js" defer></script>
+    <script src="/js/header-objects-counter.js" defer></script>
 </body>
 
 </html>
