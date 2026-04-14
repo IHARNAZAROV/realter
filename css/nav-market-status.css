@@ -1,22 +1,19 @@
-@media (min-width: 1025px) {
-    .header-nav {
-        display: flex !important;
-        align-items: center;
-    }
+.nav-market-status-li {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin-left: 8px;
 }
 
 .nav-market-status {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-left: auto;
     padding: 0 14px;
-    height: 40px;
+    height: 36px;
     border-radius: 8px;
     background: rgba(61, 214, 176, 0.07);
     border: 1px solid rgba(61, 214, 176, 0.25);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    position: relative;
     cursor: default;
     user-select: none;
     flex-shrink: 0;
@@ -24,9 +21,9 @@
 }
 
 .nav-market-status:hover {
-    background: rgba(61, 214, 176, 0.12);
+    background: rgba(61, 214, 176, 0.13);
     border-color: rgba(61, 214, 176, 0.45);
-    box-shadow: 0 0 12px rgba(61, 214, 176, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 12px rgba(61, 214, 176, 0.15);
 }
 
 .status-indicator {
@@ -48,7 +45,7 @@
 .status-text-wrapper {
     position: relative;
     height: 20px;
-    min-width: 220px;
+    min-width: 200px;
     overflow: hidden;
 }
 
@@ -61,6 +58,7 @@
     font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.01em;
+    text-transform: none;
     color: #2a3a33;
     line-height: 20px;
     will-change: transform, opacity;
@@ -78,7 +76,7 @@
 }
 
 @media (max-width: 1024px) {
-    .nav-market-status {
+    .nav-market-status-li {
         display: none !important;
     }
 }
