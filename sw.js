@@ -9,7 +9,7 @@
  */
 
 const CACHE_STATIC  = 'sw-static-v1';
-const CACHE_DATA    = 'sw-data-v3';
+const CACHE_DATA    = 'sw-data-v2';
 const CACHE_IMAGES  = 'sw-images-v1';
 
 const ALL_CACHES = [CACHE_STATIC, CACHE_DATA, CACHE_IMAGES];
@@ -38,10 +38,6 @@ const APP_SHELL = [
   '/favicon.ico',
   '/favicon.svg',
   '/apple-touch-icon.png',
-  /* Данные (JSON) */
-  '/data/objects-list.json',
-  '/data/blog-articles.json',
-  '/data/services.json',
 ];
 
 /* ─── Install: кешируем App Shell ─── */
