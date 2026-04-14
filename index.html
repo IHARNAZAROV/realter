@@ -94,6 +94,7 @@
 
     <!-- Стили блога -->
     <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/nav-market-status.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
     <!-- Fallback для пользователей без JS -->
     <noscript>
@@ -107,6 +108,7 @@
 
         <link rel="stylesheet" href="/css/flaticon.min.css">
         <link rel="stylesheet" href="/css/blog-badge.css">
+        <link rel="stylesheet" href="/css/nav-market-status.css">
     </noscript>
     <link rel="stylesheet" href="/css/contact-widget.css">
     <!-- ==============================================
@@ -260,6 +262,15 @@
                                 <li><a href="/faq">Вопросы</a></li>
                                 <li><a href="/contact">Контакты</a></li>
                             </ul>
+
+                            <div class="nav-market-status" id="marketStatus" aria-live="polite" aria-atomic="true">
+                                <span class="status-indicator" aria-hidden="true"></span>
+                                <div class="status-text-wrapper">
+                                    <div class="status-text current"></div>
+                                    <div class="status-text next"></div>
+                                </div>
+                            </div>
+
                         </div>
                         <!-- Contact Slide Dropdown -->
                         <div class="contact-slide-hide" style="background-image: url(images/background/bg-map.webp)">
@@ -1612,6 +1623,7 @@
     </div>
     <script src="/js/sw-register.js" defer></script>
     <script src="contact-widget.js" defer></script>
+    <script src="/js/nav-market-status.js" defer></script>
 </body>
 
 </html>
