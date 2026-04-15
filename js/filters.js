@@ -40,69 +40,6 @@ let favoriteCounter = null;
 const COMPARE_MAX_ITEMS = 3;
 const COMPARE_MIN_ITEMS = 2;
 
-/* =========================================================
-   PREVIEW IMAGES (static mapping)
-========================================================= */
-const previewImages = {
-  "dom-lidskiy-rayon-krupovo": "images/objects/pic1.webp",
-  "dom-lida-severnyy-gorodok-ul-govorova": "images/objects/pic2.webp",
-  "kvartira-lida-ul-zarechnaya-39": "images/objects/pic3.webp",
-  "dom-lidskiy-rayon-sheybaki": "images/objects/pic4.webp",
-  "kvartira-lida-yuzhnyy-gorodok": "images/objects/pic5.webp",
-  "dom-shchuchinskiy-rayon-rozhanka": "images/objects/pic6.webp",
-  "kvartira-lida-yuzhnyy-gorodok-d-19": "images/objects/pic7.webp",
-  "dom-dokudovo-2": "images/objects/pic8.webp",
-  "kvartira-lida-ul-varshavskaya-44": "images/objects/pic9.webp",
-  "kvartira-lida-ul-letnaya-8": "images/objects/pic10.webp",
-  "dom-lidskiy-rayon-melyashi": "images/objects/pic11.webp",
-  "kvartira-lida-ul-tuhachevskogo-65-k1": "images/objects/pic12.webp",
-  "kvartira-lida-ul-masherova-7-k2": "images/objects/pic13.webp",
-  "kvartira-lida-ul-masherova": "images/objects/pic14.webp",
-  "kvartira-lida-ul-tuhachevskogo": "images/objects/pic15.webp",
-  "dom-lidskiy-rayon-minoyty": "images/objects/pic16.webp",
-  "kvartira-lida-ul-kosmonavtov": "images/objects/pic17.webp",
-  "kvartira-lida-ul-zarechnaya-7": "images/objects/pic18.webp",
-  "dom-lidskiy-rayon-ostrovlya-novoselov": "images/objects/pic19.webp",
-  "kvartira-laykovshchina-lidskiy-rayon": "images/objects/pic20.webp",
-  "kvartira-lida-ul-prolygina-4": "images/objects/pic21.webp",
-  "dom-shchuchinskiy-rayon-skribovtsy": "images/objects/pic22.webp",
-  "dom-shchuchinskiy-rayon-boyary-zheludokskie": "images/objects/pic23.webp",
-  "kvartira-volkovysk-centr": "images/objects/pic24.webp",
-  "kvartira-lida-knyazya-gedimina-7": "images/objects/pic25.webp",
-  "sto-lida-ignatova-42-veras-avto": "images/objects/pic26.webp",
-  "kvartira-volkovysk-socialisticheskaya": "images/objects/pic27.webp",
-  "dom-lida-ul-shchedrina": "images/objects/pic28.webp",
-  "kvartira-lida-ul-tavlaya-25a":"images/objects/pic29.webp",
-  "kvartira-shchuchin-ul-ostrovskogo-5":"images/objects/pic30.webp",
-  "kvartira-lida-ul-nevskogo-20a":"images/objects/pic31.webp",
-  "kvartira-lida-ul-sovetskaya-36": "images/objects/pic32.webp",
-  "kvartira-lida-ul-respublikanskaya-7": "images/objects/pic33.webp",
-  "kvartira-lida-ul-kosmonavtov-12-k1": "images/objects/pic34.webp",
-  "dom-yodki-ul-sadovaya": "images/objects/pic35.webp",
-  "kvartira-lida-ul-urickogo-60": "images/objects/pic36.webp",
-  "kvartira-lida-ul-yuzhnyy-gorodok-24": "images/objects/pic37.webp",
-  "kvartira-lida-ul-tukhachevskogo-65":"images/objects/pic38.webp",
-  "kvartira-lida-ul-sovetskaya-36-stalinka": "images/objects/pic39.webp",
-  "kvartira-lida-ul-nevskogo-20-cheshka":"images/objects/pic40.webp",
-  "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero":"images/objects/pic41.webp",
-  "kvartira-lida-ul-hasanovskaya-1-64":"images/objects/pic42.webp",
-  "kvartira-lida-ul-sovetskaya-5-center": "images/objects/pic43.webp",
-  "kvartira-volkovysk-ul-novye-borki-23": "images/objects/pic44.webp",
-  "dom-lida-ul-novoprudskaya-2": "images/objects/pic45.webp",
-  "kvartira-lida-ul-nevskogo-44-severny":"images/objects/pic46.webp",
-  "kvartira-lida-ul-rybinovskogo-22" : "images/objects/pic47.webp",
-  "kvartira-lida-ul-masherova-15-2":"images/objects/pic48.webp",
-  "dom-lida-ul-poselkovaya-industrialny":"images/objects/pic49.webp",
-  "kvartira-lida-ul-kommunisticheskaya-49":"images/objects/pic50.webp",
-  "kvartira-shchuchin-ul-ostrovskogo-22":"images/objects/pic51.webp",
-  "kvartira-lida-yuzhny-gorodok-13-stary-yuzhny":"images/objects/pic52.webp",
-  "dom-lida-ul-urickogo-chast-doma":"images/objects/pic53.webp",
-  "kvartira-lida-ul-gastello-65":"images/objects/pic54.webp",
-  "kvartira-lida-ul-kommunisticheskaya-39k1":"images/objects/pic55.webp",
-  "dom-lida-ul-kievskaya":"images/objects/pic56.webp",
-  "kvartira-lida-ul-kooperativnaya-50": "images/objects/pic57.webp",
-  "dom-feliksovo-ekaterininskiy-trakt": "images/objects/pic58.webp",
-};
 
 /* =========================================================
    HELPERS
@@ -145,6 +82,16 @@ function debounce(fn, delay = 400) {
     clearTimeout(t);
     t = setTimeout(() => fn(...args), delay);
   };
+}
+
+function getPreviewImage(obj) {
+  if (!obj?.id) {
+    return "/images/objects/placeholder.webp";
+  }
+
+  const imageNumber = obj.id.replace("obj-", "");
+
+  return `/images/objects/pic${imageNumber}.webp`;
 }
 
 /* =========================================================
@@ -591,7 +538,7 @@ function renderObjects(list) {
     const li = document.createElement("li");
     li.className = "object-item";
 
-    const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
+    const imgSrc = getPreviewImage(obj);
 
     const area = getObjectArea(obj);
     const objectPrice = getObjectPriceByn(obj);
@@ -1098,7 +1045,7 @@ function renderComparePanel() {
 
   compareItemsEl.innerHTML = compareObjects
     .map((obj) => {
-      const imgSrc = previewImages[obj.slug] || "images/objects/placeholder.webp";
+      const imgSrc = getPreviewImage(obj);
       return `
         <article class="compare-chip">
           <img src="${imgSrc}" alt="${obj.title}" loading="lazy" />
