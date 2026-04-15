@@ -2,8 +2,8 @@
 
 /* ============================================================
    CALENDAR SIDEBAR — calendar-sidebar.js
-   Интерактивный календарь публикаций блога.
-   Без сторонних библиотек. Vanilla JS.
+   Плавающий интерактивный календарь публикаций блога.
+   Vanilla JS. Без сторонних библиотек.
    ============================================================ */
 
 (function () {
@@ -17,30 +17,26 @@
 
   const WEEKDAYS_RU = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-  /* Стрелка «вправо» (SVG path) */
-  const ARROW_RIGHT =
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>';
-  /* Стрелка «влево» */
-  const ARROW_LEFT =
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
-  /* Стрелка «вправо» малая (для ссылки) */
-  const ARROW_LINK =
-    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-  /* Шеврон вниз (для аккордеона) */
-  const CHEVRON_DOWN =
-    '<svg viewBox="0 0 24 24" class="calendar-mobile-toggle__icon" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+  /* SVG-иконки */
+  const ICON_ARROW_LEFT  = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
+  const ICON_ARROW_RIGHT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>';
+  const ICON_ARROW_LINK  = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
 
   /* ----------------------------------------------------------
      СОСТОЯНИЕ
   ---------------------------------------------------------- */
-  let articlesByDate = {};   // { "YYYY-MM-DD": [article, ...] }
+  let articlesByDate = {};  // { "YYYY-MM-DD": [article, …] }
   let currentYear;
   let currentMonth;
-  let activeDate = null;     // Активная выбранная дата (строка YYYY-MM-DD)
+  let activeDate   = null;  // Выбранная дата (YYYY-MM-DD)
+  let panelIsOpen  = false;
 
   /* ----------------------------------------------------------
-     DOM-ЭЛЕМЕНТЫ (заполняются после DOMContentLoaded)
+     DOM-ССЫЛКИ
   ---------------------------------------------------------- */
+  let elSidebar;
+  let elFab;
+  let elPanel;
   let elTitle;
   let elGrid;
   let elPopup;
@@ -48,32 +44,30 @@
 
   /* ----------------------------------------------------------
      УТИЛИТА: парсинг даты статьи
-     Поддерживает форматы: "DD.MM.YYYY" и "YYYY-MM-DD"
+     Форматы: "DD.MM.YYYY" (используется в проекте) и "YYYY-MM-DD"
   ---------------------------------------------------------- */
   function parseArticleDate(str) {
     if (!str || typeof str !== "string") return null;
     let day, month, year;
 
     if (str.includes(".")) {
-      // Формат DD.MM.YYYY (используется в проекте)
       [day, month, year] = str.split(".");
     } else if (str.includes("-") && str.length === 10) {
-      // Формат YYYY-MM-DD
       [year, month, day] = str.split("-");
     } else {
       return null;
     }
 
-    day   = parseInt(day, 10);
+    day   = parseInt(day,   10);
     month = parseInt(month, 10);
-    year  = parseInt(year, 10);
+    year  = parseInt(year,  10);
 
     if (!day || !month || !year) return null;
     return new Date(year, month - 1, day);
   }
 
   /* ----------------------------------------------------------
-     УТИЛИТА: дата → ключ "YYYY-MM-DD"
+     УТИЛИТА: Date → ключ "YYYY-MM-DD"
   ---------------------------------------------------------- */
   function toDateKey(date) {
     const y = date.getFullYear();
@@ -83,12 +77,11 @@
   }
 
   /* ----------------------------------------------------------
-     УТИЛИТА: ключ "YYYY-MM-DD" → читаемая дата на русском
+     УТИЛИТА: ключ "YYYY-MM-DD" → русская дата
   ---------------------------------------------------------- */
   function formatDateRu(key) {
     const [y, m, d] = key.split("-").map(Number);
-    const date = new Date(y, m - 1, d);
-    return date.toLocaleDateString("ru-RU", {
+    return new Date(y, m - 1, d).toLocaleDateString("ru-RU", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -96,142 +89,107 @@
   }
 
   /* ----------------------------------------------------------
-     ШАГ 1: Загрузка статей
-     Попытка переиспользовать уже загруженные данные из
-     blog-list.js. Если переменная allArticles недоступна —
-     загружаем JSON самостоятельно.
+     ЗАГРУЗКА СТАТЕЙ
+     Пытается переиспользовать глобальный allArticles из
+     blog-list.js; если недоступен — загружает сам.
   ---------------------------------------------------------- */
   function loadArticles(callback) {
-    /* Проверяем, доступен ли глобальный массив из blog-list.js */
+    /* Если blog-list.js уже загрузил и данные готовы */
     if (typeof allArticles !== "undefined" && Array.isArray(allArticles) && allArticles.length > 0) {
       callback(allArticles);
       return;
     }
 
-    /* Если данные ещё не загружены — ждём кастомного события
-       или загружаем самостоятельно */
-    const onArticlesReady = function (e) {
-      document.removeEventListener("blog:articlesLoaded", onArticlesReady);
+    /* Слушаем кастомное событие на случай, если blog-list.js
+       ещё не отработал, но вот-вот выбросит его */
+    const onReady = function (e) {
+      document.removeEventListener("blog:articlesReady", onReady);
       callback(e.detail || []);
     };
+    document.addEventListener("blog:articlesReady", onReady);
 
-    document.addEventListener("blog:articlesReady", onArticlesReady);
-
-    /* Параллельно — загружаем сами, на случай если событие
-       не будет выброшено */
+    /* Параллельно грузим самостоятельно */
     fetch("/data/blog-articles.json")
       .then(function (res) {
-        if (!res.ok) throw new Error("Ошибка загрузки blog-articles.json");
+        if (!res.ok) throw new Error("HTTP " + res.status);
         return res.json();
       })
       .then(function (articles) {
-        document.removeEventListener("blog:articlesReady", onArticlesReady);
+        document.removeEventListener("blog:articlesReady", onReady);
         callback(articles);
       })
       .catch(function (err) {
-        console.warn("[CalendarSidebar] Не удалось загрузить статьи:", err);
-        document.removeEventListener("blog:articlesReady", onArticlesReady);
+        console.warn("[CalendarSidebar] Ошибка загрузки статей:", err);
+        document.removeEventListener("blog:articlesReady", onReady);
         callback([]);
       });
   }
 
   /* ----------------------------------------------------------
-     ШАГ 2: Группировка статей по датам
+     ГРУППИРОВКА: массив статей → { "YYYY-MM-DD": [article,…] }
   ---------------------------------------------------------- */
   function groupArticlesByDate(articles) {
     const map = {};
-
-    articles.forEach(function (article) {
-      if (!article.date) return;
-
-      const dateObj = parseArticleDate(article.date);
-      if (!dateObj || isNaN(dateObj.getTime())) return;
-
-      const key = toDateKey(dateObj);
-      if (!map[key]) {
-        map[key] = [];
-      }
-      map[key].push(article);
+    articles.forEach(function (a) {
+      if (!a.date) return;
+      const d = parseArticleDate(a.date);
+      if (!d || isNaN(d.getTime())) return;
+      const key = toDateKey(d);
+      (map[key] = map[key] || []).push(a);
     });
-
     return map;
   }
 
   /* ----------------------------------------------------------
-     ШАГ 3: Рендер календаря
+     РЕНДЕР СЕТКИ КАЛЕНДАРЯ
   ---------------------------------------------------------- */
   function renderCalendar() {
     if (!elTitle || !elGrid) return;
 
-    /* Заголовок: «Апрель 2026» */
     elTitle.textContent = `${MONTHS_RU[currentMonth]} ${currentYear}`;
-
     elGrid.innerHTML = "";
 
-    const today = new Date();
-    const todayKey = toDateKey(today);
+    const todayKey  = toDateKey(new Date());
+    const firstDay  = new Date(currentYear, currentMonth, 1);
+    const daysInMonth     = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, currentMonth,     0).getDate();
 
-    /* Первый день отображаемого месяца */
-    const firstDay = new Date(currentYear, currentMonth, 1);
+    /* Смещение первого дня (0=Пн … 6=Вс) */
+    let startDow = firstDay.getDay();
+    startDow = (startDow + 6) % 7;
 
-    /* День недели первого дня (0=Вс → конвертируем в 0=Пн) */
-    let startDow = firstDay.getDay(); // 0–6 (0=Вс)
-    startDow = (startDow + 6) % 7;   // Конвертация: 0=Пн, 6=Вс
-
-    /* Кол-во дней в месяце */
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-    /* Дни предыдущего месяца (для заполнения начала сетки) */
-    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
-
-    /* Всего ячеек: заполняем до полных 6 строк (42 ячейки) */
-    const totalCells = 42;
-
-    for (let i = 0; i < totalCells; i++) {
+    /* Всегда 42 ячейки (6 строк × 7 дней) */
+    for (let i = 0; i < 42; i++) {
       const cell = document.createElement("div");
-
-      let dayNum, dateKey, isCurrentMonth;
+      let dayNum, dateKey, isCurrent;
 
       if (i < startDow) {
-        /* Дни предыдущего месяца */
-        dayNum = daysInPrevMonth - startDow + 1 + i;
-        const d = new Date(currentYear, currentMonth - 1, dayNum);
-        dateKey = toDateKey(d);
-        isCurrentMonth = false;
+        dayNum  = daysInPrevMonth - startDow + 1 + i;
+        dateKey = toDateKey(new Date(currentYear, currentMonth - 1, dayNum));
+        isCurrent = false;
       } else if (i < startDow + daysInMonth) {
-        /* Дни текущего месяца */
-        dayNum = i - startDow + 1;
-        const d = new Date(currentYear, currentMonth, dayNum);
-        dateKey = toDateKey(d);
-        isCurrentMonth = true;
+        dayNum  = i - startDow + 1;
+        dateKey = toDateKey(new Date(currentYear, currentMonth, dayNum));
+        isCurrent = true;
       } else {
-        /* Дни следующего месяца */
-        dayNum = i - startDow - daysInMonth + 1;
-        const d = new Date(currentYear, currentMonth + 1, dayNum);
-        dateKey = toDateKey(d);
-        isCurrentMonth = false;
+        dayNum  = i - startDow - daysInMonth + 1;
+        dateKey = toDateKey(new Date(currentYear, currentMonth + 1, dayNum));
+        isCurrent = false;
       }
 
-      cell.className = "calendar-day";
+      cell.className   = "calendar-day";
       cell.textContent = dayNum;
 
-      /* Флаги */
-      if (!isCurrentMonth) {
-        cell.classList.add("calendar-day--other-month");
-      }
-      if (dateKey === todayKey && isCurrentMonth) {
-        cell.classList.add("calendar-day--today");
-      }
-      if (dateKey === activeDate) {
-        cell.classList.add("calendar-day--active");
-      }
+      if (!isCurrent)              cell.classList.add("calendar-day--other-month");
+      if (dateKey === todayKey && isCurrent) cell.classList.add("calendar-day--today");
+      if (dateKey === activeDate)  cell.classList.add("calendar-day--active");
 
-      /* Есть публикации? */
+      /* Дата с публикациями */
       if (articlesByDate[dateKey] && articlesByDate[dateKey].length > 0) {
         cell.classList.add("calendar-day--has-posts");
-        cell.setAttribute("aria-label", `${dayNum} — ${articlesByDate[dateKey].length} статья(и). Нажмите для просмотра.`);
-        cell.setAttribute("role", "button");
-        cell.setAttribute("tabindex", "0");
+        cell.setAttribute("role",       "button");
+        cell.setAttribute("tabindex",   "0");
+        cell.setAttribute("aria-label", `${dayNum} — ${articlesByDate[dateKey].length} публикаций. Открыть.`);
 
         /* Точка-индикатор */
         const dot = document.createElement("span");
@@ -239,48 +197,80 @@
         dot.setAttribute("aria-hidden", "true");
         cell.appendChild(dot);
 
-        /* Обработчик клика */
-        cell.addEventListener("click", function () {
-          openPopup(dateKey);
-        });
-
-        /* Открытие по Enter/Space */
+        /* Обработчики */
+        cell.addEventListener("click", function () { openPopup(dateKey); });
         cell.addEventListener("keydown", function (e) {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            openPopup(dateKey);
-          }
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopup(dateKey); }
         });
       }
 
       elGrid.appendChild(cell);
     }
 
-    /* Скрываем последнюю строку, если она вся из дней другого месяца */
-    trimExtraRow();
+    /* Убрать пустую последнюю строку */
+    trimLastRow();
+
+    /* Обновить пульс-точку на FAB */
+    updateFabDot();
   }
 
   /* ----------------------------------------------------------
-     ВСПОМОГАТЕЛЬНАЯ: убрать лишнюю строку
+     Убрать последнюю строку, если она вся из чужих дней
   ---------------------------------------------------------- */
-  function trimExtraRow() {
-    const cells = elGrid.querySelectorAll(".calendar-day");
-    if (cells.length < 36) return;
+  function trimLastRow() {
+    const cells = Array.from(elGrid.querySelectorAll(".calendar-day"));
+    if (cells.length < 35) return;
+    const last7 = cells.slice(-7);
+    if (last7.every(function (c) { return c.classList.contains("calendar-day--other-month"); })) {
+      last7.forEach(function (c) { c.style.display = "none"; });
+    }
+  }
 
-    /* Проверяем последние 7 ячеек */
-    const lastRowStart = cells.length - 7;
-    let allOther = true;
-    for (let i = lastRowStart; i < cells.length; i++) {
-      if (!cells[i].classList.contains("calendar-day--other-month")) {
-        allOther = false;
-        break;
-      }
+  /* ----------------------------------------------------------
+     Обновить пульс-точку FAB: видима, если в текущем месяце
+     есть хотя бы один день с публикациями
+  ---------------------------------------------------------- */
+  function updateFabDot() {
+    if (!elFab) return;
+    const prefix = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`;
+    const hasThisMonth = Object.keys(articlesByDate).some(function (k) {
+      return k.startsWith(prefix);
+    });
+
+    let dot = elFab.querySelector(".calendar-fab__dot");
+    if (hasThisMonth && !dot) {
+      dot = document.createElement("span");
+      dot.className = "calendar-fab__dot";
+      dot.setAttribute("aria-hidden", "true");
+      elFab.appendChild(dot);
+    } else if (!hasThisMonth && dot) {
+      dot.remove();
     }
-    if (allOther) {
-      for (let i = lastRowStart; i < cells.length; i++) {
-        cells[i].style.display = "none";
-      }
-    }
+  }
+
+  /* ----------------------------------------------------------
+     ПАНЕЛЬ: открыть / закрыть
+  ---------------------------------------------------------- */
+  function openPanel() {
+    if (!elPanel || !elFab) return;
+    panelIsOpen = true;
+    elPanel.classList.add("is-open");
+    elPanel.setAttribute("aria-hidden", "false");
+    elFab.classList.add("is-open");
+    elFab.setAttribute("aria-expanded", "true");
+  }
+
+  function closePanel() {
+    if (!elPanel || !elFab) return;
+    panelIsOpen = false;
+    elPanel.classList.remove("is-open");
+    elPanel.setAttribute("aria-hidden", "true");
+    elFab.classList.remove("is-open");
+    elFab.setAttribute("aria-expanded", "false");
+  }
+
+  function togglePanel() {
+    panelIsOpen ? closePanel() : openPanel();
   }
 
   /* ----------------------------------------------------------
@@ -288,12 +278,11 @@
   ---------------------------------------------------------- */
   function openPopup(dateKey) {
     activeDate = dateKey;
-    renderCalendar(); /* Перерисовать календарь, чтобы подсветить активный день */
+    renderCalendar();
 
     const articles = articlesByDate[dateKey] || [];
     if (!articles.length || !elPopup || !elPopupContent) return;
 
-    /* Заголовок */
     const headerHTML = `
       <div class="calendar-popup__header">
         <div class="calendar-popup__eyebrow">Публикации блога</div>
@@ -301,50 +290,38 @@
       </div>
     `;
 
-    /* Список статей */
-    const articlesHTML = articles
-      .map(function (a) {
-        const slug = a.slug || a.id || "";
-        const href = slug ? `/blog/${slug}` : "#";
-        const img  = a.image || "";
-        const alt  = a.imageAlt || a.title || "";
-
-        return `
-          <article class="calendar-popup__article">
-            ${img ? `<img class="calendar-popup__thumb" src="${img}" alt="${alt}" loading="lazy">` : ""}
-            <div class="calendar-popup__info">
-              ${a.category ? `<span class="calendar-popup__category">${a.category}</span>` : ""}
-              <h3 class="calendar-popup__article-title">${a.title || "Без названия"}</h3>
-              <span class="calendar-popup__date">${formatDateRu(dateKey)}</span>
-              <a href="${href}" class="calendar-popup__link" aria-label="Читать статью «${a.title || ""}»">
-                Читать статью ${ARROW_LINK}
-              </a>
-            </div>
-          </article>
-        `;
-      })
-      .join("");
+    const listHTML = articles.map(function (a) {
+      const slug = a.slug || a.id || "";
+      const href = slug ? `/blog/${slug}` : "#";
+      const img  = a.image || "";
+      const alt  = a.imageAlt || a.title || "";
+      return `
+        <article class="calendar-popup__article">
+          ${img ? `<img class="calendar-popup__thumb" src="${img}" alt="${alt}" loading="lazy">` : ""}
+          <div class="calendar-popup__info">
+            ${a.category ? `<span class="calendar-popup__category">${a.category}</span>` : ""}
+            <h3 class="calendar-popup__article-title">${a.title || "Без названия"}</h3>
+            <span class="calendar-popup__date">${formatDateRu(dateKey)}</span>
+            <a href="${href}" class="calendar-popup__link" aria-label="Читать «${a.title || ""}»">
+              Читать статью ${ICON_ARROW_LINK}
+            </a>
+          </div>
+        </article>
+      `;
+    }).join("");
 
     elPopupContent.innerHTML = `
-      <button class="calendar-popup__close" aria-label="Закрыть" data-cs-close>
-        &times;
-      </button>
+      <button class="calendar-popup__close" aria-label="Закрыть" data-cs-close>&times;</button>
       ${headerHTML}
-      <div class="calendar-popup__list">${articlesHTML}</div>
+      <div class="calendar-popup__list">${listHTML}</div>
     `;
 
-    /* Показываем */
     elPopup.classList.remove("is-hidden");
     elPopup.setAttribute("aria-hidden", "false");
-
-    /* Фокус на содержимое для доступности */
     elPopupContent.focus({ preventScroll: true });
 
-    /* Кнопка закрытия внутри попапа */
     const closeBtn = elPopupContent.querySelector("[data-cs-close]");
-    if (closeBtn) {
-      closeBtn.addEventListener("click", closePopup);
-    }
+    if (closeBtn) closeBtn.addEventListener("click", closePopup);
   }
 
   /* ----------------------------------------------------------
@@ -355,109 +332,84 @@
     elPopup.classList.add("is-hidden");
     elPopup.setAttribute("aria-hidden", "true");
     activeDate = null;
-    renderCalendar(); /* Снять подсветку активного дня */
-  }
-
-  /* ----------------------------------------------------------
-     НАВИГАЦИЯ: предыдущий / следующий месяц
-  ---------------------------------------------------------- */
-  function goToPrevMonth() {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
     renderCalendar();
-  }
-
-  function goToNextMonth() {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    renderCalendar();
-  }
-
-  /* ----------------------------------------------------------
-     МОБИЛЬНЫЙ АККОРДЕОН
-  ---------------------------------------------------------- */
-  function initMobileToggle(sidebar) {
-    const toggleBtn = sidebar.querySelector(".calendar-mobile-toggle");
-    const mobileBody = sidebar.querySelector(".calendar-mobile-body");
-    if (!toggleBtn || !mobileBody) return;
-
-    toggleBtn.addEventListener("click", function () {
-      const isOpen = mobileBody.classList.contains("is-open");
-      mobileBody.classList.toggle("is-open", !isOpen);
-      toggleBtn.classList.toggle("is-open", !isOpen);
-      toggleBtn.setAttribute("aria-expanded", String(!isOpen));
-    });
   }
 
   /* ----------------------------------------------------------
      ИНИЦИАЛИЗАЦИЯ
   ---------------------------------------------------------- */
   function init() {
-    const sidebar = document.querySelector(".blog-calendar-sidebar");
-    if (!sidebar) return;
+    elSidebar      = document.querySelector(".blog-calendar-sidebar");
+    if (!elSidebar) return;
 
-    /* Найти DOM-элементы */
-    elTitle   = sidebar.querySelector(".calendar-title");
-    elGrid    = sidebar.querySelector(".calendar-grid");
-    elPopup   = document.querySelector(".calendar-popup");
-    elPopupContent = elPopup
-      ? elPopup.querySelector(".calendar-popup__content")
-      : null;
+    elFab          = elSidebar.querySelector(".calendar-fab");
+    elPanel        = elSidebar.querySelector(".calendar-panel");
+    elTitle        = elSidebar.querySelector(".calendar-title");
+    elGrid         = elSidebar.querySelector(".calendar-grid");
+    elPopup        = document.querySelector(".calendar-popup");
+    elPopupContent = elPopup ? elPopup.querySelector(".calendar-popup__content") : null;
 
     if (!elTitle || !elGrid) {
-      console.warn("[CalendarSidebar] Не найдены обязательные элементы календаря.");
+      console.warn("[CalendarSidebar] Не найдены элементы .calendar-title или .calendar-grid");
       return;
     }
 
-    /* Вставить SVG в кнопки навигации */
-    const prevBtn = sidebar.querySelector(".calendar-prev");
-    const nextBtn = sidebar.querySelector(".calendar-next");
-    if (prevBtn) prevBtn.innerHTML = ARROW_LEFT;
-    if (nextBtn) nextBtn.innerHTML = ARROW_RIGHT;
+    /* SVG в кнопках навигации */
+    const prevBtn = elSidebar.querySelector(".calendar-prev");
+    const nextBtn = elSidebar.querySelector(".calendar-next");
+    if (prevBtn) prevBtn.innerHTML = ICON_ARROW_LEFT;
+    if (nextBtn) nextBtn.innerHTML = ICON_ARROW_RIGHT;
 
-    /* Вставить шеврон в кнопку аккордеона */
-    const toggleBtn = sidebar.querySelector(".calendar-mobile-toggle");
-    if (toggleBtn) {
-      const iconSpan = toggleBtn.querySelector(".calendar-mobile-toggle__icon-wrap");
-      if (iconSpan) iconSpan.innerHTML = CHEVRON_DOWN;
-    }
-
-    /* Заполнить дни недели */
-    const weekdaysEl = sidebar.querySelector(".calendar-weekdays");
+    /* Дни недели */
+    const weekdaysEl = elSidebar.querySelector(".calendar-weekdays");
     if (weekdaysEl) {
-      weekdaysEl.innerHTML = WEEKDAYS_RU.map(function (day) {
-        return `<span class="calendar-weekday">${day}</span>`;
+      weekdaysEl.innerHTML = WEEKDAYS_RU.map(function (d) {
+        return `<span class="calendar-weekday">${d}</span>`;
       }).join("");
     }
 
-    /* Установить текущий месяц */
+    /* Текущий месяц */
     const now = new Date();
     currentYear  = now.getFullYear();
     currentMonth = now.getMonth();
 
     /* Навигация по месяцам */
-    if (prevBtn) {
-      prevBtn.addEventListener("click", goToPrevMonth);
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener("click", goToNextMonth);
-    }
-
-    /* Мобильный аккордеон */
-    initMobileToggle(sidebar);
-
-    /* Закрытие попапа по Esc */
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") closePopup();
+    if (prevBtn) prevBtn.addEventListener("click", function () {
+      if (--currentMonth < 0) { currentMonth = 11; currentYear--; }
+      renderCalendar();
+    });
+    if (nextBtn) nextBtn.addEventListener("click", function () {
+      if (++currentMonth > 11) { currentMonth = 0; currentYear++; }
+      renderCalendar();
     });
 
-    /* Закрытие попапа по клику вне содержимого */
+    /* FAB: открыть/закрыть панель */
+    if (elFab) {
+      elFab.addEventListener("click", function (e) {
+        e.stopPropagation();
+        togglePanel();
+      });
+    }
+
+    /* Клик вне панели и FAB → закрыть панель */
+    document.addEventListener("click", function (e) {
+      if (panelIsOpen && !elSidebar.contains(e.target)) {
+        closePanel();
+      }
+    });
+
+    /* Закрытие popup по Esc */
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        if (!elPopup.classList.contains("is-hidden")) {
+          closePopup();
+        } else {
+          closePanel();
+        }
+      }
+    });
+
+    /* Клик вне popup → закрыть popup */
     if (elPopup) {
       elPopup.addEventListener("click", function (e) {
         if (e.target === elPopup) closePopup();
@@ -479,4 +431,5 @@
   } else {
     init();
   }
+
 })();

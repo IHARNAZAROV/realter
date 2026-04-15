@@ -308,110 +308,113 @@
         <!-- Blog Grid Section -->
         <div class="section-full bg-white p-tb80 inner-page-padding">
           <div class="container clearfix">
-
-            <!-- Обёртка: основная колонка + sidebar -->
-            <div class="blog-with-sidebar">
-
-              <!-- Основная колонка -->
-              <div class="blog-main-column">
-                <div class="blog-filter-panel" aria-label="Фильтр статей">
-                  <div class="blog-tag-results" id="blog-tag-results" hidden></div>
-                  <div class="blog-filter-buttons" id="blog-filter-buttons">
-                    <button
-                      type="button"
-                      class="blog-filter-button"
-                      data-filter="all"
-                    >
-                      Все
-                    </button>
-                    <button
-                      type="button"
-                      class="blog-filter-button is-active"
-                      data-filter="latest"
-                    >
-                      Последние статьи
-                    </button>
-                    <button
-                      type="button"
-                      class="blog-filter-button"
-                      data-filter="legal"
-                    >
-                      Юридические риски
-                    </button>
-                    <button
-                      type="button"
-                      class="blog-filter-button"
-                      data-filter="sale"
-                    >
-                      Покупка / продажа
-                    </button>
-                    <button
-                      type="button"
-                      class="blog-filter-button"
-                      data-filter="psychology"
-                    >
-                      Психология
-                    </button>
-                  </div>
-                </div>
-
-                <div class="blog-grid-list mfp-gallery news-masonry">
-                  <!-- BLOG ITEMS FROM JSON -->
-                </div>
-              </div>
-              <!-- /Основная колонка -->
-
-              <!-- Sidebar с календарём публикаций -->
-              <aside class="blog-calendar-sidebar" aria-label="Календарь публикаций">
-
-                <!-- Кнопка-аккордеон (только на мобильных) -->
+            <div class="blog-filter-panel" aria-label="Фильтр статей">
+              <div class="blog-tag-results" id="blog-tag-results" hidden></div>
+              <div class="blog-filter-buttons" id="blog-filter-buttons">
                 <button
-                  class="calendar-mobile-toggle"
                   type="button"
-                  aria-expanded="false"
-                  aria-controls="calendar-mobile-body"
+                  class="blog-filter-button"
+                  data-filter="all"
                 >
-                  <span>Календарь публикаций</span>
-                  <span class="calendar-mobile-toggle__icon-wrap" aria-hidden="true"></span>
+                  Все
                 </button>
-
-                <!-- Тело аккордеона (скрыто на мобильном) -->
-                <div class="calendar-mobile-body" id="calendar-mobile-body">
-                  <div class="calendar-card">
-                    <div class="calendar-card__label">Публикации блога</div>
-
-                    <!-- Шапка навигации -->
-                    <div class="calendar-header">
-                      <button
-                        class="calendar-nav-btn calendar-prev"
-                        type="button"
-                        aria-label="Предыдущий месяц"
-                      ></button>
-                      <div class="calendar-title" aria-live="polite"></div>
-                      <button
-                        class="calendar-nav-btn calendar-next"
-                        type="button"
-                        aria-label="Следующий месяц"
-                      ></button>
-                    </div>
-
-                    <!-- Дни недели -->
-                    <div class="calendar-weekdays" aria-hidden="true"></div>
-
-                    <!-- Сетка дней -->
-                    <div class="calendar-grid" role="grid" aria-label="Дни месяца"></div>
-                  </div>
-                </div>
-                <!-- /Тело аккордеона -->
-
-              </aside>
-              <!-- /Sidebar -->
-
+                <button
+                  type="button"
+                  class="blog-filter-button is-active"
+                  data-filter="latest"
+                >
+                  Последние статьи
+                </button>
+                <button
+                  type="button"
+                  class="blog-filter-button"
+                  data-filter="legal"
+                >
+                  Юридические риски
+                </button>
+                <button
+                  type="button"
+                  class="blog-filter-button"
+                  data-filter="sale"
+                >
+                  Покупка / продажа
+                </button>
+                <button
+                  type="button"
+                  class="blog-filter-button"
+                  data-filter="psychology"
+                >
+                  Психология
+                </button>
+              </div>
             </div>
-            <!-- /blog-with-sidebar -->
 
+            <div class="blog-grid-list mfp-gallery news-masonry">
+              <!-- BLOG ITEMS FROM JSON -->
+            </div>
           </div>
         </div>
+
+        <!-- =============================================
+             FLOATING CALENDAR SIDEBAR
+             Вынесен из потока — position: fixed.
+             Не влияет на ширину карточек блога.
+        ============================================== -->
+        <aside
+          class="blog-calendar-sidebar"
+          aria-label="Календарь публикаций"
+          id="blogCalendarSidebar"
+        >
+          <!-- Кнопка-триггер (плавает справа, видна всегда) -->
+          <button
+            class="calendar-fab"
+            type="button"
+            aria-label="Открыть календарь публикаций"
+            aria-expanded="false"
+            aria-controls="calendar-panel"
+            id="calendarFab"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="3" ry="3"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span class="calendar-fab__label">Публикации</span>
+          </button>
+
+          <!-- Панель с календарём -->
+          <div
+            class="calendar-panel"
+            id="calendar-panel"
+            aria-hidden="true"
+          >
+            <div class="calendar-card">
+              <div class="calendar-card__label">Публикации блога</div>
+
+              <!-- Шапка навигации -->
+              <div class="calendar-header">
+                <button
+                  class="calendar-nav-btn calendar-prev"
+                  type="button"
+                  aria-label="Предыдущий месяц"
+                ></button>
+                <div class="calendar-title" aria-live="polite"></div>
+                <button
+                  class="calendar-nav-btn calendar-next"
+                  type="button"
+                  aria-label="Следующий месяц"
+                ></button>
+              </div>
+
+              <!-- Дни недели -->
+              <div class="calendar-weekdays" aria-hidden="true"></div>
+
+              <!-- Сетка дней -->
+              <div class="calendar-grid" role="grid" aria-label="Дни месяца"></div>
+            </div>
+          </div>
+        </aside>
 
         <!-- Popup статей (монтируется JS-модулем) -->
         <div
