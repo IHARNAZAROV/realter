@@ -161,6 +161,7 @@
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <link rel="stylesheet" href="/css/delay-calc.css" data-versioned>
 </head>
 
   <body id="bg">
@@ -491,6 +492,110 @@
           </div>
         </div>
       </div>
+
+      <!-- =========================================
+         DELAY CALCULATOR SECTION
+         ========================================= -->
+      <section class="delay-calc" id="delay-calculator" aria-label="Калькулятор откладывания покупки">
+        <div class="container">
+          <div class="delay-calc__inner">
+
+            <span class="delay-calc__eyebrow">Калькулятор</span>
+            <h2 class="delay-calc__title">Что я теряю, если отложу покупку на год?</h2>
+            <p class="delay-calc__subtitle">
+              Введите стоимость квартиры, которую планируете купить — и калькулятор покажет,
+              сколько вы переплатите, если подождёте ещё год. Цифры основаны на реальных данных по Беларуси&nbsp;2026.
+            </p>
+
+            <form id="delayCalcForm" class="delay-calc__form-row" novalidate>
+              <div class="delay-calc__input-group">
+                <label class="delay-calc__label" for="delayCalcBudget">Стоимость жилья</label>
+                <div class="delay-calc__input-wrap">
+                  <input
+                    type="number"
+                    id="delayCalcBudget"
+                    name="budget"
+                    placeholder="85 000"
+                    min="1000"
+                    step="1000"
+                    autocomplete="off"
+                    inputmode="numeric"
+                    aria-label="Введите стоимость жилья в BYN"
+                  />
+                  <span class="delay-calc__currency">BYN</span>
+                </div>
+              </div>
+              <button type="submit" class="delay-calc__btn">Посчитать</button>
+            </form>
+
+            <div class="delay-calc__results" id="delayCalcResults" aria-live="polite" aria-atomic="true">
+              <p class="delay-calc__results-title">Если подождать год — вы теряете:</p>
+
+              <div class="delay-calc__cards">
+
+                <div class="delay-calc__card delay-calc__card--inflation">
+                  <span class="delay-calc__card-icon">📉</span>
+                  <div class="delay-calc__card-label">Инфляция 6% в год</div>
+                  <div class="delay-calc__card-value">
+                    <span id="dcInflationVal">—</span>
+                    <span>BYN</span>
+                  </div>
+                  <div class="delay-calc__card-note">
+                    Ваши деньги теряют покупательную способность, пока вы ждёте.
+                  </div>
+                </div>
+
+                <div class="delay-calc__card delay-calc__card--price">
+                  <span class="delay-calc__card-icon">🏠</span>
+                  <div class="delay-calc__card-label">Рост цен на жильё 8% в год</div>
+                  <div class="delay-calc__card-value">
+                    <span id="dcPriceVal">—</span>
+                    <span>BYN</span>
+                  </div>
+                  <div class="delay-calc__card-note">
+                    Та же квартира через год будет стоить дороже на эту сумму.
+                  </div>
+                </div>
+
+                <div class="delay-calc__card delay-calc__card--mortgage">
+                  <span class="delay-calc__card-icon">🏦</span>
+                  <div class="delay-calc__card-label">Переплата по ипотеке</div>
+                  <div class="delay-calc__card-value">
+                    <span id="dcMortgageVal">—</span>
+                    <span>BYN</span>
+                  </div>
+                  <div class="delay-calc__card-note">
+                    Дополнительный долг из-за роста цены при ипотеке 15% на 20 лет.
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="delay-calc__total">
+                <div class="delay-calc__total-label">
+                  <strong>Итоговые потери за год ожидания</strong>
+                  инфляция + рост цен + ипотечная переплата
+                </div>
+                <div class="delay-calc__total-value">
+                  <span id="dcTotalVal">—</span>
+                  <span>&nbsp;BYN</span>
+                </div>
+              </div>
+
+              <p class="delay-calc__disclaimer">
+                Расчёт носит ознакомительный характер. Данные: инфляция — прогноз НБРБ на 2026 г. (6%),
+                рост цен на жильё в Беларуси — по данным рынка 2024–2025 гг. (8%),
+                ставка по кредиту — средняя по коммерческим банкам РБ (15% годовых, 20 лет).
+                Хотите разобраться с вашей конкретной ситуацией?
+                <a href="/contact">Напишите мне</a> — рассчитаем вместе бесплатно.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <!-- DELAY CALCULATOR END -->
+
       <!-- CONTENT END -->
       <!-- =========================================
          FOOTER START
@@ -664,6 +769,7 @@
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
+    <script src="/js/delay-calc.js" defer data-versioned></script>
       <!-- Contact widget -->
     <div class="cw" data-cw-root>
       <button
