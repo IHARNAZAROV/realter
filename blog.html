@@ -160,6 +160,7 @@
     />
     <link rel="stylesheet" href="/css/blog-tags.css" />
     <link rel="stylesheet" href="/css/contact-widget.css" />
+    <link rel="stylesheet" href="/css/calendar-sidebar.css" />
   </head>
   <body>
     <div class="page-wraper">
@@ -307,51 +308,120 @@
         <!-- Blog Grid Section -->
         <div class="section-full bg-white p-tb80 inner-page-padding">
           <div class="container clearfix">
-            <div class="blog-filter-panel" aria-label="Фильтр статей">
-              <div class="blog-tag-results" id="blog-tag-results" hidden></div>
-              <div class="blog-filter-buttons" id="blog-filter-buttons">
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="all"
-                >
-                  Все
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button is-active"
-                  data-filter="latest"
-                >
-                  Последние статьи
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="legal"
-                >
-                  Юридические риски
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="sale"
-                >
-                  Покупка / продажа
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="psychology"
-                >
-                  Психология
-                </button>
-              </div>
-            </div>
 
-            <div class="blog-grid-list mfp-gallery news-masonry">
-              <!-- BLOG ITEMS FROM JSON -->
+            <!-- Обёртка: основная колонка + sidebar -->
+            <div class="blog-with-sidebar">
+
+              <!-- Основная колонка -->
+              <div class="blog-main-column">
+                <div class="blog-filter-panel" aria-label="Фильтр статей">
+                  <div class="blog-tag-results" id="blog-tag-results" hidden></div>
+                  <div class="blog-filter-buttons" id="blog-filter-buttons">
+                    <button
+                      type="button"
+                      class="blog-filter-button"
+                      data-filter="all"
+                    >
+                      Все
+                    </button>
+                    <button
+                      type="button"
+                      class="blog-filter-button is-active"
+                      data-filter="latest"
+                    >
+                      Последние статьи
+                    </button>
+                    <button
+                      type="button"
+                      class="blog-filter-button"
+                      data-filter="legal"
+                    >
+                      Юридические риски
+                    </button>
+                    <button
+                      type="button"
+                      class="blog-filter-button"
+                      data-filter="sale"
+                    >
+                      Покупка / продажа
+                    </button>
+                    <button
+                      type="button"
+                      class="blog-filter-button"
+                      data-filter="psychology"
+                    >
+                      Психология
+                    </button>
+                  </div>
+                </div>
+
+                <div class="blog-grid-list mfp-gallery news-masonry">
+                  <!-- BLOG ITEMS FROM JSON -->
+                </div>
+              </div>
+              <!-- /Основная колонка -->
+
+              <!-- Sidebar с календарём публикаций -->
+              <aside class="blog-calendar-sidebar" aria-label="Календарь публикаций">
+
+                <!-- Кнопка-аккордеон (только на мобильных) -->
+                <button
+                  class="calendar-mobile-toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="calendar-mobile-body"
+                >
+                  <span>Календарь публикаций</span>
+                  <span class="calendar-mobile-toggle__icon-wrap" aria-hidden="true"></span>
+                </button>
+
+                <!-- Тело аккордеона (скрыто на мобильном) -->
+                <div class="calendar-mobile-body" id="calendar-mobile-body">
+                  <div class="calendar-card">
+                    <div class="calendar-card__label">Публикации блога</div>
+
+                    <!-- Шапка навигации -->
+                    <div class="calendar-header">
+                      <button
+                        class="calendar-nav-btn calendar-prev"
+                        type="button"
+                        aria-label="Предыдущий месяц"
+                      ></button>
+                      <div class="calendar-title" aria-live="polite"></div>
+                      <button
+                        class="calendar-nav-btn calendar-next"
+                        type="button"
+                        aria-label="Следующий месяц"
+                      ></button>
+                    </div>
+
+                    <!-- Дни недели -->
+                    <div class="calendar-weekdays" aria-hidden="true"></div>
+
+                    <!-- Сетка дней -->
+                    <div class="calendar-grid" role="grid" aria-label="Дни месяца"></div>
+                  </div>
+                </div>
+                <!-- /Тело аккордеона -->
+
+              </aside>
+              <!-- /Sidebar -->
+
             </div>
+            <!-- /blog-with-sidebar -->
+
           </div>
+        </div>
+
+        <!-- Popup статей (монтируется JS-модулем) -->
+        <div
+          class="calendar-popup is-hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Статьи за выбранную дату"
+          aria-hidden="true"
+        >
+          <div class="calendar-popup__content" tabindex="-1"></div>
         </div>
       </div>
       <!-- CONTENT END -->
@@ -545,6 +615,7 @@
     <!-- 4. Page Specific Init -->
     <script src="/js/blog-tags.js" defer></script>
     <script src="/js/blog-list.js" defer></script>
+    <script src="/js/calendar-sidebar.js" defer></script>
     <script src="/js/optimize.js" defer data-versioned></script>
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
