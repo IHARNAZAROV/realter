@@ -1,6 +1,6 @@
 .delay-calc {
-  background: #f4f4f4;
-  padding: 80px 0;
+ background-color: var(--color-bg-light);
+  padding: 30px 0;
 }
 
 .delay-calc__inner {
@@ -94,6 +94,7 @@
   transition: border-color 0.2s, background 0.2s;
   outline: none;
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .delay-calc__input-wrap input[type="number"]::-webkit-inner-spin-button,
