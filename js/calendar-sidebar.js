@@ -391,10 +391,12 @@
       });
     }
 
-    /* Клик вне панели и FAB → закрыть панель */
+    /* Клик вне панели и FAB → закрыть панель (только на десктопе)
+       На мобильном аккордеон закрывается только кнопкой или Esc */
     document.addEventListener("click", function (e) {
       if (panelIsOpen && !elSidebar.contains(e.target)) {
-        closePanel();
+        var isMobile = window.innerWidth <= 768;
+        if (!isMobile) closePanel();
       }
     });
 
