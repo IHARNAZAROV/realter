@@ -84,6 +84,7 @@
   box-shadow: 0 8px 28px rgba(200, 169, 110, 0.35);
 }
 
+/* Иконка-календарь + chevron */
 .calendar-fab svg {
   width: 17px;
   height: 17px;
@@ -96,11 +97,24 @@
   transition: var(--cs-trans);
 }
 
+/* Шеврон (виден только на мобильном — скрыт на десктопе) */
+.calendar-fab__chevron {
+  display: none;
+  margin-left: auto;
+  width: 16px !important;
+  height: 16px !important;
+  transition: transform var(--cs-trans) !important;
+}
+
+.calendar-fab.is-open .calendar-fab__chevron {
+  transform: rotate(180deg);
+}
+
 .calendar-fab__label {
   text-transform: uppercase;
 }
 
-/* Пульсирующий индикатор (показываем, если есть публикации в текущем месяце) */
+/* Пульсирующий индикатор */
 .calendar-fab__dot {
   width: 7px;
   height: 7px;
@@ -559,7 +573,7 @@
 
 /* ──────────────────────────────────────────────────────────
    АДАПТИВ — планшет (до 1024px)
-   Всё без изменений — элемент fixed, не влияет на layout
+   Fixed-виджет, небольшие размеры
    ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .blog-calendar-sidebar {
@@ -574,27 +588,87 @@
 
 /* ──────────────────────────────────────────────────────────
    АДАПТИВ — мобильный (до 640px)
+   Sidebar становится статическим inline-аккордеоном
    ────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
+
+  /* Sidebar — вырываем из fixed и встраиваем в поток */
   .blog-calendar-sidebar {
-    right: 12px;
-    bottom: 80px;
+    position: static;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 24px;
+    /* Убираем fixed-специфику */
+    right: auto;
+    bottom: auto;
+    z-index: auto;
   }
 
-  .calendar-fab__label {
-    display: none; /* Только иконка */
-  }
-
+  /* Кнопка — во всю ширину, как аккордеон-хедер */
   .calendar-fab {
-    padding: 11px;
-    border-radius: 50%;
+    width: 100%;
+    border-radius: 12px;
+    padding: 14px 18px;
+    justify-content: flex-start;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    gap: 10px;
   }
 
+  .calendar-fab:hover {
+    transform: none;
+  }
+
+  /* Текст всегда виден на мобильном */
+  .calendar-fab__label {
+    display: block;
+    flex: 1;
+    text-align: left;
+  }
+
+  /* Шеврон показываем на мобильном */
+  .calendar-fab__chevron {
+    display: block;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* Панель — accordion-поведение через max-height */
   .calendar-panel {
-    width: calc(100vw - 24px);
-    max-width: 340px;
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0 0 var(--cs-radius) var(--cs-radius);
+    border-top: none;
+
+    /* Скрыто: переопределяем desktop-анимацию */
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: none;
+    pointer-events: none;
+    /* Анимация раскрытия */
+    transition:
+      max-height 0.4s ease,
+      opacity 0.3s ease;
+    transform-origin: top center;
+    order: 1;
   }
 
+  .calendar-panel.is-open {
+    opacity: 1;
+    max-height: 520px;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  /* Карточка внутри панели — убрать лишние скругления сверху */
+  .calendar-panel .calendar-card {
+    border-radius: 0 0 var(--cs-radius) var(--cs-radius);
+  }
+
+  /* Popup */
   .calendar-popup__content {
     padding: 20px 14px 16px;
     max-height: 90vh;
