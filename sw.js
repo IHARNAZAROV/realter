@@ -63,6 +63,7 @@ self.addEventListener('fetch', event => {
     url.pathname.startsWith('/adminka_objects/') ||
     url.pathname.endsWith('.php') ||
     url.pathname.startsWith('/data/') ||
+    url.pathname.startsWith('/js/') ||
     url.pathname.startsWith('/images/') ||
     url.pathname.startsWith('/media/')
   ) {
@@ -72,7 +73,6 @@ self.addEventListener('fetch', event => {
   /* Cache First: CSS, JS, шрифты, библиотеки */
   if (
     url.pathname.startsWith('/css/') ||
-    url.pathname.startsWith('/js/') ||
     url.pathname.startsWith('/fonts/') ||
     url.pathname.startsWith('/libs/')
   ) {
