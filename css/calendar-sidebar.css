@@ -1,15 +1,15 @@
 /* ============================================================
    CALENDAR SIDEBAR — calendar-sidebar.css
    Плавающий фиксированный виджет. Не влияет на поток страницы.
-   Корпоративный стиль: тёмно-графитовый + золотисто-янтарный.
+   Корпоративный стиль: тёмно-зелёный + золотисто-янтарный.
    ============================================================ */
 
 /* ──────────────────────────────────────────────────────────
    ПЕРЕМЕННЫЕ
    ────────────────────────────────────────────────────────── */
 :root {
-  --cs-bg:          #1c1f2b;
-  --cs-bg-card:     #22263a;
+  --cs-bg:          #155945;
+  --cs-bg-card:     #1b6d54;
   --cs-border:      rgba(255, 255, 255, 0.08);
   --cs-gold:        #c8a96e;
   --cs-gold-light:  #e2c78a;
@@ -80,7 +80,7 @@
 .calendar-fab.is-open {
   background: linear-gradient(135deg, var(--cs-gold), #b8904e);
   border-color: var(--cs-gold);
-  color: #1c1f2b;
+  color: #155945;
   box-shadow: 0 8px 28px rgba(200, 169, 110, 0.35);
 }
 
@@ -125,7 +125,7 @@
 }
 
 .calendar-fab.is-open .calendar-fab__dot {
-  background: #1c1f2b;
+  background: #155945;
   animation: none;
 }
 
@@ -245,7 +245,7 @@
 .calendar-nav-btn:hover {
   background: var(--cs-gold);
   border-color: var(--cs-gold);
-  color: #1c1f2b;
+  color: #155945;
   transform: scale(1.1);
 }
 
@@ -344,7 +344,7 @@
 .calendar-day--active {
   background: var(--cs-gold) !important;
   border-color: var(--cs-gold) !important;
-  color: #1c1f2b !important;
+  color: #155945 !important;
   font-weight: 700;
   box-shadow: 0 0 14px var(--cs-gold-glow);
 }
@@ -363,7 +363,7 @@
 }
 
 .calendar-day--active .calendar-day__dot {
-  background: #1c1f2b;
+  background: #155945;
 }
 
 .calendar-day--has-posts:hover .calendar-day__dot {
@@ -383,7 +383,7 @@
   align-items: center;
   justify-content: center;
   padding: 16px;
-  background: rgba(14, 16, 26, 0.65);
+  background: rgba(10, 45, 32, 0.65);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   opacity: 1;
@@ -397,7 +397,7 @@
 
 .calendar-popup__content {
   position: relative;
-  background: linear-gradient(160deg, #252840 0%, #1a1c2c 100%);
+  background: linear-gradient(160deg, #1d7a5f 0%, #145040 100%);
   border: 1px solid rgba(200, 169, 110, 0.2);
   border-radius: var(--cs-radius);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;
@@ -452,7 +452,7 @@
 .calendar-popup__close:hover {
   background: var(--cs-gold);
   border-color: var(--cs-gold);
-  color: #1c1f2b;
+  color: #155945;
   transform: scale(1.1);
 }
 
