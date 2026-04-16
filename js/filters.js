@@ -314,8 +314,8 @@ function bindEvents() {
   roomsSelect.addEventListener("change", applyFiltersAndSort);
   locationSelect.addEventListener("change", applyFiltersAndSort);
 
-  priceFromInput.addEventListener("input", handlePriceInput);
-  priceToInput.addEventListener("input", handlePriceInput);
+  if (priceFromInput) priceFromInput.addEventListener("input", handlePriceInput);
+  if (priceToInput) priceToInput.addEventListener("input", handlePriceInput);
 
   if (budgetRange) {
     budgetRange.addEventListener("input", () => {
@@ -346,8 +346,8 @@ function resetFilters() {
   typeSelect.value = "all";
   roomsSelect.value = "all";
   roomsSelect.disabled = true;
-  priceFromInput.value = "";
-  priceToInput.value = "";
+  if (priceFromInput) priceFromInput.value = "";
+  if (priceToInput) priceToInput.value = "";
   locationSelect.value = "all";
 
   if (budgetRange) {
@@ -379,6 +379,8 @@ function updateRoomsState() {
    PRICE INPUTS
 ========================================================= */
 function handlePriceInput() {
+  if (!priceFromInput || !priceToInput) return;
+
   let from = parsePrice(priceFromInput.value);
   let to = parsePrice(priceToInput.value);
 
@@ -399,8 +401,8 @@ function applyFiltersAndSort() {
   const typeValue = typeSelect.value;
   const roomValue = roomsSelect.value;
   const locationValue = locationSelect.value;
-  const priceFrom = parsePrice(priceFromInput.value);
-  const priceTo = parsePrice(priceToInput.value);
+  const priceFrom = parsePrice(priceFromInput?.value ?? "");
+  const priceTo = parsePrice(priceToInput?.value ?? "");
   const isFlat = typeValue === "Квартира";
 
   // Range slider values
@@ -521,8 +523,8 @@ function buildFiltersDescription() {
   if (roomsSelect.value !== "all") {
     parts.push(roomsSelect.value === "4" ? "4+ комнаты" : roomsSelect.value + "-комн.");
   }
-  const from = parsePrice(priceFromInput.value);
-  const to   = parsePrice(priceToInput.value);
+  const from = parsePrice(priceFromInput?.value ?? "");
+  const to   = parsePrice(priceToInput?.value ?? "");
   if (from || to) {
     const p = [
       from ? "от " + from.toLocaleString("ru") + " р." : "",
@@ -1289,8 +1291,7 @@ function updateObjectsCounter(count) {
 
   if (!counter || !row) return;
 
-  const priceFrom = parsePrice(priceFromInput.value);
-  const priceTo = parsePrice(priceToInput.value);
+  const priceFrom = parsePrice(priceFromInput?.value ?? "");
 
   // EMPTY STATE
   if (count === 0) {
@@ -1331,9 +1332,7 @@ function updateActiveFilters() {
     priceToInput,
   ];
 
-  fields.forEach((field) => {
-    if (!field) return;
-
+  fields.filter(Boolean).forEach((field) => {
     const isActive =
       (field.tagName === "SELECT" && field.value !== "all") ||
       (field.tagName === "INPUT" && field.value.trim() !== "");
@@ -1359,8 +1358,8 @@ function saveFiltersToStorage() {
     sort: sortSelect.value,
     type: typeSelect.value,
     rooms: roomsSelect.value,
-    priceFrom: priceFromInput.value,
-    priceTo: priceToInput.value,
+    priceFrom: priceFromInput?.value ?? "",
+    priceTo: priceToInput?.value ?? "",
     location: locationSelect.value,
   };
 
@@ -1377,8 +1376,8 @@ function loadFiltersFromStorage() {
     sortSelect.value = data.sort ?? "recommended";
     typeSelect.value = data.type ?? "all";
     roomsSelect.value = data.rooms ?? "all";
-    priceFromInput.value = data.priceFrom ?? "";
-    priceToInput.value = data.priceTo ?? "";
+    if (priceFromInput) priceFromInput.value = data.priceFrom ?? "";
+    if (priceToInput) priceToInput.value = data.priceTo ?? "";
     locationSelect.value = data.location ?? "all";
 
     updateRoomsState();
