@@ -2,22 +2,22 @@
 
 (function SmartSliderFilter() {
   /* ── State ──────────────────────────────────────────── */
-  let sfMinUsd  = 0;
-  let sfMaxUsd  = 130000;
+  let sfMinByn  = 0;
+  let sfMaxByn  = 360000;
   let sfMinArea = 30;
   let sfMaxArea = 340;
 
   const isActive = { budget: false, area: false, location: false };
 
   /* ── DOM refs (populated in init) ───────────────────── */
-  let priceToUsdEl, areaFromEl, locationEl;
+  let priceToEl, areaFromEl, locationEl;
   let sfBudgetEl, sfAreaEl;
   let sfBudgetValueEl, sfAreaValueEl;
-  let sfCountEl, sfResetEl;
+  let sfCountEl;
 
   /* ── Helpers ────────────────────────────────────────── */
-  function fmtUsd(v) {
-    return Number(v).toLocaleString("ru-RU") + "\u00a0USD";
+  function fmtByn(v) {
+    return Number(v).toLocaleString("ru-RU") + "\u00a0BYN";
   }
 
   function fmtArea(v) {
@@ -49,25 +49,19 @@
     if (typeof window.realterApplyFilters === "function") {
       window.realterApplyFilters();
     }
-    updateResetBtn();
-  }
-
-  function updateResetBtn() {
-    const anyActive = isActive.budget || isActive.area || isActive.location;
-    sfResetEl?.classList.toggle("is-hidden", !anyActive);
   }
 
   /* ── Handlers ───────────────────────────────────────── */
   function onBudgetInput() {
     const val   = +sfBudgetEl.value;
-    const isMax = val >= sfMaxUsd;
+    const isMax = val >= sfMaxByn;
     isActive.budget = !isMax;
 
-    sfBudgetValueEl.textContent = isMax ? "Любой бюджет" : "до " + fmtUsd(val);
+    sfBudgetValueEl.textContent = isMax ? "Любой бюджет" : "до\u00a0" + fmtByn(val);
     setValueState(sfBudgetValueEl, isMax);
 
-    priceToUsdEl.value = isMax ? "" : val;
-    priceToUsdEl.dispatchEvent(new Event("change", { bubbles: true }));
+    /* Пишем BYN напрямую в #priceTo — filters.js читает его */
+    priceToEl.value = isMax ? "" : String(val);
 
     updateRangeFill(sfBudgetEl);
     triggerFilters();
@@ -78,11 +72,10 @@
     const isMin = val <= sfMinArea;
     isActive.area = !isMin;
 
-    sfAreaValueEl.textContent = isMin ? "Любая площадь" : "от " + fmtArea(val);
+    sfAreaValueEl.textContent = isMin ? "Любая площадь" : "от\u00a0" + fmtArea(val);
     setValueState(sfAreaValueEl, isMin);
 
-    areaFromEl.value = isMin ? "" : val;
-    areaFromEl.dispatchEvent(new Event("change", { bubbles: true }));
+    areaFromEl.value = isMin ? "" : String(val);
 
     updateRangeFill(sfAreaEl);
     triggerFilters();
@@ -102,22 +95,23 @@
     locationEl.dispatchEvent(new Event("change", { bubbles: true }));
   }
 
+  /* ── Сброс ползунков (вызывается из filters.js тоже) ── */
   function resetSmartFilter() {
     /* Budget */
-    sfBudgetEl.value        = sfMaxUsd;
-    isActive.budget         = false;
+    sfBudgetEl.value            = sfMaxByn;
+    isActive.budget             = false;
     sfBudgetValueEl.textContent = "Любой бюджет";
     setValueState(sfBudgetValueEl, true);
     updateRangeFill(sfBudgetEl);
-    priceToUsdEl.value      = "";
+    priceToEl.value             = "";
 
     /* Area */
-    sfAreaEl.value         = sfMinArea;
-    isActive.area          = false;
-    sfAreaValueEl.textContent = "Любая площадь";
+    sfAreaEl.value             = sfMinArea;
+    isActive.area              = false;
+    sfAreaValueEl.textContent  = "Любая площадь";
     setValueState(sfAreaValueEl, true);
     updateRangeFill(sfAreaEl);
-    areaFromEl.value       = "";
+    areaFromEl.value           = "";
 
     /* Location */
     document.querySelectorAll(".sf-pill").forEach((p) => {
@@ -126,14 +120,25 @@
     isActive.location = false;
     locationEl.value  = "all";
     locationEl.dispatchEvent(new Event("change", { bubbles: true }));
-
-    triggerFilters();
   }
 
-  /* ── Init sliders with real data bounds ─────────────── */
+  /* Глобальный хук — filters.js вызывает его при "Сбросить фильтры" */
+  window.sfResetSliders = resetSmartFilter;
+
+  /* ── Инициализация слайдеров по реальным данным ─────── */
   function initSliders(objects) {
-    const usdPrices = objects
-      .map((o) => Number(o.priceUSD))
+    /* BYN prices */
+    const bynPrices = objects
+      .map((o) => {
+        const raw = Number(o.priceBYN);
+        if (raw > 0) return raw;
+        /* fallback: если есть live-price в window.RealterPrice */
+        if (typeof window.RealterPrice?.getLiveBynPriceSync === "function") {
+          const live = window.RealterPrice.getLiveBynPriceSync(o);
+          if (live > 0) return live;
+        }
+        return 0;
+      })
       .filter((v) => v > 0);
 
     const areas = objects
@@ -142,9 +147,9 @@
       .map((a) => parseFloat(String(a).replace(",", ".")))
       .filter((a) => a > 0);
 
-    if (usdPrices.length) {
-      sfMinUsd = 0;
-      sfMaxUsd = Math.ceil(Math.max(...usdPrices) / 5000) * 5000;
+    if (bynPrices.length) {
+      sfMinByn = 0;
+      sfMaxByn = Math.ceil(Math.max(...bynPrices) / 10000) * 10000;
     }
 
     if (areas.length) {
@@ -153,17 +158,17 @@
     }
 
     /* Budget slider */
-    sfBudgetEl.min   = sfMinUsd;
-    sfBudgetEl.max   = sfMaxUsd;
-    sfBudgetEl.step  = 5000;
-    sfBudgetEl.value = sfMaxUsd;
+    sfBudgetEl.min   = sfMinByn;
+    sfBudgetEl.max   = sfMaxByn;
+    sfBudgetEl.step  = 10000;
+    sfBudgetEl.value = sfMaxByn;
     updateRangeFill(sfBudgetEl);
     setValueState(sfBudgetValueEl, true);
 
     const budgetMinEl = document.getElementById("sfBudgetMin");
     const budgetMaxEl = document.getElementById("sfBudgetMax");
-    if (budgetMinEl) budgetMinEl.textContent = "0 USD";
-    if (budgetMaxEl) budgetMaxEl.textContent = fmtUsd(sfMaxUsd);
+    if (budgetMinEl) budgetMinEl.textContent = "0 BYN";
+    if (budgetMaxEl) budgetMaxEl.textContent = fmtByn(sfMaxByn);
 
     /* Area slider */
     sfAreaEl.min   = sfMinArea;
@@ -178,7 +183,7 @@
     if (areaMinEl) areaMinEl.textContent = fmtArea(sfMinArea);
     if (areaMaxEl) areaMaxEl.textContent = fmtArea(sfMaxArea);
 
-    /* Read initial count from objectsCounter */
+    /* Начальный счётчик */
     const counterEl = document.getElementById("objectsCounter");
     if (counterEl && sfCountEl) {
       const m = (counterEl.textContent || "").match(/\d+/);
@@ -186,7 +191,7 @@
     }
   }
 
-  /* ── Observe objectsCounter for live count ──────────── */
+  /* ── Следим за счётчиком objectsCounter ─────────────── */
   function observeCounter() {
     const counterEl = document.getElementById("objectsCounter");
     if (!counterEl || !sfCountEl) return;
@@ -205,7 +210,7 @@
 
   /* ── Init ───────────────────────────────────────────── */
   function init() {
-    priceToUsdEl    = document.getElementById("priceToUsd");
+    priceToEl       = document.getElementById("priceTo");
     areaFromEl      = document.getElementById("areaFrom");
     locationEl      = document.getElementById("locationSelect");
     sfBudgetEl      = document.getElementById("sfBudget");
@@ -213,9 +218,8 @@
     sfBudgetValueEl = document.getElementById("sfBudgetValue");
     sfAreaValueEl   = document.getElementById("sfAreaValue");
     sfCountEl       = document.getElementById("sfCount");
-    sfResetEl       = document.getElementById("sfReset");
 
-    if (!sfBudgetEl || !sfAreaEl || !priceToUsdEl || !areaFromEl) return;
+    if (!sfBudgetEl || !sfAreaEl || !priceToEl || !areaFromEl) return;
 
     sfBudgetEl.addEventListener("input", onBudgetInput);
     sfAreaEl.addEventListener("input", onAreaInput);
@@ -224,15 +228,14 @@
       pill.addEventListener("click", () => onLocationPill(pill));
     });
 
-    sfResetEl?.addEventListener("click", resetSmartFilter);
-
     observeCounter();
-    updateResetBtn();
+    updateRangeFill(sfBudgetEl);
+    updateRangeFill(sfAreaEl);
   }
 
   document.addEventListener("DOMContentLoaded", init);
 
-  /* Wait for filters.js to finish loading objects */
+  /* Данные объектов готовы — инициализируем диапазоны */
   document.addEventListener("realterObjectsReady", (e) => {
     initSliders(e.detail.objects);
   });

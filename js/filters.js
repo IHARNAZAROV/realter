@@ -30,9 +30,8 @@ const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
 const VIEW_STORAGE_KEY = "objectsViewMode";
 
-/* Smart slider hidden inputs */
-const priceToUsdInput = document.getElementById("priceToUsd");
-const areaFromInput   = document.getElementById("areaFrom");
+/* Скрытый input площади — используется слайдером */
+const areaFromInput = document.getElementById("areaFrom");
 const FAVORITES_VIEW_KEY = "favoritesViewMode";
 const COMPARE_STORAGE_KEY = "compareItems";
 
@@ -265,9 +264,10 @@ function resetFilters() {
   priceToInput.value = "";
   locationSelect.value = "all";
 
-  /* Reset smart slider hidden inputs */
-  if (priceToUsdInput) priceToUsdInput.value = "";
-  if (areaFromInput)   areaFromInput.value   = "";
+  if (areaFromInput) areaFromInput.value = "";
+
+  /* Сбрасываем ползунки и пиллы в едином блоке фильтров */
+  window.sfResetSliders?.();
 
   localStorage.removeItem(FILTERS_STORAGE_KEY);
   applyFiltersAndSort();
@@ -310,9 +310,8 @@ function applyFiltersAndSort() {
   const priceTo = parsePrice(priceToInput.value);
   const isFlat = typeValue === "Квартира";
 
-  // Smart slider: USD price and area
-  const priceToUsd = priceToUsdInput ? parsePrice(priceToUsdInput.value) : 0;
-  const areaFrom   = areaFromInput   ? parsePrice(areaFromInput.value)   : 0;
+  // Слайдер площади
+  const areaFrom = areaFromInput ? parsePrice(areaFromInput.value) : 0;
 
   // ЕДИНЫЙ ЦИКЛ ФИЛЬТРАЦИИ (вместо 5 отдельных)
   let result = allObjects.filter((obj) => {
@@ -339,12 +338,6 @@ function applyFiltersAndSort() {
     const objPrice = getObjectPriceByn(obj);
     if (priceFrom && objPrice < priceFrom) return false;
     if (priceTo && objPrice > priceTo) return false;
-
-    // Фильтр цены (USD — от слайдера)
-    if (priceToUsd) {
-      const objUsd = Number(obj.priceUSD) || 0;
-      if (objUsd > priceToUsd) return false;
-    }
 
     // Фильтр площади (от слайдера)
     if (areaFrom) {
