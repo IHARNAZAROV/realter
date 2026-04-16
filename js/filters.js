@@ -29,15 +29,19 @@ const locationSelect = document.getElementById("locationSelect");
 const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
 
-const budgetRange = document.getElementById("budgetRange");
+const budgetRangeFrom  = document.getElementById("budgetRangeFrom");
+const budgetRangeTo    = document.getElementById("budgetRangeTo");
+const budgetRangeFill  = document.getElementById("budgetRangeFill");
 const budgetRangeValue = document.getElementById("budgetRangeValue");
-const budgetRangeMin = document.getElementById("budgetRangeMin");
-const budgetRangeMax = document.getElementById("budgetRangeMax");
+const budgetAbsMin     = document.getElementById("budgetAbsMin");
+const budgetAbsMax     = document.getElementById("budgetAbsMax");
 
-const areaRange = document.getElementById("areaRange");
-const areaRangeValue = document.getElementById("areaRangeValue");
-const areaRangeMin = document.getElementById("areaRangeMin");
-const areaRangeMax = document.getElementById("areaRangeMax");
+const areaRangeFrom    = document.getElementById("areaRangeFrom");
+const areaRangeTo      = document.getElementById("areaRangeTo");
+const areaRangeFill    = document.getElementById("areaRangeFill");
+const areaRangeValue   = document.getElementById("areaRangeValue");
+const areaAbsMin       = document.getElementById("areaAbsMin");
+const areaAbsMax       = document.getElementById("areaAbsMax");
 const VIEW_STORAGE_KEY = "objectsViewMode";
 const FAVORITES_VIEW_KEY = "favoritesViewMode";
 const COMPARE_STORAGE_KEY = "compareItems";
@@ -98,70 +102,88 @@ function formatRangePrice(v) {
   return Number(v).toLocaleString("ru-RU") + " BYN";
 }
 
-function updateRangeTrack(input) {
-  const min = Number(input.min);
-  const max = Number(input.max);
-  const val = Number(input.value);
-  const pct = max > min ? ((val - min) / (max - min)) * 100 : 100;
-  input.style.background = `linear-gradient(to right, var(--color-primary) ${pct}%, var(--color-border) ${pct}%)`;
+function updateDualRangeFill(fromInput, toInput, fillEl) {
+  if (!fromInput || !toInput || !fillEl) return;
+  const absMin = Number(fromInput.min);
+  const absMax = Number(toInput.max);
+  const range = absMax - absMin;
+  if (range <= 0) return;
+  const fromPct = ((Number(fromInput.value) - absMin) / range) * 100;
+  const toPct   = ((Number(toInput.value)   - absMin) / range) * 100;
+  fillEl.style.left  = fromPct + "%";
+  fillEl.style.width = (toPct - fromPct) + "%";
+  fromInput.classList.toggle("is-top", fromPct >= 95);
 }
 
 function initRangeSliders(objects) {
-  if (!budgetRange || !areaRange) return;
+  if (!budgetRangeFrom || !budgetRangeTo || !areaRangeFrom || !areaRangeTo) return;
 
-  const prices = objects
-    .map((obj) => getObjectPriceByn(obj))
-    .filter((p) => p > 0);
-
-  const areas = objects
-    .map((obj) => getObjectArea(obj))
-    .filter((a) => a !== null);
+  const prices = objects.map((obj) => getObjectPriceByn(obj)).filter((p) => p > 0);
+  const areas  = objects.map((obj) => getObjectArea(obj)).filter((a) => a !== null);
 
   if (prices.length) {
     const minP = Math.floor(Math.min(...prices));
     const maxP = Math.ceil(Math.max(...prices));
+    const step = Math.max(1, Math.round((maxP - minP) / 200));
 
-    budgetRange.min = minP;
-    budgetRange.max = maxP;
-    budgetRange.value = maxP;
-    budgetRange.step = Math.max(1, Math.round((maxP - minP) / 200));
+    budgetRangeFrom.min = minP; budgetRangeFrom.max = maxP;
+    budgetRangeFrom.value = minP; budgetRangeFrom.step = step;
 
-    if (budgetRangeMin) budgetRangeMin.textContent = formatRangePrice(minP);
-    if (budgetRangeMax) budgetRangeMax.textContent = formatRangePrice(maxP);
+    budgetRangeTo.min = minP; budgetRangeTo.max = maxP;
+    budgetRangeTo.value = maxP; budgetRangeTo.step = step;
+
+    if (budgetAbsMin) budgetAbsMin.textContent = formatRangePrice(minP);
+    if (budgetAbsMax) budgetAbsMax.textContent = formatRangePrice(maxP);
+
     updateBudgetLabel();
-    updateRangeTrack(budgetRange);
+    updateDualRangeFill(budgetRangeFrom, budgetRangeTo, budgetRangeFill);
   }
 
   if (areas.length) {
     const minA = Math.floor(Math.min(...areas));
     const maxA = Math.ceil(Math.max(...areas));
+    const step = Math.max(1, Math.round((maxA - minA) / 100));
 
-    areaRange.min = minA;
-    areaRange.max = maxA;
-    areaRange.value = maxA;
-    areaRange.step = Math.max(1, Math.round((maxA - minA) / 100));
+    areaRangeFrom.min = minA; areaRangeFrom.max = maxA;
+    areaRangeFrom.value = minA; areaRangeFrom.step = step;
 
-    if (areaRangeMin) areaRangeMin.textContent = minA + " м²";
-    if (areaRangeMax) areaRangeMax.textContent = maxA + " м²";
+    areaRangeTo.min = minA; areaRangeTo.max = maxA;
+    areaRangeTo.value = maxA; areaRangeTo.step = step;
+
+    if (areaAbsMin) areaAbsMin.textContent = minA + " м²";
+    if (areaAbsMax) areaAbsMax.textContent = maxA + " м²";
+
     updateAreaLabel();
-    updateRangeTrack(areaRange);
+    updateDualRangeFill(areaRangeFrom, areaRangeTo, areaRangeFill);
   }
 }
 
 function updateBudgetLabel() {
-  if (!budgetRange || !budgetRangeValue) return;
-  const val = Number(budgetRange.value);
-  const max = Number(budgetRange.max);
-  budgetRangeValue.textContent =
-    val >= max ? "Любой бюджет" : "До " + formatRangePrice(val);
+  if (!budgetRangeFrom || !budgetRangeTo || !budgetRangeValue) return;
+  const fromVal = Number(budgetRangeFrom.value);
+  const toVal   = Number(budgetRangeTo.value);
+  const absMin  = Number(budgetRangeFrom.min);
+  const absMax  = Number(budgetRangeTo.max);
+  const atMin   = fromVal <= absMin;
+  const atMax   = toVal   >= absMax;
+  if (atMin && atMax)      budgetRangeValue.textContent = "Любой бюджет";
+  else if (atMin)          budgetRangeValue.textContent = "До " + formatRangePrice(toVal);
+  else if (atMax)          budgetRangeValue.textContent = "От " + formatRangePrice(fromVal);
+  else                     budgetRangeValue.textContent = formatRangePrice(fromVal) + " — " + formatRangePrice(toVal);
 }
 
 function updateAreaLabel() {
-  if (!areaRange || !areaRangeValue) return;
-  const val = Number(areaRange.value);
-  const max = Number(areaRange.max);
-  areaRangeValue.textContent =
-    val >= max ? "Любая площадь" : "До " + val + " м²";
+  if (!areaRangeFrom || !areaRangeTo || !areaRangeValue) return;
+  const fromVal = Number(areaRangeFrom.value);
+  const toVal   = Number(areaRangeTo.value);
+  const absMin  = Number(areaRangeFrom.min);
+  const absMax  = Number(areaRangeTo.max);
+  const atMin   = fromVal <= absMin;
+  const atMax   = toVal   >= absMax;
+  if (atMin && atMax)      areaRangeValue.textContent = "Любая площадь";
+  else if (atMin)          areaRangeValue.textContent = "До " + toVal + " м²";
+  else if (atMax)          areaRangeValue.textContent = "От " + fromVal + " м²";
+  else                     areaRangeValue.textContent = fromVal + " — " + toVal + " м²";
 }
 
 function getPreviewImage(obj) {
@@ -317,20 +339,42 @@ function bindEvents() {
   if (priceFromInput) priceFromInput.addEventListener("input", handlePriceInput);
   if (priceToInput) priceToInput.addEventListener("input", handlePriceInput);
 
-  if (budgetRange) {
-    budgetRange.addEventListener("input", () => {
+  if (budgetRangeFrom && budgetRangeTo) {
+    const onBudget = () => {
+      let fromVal = Number(budgetRangeFrom.value);
+      let toVal   = Number(budgetRangeTo.value);
+      if (fromVal > toVal) {
+        if (document.activeElement === budgetRangeFrom) {
+          budgetRangeFrom.value = toVal;
+        } else {
+          budgetRangeTo.value = fromVal;
+        }
+      }
       updateBudgetLabel();
-      updateRangeTrack(budgetRange);
+      updateDualRangeFill(budgetRangeFrom, budgetRangeTo, budgetRangeFill);
       debouncedApply();
-    });
+    };
+    budgetRangeFrom.addEventListener("input", onBudget);
+    budgetRangeTo.addEventListener("input", onBudget);
   }
 
-  if (areaRange) {
-    areaRange.addEventListener("input", () => {
+  if (areaRangeFrom && areaRangeTo) {
+    const onArea = () => {
+      let fromVal = Number(areaRangeFrom.value);
+      let toVal   = Number(areaRangeTo.value);
+      if (fromVal > toVal) {
+        if (document.activeElement === areaRangeFrom) {
+          areaRangeFrom.value = toVal;
+        } else {
+          areaRangeTo.value = fromVal;
+        }
+      }
       updateAreaLabel();
-      updateRangeTrack(areaRange);
+      updateDualRangeFill(areaRangeFrom, areaRangeTo, areaRangeFill);
       debouncedApply();
-    });
+    };
+    areaRangeFrom.addEventListener("input", onArea);
+    areaRangeTo.addEventListener("input", onArea);
   }
 
   if (resetBtn) {
@@ -350,16 +394,18 @@ function resetFilters() {
   if (priceToInput) priceToInput.value = "";
   locationSelect.value = "all";
 
-  if (budgetRange) {
-    budgetRange.value = budgetRange.max;
+  if (budgetRangeFrom && budgetRangeTo) {
+    budgetRangeFrom.value = budgetRangeFrom.min;
+    budgetRangeTo.value   = budgetRangeTo.max;
     updateBudgetLabel();
-    updateRangeTrack(budgetRange);
+    updateDualRangeFill(budgetRangeFrom, budgetRangeTo, budgetRangeFill);
   }
 
-  if (areaRange) {
-    areaRange.value = areaRange.max;
+  if (areaRangeFrom && areaRangeTo) {
+    areaRangeFrom.value = areaRangeFrom.min;
+    areaRangeTo.value   = areaRangeTo.max;
     updateAreaLabel();
-    updateRangeTrack(areaRange);
+    updateDualRangeFill(areaRangeFrom, areaRangeTo, areaRangeFill);
   }
 
   localStorage.removeItem(FILTERS_STORAGE_KEY);
@@ -405,11 +451,16 @@ function applyFiltersAndSort() {
   const priceTo = parsePrice(priceToInput?.value ?? "");
   const isFlat = typeValue === "Квартира";
 
-  // Range slider values
-  const budgetMax = budgetRange ? Number(budgetRange.value) : null;
-  const budgetAtMax = budgetRange ? budgetMax >= Number(budgetRange.max) : true;
-  const areaMax = areaRange ? Number(areaRange.value) : null;
-  const areaAtMax = areaRange ? areaMax >= Number(areaRange.max) : true;
+  // Dual range slider values
+  const budgetFrom      = budgetRangeFrom ? Number(budgetRangeFrom.value) : null;
+  const budgetTo        = budgetRangeTo   ? Number(budgetRangeTo.value)   : null;
+  const budgetFromIsMin = !budgetRangeFrom || budgetFrom <= Number(budgetRangeFrom.min);
+  const budgetToIsMax   = !budgetRangeTo   || budgetTo   >= Number(budgetRangeTo.max);
+
+  const areaFrom      = areaRangeFrom ? Number(areaRangeFrom.value) : null;
+  const areaTo        = areaRangeTo   ? Number(areaRangeTo.value)   : null;
+  const areaFromIsMin = !areaRangeFrom || areaFrom <= Number(areaRangeFrom.min);
+  const areaToIsMax   = !areaRangeTo   || areaTo   >= Number(areaRangeTo.max);
 
   // ЕДИНЫЙ ЦИКЛ ФИЛЬТРАЦИИ (вместо 5 отдельных)
   let result = allObjects.filter((obj) => {
@@ -437,13 +488,21 @@ function applyFiltersAndSort() {
     if (priceFrom && objPrice < priceFrom) return false;
     if (priceTo && objPrice > priceTo) return false;
 
-    // Фильтр цены (слайдер бюджета)
-    if (!budgetAtMax && objPrice > budgetMax) return false;
+    // Бюджет (двойной слайдер)
+    if (!budgetFromIsMin || !budgetToIsMax) {
+      if (objPrice > 0) {
+        if (!budgetFromIsMin && objPrice < budgetFrom) return false;
+        if (!budgetToIsMax   && objPrice > budgetTo)   return false;
+      }
+    }
 
-    // Фильтр площади (слайдер)
-    if (!areaAtMax) {
+    // Площадь (двойной слайдер)
+    if (!areaFromIsMin || !areaToIsMax) {
       const objArea = getObjectArea(obj);
-      if (objArea !== null && objArea > areaMax) return false;
+      if (objArea !== null) {
+        if (!areaFromIsMin && objArea < areaFrom) return false;
+        if (!areaToIsMax   && objArea > areaTo)   return false;
+      }
     }
 
     // Фильтр локации
@@ -1340,14 +1399,18 @@ function updateActiveFilters() {
     field.classList.toggle("is-active", isActive);
   });
 
-  if (budgetRange) {
-    const budgetActive = Number(budgetRange.value) < Number(budgetRange.max);
-    budgetRange.closest(".filter-item--range")?.classList.toggle("is-active", budgetActive);
+  if (budgetRangeFrom && budgetRangeTo) {
+    const budgetActive =
+      Number(budgetRangeFrom.value) > Number(budgetRangeFrom.min) ||
+      Number(budgetRangeTo.value)   < Number(budgetRangeTo.max);
+    budgetRangeFrom.closest(".filter-item--range")?.classList.toggle("is-active", budgetActive);
   }
 
-  if (areaRange) {
-    const areaActive = Number(areaRange.value) < Number(areaRange.max);
-    areaRange.closest(".filter-item--range")?.classList.toggle("is-active", areaActive);
+  if (areaRangeFrom && areaRangeTo) {
+    const areaActive =
+      Number(areaRangeFrom.value) > Number(areaRangeFrom.min) ||
+      Number(areaRangeTo.value)   < Number(areaRangeTo.max);
+    areaRangeFrom.closest(".filter-item--range")?.classList.toggle("is-active", areaActive);
   }
 }
 

@@ -20,6 +20,7 @@ A professional real estate website for Olga Turko, a realtor from Lida, Belarus.
 - `data/blog-articles.json` — Blog articles data
 - `env.php` — PHP environment configuration
 - `site-version.php` — Returns cache-busting version string
+- `css/range-sliders.css` — Dual-handle range slider styles (budget + area filters)
 - `css/` — Stylesheets (Bootstrap, Swiper, FontAwesome, custom)
 - `js/` — JavaScript files
 - `images/`, `media/` — Assets (WebP images, SVGs, fonts)
