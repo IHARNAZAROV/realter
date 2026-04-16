@@ -63,6 +63,7 @@
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <link rel="stylesheet" href="/css/smart-slider-filter.css" data-versioned>
 </head>
   <body>
     <div class="page-wraper">
@@ -209,6 +210,94 @@
         <!-- Section Content -->
         <div class="section-full p-tb80 bg-white inner-page-padding">
           <div class="container">
+            <!-- Hidden inputs for smart slider filter -->
+            <input type="hidden" id="priceToUsd" value="">
+            <input type="hidden" id="areaFrom" value="">
+
+            <!-- ── SMART FILTER BLOCK ────────────────────────────── -->
+            <div class="smart-filter" id="smartFilter" aria-label="Быстрый подбор объектов">
+
+              <div class="smart-filter__header">
+                <div class="smart-filter__heading">
+                  <div class="smart-filter__icon" aria-hidden="true">
+                    <i class="fa-solid fa-sliders"></i>
+                  </div>
+                  <div>
+                    <div class="smart-filter__title">Быстрый подбор</div>
+                    <div class="smart-filter__subtitle">Двигайте ползунки — объекты обновляются сразу</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="smart-filter__grid">
+
+                <!-- 1. Бюджет -->
+                <div class="smart-filter__track">
+                  <div class="smart-filter__track-label">Бюджет</div>
+                  <div class="smart-filter__track-value is-default" id="sfBudgetValue">Любой бюджет</div>
+                  <input
+                    type="range"
+                    class="sf-range"
+                    id="sfBudget"
+                    min="0"
+                    max="130000"
+                    step="5000"
+                    value="130000"
+                    aria-label="Максимальный бюджет в USD"
+                  >
+                  <div class="smart-filter__bounds">
+                    <span id="sfBudgetMin">0 USD</span>
+                    <span id="sfBudgetMax">130 000 USD</span>
+                  </div>
+                </div>
+
+                <!-- 2. Площадь -->
+                <div class="smart-filter__track">
+                  <div class="smart-filter__track-label">Площадь</div>
+                  <div class="smart-filter__track-value is-default" id="sfAreaValue">Любая площадь</div>
+                  <input
+                    type="range"
+                    class="sf-range"
+                    id="sfArea"
+                    min="30"
+                    max="340"
+                    step="5"
+                    value="30"
+                    aria-label="Минимальная площадь в квадратных метрах"
+                  >
+                  <div class="smart-filter__bounds">
+                    <span id="sfAreaMin">30 м²</span>
+                    <span id="sfAreaMax">340 м²</span>
+                  </div>
+                </div>
+
+                <!-- 3. Район -->
+                <div class="smart-filter__track">
+                  <div class="smart-filter__track-label">Район</div>
+                  <div class="smart-filter__track-value is-default" style="font-size:14px; font-weight:500; margin-bottom:12px;">Выберите локацию</div>
+                  <div class="smart-filter__pills" role="group" aria-label="Выбор района">
+                    <button type="button" class="sf-pill is-active" data-location="all">Все</button>
+                    <button type="button" class="sf-pill" data-location="lida">Лида</button>
+                    <button type="button" class="sf-pill" data-location="district">Лидский район</button>
+                    <button type="button" class="sf-pill" data-location="other">Другие</button>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="smart-filter__footer">
+                <div class="smart-filter__count-wrap">
+                  <span class="smart-filter__count-num" id="sfCount">—</span>
+                  <span class="smart-filter__count-label">объектов найдено</span>
+                </div>
+                <button type="button" class="sf-reset is-hidden" id="sfReset" aria-label="Сбросить быстрые фильтры">
+                  Сбросить подбор
+                </button>
+              </div>
+
+            </div>
+            <!-- ── END SMART FILTER ──────────────────────────────── -->
+
             <!-- SORT -->
             <div class="objects-filters">
               <div class="filters-row">
@@ -500,6 +589,7 @@
     <script src="/js/live-price.js?v=20260319-1" defer></script>
     <script src="/js/filters.js?v=20260319-1" defer></script>
     <script src="/js/filters-custom-select.js" defer></script>
+    <script src="/js/smart-slider-filter.js" defer data-versioned></script>
         <script src="/js/objects-smart-badge.js" defer></script>
       <!-- Contact widget -->
     <div class="cw" data-cw-root>

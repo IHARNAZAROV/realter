@@ -1,0 +1,285 @@
+/* =====================================================
+   SMART SLIDER FILTER — Быстрый подбор
+   nedvizhimost-lida.html
+   ===================================================== */
+
+.smart-filter {
+  background: #fff;
+  border: 1px solid rgba(0, 96, 100, 0.13);
+  border-radius: 20px;
+  padding: 28px 36px 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 6px 32px rgba(0, 96, 100, 0.07);
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.smart-filter__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.smart-filter__heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.smart-filter__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 96, 100, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #006064;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.smart-filter__title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #006064;
+  line-height: 1;
+}
+
+.smart-filter__subtitle {
+  font-size: 11px;
+  color: #a0acb5;
+  margin-top: 3px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+}
+
+/* ── Grid ────────────────────────────────────────────── */
+.smart-filter__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 991px) {
+  .smart-filter__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 599px) {
+  .smart-filter {
+    padding: 22px 20px 20px;
+  }
+
+  .smart-filter__grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* ── Track item ──────────────────────────────────────── */
+.smart-filter__track {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.smart-filter__track-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #a0acb5;
+  margin-bottom: 6px;
+}
+
+.smart-filter__track-value {
+  font-size: 19px;
+  font-weight: 700;
+  color: #1a2630;
+  line-height: 1.25;
+  margin-bottom: 16px;
+  min-height: 26px;
+  transition: color 0.15s;
+}
+
+.smart-filter__track-value.is-default {
+  color: #b0bec5;
+  font-weight: 500;
+}
+
+/* ── Range slider ────────────────────────────────────── */
+.sf-range {
+  --fill: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(
+    to right,
+    #006064 0%,
+    #006064 var(--fill),
+    #e2eaec var(--fill),
+    #e2eaec 100%
+  );
+}
+
+.sf-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid #006064;
+  box-shadow: 0 2px 10px rgba(0, 96, 100, 0.28);
+  cursor: grab;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.sf-range::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.18);
+  box-shadow: 0 4px 18px rgba(0, 96, 100, 0.38);
+}
+
+.sf-range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid #006064;
+  box-shadow: 0 2px 10px rgba(0, 96, 100, 0.28);
+  cursor: grab;
+}
+
+.sf-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: transparent;
+}
+
+.smart-filter__bounds {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #c0cdd2;
+  user-select: none;
+}
+
+/* ── Location pills ──────────────────────────────────── */
+.smart-filter__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.sf-pill {
+  padding: 7px 15px;
+  border-radius: 20px;
+  border: 1.5px solid #dde6e9;
+  background: #fff;
+  color: #4a5d63;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.1s;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sf-pill:hover {
+  border-color: #006064;
+  color: #006064;
+}
+
+.sf-pill:active {
+  transform: scale(0.96);
+}
+
+.sf-pill.is-active {
+  background: #006064;
+  border-color: #006064;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 96, 100, 0.3);
+}
+
+/* ── Footer ──────────────────────────────────────────── */
+.smart-filter__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #f0f5f6;
+}
+
+.smart-filter__count-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.smart-filter__count-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: #006064;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.smart-filter__count-num.is-zero {
+  color: #e57373;
+}
+
+.smart-filter__count-label {
+  font-size: 14px;
+  color: #7a8f96;
+  font-weight: 400;
+}
+
+.sf-reset {
+  font-size: 13px;
+  color: #a0acb5;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 3px;
+  transition: color 0.15s, opacity 0.2s;
+  opacity: 1;
+}
+
+.sf-reset:hover {
+  color: #006064;
+}
+
+.sf-reset.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Mobile header collapse ──────────────────────────── */
+@media (max-width: 599px) {
+  .smart-filter__header {
+    margin-bottom: 20px;
+  }
+
+  .smart-filter__count-num {
+    font-size: 22px;
+  }
+}
