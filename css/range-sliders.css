@@ -1,18 +1,15 @@
 .filters-row--sliders {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 3rem;
   margin-top: 1.25rem;
-  flex-wrap: nowrap;
   padding-top: 1.25rem;
   border-top: 1px solid var(--color-border);
-  flex-basis: 100%;
-  width: 100%;
 }
 
 .filter-item--range {
   flex: 1;
-  min-width: 220px;
+  min-width: 0;
 }
 
 .filter-range-label {
@@ -105,12 +102,6 @@
 @media (max-width: 600px) {
   .filters-row--sliders {
     flex-direction: column;
-    flex-wrap: wrap;
     gap: 1.5rem;
-  }
-
-  .filter-item--range {
-    min-width: 0;
-    width: 100%;
   }
 }
