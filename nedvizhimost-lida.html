@@ -63,6 +63,7 @@
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <link rel="stylesheet" href="/css/range-sliders.css">
 </head>
   <body>
     <div class="page-wraper">
@@ -267,6 +268,31 @@
                     <option value="other">Другие</option>
                   </select>
                 </div>
+                <!-- RANGE SLIDERS ROW -->
+                <div class="filters-row--sliders">
+                  <!-- BUDGET SLIDER -->
+                  <div class="filter-item filter-item--range">
+                    <label class="filter-range-label" for="budgetRange">Бюджет</label>
+                    <div class="filter-range-value" id="budgetRangeValue">Любой бюджет</div>
+                    <input type="range" id="budgetRange" class="filter-range-input" min="0" max="100" value="100" step="1" />
+                    <div class="filter-range-bounds">
+                      <span id="budgetRangeMin">0 BYN</span>
+                      <span id="budgetRangeMax">100 BYN</span>
+                    </div>
+                  </div>
+
+                  <!-- AREA SLIDER -->
+                  <div class="filter-item filter-item--range">
+                    <label class="filter-range-label" for="areaRange">Площадь</label>
+                    <div class="filter-range-value" id="areaRangeValue">Любая площадь</div>
+                    <input type="range" id="areaRange" class="filter-range-input" min="0" max="100" value="100" step="1" />
+                    <div class="filter-range-bounds">
+                      <span id="areaRangeMin">0 м²</span>
+                      <span id="areaRangeMax">100 м²</span>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="filters-reset-row">
                   <button
                     type="button"

@@ -28,6 +28,16 @@ const priceToInput = document.getElementById("priceTo");
 const locationSelect = document.getElementById("locationSelect");
 const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
+
+const budgetRange = document.getElementById("budgetRange");
+const budgetRangeValue = document.getElementById("budgetRangeValue");
+const budgetRangeMin = document.getElementById("budgetRangeMin");
+const budgetRangeMax = document.getElementById("budgetRangeMax");
+
+const areaRange = document.getElementById("areaRange");
+const areaRangeValue = document.getElementById("areaRangeValue");
+const areaRangeMin = document.getElementById("areaRangeMin");
+const areaRangeMax = document.getElementById("areaRangeMax");
 const VIEW_STORAGE_KEY = "objectsViewMode";
 const FAVORITES_VIEW_KEY = "favoritesViewMode";
 const COMPARE_STORAGE_KEY = "compareItems";
@@ -82,6 +92,76 @@ function debounce(fn, delay = 400) {
     clearTimeout(t);
     t = setTimeout(() => fn(...args), delay);
   };
+}
+
+function formatRangePrice(v) {
+  return Number(v).toLocaleString("ru-RU") + " BYN";
+}
+
+function updateRangeTrack(input) {
+  const min = Number(input.min);
+  const max = Number(input.max);
+  const val = Number(input.value);
+  const pct = max > min ? ((val - min) / (max - min)) * 100 : 100;
+  input.style.background = `linear-gradient(to right, var(--color-primary) ${pct}%, var(--color-border) ${pct}%)`;
+}
+
+function initRangeSliders(objects) {
+  if (!budgetRange || !areaRange) return;
+
+  const prices = objects
+    .map((obj) => getObjectPriceByn(obj))
+    .filter((p) => p > 0);
+
+  const areas = objects
+    .map((obj) => getObjectArea(obj))
+    .filter((a) => a !== null);
+
+  if (prices.length) {
+    const minP = Math.floor(Math.min(...prices));
+    const maxP = Math.ceil(Math.max(...prices));
+
+    budgetRange.min = minP;
+    budgetRange.max = maxP;
+    budgetRange.value = maxP;
+    budgetRange.step = Math.max(1, Math.round((maxP - minP) / 200));
+
+    if (budgetRangeMin) budgetRangeMin.textContent = formatRangePrice(minP);
+    if (budgetRangeMax) budgetRangeMax.textContent = formatRangePrice(maxP);
+    updateBudgetLabel();
+    updateRangeTrack(budgetRange);
+  }
+
+  if (areas.length) {
+    const minA = Math.floor(Math.min(...areas));
+    const maxA = Math.ceil(Math.max(...areas));
+
+    areaRange.min = minA;
+    areaRange.max = maxA;
+    areaRange.value = maxA;
+    areaRange.step = Math.max(1, Math.round((maxA - minA) / 100));
+
+    if (areaRangeMin) areaRangeMin.textContent = minA + " м²";
+    if (areaRangeMax) areaRangeMax.textContent = maxA + " м²";
+    updateAreaLabel();
+    updateRangeTrack(areaRange);
+  }
+}
+
+function updateBudgetLabel() {
+  if (!budgetRange || !budgetRangeValue) return;
+  const val = Number(budgetRange.value);
+  const max = Number(budgetRange.max);
+  budgetRangeValue.textContent =
+    val >= max ? "Любой бюджет" : "До " + formatRangePrice(val);
+}
+
+function updateAreaLabel() {
+  if (!areaRange || !areaRangeValue) return;
+  const val = Number(areaRange.value);
+  const max = Number(areaRange.max);
+  areaRangeValue.textContent =
+    val >= max ? "Любая площадь" : "До " + val + " м²";
 }
 
 function getPreviewImage(obj) {
@@ -204,6 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((data) => {
       allObjects = data;
       updateRoomsState();
+      initRangeSliders(data);
       loadFiltersFromStorage();
       applyFiltersAndSort();
       renderComparePanel();
@@ -236,6 +317,22 @@ function bindEvents() {
   priceFromInput.addEventListener("input", handlePriceInput);
   priceToInput.addEventListener("input", handlePriceInput);
 
+  if (budgetRange) {
+    budgetRange.addEventListener("input", () => {
+      updateBudgetLabel();
+      updateRangeTrack(budgetRange);
+      debouncedApply();
+    });
+  }
+
+  if (areaRange) {
+    areaRange.addEventListener("input", () => {
+      updateAreaLabel();
+      updateRangeTrack(areaRange);
+      debouncedApply();
+    });
+  }
+
   if (resetBtn) {
     resetBtn.addEventListener("click", resetFilters);
   }
@@ -252,6 +349,18 @@ function resetFilters() {
   priceFromInput.value = "";
   priceToInput.value = "";
   locationSelect.value = "all";
+
+  if (budgetRange) {
+    budgetRange.value = budgetRange.max;
+    updateBudgetLabel();
+    updateRangeTrack(budgetRange);
+  }
+
+  if (areaRange) {
+    areaRange.value = areaRange.max;
+    updateAreaLabel();
+    updateRangeTrack(areaRange);
+  }
 
   localStorage.removeItem(FILTERS_STORAGE_KEY);
   applyFiltersAndSort();
@@ -294,6 +403,12 @@ function applyFiltersAndSort() {
   const priceTo = parsePrice(priceToInput.value);
   const isFlat = typeValue === "Квартира";
 
+  // Range slider values
+  const budgetMax = budgetRange ? Number(budgetRange.value) : null;
+  const budgetAtMax = budgetRange ? budgetMax >= Number(budgetRange.max) : true;
+  const areaMax = areaRange ? Number(areaRange.value) : null;
+  const areaAtMax = areaRange ? areaMax >= Number(areaRange.max) : true;
+
   // ЕДИНЫЙ ЦИКЛ ФИЛЬТРАЦИИ (вместо 5 отдельных)
   let result = allObjects.filter((obj) => {
     // Скрытые объекты
@@ -315,10 +430,19 @@ function applyFiltersAndSort() {
       }
     }
 
-    // Фильтр цены
+    // Фильтр цены (текстовые поля)
     const objPrice = getObjectPriceByn(obj);
     if (priceFrom && objPrice < priceFrom) return false;
     if (priceTo && objPrice > priceTo) return false;
+
+    // Фильтр цены (слайдер бюджета)
+    if (!budgetAtMax && objPrice > budgetMax) return false;
+
+    // Фильтр площади (слайдер)
+    if (!areaAtMax) {
+      const objArea = getObjectArea(obj);
+      if (objArea !== null && objArea > areaMax) return false;
+    }
 
     // Фильтр локации
     if (locationValue !== "all") {
@@ -1216,6 +1340,16 @@ function updateActiveFilters() {
 
     field.classList.toggle("is-active", isActive);
   });
+
+  if (budgetRange) {
+    const budgetActive = Number(budgetRange.value) < Number(budgetRange.max);
+    budgetRange.closest(".filter-item--range")?.classList.toggle("is-active", budgetActive);
+  }
+
+  if (areaRange) {
+    const areaActive = Number(areaRange.value) < Number(areaRange.max);
+    areaRange.closest(".filter-item--range")?.classList.toggle("is-active", areaActive);
+  }
 }
 
 const FILTERS_STORAGE_KEY = "objectsFilters";

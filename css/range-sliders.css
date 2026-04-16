@@ -1,0 +1,112 @@
+.filters-row--sliders {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.filter-item--range {
+  flex: 1;
+  min-width: 220px;
+}
+
+.filter-range-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-light);
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.filter-range-value {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+  margin-bottom: 0.75rem;
+  min-height: 1.5em;
+  transition: color 0.2s;
+}
+
+.filter-range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  background: linear-gradient(to right, var(--color-primary) 100%, var(--color-border) 100%);
+}
+
+.filter-range-input::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+}
+
+.filter-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2.5px solid var(--color-primary);
+  cursor: pointer;
+  margin-top: -8px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+
+.filter-range-input::-webkit-slider-thumb:hover,
+.filter-range-input::-webkit-slider-thumb:active {
+  transform: scale(1.2);
+  box-shadow: 0 2px 10px rgba(21, 89, 69, 0.35);
+}
+
+.filter-range-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2.5px solid var(--color-primary);
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.filter-range-input::-moz-range-thumb:hover,
+.filter-range-input::-moz-range-thumb:active {
+  transform: scale(1.2);
+  box-shadow: 0 2px 10px rgba(21, 89, 69, 0.35);
+}
+
+.filter-range-input::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-border);
+}
+
+.filter-range-bounds {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.45rem;
+  font-size: 0.72rem;
+  color: var(--color-text-light);
+}
+
+@media (max-width: 767px) {
+  .filters-row--sliders {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .filter-item--range {
+    min-width: 0;
+    width: 100%;
+  }
+}
