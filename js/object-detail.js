@@ -882,13 +882,6 @@ function getCachedObjectPrice(obj) {
     return displayPrice;
   }
   
-  if (typeof obj.priceUSD === "number" && obj.priceUSD > 0) {
-    const USD_TO_BYN = 3.3;
-    const price = Math.round(obj.priceUSD * USD_TO_BYN);
-    _cachedObjectPrices[key] = price;
-    return price;
-  }
-  
   _cachedObjectPrices[key] = null;
   return null;
 }
