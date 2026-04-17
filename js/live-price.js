@@ -2,8 +2,6 @@
   "use strict";
 
   const API_URL = "https://api.nbrb.by/exrates/rates/431";
-  const STORAGE_KEY = "realter_usd_byn_rate";
-
   let ratePromise = null;
 
   function formatApiDate(date) {
@@ -38,51 +36,14 @@
     };
   }
 
-  function readRateCache() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
-
-      const parsed = JSON.parse(raw);
-      if (!parsed || typeof parsed !== "object") return null;
-
-      const ratePerUnit = Number(parsed.ratePerUnit);
-      const dateLabel = typeof parsed.dateLabel === "string" ? parsed.dateLabel : "";
-      const fetchedOn = typeof parsed.fetchedOn === "string" ? parsed.fetchedOn : "";
-
-      if (!Number.isFinite(ratePerUnit) || ratePerUnit <= 0) {
-        return null;
-      }
-
-      return {
-        ratePerUnit,
-        dateLabel,
-        fetchedOn,
-      };
-    } catch (_) {
-      return null;
-    }
-  }
-
-  function writeRateCache(rateData) {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(rateData));
-    } catch (_) {
-      // ignore storage errors
-    }
-  }
-
   async function fetchUsdRate() {
     if (ratePromise) {
       return ratePromise;
     }
 
-    const cached = readRateCache();
-    if (cached && cached.fetchedOn === getTodayIsoDate()) {
-      return cached;
-    }
+    const requestUrl = `${API_URL}?_=${Date.now()}`;
 
-    ratePromise = fetch(API_URL, {
+    ratePromise = fetch(requestUrl, {
       cache: "no-store",
     })
       .then((res) => {
@@ -93,17 +54,10 @@
         return res.json();
       })
       .then((payload) => {
-        const normalized = normalizeRatePayload(payload);
-        writeRateCache(normalized);
-        return normalized;
+        return normalizeRatePayload(payload);
       })
       .catch((error) => {
         ratePromise = null;
-
-        if (cached) {
-          return cached;
-        }
-
         throw error;
       });
 
