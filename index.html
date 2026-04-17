@@ -74,6 +74,7 @@
     <link rel="stylesheet" href="/css/style.css" data-versioned>
     <link rel="stylesheet" href="/css/documents-checklist.css" data-versioned>
     <link rel="stylesheet" href="/css/client-quiz.css" data-versioned>
+    <link rel="stylesheet" href="/css/yandex-reviews.css" data-versioned>
 
     <!-- ==============================================
        8. NON-CRITICAL CSS
@@ -719,164 +720,36 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Right: Testimonials -->
+                    <!-- Right: Yandex reviews -->
                     <div class="col-xl-6 col-lg-6 col-md-12 bg-white bg-repeat" style="background-image: url(images/background/bg-12.webp)">
                         <div class="sx-right-part mobile-page-padding p-t80 p-b50">
-                            <header class="section-head section-head--bracket">
-                                <h2 class="section-title">Отзывы</h2>
-                            </header>
-                            <div class="testimonials-swiper">
-                                <div class="swiper-wrapper">
-
-                                    <!-- Review 1 -->
-                                    <div class="swiper-slide">
-                                        <div class="testi-card">
-                                            <div class="testi-card__top">
-                                                <div class="testi-card__quote">“</div>
-                                                <div class="testi-card__stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                                            </div>
-                                            <p class="testi-card__text">Очень благодарны Ольге Турко за неоценимую помощь при продаже квартиры! Очень оперативный и грамотный человек, знающий свою работу! За несколько дней вышли на сделку, что являлось главным фактором, так как живём далеко! Желаем удачи и процветания! Спасибо!</p>
-                                            <div class="testi-card__author">
-                                                <div class="testi-card__avatar">
-                                                    <img loading="lazy" src="images/testimonials/pic1.webp" width="56" height="56" alt="Анастасия Дыбина" />
-                                                </div>
-                                                <div class="testi-card__meta">
-                                                    <a class="testi-card__name" href="https://yandex.by/maps/user/jctzpg3u29f7ch0x6zu9yaytag" target="_blank" rel="noopener noreferrer">Анастасия Дыбина</a>
-                                                    <span class="testi-card__role">Продавец</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <section class="reviews" id="yandexReviews" data-yandex-reviews data-reviews-source="/data/reviews.json" data-yandex-place-url="https://yandex.by/maps/org/germesgrupp/211106167936/reviews/" aria-labelledby="reviewsTitle">
+                                <header class="reviews__header">
+                                    <div class="reviews__title-wrap">
+                                        <p class="reviews__eyebrow">Отзывы Яндекс</p>
+                                        <h2 class="reviews__title" id="reviewsTitle">Нам доверяют наши клиенты</h2>
+                                        <p class="reviews__subtitle">Отзывы клиентов агентства на Яндекс Картах</p>
                                     </div>
 
-                                    <!-- Review 2 -->
-                                    <div class="swiper-slide">
-                                        <div class="testi-card">
-                                            <div class="testi-card__top">
-                                                <div class="testi-card__quote">“</div>
-                                                <div class="testi-card__stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                                            </div>
-                                            <p class="testi-card__text">Хочу выразить огромную благодарность риэлтору Ольге Турко за неоценимую помощь в продаже квартиры! Грамотный индивидуальный подход, профессиональная консультация, качественная работа! Огромное спасибо за проведение сделки в кратчайшие сроки, полное сопровождение на каждом этапе, за доброе отношение и оперативность. Всем рекомендую!</p>
-                                            <div class="testi-card__author">
-                                                <div class="testi-card__avatar">
-                                                    <img loading="lazy" src="images/testimonials/pic2.webp" width="56" height="56" alt="Светлана Савчук" />
-                                                </div>
-                                                <div class="testi-card__meta">
-                                                    <a class="testi-card__name" href="https://yandex.by/maps/user/jpbbqugkevgzx06p7uj6r6dwtm" target="_blank" rel="noopener noreferrer">Светлана Савчук</a>
-                                                    <span class="testi-card__role">Продавец</span>
-                                                </div>
-                                            </div>
+                                    <div class="reviews__stats" aria-live="polite">
+                                        <div class="reviews__stats-brand" aria-hidden="true">Я</div>
+                                        <div class="reviews__stats-content">
+                                            <p class="reviews__rating-line">
+                                                <span class="reviews__stars">★★★★★</span>
+                                                <strong class="reviews__rating-value" data-reviews-rating>4.9</strong>
+                                                <span class="reviews__rating-text">из 5</span>
+                                            </p>
+                                            <p class="reviews__count-line">на основе <strong data-reviews-count>126</strong> отзывов на Яндексе</p>
                                         </div>
                                     </div>
+                                </header>
 
-                                    <!-- Review 3 -->
-                                    <div class="swiper-slide">
-                                        <div class="testi-card">
-                                            <div class="testi-card__top">
-                                                <div class="testi-card__quote">“</div>
-                                                <div class="testi-card__stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                                            </div>
-                                            <p class="testi-card__text">Если бы мы знали, что весь процесс покупки дома может быть таким быстрым и комфортным, мы бы обратились гораздо раньше! Огромная благодарность риэлтеру Ольге Турко за профессионализм, сопровождение и быстрое решение всех вопросов. Ольга с самого первого звонка направляла и помогала — весь процесс был максимально спокойным. Искренняя рекомендация!</p>
-                                            <div class="testi-card__author">
-                                                <div class="testi-card__avatar">
-                                                    <img loading="lazy" src="images/testimonials/pic3.webp" width="56" height="56" alt="Наталья Филипович" />
-                                                </div>
-                                                <div class="testi-card__meta">
-                                                    <a class="testi-card__name" href="https://yandex.by/maps/user/32p13t0fpm55guf2rpe5h9avy4" target="_blank" rel="noopener noreferrer">Наталья Филипович</a>
-                                                    <span class="testi-card__role">Покупатель</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Review 4 -->
-                                    <div class="swiper-slide">
-                                        <div class="testi-card">
-                                            <div class="testi-card__top">
-                                                <div class="testi-card__quote">“</div>
-                                                <div class="testi-card__stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                                            </div>
-                                            <p class="testi-card__text">Хочу выразить искреннюю благодарность Ольге Турко за проделанную работу! Честная работа, чёткий план действий, высокий уровень профессионализма, индивидуальный подход к каждому клиенту, умение просто и доходчиво объяснить сложные тонкости законодательства. Качество работы — по высшему разряду. Побольше бы таких профессионалов!</p>
-                                            <div class="testi-card__author">
-                                                <div class="testi-card__avatar">
-                                                    <img loading="lazy" src="images/testimonials/pic4.webp" width="56" height="56" alt="Света Острейко" />
-                                                </div>
-                                                <div class="testi-card__meta">
-                                                    <a class="testi-card__name" href="https://yandex.by/maps/user/tfpu86bqn1w36xcnmvn13cr4yr" target="_blank" rel="noopener noreferrer">Света Острейко</a>
-                                                    <span class="testi-card__role">Продавец</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Review 5 -->
-                                    <div class="swiper-slide">
-                                        <div class="testi-card">
-                                            <div class="testi-card__top">
-                                                <div class="testi-card__quote">“</div>
-                                                <div class="testi-card__stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                                            </div>
-                                            <p class="testi-card__text">Продавал сам 3 месяца, три раза снижал цену. Обратился в Гермесгрупп. Через неделю продал. Так как было подготовлено заранее, сделка заняла час времени. Большое спасибо Ольге. Отличный специалист, знающий своё дело, с ней приятно иметь дело.</p>
-                                            <div class="testi-card__author">
-                                                <div class="testi-card__avatar">
-                                                    <img loading="lazy" src="images/testimonials/pic5.webp" width="56" height="56" alt="Иван" />
-                                                </div>
-                                                <div class="testi-card__meta">
-                                                    <a class="testi-card__name" href="https://yandex.by/maps/user/24j2xh22vj2nxrzg1q7pkqn3cr" target="_blank" rel="noopener noreferrer">Иван</a>
-                                                    <span class="testi-card__role">Продавец</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Review 6 -->
-                                    <div class="swiper-slide">
-                                        <div class="testi-card">
-                                            <div class="testi-card__top">
-                                                <div class="testi-card__quote">“</div>
-                                                <div class="testi-card__stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                                            </div>
-                                            <p class="testi-card__text">Добрый день. Хочу выразить благодарность Турко Ольге за профессионализм в работе. Ольга активно помогала от начала и до завершения сделки. Работа проведена быстро и безупречно. Хочется отметить высокий уровень компетенции. Всем рекомендую агентство недвижимости Гермесгрупп.</p>
-                                            <div class="testi-card__author">
-                                                <div class="testi-card__avatar">
-                                                    <img loading="lazy" src="images/testimonials/pic6.webp" width="56" height="56" alt="Виктория Боломут" />
-                                                </div>
-                                                <div class="testi-card__meta">
-                                                    <a class="testi-card__name" href="https://yandex.by/maps/user/zr2r80xzmkuwb1k4dtv4xfuawm" target="_blank" rel="noopener noreferrer">Виктория Боломут</a>
-                                                    <span class="testi-card__role">Продавец</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <!-- Review 7 -->
-                                    <div class="swiper-slide">
-                                        <div class="testi-card">
-                                            <div class="testi-card__top">
-                                                <div class="testi-card__quote">“</div>
-                                                <div class="testi-card__stars" aria-label="5 из 5 звёзд">★★★★★</div>
-                                            </div>
-                                            <p class="testi-card__text">Ольга Турко! Исключительный профессионал! Компетентная, внимательная. За короткий срок провела три удачные сделки. Супер! Если когда то придется продавать/покупать недвижимость, обращаться буду только к ней!!</p>
-                                            <div class="testi-card__author">
-                                                <div class="testi-card__avatar">
-                                                    <img loading="lazy" src="images/testimonials/pic7.webp" width="56" height="56" alt="Марк" />
-                                                </div>
-                                                <div class="testi-card__meta">
-                                                    <a class="testi-card__name" href="https://yandex.by/maps/user/edjvwxn2gk7vueb9fdhxampnu0" target="_blank" rel="noopener noreferrer">Марк</a>
-                                                    <span class="testi-card__role">Продавец</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
+                                <div class="reviews__viewport" data-reviews-viewport>
+                                    <div class="reviews__list" data-reviews-list role="list"></div>
                                 </div>
-                                <!-- Навигация -->
-                                <div class="testi-swiper-pagination"></div>
-                                <button class="testi-swiper-btn testi-swiper-prev" aria-label="Предыдущий отзыв"><i class="fa fa-angle-left"></i></button>
-                                <button class="testi-swiper-btn testi-swiper-next" aria-label="Следующий отзыв"><i class="fa fa-angle-right"></i></button>
-                            </div>
+
+                                <div class="reviews__mobile-hint" aria-hidden="true">Свайпните, чтобы посмотреть больше отзывов</div>
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -1551,6 +1424,7 @@
     <script src="/js/filters-custom-select.js" defer></script>
     <script src="/js/documents-checklist.js" defer></script>
     <script src="/js/client-quiz.js" defer></script>
+    <script src="/js/yandex-reviews.js" defer></script>
 
     <!-- Contact widget -->
     <div class="cw" data-cw-root>
