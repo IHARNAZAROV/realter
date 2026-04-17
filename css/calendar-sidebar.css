@@ -23,17 +23,12 @@
 }
 
 /* ──────────────────────────────────────────────────────────
-   ОБЁРТКА SIDEBAR — фиксированная, вне потока
+   ОБЁРТКА SIDEBAR — десктоп/планшет: в потоке, панель якорится к контейнеру
    ────────────────────────────────────────────────────────── */
 .blog-calendar-sidebar {
-  position: fixed;
-  right: 24px;
-  bottom: 100px;   /* Чуть выше контакт-виджета */
-  z-index: 490;    /* Под контакт-виджетом (z-index ~500), но над контентом */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 10px;
+  position: relative;
+  z-index: 490;
+  min-height: 0;
 }
 
 /* ──────────────────────────────────────────────────────────
@@ -138,7 +133,10 @@
    ПАНЕЛЬ КАЛЕНДАРЯ (раскрывается вверх)
    ────────────────────────────────────────────────────────── */
 .calendar-panel {
-  order: -1;  /* Панель рисуется выше кнопки */
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 10px;
   width: 300px;
   background: linear-gradient(145deg, var(--cs-bg-card), var(--cs-bg));
   border: 1px solid var(--cs-border);
@@ -150,16 +148,25 @@
 
   /* Скрытое состояние */
   opacity: 0;
-  transform: translateY(12px) scale(0.97);
+  transform: translateY(-12px) scale(0.97);
   pointer-events: none;
   transition: opacity var(--cs-trans), transform var(--cs-trans);
-  transform-origin: bottom right;
+  transform-origin: top right;
 }
 
 .calendar-panel.is-open {
   opacity: 1;
   transform: translateY(0) scale(1);
   pointer-events: auto;
+}
+
+/* Триггер в панели фильтров (desktop/tablet) */
+.blog-filter-button--calendar {
+  display: inline-flex;
+}
+
+.calendar-fab--mobile {
+  display: none;
 }
 
 /* Золотая полоска сверху */
@@ -576,11 +583,6 @@
    Fixed-виджет, небольшие размеры
    ────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) and (min-width: 769px) {
-  .blog-calendar-sidebar {
-    right: 16px;
-    bottom: 90px;
-  }
-
   .calendar-panel {
     width: 280px;
   }
@@ -603,6 +605,14 @@
     right: auto !important;
     bottom: auto !important;
     z-index: auto !important;
+  }
+
+  .blog-filter-button--calendar {
+    display: none !important;
+  }
+
+  .calendar-fab--mobile {
+    display: flex !important;
   }
 
   /* Кнопка — во всю ширину, как аккордеон-хедер */

@@ -36,6 +36,9 @@
   ---------------------------------------------------------- */
   let elSidebar;
   let elFab;
+  let elFabMobile;
+  let elFabDesktop;
+  let elFabTriggers = [];
   let elPanel;
   let elTitle;
   let elGrid;
@@ -231,42 +234,48 @@
      есть хотя бы один день с публикациями
   ---------------------------------------------------------- */
   function updateFabDot() {
-    if (!elFab) return;
+    const dotTarget = elFabMobile || elFab || elFabDesktop;
+    if (!dotTarget) return;
     const prefix = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}`;
     const hasThisMonth = Object.keys(articlesByDate).some(function (k) {
       return k.startsWith(prefix);
     });
 
-    let dot = elFab.querySelector(".calendar-fab__dot");
+    let dot = dotTarget.querySelector(".calendar-fab__dot");
     if (hasThisMonth && !dot) {
       dot = document.createElement("span");
       dot.className = "calendar-fab__dot";
       dot.setAttribute("aria-hidden", "true");
-      elFab.appendChild(dot);
+      dotTarget.appendChild(dot);
     } else if (!hasThisMonth && dot) {
       dot.remove();
     }
+  }
+
+  function syncFabState(expanded) {
+    elFabTriggers.forEach(function (trigger) {
+      trigger.classList.toggle("is-open", expanded);
+      trigger.setAttribute("aria-expanded", String(expanded));
+    });
   }
 
   /* ----------------------------------------------------------
      ПАНЕЛЬ: открыть / закрыть
   ---------------------------------------------------------- */
   function openPanel() {
-    if (!elPanel || !elFab) return;
+    if (!elPanel) return;
     panelIsOpen = true;
     elPanel.classList.add("is-open");
     elPanel.setAttribute("aria-hidden", "false");
-    elFab.classList.add("is-open");
-    elFab.setAttribute("aria-expanded", "true");
+    syncFabState(true);
   }
 
   function closePanel() {
-    if (!elPanel || !elFab) return;
+    if (!elPanel) return;
     panelIsOpen = false;
     elPanel.classList.remove("is-open");
     elPanel.setAttribute("aria-hidden", "true");
-    elFab.classList.remove("is-open");
-    elFab.setAttribute("aria-expanded", "false");
+    syncFabState(false);
   }
 
   function togglePanel() {
@@ -342,7 +351,10 @@
     elSidebar      = document.querySelector(".blog-calendar-sidebar");
     if (!elSidebar) return;
 
-    elFab          = elSidebar.querySelector(".calendar-fab");
+    elFabMobile    = elSidebar.querySelector(".calendar-fab--mobile");
+    elFabDesktop   = document.querySelector(".blog-filter-button--calendar");
+    elFabTriggers  = [elFabDesktop, elFabMobile].filter(Boolean);
+    elFab          = window.innerWidth <= 768 ? (elFabMobile || elFabDesktop) : (elFabDesktop || elFabMobile);
     elPanel        = elSidebar.querySelector(".calendar-panel");
     elTitle        = elSidebar.querySelector(".calendar-title");
     elGrid         = elSidebar.querySelector(".calendar-grid");
@@ -384,17 +396,22 @@
     });
 
     /* FAB: открыть/закрыть панель */
-    if (elFab) {
-      elFab.addEventListener("click", function (e) {
-        e.stopPropagation();
-        togglePanel();
+    if (elFabTriggers.length) {
+      elFabTriggers.forEach(function (trigger) {
+        trigger.addEventListener("click", function (e) {
+          e.stopPropagation();
+          togglePanel();
+        });
       });
     }
 
     /* Клик вне панели и FAB → закрыть панель (только на десктопе)
        На мобильном аккордеон закрывается только кнопкой или Esc */
     document.addEventListener("click", function (e) {
-      if (panelIsOpen && !elSidebar.contains(e.target)) {
+      const clickedTrigger = elFabTriggers.some(function (trigger) {
+        return trigger.contains(e.target);
+      });
+      if (panelIsOpen && !elSidebar.contains(e.target) && !clickedTrigger) {
         var isMobile = window.innerWidth <= 768;
         if (!isMobile) closePanel();
       }

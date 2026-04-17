@@ -321,12 +321,13 @@
             >
               <!-- Кнопка-триггер -->
               <button
-                class="calendar-fab"
+                class="calendar-fab calendar-fab--mobile"
                 type="button"
                 aria-label="Открыть календарь публикаций"
                 aria-expanded="false"
                 aria-controls="calendar-panel"
                 id="calendarFab"
+                data-calendar-trigger
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <rect x="3" y="4" width="18" height="18" rx="3" ry="3"/>
@@ -410,6 +411,16 @@
                   data-filter="psychology"
                 >
                   Психология
+                </button>
+                <button
+                  type="button"
+                  class="blog-filter-button blog-filter-button--calendar"
+                  aria-label="Открыть календарь публикаций"
+                  aria-expanded="false"
+                  aria-controls="calendar-panel"
+                  data-calendar-trigger
+                >
+                  Публикации
                 </button>
               </div>
             </div>
