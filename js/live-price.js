@@ -22,14 +22,6 @@
     return `${yyyy}-${mm}-${dd}`;
   }
 
-  function getApiDateForQuery() {
-    const now = new Date();
-    const dd = String(now.getDate()).padStart(2, "0");
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const yyyy = now.getFullYear();
-    return `${yyyy}-${mm}-${dd}`;
-  }
-
   function normalizeRatePayload(payload) {
     const officialRate = Number(payload?.Cur_OfficialRate);
     const scale = Number(payload?.Cur_Scale) || 1;
@@ -90,14 +82,8 @@
       return cached;
     }
 
-    const requestUrl = `${API_URL}?ondate=${encodeURIComponent(getApiDateForQuery())}&parammode=2`;
-
-    ratePromise = fetch(requestUrl, {
+    ratePromise = fetch(API_URL, {
       cache: "no-store",
-      headers: {
-        "Cache-Control": "no-cache",
-        Pragma: "no-cache",
-      },
     })
       .then((res) => {
         if (!res.ok) {
