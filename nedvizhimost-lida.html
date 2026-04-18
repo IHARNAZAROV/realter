@@ -58,6 +58,7 @@
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned />
+    <link rel="stylesheet" type="text/css" href="css/price-range-slider.css" />
     <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -248,11 +249,30 @@
 
                 <!-- PRICE -->
                 <div class="filter-item filter-price">
-                  <label>Цена, BYN</label>
-                  <div class="price-fields">
-                    <input type="text" id="priceFrom" placeholder="от" />
-                    <span>—</span>
-                    <input type="text" id="priceTo" placeholder="до" />
+                  <div class="price-filter">
+                    <div class="price-filter__label">Цена</div>
+
+                    <div class="price-filter__values" aria-live="polite">
+                      <span id="priceMinValue"></span>
+                      <span id="priceMaxValue"></span>
+                    </div>
+
+                    <div class="price-filter__slider">
+                      <div class="price-filter__track"></div>
+                      <div class="price-filter__range" id="priceRangeFill"></div>
+
+                      <input
+                        type="range"
+                        id="priceMin"
+                        class="price-filter__input price-filter__input--min"
+                      />
+
+                      <input
+                        type="range"
+                        id="priceMax"
+                        class="price-filter__input price-filter__input--max"
+                      />
+                    </div>
                   </div>
                 </div>
 

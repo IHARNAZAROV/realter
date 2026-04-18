@@ -23,8 +23,11 @@ let loadMoreAppearedOnce = false;
 const sortSelect = document.getElementById("sortSelect");
 const typeSelect = document.getElementById("typeSelect");
 const roomsSelect = document.getElementById("roomsSelect");
-const priceFromInput = document.getElementById("priceFrom");
-const priceToInput = document.getElementById("priceTo");
+const priceMinInput = document.getElementById("priceMin");
+const priceMaxInput = document.getElementById("priceMax");
+const priceMinValue = document.getElementById("priceMinValue");
+const priceMaxValue = document.getElementById("priceMaxValue");
+const priceRangeFill = document.getElementById("priceRangeFill");
 const locationSelect = document.getElementById("locationSelect");
 const objectsList = document.getElementById("objectsList");
 const resetBtn = document.getElementById("resetFilters");
@@ -72,8 +75,124 @@ function getObjectPriceByn(obj) {
   return price;
 }
 
-function parsePrice(v) {
-  return v ? Number(String(v).replace(/\s/g, "")) : 0;
+const PRICE_STEP = 1000;
+const PRICE_MIN_GAP = 1000;
+let priceBoundsMin = 0;
+let priceBoundsMax = 0;
+
+function formatSliderPrice(value) {
+  return Number(value || 0).toLocaleString("ru-RU");
+}
+
+function getSelectedMinPrice() {
+  return Number(priceMinInput?.value || priceBoundsMin || 0);
+}
+
+function getSelectedMaxPrice() {
+  return Number(priceMaxInput?.value || priceBoundsMax || 0);
+}
+
+function refreshPriceRangeUI() {
+  if (!priceMinInput || !priceMaxInput || !priceRangeFill) return;
+
+  const min = Number(priceMinInput.min || 0);
+  const max = Number(priceMinInput.max || 0);
+  const selectedMin = getSelectedMinPrice();
+  const selectedMax = getSelectedMaxPrice();
+  const range = Math.max(max - min, 1);
+
+  const left = ((selectedMin - min) / range) * 100;
+  const right = ((selectedMax - min) / range) * 100;
+
+  priceRangeFill.style.left = `${left}%`;
+  priceRangeFill.style.width = `${Math.max(right - left, 0)}%`;
+
+  if (priceMinValue) {
+    priceMinValue.textContent = `Цена: от ${formatSliderPrice(selectedMin)} $`;
+  }
+
+  if (priceMaxValue) {
+    priceMaxValue.textContent = `до ${formatSliderPrice(selectedMax)} $`;
+  }
+}
+
+function applySliderDistance(activeThumb) {
+  if (!priceMinInput || !priceMaxInput) return;
+
+  let minValue = Number(priceMinInput.value);
+  let maxValue = Number(priceMaxInput.value);
+
+  if (maxValue - minValue < PRICE_MIN_GAP) {
+    if (activeThumb === "min") {
+      minValue = maxValue - PRICE_MIN_GAP;
+      if (minValue < priceBoundsMin) {
+        minValue = priceBoundsMin;
+        maxValue = Math.min(priceBoundsMax, minValue + PRICE_MIN_GAP);
+      }
+    } else {
+      maxValue = minValue + PRICE_MIN_GAP;
+      if (maxValue > priceBoundsMax) {
+        maxValue = priceBoundsMax;
+        minValue = Math.max(priceBoundsMin, maxValue - PRICE_MIN_GAP);
+      }
+    }
+  }
+
+  priceMinInput.value = String(minValue);
+  priceMaxInput.value = String(maxValue);
+}
+
+function handlePriceRangeInput(event) {
+  const activeThumb = event?.target?.id === "priceMin" ? "min" : "max";
+  applySliderDistance(activeThumb);
+  refreshPriceRangeUI();
+  debouncedApply();
+}
+
+function initPriceRange(objects) {
+  if (!priceMinInput || !priceMaxInput) return;
+
+  const prices = objects
+    .map((obj) => getObjectPriceByn(obj))
+    .filter((price) => typeof price === "number" && price > 0);
+
+  if (!prices.length) {
+    priceBoundsMin = 0;
+    priceBoundsMax = PRICE_STEP;
+  } else {
+    priceBoundsMin = Math.min(...prices);
+    priceBoundsMax = Math.max(...prices);
+  }
+
+  if (priceBoundsMin === priceBoundsMax) {
+    priceBoundsMax = priceBoundsMin + PRICE_STEP;
+  }
+
+  priceMinInput.min = String(priceBoundsMin);
+  priceMinInput.max = String(priceBoundsMax);
+  priceMinInput.step = String(PRICE_STEP);
+
+  priceMaxInput.min = String(priceBoundsMin);
+  priceMaxInput.max = String(priceBoundsMax);
+  priceMaxInput.step = String(PRICE_STEP);
+
+  priceMinInput.value = String(priceBoundsMin);
+  priceMaxInput.value = String(priceBoundsMax);
+
+  refreshPriceRangeUI();
+}
+
+function setPriceRange(minValue, maxValue) {
+  if (!priceMinInput || !priceMaxInput) return;
+
+  const nextMin = Math.max(priceBoundsMin, Number(minValue || priceBoundsMin));
+  const nextMax = Math.min(priceBoundsMax, Number(maxValue || priceBoundsMax));
+
+  priceMinInput.value = String(nextMin);
+  priceMaxInput.value = String(nextMax);
+
+  applySliderDistance("max");
+  refreshPriceRangeUI();
 }
 
 function debounce(fn, delay = 400) {
@@ -203,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((data) => {
       allObjects = data;
+      initPriceRange(allObjects);
       updateRoomsState();
       loadFiltersFromStorage();
       applyFiltersAndSort();
@@ -233,8 +353,8 @@ function bindEvents() {
   roomsSelect.addEventListener("change", applyFiltersAndSort);
   locationSelect.addEventListener("change", applyFiltersAndSort);
 
-  priceFromInput.addEventListener("input", handlePriceInput);
-  priceToInput.addEventListener("input", handlePriceInput);
+  priceMinInput?.addEventListener("input", handlePriceRangeInput);
+  priceMaxInput?.addEventListener("input", handlePriceRangeInput);
 
   if (resetBtn) {
     resetBtn.addEventListener("click", resetFilters);
@@ -249,8 +369,7 @@ function resetFilters() {
   typeSelect.value = "all";
   roomsSelect.value = "all";
   roomsSelect.disabled = true;
-  priceFromInput.value = "";
-  priceToInput.value = "";
+  setPriceRange(priceBoundsMin, priceBoundsMax);
   locationSelect.value = "all";
 
   localStorage.removeItem(FILTERS_STORAGE_KEY);
@@ -267,21 +386,6 @@ function updateRoomsState() {
 }
 
 /* =========================================================
-   PRICE INPUTS
-========================================================= */
-function handlePriceInput() {
-  let from = parsePrice(priceFromInput.value);
-  let to = parsePrice(priceToInput.value);
-
-  if (from && to && from > to) to = from;
-
-  priceFromInput.value = formatPrice(from);
-  priceToInput.value = formatPrice(to);
-
-  debouncedApply();
-}
-
-/* =========================================================
    FILTER + SORT (оптимизированная версия)
 ========================================================= */
 function applyFiltersAndSort() {
@@ -290,8 +394,8 @@ function applyFiltersAndSort() {
   const typeValue = typeSelect.value;
   const roomValue = roomsSelect.value;
   const locationValue = locationSelect.value;
-  const priceFrom = parsePrice(priceFromInput.value);
-  const priceTo = parsePrice(priceToInput.value);
+  const priceFrom = getSelectedMinPrice();
+  const priceTo = getSelectedMaxPrice();
   const isFlat = typeValue === "Квартира";
 
   // ЕДИНЫЙ ЦИКЛ ФИЛЬТРАЦИИ (вместо 5 отдельных)
@@ -397,14 +501,12 @@ function buildFiltersDescription() {
   if (roomsSelect.value !== "all") {
     parts.push(roomsSelect.value === "4" ? "4+ комнаты" : roomsSelect.value + "-комн.");
   }
-  const from = parsePrice(priceFromInput.value);
-  const to   = parsePrice(priceToInput.value);
-  if (from || to) {
-    const p = [
-      from ? "от " + from.toLocaleString("ru") + " р." : "",
-      to   ? "до " + to.toLocaleString("ru")   + " р." : "",
-    ].filter(Boolean).join(" ");
-    parts.push(p);
+  const from = getSelectedMinPrice();
+  const to = getSelectedMaxPrice();
+  const hasCustomPrice = from > priceBoundsMin || to < priceBoundsMax;
+
+  if (hasCustomPrice) {
+    parts.push(`от ${from.toLocaleString("ru-RU")} до ${to.toLocaleString("ru-RU")} BYN`);
   }
   if (locationSelect.value !== "all") {
     const loc = { lida: "Лида", district: "Лидский район", other: "Другой город" };
@@ -1165,14 +1267,14 @@ function updateObjectsCounter(count) {
 
   if (!counter || !row) return;
 
-  const priceFrom = parsePrice(priceFromInput.value);
-  const priceTo = parsePrice(priceToInput.value);
+  const priceFrom = getSelectedMinPrice();
+  const priceTo = getSelectedMaxPrice();
 
   // EMPTY STATE
   if (count === 0) {
     let hint = "";
 
-    if (priceFrom > 0) {
+    if (priceFrom > priceBoundsMin) {
       hint = `<span class="price-hint">
         Попробуйте снизить минимальную цену
       </span>`;
@@ -1198,24 +1300,20 @@ function updateObjectsCounter(count) {
 }
 
 function updateActiveFilters() {
-  const fields = [
-    sortSelect,
-    typeSelect,
-    roomsSelect,
-    locationSelect,
-    priceFromInput,
-    priceToInput,
-  ];
+  const hasCustomPrice =
+    getSelectedMinPrice() > priceBoundsMin || getSelectedMaxPrice() < priceBoundsMax;
+
+  const fields = [sortSelect, typeSelect, roomsSelect, locationSelect];
 
   fields.forEach((field) => {
     if (!field) return;
 
-    const isActive =
-      (field.tagName === "SELECT" && field.value !== "all") ||
-      (field.tagName === "INPUT" && field.value.trim() !== "");
-
+    const isActive = field.tagName === "SELECT" && field.value !== "all";
     field.classList.toggle("is-active", isActive);
   });
+
+  priceMinInput?.classList.toggle("is-active", hasCustomPrice);
+  priceMaxInput?.classList.toggle("is-active", hasCustomPrice);
 }
 
 const FILTERS_STORAGE_KEY = "objectsFilters";
@@ -1225,8 +1323,8 @@ function saveFiltersToStorage() {
     sort: sortSelect.value,
     type: typeSelect.value,
     rooms: roomsSelect.value,
-    priceFrom: priceFromInput.value,
-    priceTo: priceToInput.value,
+    priceFrom: getSelectedMinPrice(),
+    priceTo: getSelectedMaxPrice(),
     location: locationSelect.value,
   };
 
@@ -1243,8 +1341,7 @@ function loadFiltersFromStorage() {
     sortSelect.value = data.sort ?? "recommended";
     typeSelect.value = data.type ?? "all";
     roomsSelect.value = data.rooms ?? "all";
-    priceFromInput.value = data.priceFrom ?? "";
-    priceToInput.value = data.priceTo ?? "";
+    setPriceRange(data.priceFrom ?? priceBoundsMin, data.priceTo ?? priceBoundsMax);
     locationSelect.value = data.location ?? "all";
 
     updateRoomsState();
