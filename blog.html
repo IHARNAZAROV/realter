@@ -161,6 +161,7 @@
     <link rel="stylesheet" href="/css/blog-tags.css" />
     <link rel="stylesheet" href="/css/contact-widget.css" />
     <link rel="stylesheet" href="/css/calendar-sidebar.css" data-versioned />
+    <link rel="stylesheet" href="/css/blog-sidebar.css" data-versioned />
   </head>
   <body>
     <div class="page-wraper">
@@ -373,49 +374,68 @@
               </div>
             </aside>
 
-            <div class="blog-filter-panel" aria-label="Фильтр статей">
-              <div class="blog-tag-results" id="blog-tag-results" hidden></div>
-              <div class="blog-filter-buttons" id="blog-filter-buttons">
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="all"
-                >
-                  Все
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button is-active"
-                  data-filter="latest"
-                >
-                  Последние статьи
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="legal"
-                >
-                  Юридические риски
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="sale"
-                >
-                  Покупка / продажа
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="psychology"
-                >
-                  Психология
-                </button>
-              </div>
-            </div>
+            <div class="blog-layout">
 
-            <div class="blog-grid-list mfp-gallery news-masonry">
-              <!-- BLOG ITEMS FROM JSON -->
+              <!-- =========================================
+                   SIDEBAR
+                   ========================================= -->
+              <aside class="blog-sidebar" id="blogSidebar" aria-label="Навигация по блогу">
+
+                <div class="bsb-widget">
+                  <h3 class="bsb-widget__title">Категории</h3>
+                  <ul class="bsb-cat-list" id="bsbCatList"></ul>
+                </div>
+
+                <div class="bsb-widget">
+                  <h3 class="bsb-widget__title">Поиск</h3>
+                  <div class="bsb-search-wrap">
+                    <input
+                      type="text"
+                      class="bsb-search-input"
+                      id="bsbSearchInput"
+                      placeholder="Введите название статьи..."
+                      autocomplete="off"
+                      aria-label="Поиск по статьям"
+                    />
+                  </div>
+                </div>
+
+                <div class="bsb-widget">
+                  <h3 class="bsb-widget__title">Последние статьи</h3>
+                  <div class="bsb-recent-list" id="bsbRecentList"></div>
+                </div>
+
+                <div class="bsb-widget">
+                  <h3 class="bsb-widget__title">Архив</h3>
+                  <div class="bsb-archive-list" id="bsbArchiveList"></div>
+                </div>
+
+              </aside>
+
+              <!-- =========================================
+                   MAIN CONTENT
+                   ========================================= -->
+              <div class="blog-main-content">
+
+                <div class="blog-tag-results" id="blog-tag-results" hidden></div>
+
+                <div class="blog-results-bar">
+                  <span class="blog-results-text" id="blogResultsText"></span>
+                  <button type="button" class="blog-reset-filter" id="blogResetFilter" hidden>
+                    Сбросить фильтр
+                  </button>
+                </div>
+
+                <div class="blog-grid-list mfp-gallery news-masonry" id="blogGridList">
+                </div>
+
+                <div class="blog-load-more-wrap" id="blogLoadMoreWrap">
+                  <button type="button" class="blog-load-more-btn" id="blogLoadMoreBtn">
+                    Показать ещё статьи
+                  </button>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
@@ -621,7 +641,7 @@
        ========================================= -->
     <!-- 4. Page Specific Init -->
     <script src="/js/blog-tags.js" defer></script>
-    <script src="/js/blog-list.js" defer></script>
+    <script src="/js/blog-sidebar.js" defer></script>
     <script src="/js/calendar-sidebar.js" defer></script>
     <script src="/js/optimize.js" defer data-versioned></script>
     <script src="/js/analytics-consent-loader.js" defer></script>
