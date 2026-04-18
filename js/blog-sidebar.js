@@ -81,7 +81,7 @@ function loadArticles() {
   fetch("/data/blog-articles.json")
     .then(r => { if (!r.ok) throw new Error("JSON load error"); return r.json(); })
     .then(data => {
-      allArticles = [...data].sort((a, b) => parseDate(b.date) - parseDate(a.date));
+      allArticles = [...data].sort((a, b) => bsbParseDate(b.date) - bsbParseDate(a.date));
       fadeOutSkeletons(() => {
         renderSidebar();
         applyFilters({ skipAnimation: true });
@@ -181,7 +181,7 @@ function renderArchive() {
 
   const byYearMonth = {};
   allArticles.forEach(a => {
-    const d = parseDate(a.date);
+    const d = bsbParseDate(a.date);
     const year  = d.getFullYear();
     const month = d.getMonth();
     const key   = `${year}-${String(month + 1).padStart(2, "0")}`;
@@ -227,7 +227,7 @@ function applyFilters({ skipAnimation = false } = {}) {
   } else if (activeArchive) {
     const [y, m] = activeArchive.split("-").map(Number);
     filteredArticles = allArticles.filter(a => {
-      const d = parseDate(a.date);
+      const d = bsbParseDate(a.date);
       return d.getFullYear() === y && d.getMonth() + 1 === m;
     });
   } else {
@@ -513,25 +513,25 @@ function updateCategoryActive() {
 /* ================================================================
    HELPERS — Data
    ================================================================ */
-function parseDate(str) {
+function bsbParseDate(str) {
   if (!str || typeof str !== "string") return new Date(0);
   if (str.includes(".")) {
-    const [d, m, y] = str.split(".");
-    return new Date(+y, +m - 1, +d);
+    const [dd, mm, yy] = str.split(".");
+    return new Date(+yy, +mm - 1, +dd);
   }
   return new Date(str);
 }
 
 function formatDate(str) {
   try {
-    const d = parseDate(str);
+    const d = bsbParseDate(str);
     return d.toLocaleDateString("ru-RU", { day: "2-digit", month: "long", year: "numeric" });
   } catch { return str; }
 }
 
 function renderDate(str) {
   try {
-    const d = parseDate(str);
+    const d = bsbParseDate(str);
     return `<strong>${d.getDate().toString().padStart(2, "0")}</strong>
             <span>${d.toLocaleDateString("ru-RU", { month: "short" })}</span>`;
   } catch { return ""; }
