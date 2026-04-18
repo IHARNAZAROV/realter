@@ -309,9 +309,6 @@ function cardHTML(a) {
             <a href="/blog/${a.slug}">${a.title}</a>
           </h4>
         </div>
-        <a href="/blog/${a.slug}" class="blog-read-more">
-          Узнать подробнее <i class="fa-solid fa-arrow-right"></i>
-        </a>
       </div>
     </div>
   `;

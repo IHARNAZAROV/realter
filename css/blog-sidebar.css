@@ -351,6 +351,30 @@
   pointer-events: none;
 }
 
+/* ── Compact card overrides (no read-more button) ───────────── */
+.blog-grid-list .sx-post-info.p-t30 {
+  padding-top: 16px !important;
+}
+
+.blog-grid-list .sx-post-info {
+  padding-bottom: 20px;
+}
+
+.blog-grid-list .sx-post-meta ul {
+  margin-bottom: 8px;
+}
+
+.blog-grid-list .post-title {
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.blog-grid-list .blog-card {
+  display: flex;
+  flex-direction: column;
+}
+
 /* ── Empty state ─────────────────────────────────────────────── */
 .blog-empty-state {
   grid-column: 1 / -1;
