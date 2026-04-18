@@ -12,7 +12,6 @@ const BLOG_FILTERS = {
   latest: {
     key: "latest",
     predicate: () => true,
-    limit: 6,
   },
   legal: {
     key: "legal",
@@ -33,25 +32,24 @@ const BLOG_FILTERS = {
 };
 
 const FILTER_ANIMATION_DURATION = 260;
+const BLOG_PAGE_SIZE = 6;
 
 let allArticles = [];
 let activeFilterKey = "latest";
 let activeTagSlug = getTagFromQuery();
 let tagLabelCache = {}; // ✅ Кэш для slugs -> labels
-let prevActiveFilterKey = null; // ✅ Для оптимизации обновления кнопок
+let visibleArticlesCount = BLOG_PAGE_SIZE;
 
 document.addEventListener("DOMContentLoaded", () => {
   if (activeTagSlug) {
     activeFilterKey = null;
   }
 
-  movePublishButtonToSidebar();
-  window.addEventListener("resize", movePublishButtonToSidebar);
-
-  renderSkeletons(8);
+  renderSkeletons(BLOG_PAGE_SIZE);
   loadBlogArticles();
   initBlogFilters();
   initTagCloudFilter();
+  initLoadMore();
   initTagResultsReset();
   updateActiveFilterButton();
   updateTagResultsState();
@@ -194,6 +192,7 @@ function initBlogFilters() {
 
     activeTagSlug = null;
     activeFilterKey = nextFilterKey;
+    visibleArticlesCount = BLOG_PAGE_SIZE;
     syncTagQueryParam();
     updateTagResultsState();
     updateActiveFilterButton();
@@ -208,6 +207,7 @@ function initTagResultsReset() {
 
     activeTagSlug = null;
     activeFilterKey = "all";
+    visibleArticlesCount = BLOG_PAGE_SIZE;
     syncTagQueryParam();
     updateTagResultsState();
     updateActiveFilterButton();
@@ -227,13 +227,15 @@ function renderActiveArticles({ skipAnimation = false } = {}) {
   const container = document.querySelector(".blog-grid-list");
   if (!container || !allArticles.length) return;
 
-  const articles = getVisibleArticles();
-  updateTagResultsState(articles.length);
+  const filteredArticles = getVisibleArticles();
+  const pagedArticles = filteredArticles.slice(0, visibleArticlesCount);
+  updateTagResultsState(filteredArticles.length);
   updateActiveTagCloud();
+  updateLoadMoreState(filteredArticles.length);
 
   if (skipAnimation) {
     // ✅ Простая отрисовка без анимации при загрузке
-    renderBlogCards(articles);
+    renderBlogCards(pagedArticles);
     container.classList.add("blog-list-fade-in");
     setTimeout(() => {
       container.classList.remove("blog-list-fade-in");
@@ -245,7 +247,7 @@ function renderActiveArticles({ skipAnimation = false } = {}) {
   container.classList.add("blog-list-fade-out");
 
   setTimeout(() => {
-    renderBlogCards(articles);
+    renderBlogCards(pagedArticles);
     container.classList.remove("blog-list-fade-out");
     container.classList.add("blog-list-fade-in");
 
@@ -350,22 +352,6 @@ function syncTagQueryParam() {
   window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
-function movePublishButtonToSidebar() {
-  const publishButton = document.querySelector(".blog-calendar-sidebar");
-  const sidebarContainer = document.getElementById("sidebarPublishContainer");
-  const floatingHost = document.getElementById("blogFloatingPublishHost");
-  if (!publishButton || !sidebarContainer || !floatingHost) return;
-
-  const shouldMoveToSidebar = window.innerWidth > 768;
-  if (shouldMoveToSidebar && publishButton.parentElement !== sidebarContainer) {
-    sidebarContainer.appendChild(publishButton);
-    publishButton.classList.add("inside-sidebar");
-  } else if (!shouldMoveToSidebar && publishButton.parentElement !== floatingHost) {
-    floatingHost.appendChild(publishButton);
-    publishButton.classList.remove("inside-sidebar");
-  }
-}
-
 function renderSidebarCategories() {
   const categoriesBlock = document.querySelector(".blog-categories");
   if (!categoriesBlock) return;
@@ -397,8 +383,10 @@ function renderRandomTags(posts) {
 
   const uniqueTags = [...new Set(posts.flatMap((post) => post.tags || []))];
   const shuffledTags = shuffleArray(uniqueTags);
+  const tagsLimit = Math.min(shuffledTags.length, randomInt(5, 6));
 
   container.innerHTML = shuffledTags
+    .slice(0, tagsLimit)
     .map((tag) => `
       <button type="button" class="tag-item" data-tag-slug="${slugify(tag)}">
         ${tag}
@@ -419,11 +407,30 @@ function initTagCloudFilter() {
 
     activeTagSlug = tagButton.dataset.tagSlug || null;
     activeFilterKey = null;
+    visibleArticlesCount = BLOG_PAGE_SIZE;
     syncTagQueryParam();
     updateTagResultsState();
     updateActiveFilterButton();
     renderActiveArticles();
   });
+}
+
+function initLoadMore() {
+  const loadMoreButton = document.getElementById("blog-load-more");
+  if (!loadMoreButton) return;
+
+  loadMoreButton.addEventListener("click", () => {
+    visibleArticlesCount += BLOG_PAGE_SIZE;
+    renderActiveArticles();
+  });
+}
+
+function updateLoadMoreState(totalArticlesCount) {
+  const loadMoreButton = document.getElementById("blog-load-more");
+  if (!loadMoreButton) return;
+
+  const hasMore = totalArticlesCount > visibleArticlesCount;
+  loadMoreButton.hidden = !hasMore;
 }
 
 function updateActiveTagCloud() {

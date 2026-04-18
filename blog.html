@@ -308,70 +308,36 @@
         <!-- Blog Grid Section -->
         <div class="section-full bg-white p-tb80 inner-page-padding">
           <div class="container clearfix">
-            <div id="blogFloatingPublishHost">
-              <aside
-                class="blog-calendar-sidebar"
-                aria-label="Календарь публикаций"
-                id="blogCalendarSidebar"
-              >
-                <!-- Кнопка-триггер -->
-                <button
-                  class="calendar-fab"
-                  type="button"
-                  aria-label="Открыть календарь публикаций"
-                  aria-expanded="false"
-                  aria-controls="calendar-panel"
-                  id="calendarFab"
-                >
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect x="3" y="4" width="18" height="18" rx="3" ry="3"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                  </svg>
-                  <span class="calendar-fab__label">Публикации</span>
-                  <svg class="calendar-fab__chevron" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M6 9l6 6 6-6"/>
-                  </svg>
-                </button>
-
-                <!-- Панель с календарём -->
-                <div
-                  class="calendar-panel"
-                  id="calendar-panel"
-                  aria-hidden="true"
-                >
-                  <div class="calendar-card">
-                    <div class="calendar-card__label">Публикации блога</div>
-
-                    <!-- Шапка навигации -->
-                    <div class="calendar-header">
-                      <button
-                        class="calendar-nav-btn calendar-prev"
-                        type="button"
-                        aria-label="Предыдущий месяц"
-                      ></button>
-                      <div class="calendar-title" aria-live="polite"></div>
-                      <button
-                        class="calendar-nav-btn calendar-next"
-                        type="button"
-                        aria-label="Следующий месяц"
-                      ></button>
-                    </div>
-
-                    <!-- Дни недели -->
-                    <div class="calendar-weekdays" aria-hidden="true"></div>
-
-                    <!-- Сетка дней -->
-                    <div class="calendar-grid" role="grid" aria-label="Дни месяца"></div>
-                  </div>
-                </div>
-              </aside>
-            </div>
-
             <div class="blog-layout">
               <aside class="blog-sidebar">
-                <div class="sidebar-block sidebar-publish-container" id="sidebarPublishContainer"></div>
+                <div class="sidebar-block sidebar-calendar-block">
+                  <aside
+                    class="blog-calendar-sidebar blog-calendar-sidebar--inline"
+                    aria-label="Календарь публикаций"
+                    id="blogCalendarSidebar"
+                  >
+                    <div class="calendar-panel is-open" id="calendar-panel" aria-hidden="false">
+                      <div class="calendar-card">
+                        <div class="calendar-card__label">Публикации блога</div>
+                        <div class="calendar-header">
+                          <button
+                            class="calendar-nav-btn calendar-prev"
+                            type="button"
+                            aria-label="Предыдущий месяц"
+                          ></button>
+                          <div class="calendar-title" aria-live="polite"></div>
+                          <button
+                            class="calendar-nav-btn calendar-next"
+                            type="button"
+                            aria-label="Следующий месяц"
+                          ></button>
+                        </div>
+                        <div class="calendar-weekdays" aria-hidden="true"></div>
+                        <div class="calendar-grid" role="grid" aria-label="Дни месяца"></div>
+                      </div>
+                    </div>
+                  </aside>
+                </div>
 
                 <div class="sidebar-block blog-categories" aria-label="Категории блога">
                   <h3 class="sidebar-title">Категории</h3>
@@ -432,6 +398,11 @@
                 </div>
                 <div class="blog-grid-list mfp-gallery news-masonry">
                   <!-- BLOG ITEMS FROM JSON -->
+                </div>
+                <div class="blog-load-more-wrap">
+                  <button type="button" class="blog-load-more-btn" id="blog-load-more">
+                    Загрузить еще
+                  </button>
                 </div>
               </div>
             </div>
