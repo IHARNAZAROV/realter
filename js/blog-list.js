@@ -45,9 +45,13 @@ document.addEventListener("DOMContentLoaded", () => {
     activeFilterKey = null;
   }
 
+  movePublishButtonToSidebar();
+  window.addEventListener("resize", movePublishButtonToSidebar);
+
   renderSkeletons(8);
   loadBlogArticles();
   initBlogFilters();
+  initTagCloudFilter();
   initTagResultsReset();
   updateActiveFilterButton();
   updateTagResultsState();
@@ -95,10 +99,15 @@ function loadBlogArticles() {
 
       // ✅ Кэшируем все теги при загрузке
       buildTagLabelCache();
+      renderSidebarCategories(allArticles);
+      renderRandomRecentPosts(allArticles);
+      renderRandomTags(allArticles);
 
       fadeOutSkeletons(() => {
         renderActiveArticles({ skipAnimation: true });
       });
+
+      document.dispatchEvent(new CustomEvent("blog:articlesReady", { detail: allArticles }));
     })
     .catch(console.error);
 }
@@ -220,6 +229,7 @@ function renderActiveArticles({ skipAnimation = false } = {}) {
 
   const articles = getVisibleArticles();
   updateTagResultsState(articles.length);
+  updateActiveTagCloud();
 
   if (skipAnimation) {
     // ✅ Простая отрисовка без анимации при загрузке
@@ -338,6 +348,103 @@ function syncTagQueryParam() {
   }
 
   window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+function movePublishButtonToSidebar() {
+  const publishButton = document.querySelector(".blog-calendar-sidebar");
+  const sidebarContainer = document.getElementById("sidebarPublishContainer");
+  const floatingHost = document.getElementById("blogFloatingPublishHost");
+  if (!publishButton || !sidebarContainer || !floatingHost) return;
+
+  const shouldMoveToSidebar = window.innerWidth > 768;
+  if (shouldMoveToSidebar && publishButton.parentElement !== sidebarContainer) {
+    sidebarContainer.appendChild(publishButton);
+    publishButton.classList.add("inside-sidebar");
+  } else if (!shouldMoveToSidebar && publishButton.parentElement !== floatingHost) {
+    floatingHost.appendChild(publishButton);
+    publishButton.classList.remove("inside-sidebar");
+  }
+}
+
+function renderSidebarCategories() {
+  const categoriesBlock = document.querySelector(".blog-categories");
+  if (!categoriesBlock) return;
+  categoriesBlock.hidden = false;
+}
+
+function renderRandomRecentPosts(posts) {
+  const container = document.getElementById("recent-posts-list");
+  if (!container || !Array.isArray(posts) || !posts.length) return;
+
+  const count = Math.min(posts.length, randomInt(3, 5));
+  const randomPosts = shuffleArray(posts).slice(0, count);
+
+  container.innerHTML = randomPosts
+    .map((post) => `
+      <a class="recent-post-item" href="/blog/${post.slug}">
+        <img src="${post.image}" alt="${post.imageAlt || post.title}" loading="lazy">
+        <div>
+          <span class="recent-post-title">${post.title}</span>
+        </div>
+      </a>
+    `)
+    .join("");
+}
+
+function renderRandomTags(posts) {
+  const container = document.getElementById("tags-cloud");
+  if (!container || !Array.isArray(posts) || !posts.length) return;
+
+  const uniqueTags = [...new Set(posts.flatMap((post) => post.tags || []))];
+  const shuffledTags = shuffleArray(uniqueTags);
+
+  container.innerHTML = shuffledTags
+    .map((tag) => `
+      <button type="button" class="tag-item" data-tag-slug="${slugify(tag)}">
+        ${tag}
+      </button>
+    `)
+    .join("");
+
+  updateActiveTagCloud();
+}
+
+function initTagCloudFilter() {
+  const tagsCloud = document.getElementById("tags-cloud");
+  if (!tagsCloud) return;
+
+  tagsCloud.addEventListener("click", (event) => {
+    const tagButton = event.target.closest(".tag-item");
+    if (!tagButton) return;
+
+    activeTagSlug = tagButton.dataset.tagSlug || null;
+    activeFilterKey = null;
+    syncTagQueryParam();
+    updateTagResultsState();
+    updateActiveFilterButton();
+    renderActiveArticles();
+  });
+}
+
+function updateActiveTagCloud() {
+  const tags = document.querySelectorAll(".tag-item");
+  tags.forEach((button) => {
+    const isActive = Boolean(activeTagSlug) && button.dataset.tagSlug === activeTagSlug;
+    button.classList.toggle("is-active", isActive);
+  });
+}
+
+function shuffleArray(list) {
+  const cloned = [...list];
+  for (let i = cloned.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+  }
+  return cloned;
+}
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function slugify(text) {

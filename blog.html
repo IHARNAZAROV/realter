@@ -308,114 +308,132 @@
         <!-- Blog Grid Section -->
         <div class="section-full bg-white p-tb80 inner-page-padding">
           <div class="container clearfix">
-
-            <!-- ==============================================
-                 CALENDAR SIDEBAR
-                 Desktop/tablet: position:fixed (floating FAB)
-                 Mobile: position:static (inline accordion)
-            =============================================== -->
-            <aside
-              class="blog-calendar-sidebar"
-              aria-label="Календарь публикаций"
-              id="blogCalendarSidebar"
-            >
-              <!-- Кнопка-триггер -->
-              <button
-                class="calendar-fab"
-                type="button"
-                aria-label="Открыть календарь публикаций"
-                aria-expanded="false"
-                aria-controls="calendar-panel"
-                id="calendarFab"
+            <div id="blogFloatingPublishHost">
+              <aside
+                class="blog-calendar-sidebar"
+                aria-label="Календарь публикаций"
+                id="blogCalendarSidebar"
               >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="3" y="4" width="18" height="18" rx="3" ry="3"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-                <span class="calendar-fab__label">Публикации</span>
-                <svg class="calendar-fab__chevron" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M6 9l6 6 6-6"/>
-                </svg>
-              </button>
+                <!-- Кнопка-триггер -->
+                <button
+                  class="calendar-fab"
+                  type="button"
+                  aria-label="Открыть календарь публикаций"
+                  aria-expanded="false"
+                  aria-controls="calendar-panel"
+                  id="calendarFab"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="3" ry="3"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span class="calendar-fab__label">Публикации</span>
+                  <svg class="calendar-fab__chevron" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </button>
 
-              <!-- Панель с календарём -->
-              <div
-                class="calendar-panel"
-                id="calendar-panel"
-                aria-hidden="true"
-              >
-                <div class="calendar-card">
-                  <div class="calendar-card__label">Публикации блога</div>
+                <!-- Панель с календарём -->
+                <div
+                  class="calendar-panel"
+                  id="calendar-panel"
+                  aria-hidden="true"
+                >
+                  <div class="calendar-card">
+                    <div class="calendar-card__label">Публикации блога</div>
 
-                  <!-- Шапка навигации -->
-                  <div class="calendar-header">
-                    <button
-                      class="calendar-nav-btn calendar-prev"
-                      type="button"
-                      aria-label="Предыдущий месяц"
-                    ></button>
-                    <div class="calendar-title" aria-live="polite"></div>
-                    <button
-                      class="calendar-nav-btn calendar-next"
-                      type="button"
-                      aria-label="Следующий месяц"
-                    ></button>
+                    <!-- Шапка навигации -->
+                    <div class="calendar-header">
+                      <button
+                        class="calendar-nav-btn calendar-prev"
+                        type="button"
+                        aria-label="Предыдущий месяц"
+                      ></button>
+                      <div class="calendar-title" aria-live="polite"></div>
+                      <button
+                        class="calendar-nav-btn calendar-next"
+                        type="button"
+                        aria-label="Следующий месяц"
+                      ></button>
+                    </div>
+
+                    <!-- Дни недели -->
+                    <div class="calendar-weekdays" aria-hidden="true"></div>
+
+                    <!-- Сетка дней -->
+                    <div class="calendar-grid" role="grid" aria-label="Дни месяца"></div>
                   </div>
-
-                  <!-- Дни недели -->
-                  <div class="calendar-weekdays" aria-hidden="true"></div>
-
-                  <!-- Сетка дней -->
-                  <div class="calendar-grid" role="grid" aria-label="Дни месяца"></div>
                 </div>
-              </div>
-            </aside>
-
-            <div class="blog-filter-panel" aria-label="Фильтр статей">
-              <div class="blog-tag-results" id="blog-tag-results" hidden></div>
-              <div class="blog-filter-buttons" id="blog-filter-buttons">
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="all"
-                >
-                  Все
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button is-active"
-                  data-filter="latest"
-                >
-                  Последние статьи
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="legal"
-                >
-                  Юридические риски
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="sale"
-                >
-                  Покупка / продажа
-                </button>
-                <button
-                  type="button"
-                  class="blog-filter-button"
-                  data-filter="psychology"
-                >
-                  Психология
-                </button>
-              </div>
+              </aside>
             </div>
 
-            <div class="blog-grid-list mfp-gallery news-masonry">
-              <!-- BLOG ITEMS FROM JSON -->
+            <div class="blog-layout">
+              <aside class="blog-sidebar">
+                <div class="sidebar-block sidebar-publish-container" id="sidebarPublishContainer"></div>
+
+                <div class="sidebar-block blog-categories" aria-label="Категории блога">
+                  <h3 class="sidebar-title">Категории</h3>
+                  <div class="blog-filter-buttons blog-filter-buttons--sidebar" id="blog-filter-buttons">
+                    <button type="button" class="blog-filter-button" data-filter="all">
+                      <span>Все публикации</span>
+                      <span class="blog-filter-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="blog-filter-button is-active" data-filter="latest">
+                      <span>Последние статьи</span>
+                      <span class="blog-filter-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="blog-filter-button" data-filter="legal">
+                      <span>Юридические риски</span>
+                      <span class="blog-filter-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="blog-filter-button" data-filter="sale">
+                      <span>Покупка / продажа</span>
+                      <span class="blog-filter-arrow" aria-hidden="true">→</span>
+                    </button>
+                    <button type="button" class="blog-filter-button" data-filter="psychology">
+                      <span>Психология</span>
+                      <span class="blog-filter-arrow" aria-hidden="true">→</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="sidebar-block sidebar-recent-posts">
+                  <h3 class="sidebar-title">Последние посты</h3>
+                  <div class="recent-posts-list" id="recent-posts-list"></div>
+                </div>
+
+                <div class="sidebar-call-box">
+                  <div class="sidebar-call-overlay"></div>
+                  <div class="sidebar-call-content">
+                    <div class="sidebar-call-icon" aria-hidden="true">📞</div>
+                    <div class="sidebar-call-title">Call Us Anytime</div>
+                    <div class="sidebar-call-text">
+                      Поможем подобрать недвижимость, ответим на вопросы и организуем просмотр.
+                    </div>
+                    <a href="contacts.html" class="sidebar-call-button">
+                      Связаться с нами
+                      <span aria-hidden="true">→</span>
+                    </a>
+                    <div class="sidebar-call-phone">+375 (29) 000-00-00</div>
+                  </div>
+                </div>
+
+                <div class="sidebar-block sidebar-tags-cloud">
+                  <h3 class="sidebar-title">Облако тегов</h3>
+                  <div class="tags-cloud" id="tags-cloud"></div>
+                </div>
+              </aside>
+
+              <div class="blog-content">
+                <div class="blog-filter-panel" aria-label="Фильтр статей">
+                  <div class="blog-tag-results" id="blog-tag-results" hidden></div>
+                </div>
+                <div class="blog-grid-list mfp-gallery news-masonry">
+                  <!-- BLOG ITEMS FROM JSON -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
