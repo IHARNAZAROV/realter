@@ -6,9 +6,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="/adminka_objects/direct-stats.css">
-  
+  <link rel="stylesheet" href="/adminka_objects/admin-premium.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="dashboard-theme">
+<body class="dashboard-theme premium-admin">
+
+<div class="admin-layout">
+
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar__header">
+      <h2>Control Center</h2>
+      <p>Premium Admin</p>
+    </div>
+    <nav class="admin-nav">
+      <a href="/adminka_objects/index.html">
+        <span class="pa-tab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span class="pa-tab__text"><span class="pa-tab__title">Объекты</span><span class="pa-tab__sub">Недвижимость</span></span>
+        <svg class="pa-tab__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+      <a href="/adminka_objects/tasks.html">
+        <span class="pa-tab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+        <span class="pa-tab__text"><span class="pa-tab__title">Задачи</span><span class="pa-tab__sub">To-do и доски</span></span>
+        <svg class="pa-tab__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+      <a href="/adminka_objects/direct.html" class="active">
+        <span class="pa-tab__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+        <span class="pa-tab__text"><span class="pa-tab__title">Яндекс Директ</span><span class="pa-tab__sub">Реклама и аналитика</span></span>
+        <svg class="pa-tab__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="admin-content-wrap">
 
 <!-- ===== HEADER ===== -->
 <header class="dashboard-header">
@@ -18,12 +47,6 @@
       <span class="sep">›</span>
       <span class="project">turko.by</span>
     </div>
-
-    <nav class="admin-nav">
-      <a href="/adminka_objects/index.html">Объекты</a>
-      <a href="/adminka_objects/tasks.html">Задачи</a>
-      <a href="/adminka_objects/direct.html" class="active">Яндекс Директ</a>
-    </nav>
   </div>
 </header>
 
@@ -319,6 +342,9 @@
     <div id="notification" class="notification"></div>
   </div>
 </main>
+
+  </div><!-- /admin-content-wrap -->
+</div><!-- /admin-layout -->
 
 <script src="/adminka_objects/direct.js"></script>
 </body>
