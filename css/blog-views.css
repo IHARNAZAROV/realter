@@ -1,0 +1,53 @@
+/* =========================================================
+   BLOG VIEWS COUNTER — минималистично, в стиле post-meta
+   ========================================================= */
+
+.post-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: inherit;
+  line-height: 1;
+}
+
+.post-views .post-views-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: .85;
+}
+
+.post-views .post-views-count {
+  font-weight: 600;
+}
+
+/* Внутри списка post-meta наследуем стиль соседних элементов */
+.sx-post-meta ul li.post-views {
+  display: inline-flex;
+}
+
+/* Бейдж под заголовком статьи (страница статьи) */
+.post-views--detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 18px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(28, 140, 92, .08);
+  color: #1c8c5c;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.post-views--detail .post-views-icon {
+  width: 15px;
+  height: 15px;
+  opacity: 1;
+}
+
+.post-views--detail .post-views-label {
+  font-weight: 500;
+  opacity: .85;
+}

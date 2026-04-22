@@ -302,6 +302,7 @@ function cardHTML(a) {
             <li class="post-reading">
               <i class="fa-solid fa-clock"></i> ${readingTime(a)} мин
             </li>
+            ${window.BlogViews ? window.BlogViews.renderCardBadge(a.id || a.slug) : ""}
           </ul>
         </div>
         <div class="sx-post-title">
