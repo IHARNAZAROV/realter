@@ -152,6 +152,7 @@ function renderBlogCards(articles) {
                          <i class="fa-solid fa-clock"></i>
    ${calculateReadingTime(article)} мин
 </li>
+              ${window.BlogViews ? window.BlogViews.renderCardBadge(article.id || article.slug) : ""}
             </ul>
           </div>
 

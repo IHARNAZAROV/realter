@@ -114,6 +114,8 @@ window.currentArticle = article;
 
 renderArticle(article);
 
+renderViewsCounter(article);
+
 renderRelatedPosts(currentArticle, articles);
 
 /* ВАЖНО — рендер тегов */
@@ -349,6 +351,39 @@ function renderSchema(article) {
   breadcrumbScript.textContent = JSON.stringify(breadcrumbSchema);
   breadcrumbScript.setAttribute("data-schema", "blog-breadcrumb");
   document.head.appendChild(breadcrumbScript);
+}
+
+/* =========================================================
+   VIEWS COUNTER
+   Один инкремент на загрузку страницы, затем рендер под заголовком.
+   ========================================================= */
+function renderViewsCounter(article) {
+  if (!article || !window.BlogViews) return;
+
+  const postId = article.id || article.slug;
+  if (!postId) return;
+
+  // Инкрементируем один раз на загрузку страницы
+  window.BlogViews.incrementViews(postId);
+
+  const titleEl = document.getElementById("post-title");
+  if (!titleEl) return;
+
+  // Удаляем старый бейдж, если ре-рендер
+  const existing = document.getElementById("post-views-badge");
+  if (existing) existing.remove();
+
+  const wrapper = document.createElement("div");
+  wrapper.id = "post-views-badge";
+  wrapper.innerHTML = window.BlogViews.renderDetailBadge(postId);
+
+  // Размещаем сразу после заголовка статьи
+  const titleContainer = titleEl.parentNode;
+  if (titleContainer && titleContainer.parentNode) {
+    titleContainer.parentNode.insertBefore(wrapper, titleContainer.nextSibling);
+  } else {
+    titleEl.insertAdjacentElement("afterend", wrapper);
+  }
 }
 
 /* =========================================================
