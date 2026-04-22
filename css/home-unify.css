@@ -1,0 +1,519 @@
+/* ==========================================================================
+   home-unify.css
+   Visual unification layer for the homepage (index.html).
+   Aligns every section to the same corporate design system already used on
+   the rest of the site — colors, typography, spacing, radii, shadows,
+   transitions, buttons, cards, icons and forms.
+   No HTML or JS changes are required.
+   ========================================================================== */
+
+:root {
+    /* Corporate spacing scale (8 / 16 / 24 / 32 / 48 / 64 / 80) */
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 1.5rem;
+    --space-4: 2rem;
+    --space-5: 3rem;
+    --space-6: 4rem;
+    --space-7: 5rem;
+
+    /* Unified card system */
+    --card-radius: 14px;
+    --card-radius-sm: 10px;
+    --card-shadow: 0 8px 24px rgba(21, 89, 69, 0.08);
+    --card-shadow-hover: 0 14px 36px rgba(21, 89, 69, 0.14);
+    --card-border: 1px solid rgba(21, 89, 69, 0.08);
+
+    /* Unified motion */
+    --t-fast: all 0.2s ease;
+    --t-medium: all 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   1. TYPOGRAPHY — unify all headings on the page to the corporate scale
+   -------------------------------------------------------------------------- */
+body {
+    color: var(--color-text-main);
+    font-family: var(--font-main);
+    line-height: var(--line-height-base);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-primary);
+    font-family: var(--font-main);
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.section-head .section-title,
+.section-head h2 {
+    font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+    line-height: 1.2;
+    margin: 0 0 var(--space-2);
+}
+
+.section-head--bracket {
+    margin-bottom: var(--space-4);
+}
+
+.about-home-left h3.sx-tilte,
+.large-title h3,
+.icon-content h4.sx-tilte,
+.figcaption h4 {
+    font-size: 1.25rem;
+    line-height: 1.35;
+    font-weight: 700;
+}
+
+.figcaption h4 {
+    margin: 0;
+}
+
+p,
+.large-title-info p,
+.about-home-left p {
+    color: var(--color-text-main);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+}
+
+/* --------------------------------------------------------------------------
+   2. SECTIONS — unify vertical rhythm across all blocks
+   -------------------------------------------------------------------------- */
+.section-full.p-t80 { padding-top: var(--space-7); }
+.section-full.p-b80 { padding-bottom: var(--space-7); }
+.section-full.p-b50 { padding-bottom: var(--space-6); }
+.section-full.p-b30 { padding-bottom: var(--space-5); }
+
+.section-content { position: relative; }
+
+@media (max-width: 768px) {
+    .section-full.p-t80 { padding-top: var(--space-6); }
+    .section-full.p-b80 { padding-bottom: var(--space-6); }
+}
+
+/* --------------------------------------------------------------------------
+   3. BUTTONS / CTA — one primary, one secondary, identical interactions
+   -------------------------------------------------------------------------- */
+.site-button,
+.site-button-secondry,
+.client-quiz-launch.header-quick-actions__btn,
+.get-in-touch-btn,
+.documents-checklist__telegram-btn,
+.documents-checklist__cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 var(--space-3);
+    border-radius: 999px;
+    font-family: var(--font-main);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(--t-medium);
+    line-height: 1;
+}
+
+/* Primary */
+.site-button,
+.documents-checklist__cta-btn {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+.site-button:hover,
+.documents-checklist__cta-btn:hover {
+    background-color: #0f4334;
+    border-color: #0f4334;
+    color: var(--color-white);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(21, 89, 69, 0.22);
+}
+
+/* Secondary (outline) */
+.site-button-secondry,
+.client-quiz-launch.header-quick-actions__btn,
+.get-in-touch-btn,
+.documents-checklist__telegram-btn {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.site-button-secondry:hover,
+.client-quiz-launch.header-quick-actions__btn:hover,
+.get-in-touch-btn:hover,
+.documents-checklist__telegram-btn:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(21, 89, 69, 0.22);
+}
+
+.documents-checklist__telegram-btn[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* btn-half wrapper: drop legacy sliding underline so buttons feel uniform */
+.site-button-secondry.btn-half {
+    overflow: hidden;
+}
+.site-button-secondry.btn-half::before,
+.site-button-secondry.btn-half::after {
+    display: none;
+}
+.site-button-secondry.btn-half span {
+    display: inline-block;
+    transform: none;
+    color: inherit;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+/* Inline text link CTA */
+.site-button-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    transition: var(--t-fast);
+}
+.site-button-link::before {
+    background-color: var(--accent-color);
+    height: 3px;
+    border-radius: 0;
+}
+.site-button-link:hover {
+    color: #0f4334;
+    animation: none;
+}
+
+.btn-center { margin-top: var(--space-4); }
+
+/* Hero slider link */
+.section__slider .swiper-slide__block__text .link {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--color-primary);
+    border-radius: 999px;
+    color: var(--color-primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    transition: var(--t-medium);
+}
+.section__slider .swiper-slide__block__text .link:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+/* Header CTA group: align heights */
+.header-quick-actions { gap: var(--space-1); }
+
+/* --------------------------------------------------------------------------
+   4. CARDS — single shared style for every card-like block
+   -------------------------------------------------------------------------- */
+.sx-count.sx-icon-box-wraper,
+.testi-card,
+.market-card,
+.number-block-one .figcaption,
+.service-hover-card .icon-count-2 {
+    background-color: var(--color-white);
+    border: var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: var(--space-3);
+    transition: var(--t-medium);
+}
+
+.sx-count.sx-icon-box-wraper:hover,
+.testi-card:hover,
+.market-card:hover,
+.service-hover-card:hover .icon-count-2 {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px);
+}
+
+/* Stats cards */
+.sx-count.sx-icon-box-wraper {
+    background-image: none !important;
+    text-align: left;
+}
+.sx-count .st-count-number {
+    color: var(--color-primary);
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 0 0 var(--space-1);
+    line-height: 1;
+}
+.sx-count h4 {
+    color: var(--color-text-main);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Numbered service blocks (Подбор / Юр. сопровождение / Переговоры) */
+.number-block-one {
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: var(--t-medium);
+}
+.number-block-one:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-3px);
+}
+.number-block-one img { display: block; width: 100%; height: auto; }
+.number-block-one .figcaption {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: var(--space-2) var(--space-3);
+}
+.number-block-one .figcaption-number span {
+    color: var(--color-primary);
+    font-weight: 800;
+}
+
+/* Large title block */
+.large-title-block.bg-gray {
+    background-color: var(--color-gray-bg);
+    border-radius: var(--card-radius);
+    padding: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+/* Testimonials */
+.testi-card__quote {
+    color: var(--accent-color);
+    font-size: 2.5rem;
+    line-height: 1;
+}
+.testi-card__stars { color: #f5b301; letter-spacing: 2px; }
+.testi-card__text {
+    color: var(--color-text-main);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+}
+.testi-card__name { color: var(--color-primary); font-weight: 600; }
+.testi-card__role { color: var(--color-text-light); }
+.testi-card__avatar img {
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+
+.testi-swiper-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-primary);
+    border: 1px solid rgba(21, 89, 69, 0.15);
+    box-shadow: var(--card-shadow);
+    transition: var(--t-fast);
+}
+.testi-swiper-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+/* Service swiper arrows (Объекты на продажу) */
+.service-swiper-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-primary);
+    border: 1px solid rgba(21, 89, 69, 0.15);
+    box-shadow: var(--card-shadow);
+    transition: var(--t-fast);
+    display: inline-flex; align-items: center; justify-content: center;
+}
+.service-swiper-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+/* About slider arrows */
+.about-swiper-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-primary);
+    border: 1px solid rgba(21, 89, 69, 0.15);
+    box-shadow: var(--card-shadow);
+    transition: var(--t-fast);
+}
+.about-swiper-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+/* Market analytics cards */
+.market-card {
+    padding: var(--space-3);
+}
+.market-card__label {
+    color: var(--color-text-light);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 var(--space-1);
+}
+.market-card__price,
+.market-card__trend {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 var(--space-1);
+}
+.market-card__sqm {
+    color: var(--color-text-light);
+    font-size: 0.8125rem;
+    margin: 0;
+}
+
+/* All services — service-hover-card harmonization */
+.service-hover-card {
+    border-radius: var(--card-radius);
+    overflow: hidden;
+}
+.service-hover-card .icon-count-2 {
+    border-radius: var(--card-radius);
+    padding: var(--space-4) var(--space-3);
+}
+.service-hover-card .icon-count-number {
+    color: var(--accent-color);
+    font-weight: 800;
+}
+.service-hover-card .icon-content h4 {
+    color: var(--color-primary);
+    margin-bottom: var(--space-1);
+}
+.service-hover-card .icon-content p {
+    color: var(--color-text-main);
+    font-size: 0.9375rem;
+}
+
+/* --------------------------------------------------------------------------
+   5. ICONS — unified accent color and sizing
+   -------------------------------------------------------------------------- */
+.icon-xl.inline-icon .icon-cell i,
+.service-hover-card .icon-cell i {
+    color: var(--color-primary);
+    font-size: 2.25rem;
+    line-height: 1;
+    transition: var(--t-fast);
+}
+.service-hover-card:hover .icon-cell i {
+    color: var(--accent-color);
+}
+
+/* --------------------------------------------------------------------------
+   6. FORMS — newsletter, checklist & quiz inputs share one style
+   -------------------------------------------------------------------------- */
+.newsletter-form input[type="email"],
+.newsletter-form input[type="text"],
+.newsletter-form input[type="tel"],
+.documents-checklist__native-select,
+.client-quiz input,
+.client-quiz textarea,
+.client-quiz select {
+    width: 100%;
+    height: 48px;
+    padding: 0 var(--space-2);
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--card-radius-sm);
+    font-family: var(--font-main);
+    font-size: 0.9375rem;
+    color: var(--color-text-main);
+    transition: var(--t-fast);
+    outline: none;
+}
+.newsletter-form textarea,
+.client-quiz textarea {
+    height: auto;
+    min-height: 110px;
+    padding: var(--space-2);
+    line-height: 1.5;
+}
+.newsletter-form input:focus,
+.documents-checklist__native-select:focus,
+.client-quiz input:focus,
+.client-quiz textarea:focus,
+.client-quiz select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(21, 89, 69, 0.12);
+}
+
+.newsletter-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: 0.8125rem;
+    color: var(--color-text-light);
+    cursor: pointer;
+}
+.newsletter-checkbox a { color: var(--color-primary); }
+.newsletter-checkbox.error span { color: #c0392b; }
+
+.newsletter-hint {
+    color: var(--color-text-light);
+    font-size: 0.75rem;
+    margin-top: var(--space-1);
+}
+
+/* --------------------------------------------------------------------------
+   7. FOOTER — align widget titles & links with corporate palette
+   -------------------------------------------------------------------------- */
+.site-footer .widget-title {
+    color: var(--color-primary);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-2);
+}
+.site-footer .widget_services ul li a,
+.site-footer .widget_address li,
+.site-footer .widget_address li a {
+    color: var(--color-text-main);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    transition: var(--t-fast);
+}
+.site-footer .widget_services ul li a:hover,
+.site-footer .widget_address li a:hover {
+    color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   8. GLOBAL POLISH — links, transitions, hover consistency
+   -------------------------------------------------------------------------- */
+a { transition: var(--t-fast); }
+
+img { max-width: 100%; height: auto; }
+
+/* Smooth out any element that previously used trans-slow on the homepage */
+.block-shadow,
+.hover-shadow:hover,
+.number-block-one:hover .figcaption,
+.number-block-three:hover .figcaption {
+    transition: var(--t-medium);
+}
