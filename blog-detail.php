@@ -2,6 +2,44 @@
 $rawSlug = isset($_GET['slug']) ? $_GET['slug'] : '';
 $slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
 $canonicalUrl = $slug !== '' ? "https://turko.by/blog/$slug" : "https://turko.by/blog";
+
+// Resolve OG image, title and description from blog-articles.json by slug
+$ogImage = "https://turko.by/images/main-slider/2.webp";
+$ogTitle = "Статья о недвижимости в Лиде — Ольга Турко";
+$ogDescription = "Читайте разборы и рекомендации по рынку недвижимости Лиды: документы, этапы сделки и важные нюансы.";
+if ($slug !== '') {
+    $articlesFile = __DIR__ . '/data/blog-articles.json';
+    if (is_file($articlesFile)) {
+        $articlesData = json_decode(file_get_contents($articlesFile), true);
+        if (is_array($articlesData)) {
+            foreach ($articlesData as $art) {
+                if (isset($art['slug']) && $art['slug'] === $slug) {
+                    if (!empty($art['image'])) {
+                        $imgPath = $art['image'];
+                        if (strpos($imgPath, 'http') === 0) {
+                            $ogImage = $imgPath;
+                        } else {
+                            if ($imgPath[0] !== '/') { $imgPath = '/' . $imgPath; }
+                            if (is_file(__DIR__ . $imgPath)) {
+                                $ogImage = "https://turko.by{$imgPath}";
+                            }
+                        }
+                    }
+                    if (!empty($art['title'])) {
+                        $ogTitle = $art['title'] . ' — Ольга Турко';
+                    }
+                    if (!empty($art['metaDescription'])) {
+                        $ogDescription = mb_substr(trim($art['metaDescription']), 0, 280);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+$ogImageEsc = htmlspecialchars($ogImage, ENT_QUOTES);
+$ogTitleEsc = htmlspecialchars($ogTitle, ENT_QUOTES);
+$ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
 ?>
 <!doctype html>
 <html lang="ru">
@@ -13,24 +51,26 @@ $canonicalUrl = $slug !== '' ? "https://turko.by/blog/$slug" : "https://turko.by
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Статья о недвижимости в Лиде — Ольга Турко</title>
+    <title><?php echo $ogTitleEsc; ?></title>
     <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
     <meta
       name="description"
-      content="Подробная статья о недвижимости в Лиде: практические рекомендации риэлтера Ольги Турко по сделкам, документам и безопасности."
+      content="<?php echo $ogDescriptionEsc; ?>"
     />
     <meta name="robots" content="index, follow" />
     <!-- Canonical Link (SEO) -->
     <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Статья о недвижимости в Лиде — Ольга Турко" />
-    <meta property="og:description" content="Читайте разборы и рекомендации по рынку недвижимости Лиды: документы, этапы сделки и важные нюансы." />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="<?php echo $ogTitleEsc; ?>" />
+    <meta property="og:description" content="<?php echo $ogDescriptionEsc; ?>" />
     <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
-    <meta property="og:image" content="https://turko.by/images/main-slider/2.webp" />
+    <meta property="og:image" content="<?php echo $ogImageEsc; ?>" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Статья о недвижимости в Лиде — Ольга Турко" />
-    <meta name="twitter:description" content="Читайте разборы и рекомендации по рынку недвижимости Лиды: документы, этапы сделки и важные нюансы." />
-    <meta name="twitter:image" content="https://turko.by/images/main-slider/2.webp" />
+    <meta name="twitter:title" content="<?php echo $ogTitleEsc; ?>" />
+    <meta name="twitter:description" content="<?php echo $ogDescriptionEsc; ?>" />
+    <meta name="twitter:image" content="<?php echo $ogImageEsc; ?>" />
     <!-- =========================================
        3. ICONS & FONTS
        ========================================= -->

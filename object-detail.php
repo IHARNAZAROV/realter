@@ -2,6 +2,39 @@
 $rawSlug = isset($_GET['slug']) ? $_GET['slug'] : '';
 $slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
 $canonicalUrl = $slug !== '' ? "https://turko.by/objects/$slug" : "https://turko.by/objects";
+
+// Resolve OG image and title from objects.json by slug
+$ogImage = "https://turko.by/images/main-slider/2.webp";
+$ogTitle = "Объект недвижимости в Лиде — Ольга Турко";
+$ogDescription = "Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко.";
+if ($slug !== '') {
+    $objectsFile = __DIR__ . '/data/objects.json';
+    if (is_file($objectsFile)) {
+        $objectsData = json_decode(file_get_contents($objectsFile), true);
+        if (is_array($objectsData)) {
+            foreach ($objectsData as $obj) {
+                if (isset($obj['slug']) && $obj['slug'] === $slug) {
+                    if (isset($obj['id']) && preg_match('/(\d+)/', (string)$obj['id'], $m)) {
+                        $picPath = "/images/objects/pic{$m[1]}.webp";
+                        if (is_file(__DIR__ . $picPath)) {
+                            $ogImage = "https://turko.by{$picPath}";
+                        }
+                    }
+                    if (!empty($obj['title'])) {
+                        $ogTitle = $obj['title'] . ' — Ольга Турко, риэлтер в Лиде';
+                    }
+                    if (!empty($obj['cardDescription'])) {
+                        $ogDescription = mb_substr(trim($obj['cardDescription']), 0, 280);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}
+$ogImageEsc = htmlspecialchars($ogImage, ENT_QUOTES);
+$ogTitleEsc = htmlspecialchars($ogTitle, ENT_QUOTES);
+$ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
 ?>
 <!doctype html>
 <html lang="ru">
@@ -14,38 +47,38 @@ $canonicalUrl = $slug !== '' ? "https://turko.by/objects/$slug" : "https://turko
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- SEO Meta -->
-    <title>Объект недвижимости в Лиде — Ольга Турко</title>
+    <title><?php echo $ogTitleEsc; ?></title>
     <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
     <meta name="robots" content="index, follow" />
     <meta
       name="description"
-      content="Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко."
+      content="<?php echo $ogDescriptionEsc; ?>"
     />
     <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
     <!-- Open Graph (Facebook/Instagram) -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Объект недвижимости в Лиде — Ольга Турко" />
+    <meta property="og:title" content="<?php echo $ogTitleEsc; ?>" />
     <meta
       property="og:description"
-      content="Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко."
+      content="<?php echo $ogDescriptionEsc; ?>"
     />
     <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
     <meta
       property="og:image"
-      content="https://turko.by/images/main-slider/2.webp"
+      content="<?php echo $ogImageEsc; ?>"
     />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Объект недвижимости в Лиде — Ольга Турко" />
+    <meta name="twitter:title" content="<?php echo $ogTitleEsc; ?>" />
     <meta
       name="twitter:description"
-      content="Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко."
+      content="<?php echo $ogDescriptionEsc; ?>"
     />
     <meta
       name="twitter:image"
-      content="https://turko.by/images/main-slider/2.webp"
+      content="<?php echo $ogImageEsc; ?>"
     />
     <meta name="twitter:image:width" content="1200" />
     <meta name="twitter:image:height" content="630" />
