@@ -51,6 +51,60 @@ $breadcrumbJsonLd = json_encode([
         ['@type' => 'ListItem', 'position' => 3, 'name' => $breadcrumbLeafName, 'item' => $canonicalUrl],
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+// =========================================================
+// Related links (контекстные ссылки на услуги/каталог)
+// Гибрид: ручной override через relatedLinks в статье > авто по тегам
+// =========================================================
+$relatedLinks = [];
+$ctaBlock = null;
+$currentArticle = null;
+if ($slug !== '' && isset($articlesData) && is_array($articlesData)) {
+    foreach ($articlesData as $art) {
+        if (isset($art['slug']) && $art['slug'] === $slug) { $currentArticle = $art; break; }
+    }
+}
+if ($currentArticle !== null) {
+    $relatedMapFile = __DIR__ . '/data/blog-related-map.json';
+    $ctaMapFile = __DIR__ . '/data/blog-cta-map.json';
+    $relatedMap = is_file($relatedMapFile) ? json_decode(file_get_contents($relatedMapFile), true) : null;
+    $ctaMap = is_file($ctaMapFile) ? json_decode(file_get_contents($ctaMapFile), true) : null;
+
+    // Сбор ссылок
+    $candidates = [];
+    if (!empty($currentArticle['relatedLinks']) && is_array($currentArticle['relatedLinks'])) {
+        $candidates = $currentArticle['relatedLinks'];
+    } elseif (is_array($relatedMap) && !empty($currentArticle['tags'])) {
+        $tagsLower = array_map(function($t) { return mb_strtolower(trim($t)); }, $currentArticle['tags']);
+        $tagsMap = $relatedMap['tags'] ?? [];
+        $tagsMapLower = [];
+        foreach ($tagsMap as $k => $v) { $tagsMapLower[mb_strtolower($k)] = $v; }
+        foreach ($tagsLower as $tag) {
+            if (isset($tagsMapLower[$tag])) { $candidates[] = $tagsMapLower[$tag]; }
+        }
+        if (count($candidates) < 2 && !empty($relatedMap['fallback'])) {
+            foreach ($relatedMap['fallback'] as $fb) { $candidates[] = $fb; }
+        }
+    }
+    // Dedupe по URL, исключаем ссылку саму на себя
+    $selfPath = "/blog/{$currentArticle['slug']}";
+    $seen = [];
+    foreach ($candidates as $c) {
+        if (empty($c['url']) || empty($c['title'])) continue;
+        if ($c['url'] === $selfPath) continue;
+        if (isset($seen[$c['url']])) continue;
+        $seen[$c['url']] = true;
+        $relatedLinks[] = $c;
+        if (count($relatedLinks) >= 3) break;
+    }
+
+    // CTA
+    if (is_array($ctaMap)) {
+        $cat = $currentArticle['category'] ?? '';
+        $ctaBlock = $ctaMap['categories'][$cat] ?? ($ctaMap['default'] ?? null);
+    }
+}
+$ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '';
 ?>
 <!doctype html>
 <html lang="ru">
@@ -125,6 +179,7 @@ $breadcrumbJsonLd = json_encode([
     <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="stylesheet" href="/css/blog-tags.css" />
     <link rel="stylesheet" href="/css/blog-views.css" />
+    <link rel="stylesheet" href="/css/blog-related.css" />
     <link rel="stylesheet" href="/css/contact-widget.css">
 </head>
   <body>
@@ -322,7 +377,19 @@ $breadcrumbJsonLd = json_encode([
                     </div>
                   </div>
 
-                  <div class="sx-post-text" id="post-content"></div>
+                  <div class="sx-post-text" id="post-content"<?php if ($ctaJson): ?> data-mid-cta='<?php echo htmlspecialchars($ctaJson, ENT_QUOTES); ?>'<?php endif; ?>></div>
+
+                <?php if (!empty($relatedLinks)): ?>
+                <aside class="related-links-card" aria-labelledby="related-links-title">
+                  <h3 id="related-links-title" class="related-links-card__title">По теме</h3>
+                  <ul class="related-links-card__list">
+                    <?php foreach ($relatedLinks as $link): ?>
+                      <li><a href="<?php echo htmlspecialchars($link['url'], ENT_QUOTES); ?>" title="<?php echo htmlspecialchars($link['title'], ENT_QUOTES); ?>"><?php echo htmlspecialchars($link['title'], ENT_QUOTES); ?></a></li>
+                    <?php endforeach; ?>
+                  </ul>
+                </aside>
+                <?php endif; ?>
+
                 <div class="related-posts">
   <h3 class="related-title">Статьи по теме</h3>
   <div class="related-grid" id="relatedPosts"></div>
