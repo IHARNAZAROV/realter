@@ -689,3 +689,29 @@ function initServiceCardsAnimation() {
     (window.__optimizeListeners.diagramResize = debouncedResize),
     window.addEventListener("resize", window.__optimizeListeners.diagramResize);
   })());
+
+/* Speculation Rules: prerender same-origin pages on hover for instant View Transitions */
+(function () {
+  if (!HTMLScriptElement.supports || !HTMLScriptElement.supports('speculationrules')) return;
+  if (document.querySelector('script[type="speculationrules"][data-turko]')) return;
+  var rules = {
+    prerender: [{
+      where: {
+        and: [
+          { href_matches: "/*" },
+          { not: { href_matches: "/*\\?*" } },
+          { not: { href_matches: "/*#*" } },
+          { not: { selector_matches: "a[download]" } },
+          { not: { selector_matches: 'a[target="_blank"]' } },
+          { not: { selector_matches: ".no-prerender a, a.no-prerender" } }
+        ]
+      },
+      eagerness: "moderate"
+    }]
+  };
+  var s = document.createElement('script');
+  s.type = 'speculationrules';
+  s.dataset.turko = '1';
+  s.textContent = JSON.stringify(rules);
+  document.head.appendChild(s);
+})();
