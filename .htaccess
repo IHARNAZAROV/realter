@@ -37,6 +37,11 @@ RewriteRule ^blog-detail(?:\.html)?$ https://turko.by/blog/%1? [R=301,L,NE]
 RewriteCond %{THE_REQUEST} \s/+services-detail(?:\.html)?\?slug=([^\s&]+) [NC]
 RewriteRule ^services-detail(?:\.html)?$ https://turko.by/services/%1? [R=301,L,NE]
 
+# Legacy detail URLs without slug → redirect to section index
+RewriteRule ^blog-detail(?:\.html|\.php)?/?$ https://turko.by/blog [R=301,L]
+RewriteRule ^object-detail(?:\.html|\.php)?/?$ https://turko.by/objects [R=301,L]
+RewriteRule ^services-detail(?:\.html|\.php)?/?$ https://turko.by/rieltor-lida [R=301,L]
+
 # -------------------------------------------------
 # PRETTY ROUTES
 # -------------------------------------------------
