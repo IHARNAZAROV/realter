@@ -150,7 +150,7 @@ function getArticleBySlug(articles) {
 function renderArticle(article) {
   renderMeta(article);
   renderHeader(article);
-  renderBreadcrumb(article);
+  // Breadcrumb is server-rendered in PHP (see blog-detail.php)
   renderImage(article);
   renderContent(article);
   renderConclusion(article);
@@ -321,36 +321,7 @@ function renderSchema(article) {
 
   document.head.appendChild(script);
 
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Главная",
-        item: "https://turko.by/",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Блог",
-        item: "https://turko.by/blog",
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: article.title || "Статья",
-        item: `https://turko.by/blog/${article.slug}`,
-      },
-    ],
-  };
-
-  const breadcrumbScript = document.createElement("script");
-  breadcrumbScript.type = "application/ld+json";
-  breadcrumbScript.textContent = JSON.stringify(breadcrumbSchema);
-  breadcrumbScript.setAttribute("data-schema", "blog-breadcrumb");
-  document.head.appendChild(breadcrumbScript);
+  // BreadcrumbList JSON-LD is server-rendered in PHP (see blog-detail.php)
 }
 
 /* =========================================================

@@ -257,14 +257,15 @@ $breadcrumbJsonLd = json_encode([
                      <!-- DIVIDER -->
                      <div class="page-intro-divider"></div>
 
-                     <!-- BREADCRUMBS (JS управляет) -->
+                     <!-- BREADCRUMBS (server-rendered) -->
                      <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
                         <ul
                            class="sx-breadcrumb breadcrumb-style-2"
                            id="service-breadcrumbs"
                         >
                            <li><a href="/">Главная</a></li>
-                           <li id="service-breadcrumb-title"></li>
+                           <li><a href="/rieltor-lida">Услуги риэлтера</a></li>
+                           <li id="service-breadcrumb-title"><?php echo htmlspecialchars($breadcrumbLeafName, ENT_QUOTES); ?></li>
                         </ul>
                      </nav>
                   </div>

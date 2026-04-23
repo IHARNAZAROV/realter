@@ -494,33 +494,11 @@
       },
     };
 
-    const breadcrumbs = {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Главная",
-          item: "https://turko.by/",
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Объекты недвижимости",
-          item: "https://turko.by/nedvizhimost-lida",
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: obj.title,
-          item: pageUrl,
-        },
-      ],
-    };
+    // BreadcrumbList JSON-LD is server-rendered in PHP (see object-detail.php)
 
     const payload = cleanObject({
       "@context": "https://schema.org",
-      "@graph": [offerCatalog, property, offer, listing, breadcrumbs],
+      "@graph": [offerCatalog, property, offer, listing],
     });
 
     if (payload) {

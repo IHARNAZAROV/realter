@@ -258,6 +258,9 @@ $breadcrumbJsonLd = json_encode([
 
       <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
         <ul id="breadcrumb">
+          <li><a href="/">Главная</a></li>
+          <li><a href="/blog">Блог</a></li>
+          <li><?php echo htmlspecialchars($breadcrumbLeafName, ENT_QUOTES); ?></li>
         </ul>
       </nav>
 
