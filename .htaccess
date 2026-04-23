@@ -28,30 +28,42 @@ RewriteRule \.json$ - [L]
 # LEGACY URL REDIRECTS
 # -------------------------------------------------
 
+# Only act on the original external request (avoids infinite loops on LiteSpeed
+# where THE_REQUEST gets rewritten on internal subrequests).
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+
 # Old detail filenames with ?slug=... → clean URL
-RewriteCond %{THE_REQUEST} \s/+object-detail(?:\.html|\.php)?\?slug=([^\s&]+) [NC]
-RewriteRule ^object-detail(?:\.html|\.php)?$ https://turko.by/objects/%1? [R=301,L,NE]
+RewriteCond %{THE_REQUEST} \s/+object-detail(?:\.html)?\?slug=([^\s&]+) [NC]
+RewriteRule ^object-detail(?:\.html)?$ https://turko.by/objects/%1? [R=301,L,NE]
 
-RewriteCond %{THE_REQUEST} \s/+blog-detail(?:\.html|\.php)?\?slug=([^\s&]+) [NC]
-RewriteRule ^blog-detail(?:\.html|\.php)?$ https://turko.by/blog/%1? [R=301,L,NE]
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+blog-detail(?:\.html)?\?slug=([^\s&]+) [NC]
+RewriteRule ^blog-detail(?:\.html)?$ https://turko.by/blog/%1? [R=301,L,NE]
 
-RewriteCond %{THE_REQUEST} \s/+services-detail(?:\.html|\.php)?\?slug=([^\s&]+) [NC]
-RewriteRule ^services-detail(?:\.html|\.php)?$ https://turko.by/services/%1? [R=301,L,NE]
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+services-detail(?:\.html)?\?slug=([^\s&]+) [NC]
+RewriteRule ^services-detail(?:\.html)?$ https://turko.by/services/%1? [R=301,L,NE]
 
 # Section URLs with ?slug=... → clean URL  (e.g. /objects?slug=foo → /objects/foo)
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+objects/?\?slug=([^\s&]+) [NC]
 RewriteRule ^objects/?$ https://turko.by/objects/%1? [R=301,L,NE]
 
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+blog/?\?slug=([^\s&]+) [NC]
 RewriteRule ^blog/?$ https://turko.by/blog/%1? [R=301,L,NE]
 
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+services/?\?slug=([^\s&]+) [NC]
 RewriteRule ^services/?$ https://turko.by/services/%1? [R=301,L,NE]
 
-# Legacy detail URLs without slug → redirect to section index
-RewriteRule ^blog-detail(?:\.html|\.php)?/?$ https://turko.by/blog [R=301,L]
-RewriteRule ^object-detail(?:\.html|\.php)?/?$ https://turko.by/objects [R=301,L]
-RewriteRule ^services-detail(?:\.html|\.php)?/?$ https://turko.by/rieltor-lida [R=301,L]
+# Legacy detail URLs without slug → redirect to section index (only .html, not .php)
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteRule ^blog-detail(?:\.html)?/?$ https://turko.by/blog [R=301,L]
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteRule ^object-detail(?:\.html)?/?$ https://turko.by/objects [R=301,L]
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteRule ^services-detail(?:\.html)?/?$ https://turko.by/rieltor-lida [R=301,L]
 
 # -------------------------------------------------
 # PRETTY ROUTES
