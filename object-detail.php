@@ -287,12 +287,9 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
       <!-- BREADCRUMB -->
       <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
         <ul>
-          <li>
-            <a href="/">
-                         Главная
-            </a>
-          </li>
-          <li>Детали объекта</li>
+          <li><a href="/">Главная</a></li>
+          <li><a href="/nedvizhimost-lida">Недвижимость в Лиде</a></li>
+          <li><?php echo htmlspecialchars($breadcrumbLeafName, ENT_QUOTES); ?></li>
         </ul>
       </nav>
 
