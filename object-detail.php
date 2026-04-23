@@ -7,6 +7,7 @@ $canonicalUrl = $slug !== '' ? "https://turko.by/objects/$slug" : "https://turko
 $ogImage = "https://turko.by/images/main-slider/2.webp";
 $ogTitle = "Объект недвижимости в Лиде — Ольга Турко";
 $ogDescription = "Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко.";
+$breadcrumbLeafName = "Объект недвижимости";
 if ($slug !== '') {
     $objectsFile = __DIR__ . '/data/objects.json';
     if (is_file($objectsFile)) {
@@ -22,6 +23,7 @@ if ($slug !== '') {
                     }
                     if (!empty($obj['title'])) {
                         $ogTitle = $obj['title'] . ' — Ольга Турко, риэлтер в Лиде';
+                        $breadcrumbLeafName = $obj['title'];
                     }
                     if (!empty($obj['cardDescription'])) {
                         $ogDescription = mb_substr(trim($obj['cardDescription']), 0, 280);
@@ -32,6 +34,15 @@ if ($slug !== '') {
         }
     }
 }
+$breadcrumbJsonLd = json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Главная', 'item' => 'https://turko.by/'],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Недвижимость в Лиде', 'item' => 'https://turko.by/nedvizhimost-lida'],
+        ['@type' => 'ListItem', 'position' => 3, 'name' => $breadcrumbLeafName, 'item' => $canonicalUrl],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 $ogImageEsc = htmlspecialchars($ogImage, ENT_QUOTES);
 $ogTitleEsc = htmlspecialchars($ogTitle, ENT_QUOTES);
 $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
@@ -82,6 +93,8 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     />
     <meta name="twitter:image:width" content="1200" />
     <meta name="twitter:image:height" content="630" />
+    <!-- Breadcrumbs (JSON-LD) -->
+    <script type="application/ld+json"><?php echo $breadcrumbJsonLd; ?></script>
     <!-- Favicons -->
     <link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />

@@ -7,6 +7,7 @@ $canonicalUrl = $slug !== '' ? "https://turko.by/blog/$slug" : "https://turko.by
 $ogImage = "https://turko.by/images/main-slider/2.webp";
 $ogTitle = "Статья о недвижимости в Лиде — Ольга Турко";
 $ogDescription = "Читайте разборы и рекомендации по рынку недвижимости Лиды: документы, этапы сделки и важные нюансы.";
+$breadcrumbLeafName = "Статья";
 if ($slug !== '') {
     $articlesFile = __DIR__ . '/data/blog-articles.json';
     if (is_file($articlesFile)) {
@@ -27,6 +28,7 @@ if ($slug !== '') {
                     }
                     if (!empty($art['title'])) {
                         $ogTitle = $art['title'] . ' — Ольга Турко';
+                        $breadcrumbLeafName = $art['title'];
                     }
                     if (!empty($art['metaDescription'])) {
                         $ogDescription = mb_substr(trim($art['metaDescription']), 0, 280);
@@ -40,6 +42,15 @@ if ($slug !== '') {
 $ogImageEsc = htmlspecialchars($ogImage, ENT_QUOTES);
 $ogTitleEsc = htmlspecialchars($ogTitle, ENT_QUOTES);
 $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
+$breadcrumbJsonLd = json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Главная', 'item' => 'https://turko.by/'],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Блог', 'item' => 'https://turko.by/blog'],
+        ['@type' => 'ListItem', 'position' => 3, 'name' => $breadcrumbLeafName, 'item' => $canonicalUrl],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 ?>
 <!doctype html>
 <html lang="ru">
@@ -71,6 +82,8 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <meta name="twitter:title" content="<?php echo $ogTitleEsc; ?>" />
     <meta name="twitter:description" content="<?php echo $ogDescriptionEsc; ?>" />
     <meta name="twitter:image" content="<?php echo $ogImageEsc; ?>" />
+    <!-- Breadcrumbs (JSON-LD) -->
+    <script type="application/ld+json"><?php echo $breadcrumbJsonLd; ?></script>
     <!-- =========================================
        3. ICONS & FONTS
        ========================================= -->

@@ -2,6 +2,32 @@
 $rawSlug = isset($_GET['slug']) ? $_GET['slug'] : '';
 $slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
 $canonicalUrl = $slug !== '' ? "https://turko.by/services/$slug" : "https://turko.by/rieltor-lida";
+
+$breadcrumbLeafName = "Услуга риэлтера";
+if ($slug !== '') {
+    $servicesFile = __DIR__ . '/data/services.json';
+    if (is_file($servicesFile)) {
+        $servicesData = json_decode(file_get_contents($servicesFile), true);
+        $list = isset($servicesData['services']) && is_array($servicesData['services']) ? $servicesData['services'] : (is_array($servicesData) ? $servicesData : []);
+        foreach ($list as $svc) {
+            if (isset($svc['slug']) && $svc['slug'] === $slug) {
+                if (!empty($svc['title'])) {
+                    $breadcrumbLeafName = $svc['title'];
+                }
+                break;
+            }
+        }
+    }
+}
+$breadcrumbJsonLd = json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Главная', 'item' => 'https://turko.by/'],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Услуги риэлтера', 'item' => 'https://turko.by/rieltor-lida'],
+        ['@type' => 'ListItem', 'position' => 3, 'name' => $breadcrumbLeafName, 'item' => $canonicalUrl],
+    ],
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 ?>
 <!doctype html>
 
@@ -31,6 +57,9 @@ $canonicalUrl = $slug !== '' ? "https://turko.by/services/$slug" : "https://turk
       <meta name="twitter:title" content="Услуги риэлтера в Лиде — Ольга Турко" />
       <meta name="twitter:description" content="Сопровождение продажи, покупки и обмена недвижимости в Лиде: консультации, документы, безопасность сделки." />
       <meta name="twitter:image" content="https://turko.by/images/main-slider/2.webp" />
+
+      <!-- Breadcrumbs (JSON-LD) -->
+      <script type="application/ld+json"><?php echo $breadcrumbJsonLd; ?></script>
 
       <!-- =========================================
        3. ICONS & FONTS
