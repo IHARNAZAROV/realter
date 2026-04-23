@@ -1,3 +1,8 @@
+<?php
+$rawSlug = isset($_GET['slug']) ? $_GET['slug'] : '';
+$slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
+$canonicalUrl = $slug !== '' ? "https://turko.by/blog/$slug" : "https://turko.by/blog";
+?>
 <!doctype html>
 <html lang="ru">
   <head>
@@ -16,36 +21,16 @@
     />
     <meta name="robots" content="index, follow" />
     <!-- Canonical Link (SEO) -->
-    <link rel="canonical" href="https://turko.by/blog" />
+    <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Статья о недвижимости в Лиде — Ольга Турко" />
     <meta property="og:description" content="Читайте разборы и рекомендации по рынку недвижимости Лиды: документы, этапы сделки и важные нюансы." />
-    <meta property="og:url" content="https://turko.by/blog" />
+    <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
     <meta property="og:image" content="https://turko.by/images/main-slider/2.webp" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Статья о недвижимости в Лиде — Ольга Турко" />
     <meta name="twitter:description" content="Читайте разборы и рекомендации по рынку недвижимости Лиды: документы, этапы сделки и важные нюансы." />
     <meta name="twitter:image" content="https://turko.by/images/main-slider/2.webp" />
-    <script>
-      (function setBlogCanonicalEarly() {
-        const canonical = document.querySelector('link[rel="canonical"]');
-        if (!canonical) return;
-
-        const { pathname, search } = window.location;
-        const cleanPath = pathname.replace(/\/+$/, "");
-        const pathMatch = cleanPath.match(/^\/blog\/([^/?#]+)/);
-
-        if (pathMatch && pathMatch[1]) {
-          canonical.href = `https://turko.by/blog/${decodeURIComponent(pathMatch[1])}`;
-          return;
-        }
-
-        const slug = new URLSearchParams(search).get("slug");
-        if (slug) {
-          canonical.href = `https://turko.by/blog/${slug}`;
-        }
-      })();
-    </script>
     <!-- =========================================
        3. ICONS & FONTS
        ========================================= -->

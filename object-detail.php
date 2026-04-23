@@ -1,3 +1,8 @@
+<?php
+$rawSlug = isset($_GET['slug']) ? $_GET['slug'] : '';
+$slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
+$canonicalUrl = $slug !== '' ? "https://turko.by/objects/$slug" : "https://turko.by/objects";
+?>
 <!doctype html>
 <html lang="ru">
   <head>
@@ -16,27 +21,7 @@
       name="description"
       content="Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко."
     />
-    <link rel="canonical" href="https://turko.by/objects" />
-    <script>
-      (function setObjectCanonicalEarly() {
-        const canonical = document.querySelector('link[rel="canonical"]');
-        if (!canonical) return;
-
-        const { pathname, search } = window.location;
-        const cleanPath = pathname.replace(/\/+$/, "");
-        const pathMatch = cleanPath.match(/^\/objects?\/([^/?#]+)/);
-
-        if (pathMatch && pathMatch[1]) {
-          canonical.href = `https://turko.by/objects/${decodeURIComponent(pathMatch[1])}`;
-          return;
-        }
-
-        const slug = new URLSearchParams(search).get("slug");
-        if (slug) {
-          canonical.href = `https://turko.by/objects/${encodeURIComponent(slug)}`;
-        }
-      })();
-    </script>
+    <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
     <!-- Open Graph (Facebook/Instagram) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Объект недвижимости в Лиде — Ольга Турко" />
@@ -44,7 +29,7 @@
       property="og:description"
       content="Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко."
     />
-    <meta property="og:url" content="https://turko.by/objects" />
+    <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
     <meta
       property="og:image"
       content="https://turko.by/images/main-slider/2.webp"

@@ -41,9 +41,9 @@ RewriteRule ^services-detail(?:\.html)?$ https://turko.by/services/%1? [R=301,L,
 # PRETTY ROUTES
 # -------------------------------------------------
 
-RewriteRule ^objects/([^/]+)/?$ /object-detail.html?slug=$1 [L,QSA,NC]
-RewriteRule ^blog/([^/]+)/?$ /blog-detail.html?slug=$1 [L,QSA,NC]
-RewriteRule ^services/([^/]+)/?$ /services-detail.html?slug=$1 [L,QSA,NC]
+RewriteRule ^objects/([^/]+)/?$ /object-detail.php?slug=$1 [L,QSA,NC]
+RewriteRule ^blog/([^/]+)/?$ /blog-detail.php?slug=$1 [L,QSA,NC]
+RewriteRule ^services/([^/]+)/?$ /services-detail.php?slug=$1 [L,QSA,NC]
 
 # -------------------------------------------------
 # PRETTY URL (.html hidden)

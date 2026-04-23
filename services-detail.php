@@ -1,3 +1,8 @@
+<?php
+$rawSlug = isset($_GET['slug']) ? $_GET['slug'] : '';
+$slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
+$canonicalUrl = $slug !== '' ? "https://turko.by/services/$slug" : "https://turko.by/rieltor-lida";
+?>
 <!doctype html>
 
 <html lang="ru">
@@ -16,11 +21,11 @@
          content="Услуги риэлтера в Лиде: сопровождение сделок, продажа, покупка и консультации по недвижимости от Ольги Турко."
       />
       <meta name="robots" content="index, follow" />
-      <link rel="canonical" href="https://turko.by/rieltor-lida.html" />
+      <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
       <meta property="og:type" content="website" />
       <meta property="og:title" content="Услуги риэлтера в Лиде — Ольга Турко" />
       <meta property="og:description" content="Сопровождение продажи, покупки и обмена недвижимости в Лиде: консультации, документы, безопасность сделки." />
-      <meta property="og:url" content="https://turko.by/services-detail" />
+      <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
       <meta property="og:image" content="https://turko.by/images/main-slider/2.webp" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Услуги риэлтера в Лиде — Ольга Турко" />
