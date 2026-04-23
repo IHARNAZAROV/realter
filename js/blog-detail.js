@@ -472,6 +472,44 @@ function renderContent(article) {
   article.content.forEach((block) => {
     renderContentBlock(container, block);
   });
+
+  insertMidCta(container);
+}
+
+function insertMidCta(container) {
+  const raw = container.getAttribute("data-mid-cta");
+  if (!raw) return;
+  let cta;
+  try { cta = JSON.parse(raw); } catch (_) { return; }
+  if (!cta || !cta.url || !cta.heading) return;
+
+  const cards = container.querySelectorAll("p");
+  if (cards.length < 4) return;
+
+  const wrap = document.createElement("aside");
+  wrap.className = "blog-mid-cta";
+  wrap.setAttribute("aria-label", "Призыв к действию");
+
+  const h = document.createElement("p");
+  h.className = "blog-mid-cta__heading";
+  h.textContent = cta.heading;
+
+  const t = document.createElement("p");
+  t.className = "blog-mid-cta__text";
+  t.textContent = cta.text || "";
+
+  const a = document.createElement("a");
+  a.className = "blog-mid-cta__button";
+  a.href = cta.url;
+  a.textContent = cta.buttonText || "Подробнее";
+
+  wrap.appendChild(h);
+  if (cta.text) wrap.appendChild(t);
+  wrap.appendChild(a);
+
+  // Вставляем после 3-го абзаца
+  const after = cards[2];
+  after.parentNode.insertBefore(wrap, after.nextSibling);
 }
 
 /* =========================================================

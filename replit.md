@@ -48,6 +48,12 @@ Environment variables:
 - Target: autoscale
 - Run: `php -S 0.0.0.0:5000 -t .`
 
+## Blog Contextual Internal Links
+Blog articles automatically render two internal-link blocks for SEO:
+- **Mid-article CTA** — server passes JSON via `data-mid-cta` on `#post-content`; `js/blog-detail.js` (`insertMidCta`) inserts a styled aside after the 3rd paragraph. CTA chosen by article `category` from `data/blog-cta-map.json` (with `default` fallback). Skipped if article has fewer than 4 paragraphs.
+- **«По теме» card** — server-rendered `<aside class="related-links-card">` after `#post-content`. Up to 3 deduped links chosen by article `tags` from `data/blog-related-map.json` (`fallback` array used when fewer than 2 matches). Manual override: set `relatedLinks: [{title,url},...]` in the article's JSON entry to bypass auto-mapping.
+- Styles: `css/blog-related.css`.
+
 ## Admin Panel Protection (`/adminka_objects/`)
 The admin panel includes Basic Auth protection and token-based validation for save operations.
 
