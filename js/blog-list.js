@@ -171,6 +171,10 @@ function renderBlogCards(articles) {
 
     container.appendChild(item);
   });
+
+  if (window.BlogViews && typeof window.BlogViews.refreshBadges === "function") {
+    window.BlogViews.refreshBadges(container);
+  }
 }
 
 function initBlogFilters() {

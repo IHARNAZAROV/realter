@@ -284,6 +284,10 @@ function insertCards(container, articles) {
     container.appendChild(item);
     setTimeout(() => item.classList.add("is-visible"), i * 40);
   });
+
+  if (window.BlogViews && typeof window.BlogViews.refreshBadges === "function") {
+    window.BlogViews.refreshBadges(container);
+  }
 }
 
 function cardHTML(a) {

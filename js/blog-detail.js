@@ -363,9 +363,6 @@ function renderViewsCounter(article) {
   const postId = article.id || article.slug;
   if (!postId) return;
 
-  // Инкрементируем один раз на загрузку страницы
-  window.BlogViews.incrementViews(postId);
-
   const titleEl = document.getElementById("post-title");
   if (!titleEl) return;
 
@@ -384,6 +381,11 @@ function renderViewsCounter(article) {
   } else {
     titleEl.insertAdjacentElement("afterend", wrapper);
   }
+
+  // Инкрементируем на сервере и обновляем бейдж актуальным значением
+  Promise.resolve(window.BlogViews.incrementViews(postId))
+    .then(() => window.BlogViews.applyCountsToDom(wrapper))
+    .catch(() => {});
 }
 
 /* =========================================================
