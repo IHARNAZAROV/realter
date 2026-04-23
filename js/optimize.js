@@ -703,7 +703,7 @@ function initServiceCardsAnimation() {
           { href_matches: "/*" },
           { not: { selector_matches: "a[download], a[target=_blank], a[rel~=external], .no-prerender a, a.no-prerender" } }
         ]},
-        eagerness: "moderate"
+        eagerness: "eager"
       }],
       prerender: [{
         source: "document",
