@@ -1412,18 +1412,50 @@ function initMortgageCalculator(obj) {
 }
 
 
-function initObjectMap(obj) {
-  if (!obj || !obj.location || !obj.location.lat || !obj.location.lng) {
-    console.warn("Координаты объекта не найдены");
-    return;
-  }
+/* =====================================================
+   ЛЕНИВАЯ ЗАГРУЗКА MAPLIBRE-GL
+   Библиотека (~745 КБ JS + 63 КБ CSS) подгружается только
+   когда блок карты появляется в зоне видимости — экономит
+   трафик пользователям, которые не доскроллили до карты.
+===================================================== */
+let _maplibrePromise = null;
+function loadMaplibre() {
+  if (_maplibrePromise) return _maplibrePromise;
 
-  const mapEl = document.getElementById("objectMap");
-  if (!mapEl) {
-    console.warn("Контейнер #objectMap не найден");
-    return;
-  }
+  _maplibrePromise = new Promise((resolve, reject) => {
+    if (window.maplibregl) {
+      resolve(window.maplibregl);
+      return;
+    }
 
+    if (!document.querySelector('link[data-maplibre-css]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = '/libs/maplibre/maplibre-gl.css';
+      link.setAttribute('data-maplibre-css', '');
+      document.head.appendChild(link);
+    }
+
+    const existing = document.querySelector('script[data-maplibre-js]');
+    if (existing) {
+      existing.addEventListener('load', () => resolve(window.maplibregl));
+      existing.addEventListener('error', reject);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = '/libs/maplibre/maplibre-gl.js';
+    script.async = true;
+    script.setAttribute('data-maplibre-js', '');
+    script.onload = () => resolve(window.maplibregl);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+
+  return _maplibrePromise;
+}
+
+function createObjectMap(obj, mapEl) {
   const { lat, lng } = obj.location;
 
   const map = new maplibregl.Map({
@@ -1457,14 +1489,50 @@ function initObjectMap(obj) {
   map.touchZoomRotate.disableRotation();
 
   new maplibregl.Marker({
-    color: "var(--color-primary)", 
+    color: "var(--color-primary)",
     scale: 1.1
   })
     .setLngLat([lng, lat])
     .addTo(map);
-  
+
   // Сохраняем инстанс для возможной очистки при переходе
   window._objectMap = map;
+}
+
+function initObjectMap(obj) {
+  if (!obj || !obj.location || !obj.location.lat || !obj.location.lng) {
+    console.warn("Координаты объекта не найдены");
+    return;
+  }
+
+  const mapEl = document.getElementById("objectMap");
+  if (!mapEl) {
+    console.warn("Контейнер #objectMap не найден");
+    return;
+  }
+
+  const startMap = () => {
+    loadMaplibre()
+      .then(() => createObjectMap(obj, mapEl))
+      .catch((err) => console.error("Ошибка загрузки maplibre-gl:", err));
+  };
+
+  // Если IntersectionObserver недоступен — грузим сразу (старые браузеры)
+  if (typeof IntersectionObserver === "undefined") {
+    startMap();
+    return;
+  }
+
+  const io = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        observer.disconnect();
+        startMap();
+      }
+    });
+  }, { rootMargin: "200px 0px" });
+
+  io.observe(mapEl);
 }
 
 

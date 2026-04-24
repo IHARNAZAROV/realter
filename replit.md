@@ -74,4 +74,17 @@ Full audit lives at `docs/frontend-assets-audit.md`. Safe optimizations applied 
 - Aligned `nav-market-status.css` cache version in `index.html` `<noscript>` fallback (`?v=8`) with the preload above.
 - Deleted dead files: `js/blog-list.js` (never referenced — `js/calendar-sidebar.js` has its own `fetch` fallback) and `css/privacy.css` (never referenced).
 
-Remaining recommendations (not yet applied — require deeper refactor): split FontAwesome subsets per page, lazy-load `chart.js` + market-analytics on index, lazy-load `maplibre-gl.js` on object-detail, dynamic import for client-quiz / documents-checklist / viewing-booking / mortgage modals, critical CSS extraction.
+### Lazy-load of maplibre-gl on `object-detail.php`
+The map library (~745 KB JS + 63 KB CSS) is no longer loaded synchronously on every property page view. Removed from `object-detail.php`:
+- `<link rel="stylesheet" href="/libs/maplibre/maplibre-gl.css" />`
+- `<script src="/libs/maplibre/maplibre-gl.js"></script>`
+
+Inside `js/object-detail.js`:
+- `loadMaplibre()` helper dynamically injects `<link>` + `<script>` for maplibre and caches the resulting promise (so multiple callers never trigger duplicate downloads).
+- `initObjectMap(obj)` now attaches an `IntersectionObserver` (with `rootMargin: "200px 0px"`) to `#objectMap`. The library is fetched only when the map block is about to enter the viewport, then `createObjectMap(obj, mapEl)` runs.
+- Falls back to immediate load if `IntersectionObserver` is unavailable (very old browsers).
+- `cleanupResources()` continues to dispose `window._objectMap` on navigation.
+
+Cache-bust: `object-detail.js` version bumped to `?v=20260424-1`.
+
+Remaining recommendations (not yet applied — require deeper refactor): split FontAwesome subsets per page, lazy-load `chart.js` + market-analytics on index, dynamic import for client-quiz / documents-checklist / viewing-booking / mortgage modals, critical CSS extraction.

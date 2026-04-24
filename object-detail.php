@@ -131,7 +131,6 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="stylesheet" href="/libs/maplibre/maplibre-gl.css" />
     <!-- Main Styles -->
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned/>
     <link rel="stylesheet" href="/css/object-share.css" />
@@ -879,12 +878,11 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <script src="/js/live-price.js?v=20260417-2" defer></script>
     <script src="/js/mortgage-programs.js" defer></script>
     <script src="/js/mortgage-calculator.js" defer></script>
-    <script src="/js/object-detail.js?v=20260319-4" defer></script>
+    <script src="/js/object-detail.js?v=20260424-1" defer></script>
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
     <script src="/js/viewing-booking.js" defer></script>
-   <script src="/libs/maplibre/maplibre-gl.js"></script>
 
     <!-- QR MODAL -->
     <div class="share-qr-modal" id="share-qr-modal" role="dialog" aria-modal="true" aria-label="QR-код объекта">
