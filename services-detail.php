@@ -109,7 +109,6 @@ $breadcrumbJsonLd = json_encode([
       />
       <link rel="stylesheet" href="/css/fontawesome/css/fontawesome.min.css" />
       <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
-      <link rel="stylesheet" href="/css/fontawesome/css/regular.min.css" />
       <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
     <link rel="stylesheet" href="/css/contact-widget.css">
 </head>

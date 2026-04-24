@@ -104,6 +104,16 @@ Cache-bust: `object-detail.js` version bumped to `?v=20260424-2`.
 
 Verified in production-mode preview: graph renders after scroll, mortgage calculator renders real values after scroll, page-load HTTP logs show `mortgage-*.js`, `viewing-booking.js`, `chart.js`, `market-analytics.js`, `client-quiz.js`, `documents-checklist.js` are no longer requested on initial page view.
 
+### FontAwesome split-CSS optimization (April 24, 2026)
+Audit of actual icon-class usage across pages:
+- **Brands** (`fab` / `fa-brands`) — used on every page through the social-media block (Viber, TikTok, Telegram, Instagram). Cannot be removed anywhere except `Privacy.html` / `cookies-policy.html` which already don't load it.
+- **Regular** (`far` / `fa-regular`) — used only on `nedvizhimost-lida.html` (`fa-regular fa-heart` favorites icon + `js/filters.js` line 762 dynamically toggles `fa-regular`) and `object-detail.php`.
+- **Solid** + base `fontawesome.min.css` — required everywhere.
+
+Removed `regular.min.css` `<link>` (preload + noscript fallback where present) from 8 pages that never use it: `index.html`, `404.html`, `blog.html`, `blog-detail.php`, `contact.html`, `faq.html`, `rieltor-lida.html`, `services-detail.php`. Saves a CSS request and prevents `fa-regular-400.woff2` font download on those pages. Kept on `nedvizhimost-lida.html` and `object-detail.php`.
+
+Note: a previous audit recommendation to also remove `brands.min.css` from `services-detail.php`, `faq.html`, `rieltor-lida.html`, `contact.html`, `nedvizhimost-lida.html` was rejected after verification — every one of those pages contains the social-media block and would lose the brand icons.
+
 ### Bugfix: «Чеклист документов» modal didn't open (April 24, 2026)
 After the lazy-load refactor, clicking «Чеклист документов» in the header did nothing. Root cause: `js/documents-checklist.js` wrapped all setup (including `setupModal()` which binds the open-button click handler) in `document.addEventListener("DOMContentLoaded", ...)`. The lazy-loader fetches this script only on first user click — long after `DOMContentLoaded` has fired — so the listener never ran and the synthetic `button.click()` re-dispatched by `js/lazy-loaders.js` had no handler to open the modal.
 
