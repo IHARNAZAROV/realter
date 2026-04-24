@@ -94,6 +94,7 @@
     <!-- Стили блога -->
     <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/nav-market-status.css?v=8" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="/css/tabbed-search.css?v=20260424-1" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
     <!-- Fallback для пользователей без JS -->
     <noscript>
@@ -107,6 +108,7 @@
         <link rel="stylesheet" href="/css/flaticon.min.css">
         <link rel="stylesheet" href="/css/blog-badge.css">
         <link rel="stylesheet" href="/css/nav-market-status.css?v=8">
+        <link rel="stylesheet" href="/css/tabbed-search.css?v=20260424-1">
     </noscript>
     <link rel="stylesheet" href="/css/contact-widget.css">
     <style>
@@ -506,6 +508,168 @@
                 </div>
             </div>
         </section>
+
+        <!-- SECTION: Tabbed Search -->
+        <section class="section-full p-t40 p-b40 bg-white" aria-label="Поиск услуг по недвижимости">
+            <div class="container">
+                <div class="tabbed-search" data-tabbed-search>
+                    <div class="tabbed-search__inner">
+                        <div class="tabbed-search__tabs" role="tablist" aria-label="Тип услуги">
+                            <button type="button" role="tab" id="tabbedSearchTabBuy"
+                                class="tabbed-search__tab"
+                                data-tabbed-search-tab="buy"
+                                aria-selected="true"
+                                aria-controls="tabbedSearchPanelBuy"
+                                tabindex="0">Купить</button>
+                            <button type="button" role="tab" id="tabbedSearchTabSell"
+                                class="tabbed-search__tab"
+                                data-tabbed-search-tab="sell"
+                                aria-selected="false"
+                                aria-controls="tabbedSearchPanelSell"
+                                tabindex="-1">Продать</button>
+                            <button type="button" role="tab" id="tabbedSearchTabSupport"
+                                class="tabbed-search__tab"
+                                data-tabbed-search-tab="support"
+                                aria-selected="false"
+                                aria-controls="tabbedSearchPanelSupport"
+                                tabindex="-1">Сопровождение</button>
+                        </div>
+
+                        <div class="tabbed-search__panels">
+
+                            <!-- Buy panel -->
+                            <div class="tabbed-search__panel"
+                                 role="tabpanel"
+                                 id="tabbedSearchPanelBuy"
+                                 aria-labelledby="tabbedSearchTabBuy"
+                                 data-tabbed-search-panel="buy">
+                                <p class="tabbed-search__panel-lead">Подберу квартиру в Лиде по вашим критериям — отвечу с подходящими вариантами.</p>
+                                <form class="tabbed-search__form" data-tabbed-search-form novalidate>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsBuyDistrict">Район Лиды</label>
+                                        <select class="tabbed-search__select" id="tsBuyDistrict" name="district" required>
+                                            <option value="">Выберите район</option>
+                                            <option value="Молодёжный">Молодёжный</option>
+                                            <option value="Красноармейский">Красноармейский</option>
+                                            <option value="Гастелло">Гастелло</option>
+                                            <option value="Север">Север</option>
+                                            <option value="Южный городок">Южный городок</option>
+                                            <option value="Слобода">Слобода</option>
+                                            <option value="Центр">Центр</option>
+                                            <option value="Северный городок">Северный городок</option>
+                                        </select>
+                                    </div>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsBuyRooms">Комнаты</label>
+                                        <select class="tabbed-search__select" id="tsBuyRooms" name="rooms" required>
+                                            <option value="">Количество комнат</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4+">4+</option>
+                                        </select>
+                                    </div>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsBuyPriceTo">Цена до, BYN</label>
+                                        <input class="tabbed-search__input" id="tsBuyPriceTo" name="priceTo" type="number" inputmode="numeric" min="0" step="1000" placeholder="Максимальная цена">
+                                    </div>
+                                    <div class="tabbed-search__actions">
+                                        <button type="submit" class="tabbed-search__submit">Подобрать</button>
+                                        <p class="tabbed-search__hint">Открою каталог с применёнными фильтрами.</p>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Sell panel -->
+                            <div class="tabbed-search__panel"
+                                 role="tabpanel"
+                                 id="tabbedSearchPanelSell"
+                                 aria-labelledby="tabbedSearchTabSell"
+                                 data-tabbed-search-panel="sell"
+                                 hidden>
+                                <p class="tabbed-search__panel-lead">Оценю объект по реальным сделкам в районе и предложу стратегию продажи.</p>
+                                <form class="tabbed-search__form" data-tabbed-search-form novalidate>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsSellDistrict">Район Лиды</label>
+                                        <select class="tabbed-search__select" id="tsSellDistrict" name="district" required>
+                                            <option value="">Выберите район</option>
+                                            <option value="Молодёжный">Молодёжный</option>
+                                            <option value="Красноармейский">Красноармейский</option>
+                                            <option value="Гастелло">Гастелло</option>
+                                            <option value="Север">Север</option>
+                                            <option value="Южный городок">Южный городок</option>
+                                            <option value="Слобода">Слобода</option>
+                                            <option value="Центр">Центр</option>
+                                            <option value="Северный городок">Северный городок</option>
+                                        </select>
+                                    </div>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsSellRooms">Комнаты</label>
+                                        <select class="tabbed-search__select" id="tsSellRooms" name="rooms" required>
+                                            <option value="">Количество комнат</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4+">4+</option>
+                                        </select>
+                                    </div>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsSellPrice">Желаемая цена, BYN</label>
+                                        <input class="tabbed-search__input" id="tsSellPrice" name="desiredPrice" type="number" inputmode="numeric" min="0" step="1000" placeholder="Сколько хотите получить">
+                                    </div>
+                                    <div class="tabbed-search__actions">
+                                        <button type="submit" class="tabbed-search__submit">Оценить и продать</button>
+                                        <p class="tabbed-search__hint">Отправлю заявку через Telegram — отвечу в течение часа.</p>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Support panel -->
+                            <div class="tabbed-search__panel"
+                                 role="tabpanel"
+                                 id="tabbedSearchPanelSupport"
+                                 aria-labelledby="tabbedSearchTabSupport"
+                                 data-tabbed-search-panel="support"
+                                 hidden>
+                                <p class="tabbed-search__panel-lead">Сопровождаю сделки и проверяю объекты — снимаю с вас ответственность за документы и юридические риски.</p>
+                                <form class="tabbed-search__form tabbed-search__form--with-textarea" data-tabbed-search-form novalidate>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsSupportService">Тип услуги</label>
+                                        <select class="tabbed-search__select" id="tsSupportService" name="service" required>
+                                            <option value="">Выберите услугу</option>
+                                            <option value="check">Проверка недвижимости</option>
+                                            <option value="deal">Сопровождение сделки</option>
+                                            <option value="mortgage">Помощь с ипотекой</option>
+                                            <option value="legal">Юридическая консультация</option>
+                                        </select>
+                                    </div>
+                                    <div class="tabbed-search__field">
+                                        <label class="tabbed-search__label" for="tsSupportObject">Тип объекта</label>
+                                        <select class="tabbed-search__select" id="tsSupportObject" name="objectType" required>
+                                            <option value="">Выберите тип объекта</option>
+                                            <option value="apartment">Квартира</option>
+                                            <option value="house">Дом</option>
+                                            <option value="land">Участок</option>
+                                            <option value="commercial">Коммерческая недвижимость</option>
+                                        </select>
+                                    </div>
+                                    <div class="tabbed-search__field tabbed-search__field--full">
+                                        <label class="tabbed-search__label" for="tsSupportComment">Комментарий <span style="text-transform:none;font-weight:400;color:var(--color-muted)">(необязательно)</span></label>
+                                        <textarea class="tabbed-search__textarea" id="tsSupportComment" name="comment" rows="3" placeholder="Опишите задачу или ситуацию"></textarea>
+                                    </div>
+                                    <div class="tabbed-search__actions">
+                                        <button type="submit" class="tabbed-search__submit">Получить консультацию</button>
+                                        <p class="tabbed-search__hint tabbed-search__hint--accent">Перезвоню сама и разберу вашу ситуацию.</p>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- SECTION: About Me -->
         <div class="section-full mobile-page-padding p-t80 p-b80 bg-white bg-no-repeat bg-bottom-left" style="background-image: url(images/background/bg-4.webp)">
             <div class="container">
@@ -1546,6 +1710,7 @@
     <script src="/js/objects-smart-badge.js" defer></script>
     <script src="/js/filters-custom-select.js" defer></script>
     <script src="/js/lazy-loaders.js?v=20260424-3" defer></script>
+    <script src="/js/tabbed-search.js?v=20260424-1" defer></script>
 
     <!-- Contact widget -->
     <div class="cw" data-cw-root>

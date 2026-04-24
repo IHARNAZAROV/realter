@@ -54,6 +54,15 @@ Blog articles automatically render two internal-link blocks for SEO:
 - **«По теме» card** — server-rendered `<aside class="related-links-card">` after `#post-content`. Up to 3 deduped links chosen by article `tags` from `data/blog-related-map.json` (`fallback` array used when fewer than 2 matches). Manual override: set `relatedLinks: [{title,url},...]` in the article's JSON entry to bypass auto-mapping.
 - Styles: `css/blog-related.css`.
 
+## Tabbed Search Block (Homepage)
+Universal services widget on `index.html` between hero slider and «Обо мне».
+- Three tabs: **Купить / Продать / Сопровождение** with WAI-ARIA tablist (arrow-key navigation, `aria-selected`, `aria-controls`).
+- **Buy** → submits to `/nedvizhimost-lida.html?type=buy&district=…&rooms=…&price=…` (catalog page).
+- **Sell / Support** → opens prefilled Telegram share URL (same pattern as `js/documents-checklist.js`); no backend call.
+- Files: `css/tabbed-search.css`, `js/tabbed-search.js` (vanilla IIFE, `init()` pattern guarded by `document.readyState === "loading"`).
+- Last active tab persisted in `localStorage` key `tabbedSearch:activeTab`.
+- Markup hooks: `[data-tabbed-search]`, `[data-tabbed-search-tab]`, `[data-tabbed-search-panel]`, `[data-tabbed-search-form]`. Cache-bust `?v=20260424-1`.
+
 ## Admin Panel Protection (`/adminka_objects/`)
 The admin panel includes Basic Auth protection and token-based validation for save operations.
 
