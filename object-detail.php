@@ -876,13 +876,10 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
 
       <script src="/js/optimize.js" defer data-versioned></script>
     <script src="/js/live-price.js?v=20260417-2" defer></script>
-    <script src="/js/mortgage-programs.js" defer></script>
-    <script src="/js/mortgage-calculator.js" defer></script>
-    <script src="/js/object-detail.js?v=20260424-1" defer></script>
+    <script src="/js/object-detail.js?v=20260424-2" defer></script>
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
-    <script src="/js/viewing-booking.js" defer></script>
 
     <!-- QR MODAL -->
     <div class="share-qr-modal" id="share-qr-modal" role="dialog" aria-modal="true" aria-label="QR-код объекта">

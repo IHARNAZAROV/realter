@@ -1405,10 +1405,112 @@ function initCustomSelectUI(nativeSelect) {
 
 window.initCustomSelectUI = initCustomSelectUI;
 
+/* =====================================================
+   ОБЩИЙ ЛЕНИВЫЙ ЗАГРУЗЧИК СКРИПТОВ
+   Используется для maplibre, ипотечного калькулятора,
+   формы записи на просмотр и т.п. Кеширует промис, чтобы
+   повторные вызовы не качали файл дважды.
+===================================================== */
+const _lazyScriptPromises = new Map();
+function loadScriptOnce(url) {
+  if (_lazyScriptPromises.has(url)) return _lazyScriptPromises.get(url);
+
+  const promise = new Promise(function (resolve, reject) {
+    const existing = document.querySelector(
+      'script[data-lazy-loaded="' + url + '"]'
+    );
+    if (existing) {
+      existing.addEventListener("load", function () { resolve(); });
+      existing.addEventListener("error", reject);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = url;
+    script.async = true;
+    script.setAttribute("data-lazy-loaded", url);
+    script.onload = function () { resolve(); };
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+
+  _lazyScriptPromises.set(url, promise);
+  return promise;
+}
+
+/* =====================================================
+   ЛЕНИВАЯ ЗАГРУЗКА ИПОТЕЧНОГО КАЛЬКУЛЯТОРА
+   mortgage-programs.js + mortgage-calculator.js (~19 КБ)
+   подгружаются только когда блок калькулятора
+   попадает в зону видимости.
+===================================================== */
 function initMortgageCalculator(obj) {
-  if (typeof window.initMultiBankMortgageCalculator === "function") {
-    window.initMultiBankMortgageCalculator(obj);
+  const mortgageEl = document.querySelector("[data-mortgage-calculator]");
+  if (!mortgageEl) return;
+
+  const startLoad = function () {
+    loadScriptOnce("/js/mortgage-programs.js")
+      .then(function () { return loadScriptOnce("/js/mortgage-calculator.js"); })
+      .then(function () {
+        if (typeof window.initMultiBankMortgageCalculator === "function") {
+          window.initMultiBankMortgageCalculator(obj);
+        }
+      })
+      .catch(function (err) {
+        console.error("Ошибка загрузки ипотечного калькулятора:", err);
+      });
+  };
+
+  if (typeof IntersectionObserver === "undefined") {
+    startLoad();
+    return;
   }
+
+  const io = new IntersectionObserver(
+    function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          observer.disconnect();
+          startLoad();
+        }
+      });
+    },
+    { rootMargin: "200px 0px" }
+  );
+
+  io.observe(mortgageEl);
+}
+
+/* =====================================================
+   ЛЕНИВАЯ ЗАГРУЗКА ФОРМЫ ЗАПИСИ НА ПРОСМОТР
+   viewing-booking.js (~5 КБ) подгружается только при
+   первом клике на кнопку «Записаться на просмотр».
+===================================================== */
+function initViewingBookingLazyLoad() {
+  const buttons = document.querySelectorAll("[data-open-booking-modal]");
+  if (!buttons.length) return;
+
+  function handleFirstClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const button = event.currentTarget;
+
+    buttons.forEach(function (b) {
+      b.removeEventListener("click", handleFirstClick);
+    });
+
+    loadScriptOnce("/js/viewing-booking.js")
+      .then(function () {
+        button.click();
+      })
+      .catch(function (err) {
+        console.error("Ошибка загрузки формы записи:", err);
+      });
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener("click", handleFirstClick);
+  });
 }
 
 
@@ -1764,5 +1866,8 @@ function initObjectMap(obj) {
 }
 
 
-  document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", function () {
+    initViewingBookingLazyLoad();
+    init();
+  });
 })();

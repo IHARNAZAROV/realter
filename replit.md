@@ -87,4 +87,21 @@ Inside `js/object-detail.js`:
 
 Cache-bust: `object-detail.js` version bumped to `?v=20260424-1`.
 
-Remaining recommendations (not yet applied — require deeper refactor): split FontAwesome subsets per page, lazy-load `chart.js` + market-analytics on index, dynamic import for client-quiz / documents-checklist / viewing-booking / mortgage modals, critical CSS extraction.
+### Lazy-load of chart / quiz / checklist / booking / mortgage scripts
+Four additional bundles moved to deferred loading on April 24, 2026.
+
+**`index.html`** — removed four sync `<script>` tags (`chart.js` CDN ≈ 200 KB, `market-analytics.js`, `client-quiz.js`, `documents-checklist.js`) and added a single bootstrap `js/lazy-loaders.js?v=20260424-1`. The bootstrap:
+- Caches script-loading promises so the same URL is never fetched twice.
+- Attaches an `IntersectionObserver` (`rootMargin: "200px 0px"`) on `#market-price-chart` — fires `chart.js` then `market-analytics.js` (in order, dependency respected) when the chart approaches the viewport.
+- Wires first-click handlers on `[data-client-quiz-open]` and `[data-documents-checklist-open]`. On the first click the bootstrap fetches the corresponding IIFE module then re-dispatches `button.click()`, so the freshly bound modal-open listener fires.
+
+**`object-detail.php`** — removed three sync `<script>` tags (`mortgage-programs.js`, `mortgage-calculator.js`, `viewing-booking.js`). All three are now triggered from `js/object-detail.js`:
+- New shared `loadScriptOnce(url)` helper (mirrors the maplibre pattern, but generic).
+- `initMortgageCalculator(obj)` now uses `IntersectionObserver` on `[data-mortgage-calculator]`. When the calculator nears the viewport, `mortgage-programs.js` loads first (defines `window.MORTGAGE_PROGRAMS`), then `mortgage-calculator.js` (defines `window.initMultiBankMortgageCalculator`), then `initMultiBankMortgageCalculator(obj)` is invoked.
+- New `initViewingBookingLazyLoad()` is wired on `DOMContentLoaded` and listens for the first click on `[data-open-booking-modal]`. On first click it loads `viewing-booking.js` and re-dispatches the click so the IIFE's modal-open handler runs.
+
+Cache-bust: `object-detail.js` version bumped to `?v=20260424-2`.
+
+Verified in production-mode preview: graph renders after scroll, mortgage calculator renders real values after scroll, page-load HTTP logs show `mortgage-*.js`, `viewing-booking.js`, `chart.js`, `market-analytics.js`, `client-quiz.js`, `documents-checklist.js` are no longer requested on initial page view.
+
+Remaining recommendations (not yet applied — require deeper refactor): split FontAwesome subsets per page, critical CSS extraction.
