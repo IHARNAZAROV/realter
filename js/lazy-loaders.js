@@ -100,7 +100,7 @@
     );
     setupModalClickLazyLoad(
       "[data-documents-checklist-open]",
-      "/js/documents-checklist.js"
+      "/js/documents-checklist.js?v=20260424-3"
     );
   }
 

@@ -104,4 +104,12 @@ Cache-bust: `object-detail.js` version bumped to `?v=20260424-2`.
 
 Verified in production-mode preview: graph renders after scroll, mortgage calculator renders real values after scroll, page-load HTTP logs show `mortgage-*.js`, `viewing-booking.js`, `chart.js`, `market-analytics.js`, `client-quiz.js`, `documents-checklist.js` are no longer requested on initial page view.
 
+### Bugfix: «Чеклист документов» modal didn't open (April 24, 2026)
+After the lazy-load refactor, clicking «Чеклист документов» in the header did nothing. Root cause: `js/documents-checklist.js` wrapped all setup (including `setupModal()` which binds the open-button click handler) in `document.addEventListener("DOMContentLoaded", ...)`. The lazy-loader fetches this script only on first user click — long after `DOMContentLoaded` has fired — so the listener never ran and the synthetic `button.click()` re-dispatched by `js/lazy-loaders.js` had no handler to open the modal.
+
+Fix:
+- `js/documents-checklist.js` — extracted the body of the `DOMContentLoaded` listener into a named `init()` function and replaced the wrapper with `document.readyState === "loading" ? addEventListener("DOMContentLoaded", init) : init()`.
+- `js/lazy-loaders.js` — appended `?v=20260424-3` to the lazy-loaded URL so browsers fetch the patched file.
+- `index.html` — bumped `js/lazy-loaders.js` to `?v=20260424-3`.
+
 Remaining recommendations (not yet applied — require deeper refactor): split FontAwesome subsets per page, critical CSS extraction.

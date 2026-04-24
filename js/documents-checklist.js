@@ -117,7 +117,7 @@
     ]
   };
 
-  document.addEventListener("DOMContentLoaded", function () {
+  function init() {
     const section = document.querySelector(".documents-checklist");
     const modalElement = document.querySelector("#documentsChecklistModal");
     const modalOpenButton = document.querySelector("[data-documents-checklist-open]");
@@ -396,5 +396,11 @@
       modalElement.hidden = true;
       document.body.style.overflow = "";
     }
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();
