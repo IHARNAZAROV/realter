@@ -64,3 +64,14 @@ Setup steps:
 3. Keep bearer token checks in app code enabled as the first/second factor (defense in depth).
 
 `adminka_objects/.htpasswd.example` is only a template and must not be used in production.
+
+## Frontend Assets Audit (April 2026)
+Full audit lives at `docs/frontend-assets-audit.md`. Safe optimizations applied (steps 1–3):
+- Removed `<script src="/js/blog-smart-badge.js">` from `blog.html`, `blog-detail.php` (only `index.html` has `#blogBadge`).
+- Removed `<script src="/js/objects-smart-badge.js">` from `nedvizhimost-lida.html`, `object-detail.php` (only `index.html` has `#objectsBadge`).
+- Removed unused `<link rel="preload" href="/css/swiper.css">` from `object-detail.php` (only `swiper-bundle.css` is needed).
+- Removed `css/flaticon.min.css` link from 8 pages where flaticon classes are not used: `404.html`, `blog.html`, `contact.html`, `faq.html`, `nedvizhimost-lida.html`, `rieltor-lida.html`, `blog-detail.php`, `object-detail.php`, `services-detail.php`. It is still loaded on `index.html`.
+- Aligned `nav-market-status.css` cache version in `index.html` `<noscript>` fallback (`?v=8`) with the preload above.
+- Deleted dead files: `js/blog-list.js` (never referenced — `js/calendar-sidebar.js` has its own `fetch` fallback) and `css/privacy.css` (never referenced).
+
+Remaining recommendations (not yet applied — require deeper refactor): split FontAwesome subsets per page, lazy-load `chart.js` + market-analytics on index, lazy-load `maplibre-gl.js` on object-detail, dynamic import for client-quiz / documents-checklist / viewing-booking / mortgage modals, critical CSS extraction.

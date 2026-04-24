@@ -101,7 +101,6 @@ $breadcrumbJsonLd = json_encode([
        4. STYLESHEETS (CSS)
        ========================================= -->
       <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-      <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
       <link
          rel="stylesheet"
          type="text/css"

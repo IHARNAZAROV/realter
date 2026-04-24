@@ -126,9 +126,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     =============================================== -->
     <!-- Libraries -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
     <link rel="preload" href="/css/swiper-bundle.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="/css/swiper.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/regular.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -887,7 +885,6 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <script src="/js/footer-post.js" defer></script>
     <script src="/js/viewing-booking.js" defer></script>
    <script src="/libs/maplibre/maplibre-gl.js"></script>
-       <script src="/js/objects-smart-badge.js" defer></script>
 
     <!-- QR MODAL -->
     <div class="share-qr-modal" id="share-qr-modal" role="dialog" aria-modal="true" aria-label="QR-код объекта">

@@ -171,7 +171,6 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
        4. STYLESHEETS (CSS)
        ========================================= -->
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/flaticon.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned />
     <link rel="preload" href="/css/fontawesome/css/fontawesome.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -648,7 +647,6 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/blog-detail.js" defer data-versioned></script>
     <script src="/js/footer-post.js" defer></script>
-        <script src="/js/blog-smart-badge.js" defer></script>
       <!-- Contact widget -->
     <div class="cw" data-cw-root>
       <button
