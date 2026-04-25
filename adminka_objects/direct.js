@@ -32,6 +32,7 @@ const DirectAPI = (function () {
   let campaignsRequestController = null;
   let campaignsRequestSeq = 0;
   let searchDebounceTimer = null;
+  let campaignRowDelegationBound = false;
 
   const currencyFormatter = new Intl.NumberFormat('ru-RU', {
     style: 'currency',
@@ -694,7 +695,6 @@ const DirectAPI = (function () {
     `;
     }).join('');
 
-    setupCampaignRowListeners();
   }
 
 
@@ -709,20 +709,31 @@ const DirectAPI = (function () {
     loadData();
   }
 
-  function setupCampaignRowListeners() {
-    document.querySelectorAll('#campaignsTableBody tr[data-campaign-id]').forEach((row) => {
-      row.addEventListener('click', () => {
-        const campaignId = row.getAttribute('data-campaign-id') || '';
-        setCampaignFilterAndReload(campaignId);
-      });
+  function setupCampaignRowDelegation() {
+    if (campaignRowDelegationBound) return;
 
-      row.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          const campaignId = row.getAttribute('data-campaign-id') || '';
-          setCampaignFilterAndReload(campaignId);
-        }
-      });
+    const tbody = document.getElementById('campaignsTableBody');
+    if (!tbody) return;
+
+    campaignRowDelegationBound = true;
+
+    tbody.addEventListener('click', (event) => {
+      const row = event.target.closest('tr[data-campaign-id]');
+      if (!row || !tbody.contains(row)) return;
+
+      const campaignId = row.getAttribute('data-campaign-id') || '';
+      setCampaignFilterAndReload(campaignId);
+    });
+
+    tbody.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+
+      const row = event.target.closest('tr[data-campaign-id]');
+      if (!row || !tbody.contains(row)) return;
+
+      event.preventDefault();
+      const campaignId = row.getAttribute('data-campaign-id') || '';
+      setCampaignFilterAndReload(campaignId);
     });
   }
 
@@ -957,6 +968,7 @@ const DirectAPI = (function () {
   }
 
   function setupEventListeners() {
+    setupCampaignRowDelegation();
     setupSearchListener();
 
     // Period filter change
