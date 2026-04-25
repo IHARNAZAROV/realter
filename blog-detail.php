@@ -162,7 +162,7 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
          <!-- ==============================================
          SITE VERSION (AUTO CACHE BUSTING)
     =============================================== -->
-    <script src="/site-version.js"></script>
+    <script src="/site-version.php"></script>
     <link rel="preconnect" href="https://api.qrserver.com" crossorigin />
     <link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/inter/Inter-Medium.woff2" as="font" type="font/woff2" crossorigin />
