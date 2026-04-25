@@ -29,6 +29,18 @@ const DirectAPI = (function () {
 
   const CONFIG_KEY = 'directApiConfig';
   const CACHE_KEY = 'directApiCache';
+  let campaignsRequestController = null;
+  let campaignsRequestSeq = 0;
+  let searchDebounceTimer = null;
+  let campaignRowDelegationBound = false;
+
+  const currencyFormatter = new Intl.NumberFormat('ru-RU', {
+    style: 'currency',
+    currency: 'BYN',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
+  const numberFormatter = new Intl.NumberFormat('ru-RU');
 
   // =========================================================
   // INITIALIZATION
@@ -385,6 +397,12 @@ const DirectAPI = (function () {
       return;
     }
 
+    if (campaignsRequestController) {
+      campaignsRequestController.abort();
+    }
+    campaignsRequestController = new AbortController();
+    const requestId = ++campaignsRequestSeq;
+
     try {
       // Show loading state
       document.getElementById('campaignsTableBody').innerHTML = 
@@ -401,7 +419,8 @@ const DirectAPI = (function () {
           token: state.credentials.token,
           login: state.credentials.login,
           filters: state.filters
-        })
+        }),
+        signal: campaignsRequestController.signal
       });
 
       if (!response.ok) {
@@ -409,6 +428,9 @@ const DirectAPI = (function () {
       }
 
       const data = await response.json();
+      if (requestId !== campaignsRequestSeq) {
+        return;
+      }
 
       if (!data.success) {
         showError(data.error || 'Ошибка при загрузке данных');
@@ -439,8 +461,15 @@ const DirectAPI = (function () {
 
       showNotification('Данные обновлены');
     } catch (error) {
+      if (error?.name === 'AbortError') {
+        return;
+      }
       showError(`Ошибка: ${error.message}`);
       console.error(error);
+    } finally {
+      if (requestId === campaignsRequestSeq) {
+        campaignsRequestController = null;
+      }
     }
   }
 
@@ -666,7 +695,6 @@ const DirectAPI = (function () {
     `;
     }).join('');
 
-    setupCampaignRowListeners();
   }
 
 
@@ -681,20 +709,31 @@ const DirectAPI = (function () {
     loadData();
   }
 
-  function setupCampaignRowListeners() {
-    document.querySelectorAll('#campaignsTableBody tr[data-campaign-id]').forEach((row) => {
-      row.addEventListener('click', () => {
-        const campaignId = row.getAttribute('data-campaign-id') || '';
-        setCampaignFilterAndReload(campaignId);
-      });
+  function setupCampaignRowDelegation() {
+    if (campaignRowDelegationBound) return;
 
-      row.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          const campaignId = row.getAttribute('data-campaign-id') || '';
-          setCampaignFilterAndReload(campaignId);
-        }
-      });
+    const tbody = document.getElementById('campaignsTableBody');
+    if (!tbody) return;
+
+    campaignRowDelegationBound = true;
+
+    tbody.addEventListener('click', (event) => {
+      const row = event.target.closest('tr[data-campaign-id]');
+      if (!row || !tbody.contains(row)) return;
+
+      const campaignId = row.getAttribute('data-campaign-id') || '';
+      setCampaignFilterAndReload(campaignId);
+    });
+
+    tbody.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+
+      const row = event.target.closest('tr[data-campaign-id]');
+      if (!row || !tbody.contains(row)) return;
+
+      event.preventDefault();
+      const campaignId = row.getAttribute('data-campaign-id') || '';
+      setCampaignFilterAndReload(campaignId);
     });
   }
 
@@ -810,8 +849,15 @@ const DirectAPI = (function () {
     const searchInput = document.getElementById('tableSearch');
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
-        state.searchQuery = e.target.value;
-        renderCampaignsTable();
+        const nextValue = e.target.value;
+        if (searchDebounceTimer) {
+          clearTimeout(searchDebounceTimer);
+        }
+        searchDebounceTimer = setTimeout(() => {
+          state.searchQuery = nextValue;
+          renderCampaignsTable();
+          searchDebounceTimer = null;
+        }, 200);
       });
     }
   }
@@ -836,6 +882,15 @@ const DirectAPI = (function () {
   function disconnect() {
     if (!confirm('Вы уверены? Эта кабина будет отключена.')) {
       return;
+    }
+
+    if (campaignsRequestController) {
+      campaignsRequestController.abort();
+      campaignsRequestController = null;
+    }
+    if (searchDebounceTimer) {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = null;
     }
 
     state.isAuthenticated = false;
@@ -889,17 +944,12 @@ const DirectAPI = (function () {
   // =========================================================
   function formatCurrency(value) {
     if (typeof value !== 'number') return '—';
-    return new Intl.NumberFormat('ru-RU', {
-      style: 'currency',
-      currency: 'BYN',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value);
+    return currencyFormatter.format(value);
   }
 
   function formatNumber(value) {
     if (typeof value !== 'number') return '—';
-    return new Intl.NumberFormat('ru-RU').format(value);
+    return numberFormatter.format(value);
   }
 
   function escapeHtml(text) {
@@ -918,6 +968,7 @@ const DirectAPI = (function () {
   }
 
   function setupEventListeners() {
+    setupCampaignRowDelegation();
     setupSearchListener();
 
     // Period filter change

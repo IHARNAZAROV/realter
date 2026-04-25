@@ -478,60 +478,70 @@ function render() {
 function enableDragAndDrop(container, dataArray) {
   if (!container) return;
 
-  let draggedEl = null;
+  if (!container.__dndState) {
+    container.__dndState = { draggedEl: null, dataArray };
+  } else {
+    container.__dndState.dataArray = dataArray;
+  }
 
-  // Используем event delegation вместо привязки к каждому элементу
-  container.addEventListener("dragstart", (e) => {
-    const item = e.target.closest(".object");
-    if (!item) return;
-    
-    draggedEl = item;
-    item.classList.add("dragging");
-  });
+  if (!container.__dndHandlersBound) {
+    container.__dndHandlersBound = true;
 
-  container.addEventListener("dragend", (e) => {
-    const item = e.target.closest(".object");
-    if (!item) return;
-    
-    item.classList.remove("dragging");
-    draggedEl = null;
-  });
-
-  container.addEventListener("dragover", (e) => {
-    e.preventDefault();
-  });
-
-  container.addEventListener("drop", (e) => {
-    e.preventDefault();
-    if (!draggedEl) return;
-
-    const dropTarget = e.target.closest(".object");
-    if (!dropTarget || draggedEl === dropTarget) return;
-
-    const fromIndex = Number(draggedEl.dataset.index);
-    const toIndex = Number(dropTarget.dataset.index);
-    if (Number.isNaN(fromIndex) || Number.isNaN(toIndex)) return;
-
-    /* ===== 1. ДВИГАЕМ DOM ===== */
-    const rect = dropTarget.getBoundingClientRect();
-    const isAfter = e.clientY > rect.top + rect.height / 2;
-
-    container.insertBefore(
-      draggedEl,
-      isAfter ? dropTarget.nextSibling : dropTarget
-    );
-
-    /* ===== 2. ОБНОВЛЯЕМ МАССИВ ===== */
-    const moved = dataArray.splice(fromIndex, 1)[0];
-    dataArray.splice(toIndex, 0, moved);
-
-    /* ===== 3. ОБНОВЛЯЕМ data-index ===== */
-    container.querySelectorAll(".object").forEach((el, i) => {
-      el.dataset.index = i;
+    // Используем event delegation вместо привязки к каждому элементу
+    container.addEventListener("dragstart", (e) => {
+      const item = e.target.closest(".object");
+      if (!item) return;
+      
+      container.__dndState.draggedEl = item;
+      item.classList.add("dragging");
     });
 
-    setDirty();
-  });
+    container.addEventListener("dragend", (e) => {
+      const item = e.target.closest(".object");
+      if (!item) return;
+      
+      item.classList.remove("dragging");
+      container.__dndState.draggedEl = null;
+    });
+
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    container.addEventListener("drop", (e) => {
+      e.preventDefault();
+      const draggedEl = container.__dndState?.draggedEl;
+      const currentDataArray = container.__dndState?.dataArray || dataArray;
+      if (!draggedEl) return;
+
+      const dropTarget = e.target.closest(".object");
+      if (!dropTarget || draggedEl === dropTarget) return;
+
+      const fromIndex = Number(draggedEl.dataset.index);
+      const toIndex = Number(dropTarget.dataset.index);
+      if (Number.isNaN(fromIndex) || Number.isNaN(toIndex)) return;
+
+      /* ===== 1. ДВИГАЕМ DOM ===== */
+      const rect = dropTarget.getBoundingClientRect();
+      const isAfter = e.clientY > rect.top + rect.height / 2;
+
+      container.insertBefore(
+        draggedEl,
+        isAfter ? dropTarget.nextSibling : dropTarget
+      );
+
+      /* ===== 2. ОБНОВЛЯЕМ МАССИВ ===== */
+      const moved = currentDataArray.splice(fromIndex, 1)[0];
+      currentDataArray.splice(toIndex, 0, moved);
+
+      /* ===== 3. ОБНОВЛЯЕМ data-index ===== */
+      container.querySelectorAll(".object").forEach((el, i) => {
+        el.dataset.index = i;
+      });
+
+      setDirty();
+    });
+  }
 
   // Устанавливаем draggable атрибут для всех элементов
   container.querySelectorAll(".object").forEach((item) => {

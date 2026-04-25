@@ -11,6 +11,9 @@
     sortDir: "desc",
     search: "",
     category: "",
+    requestController: null,
+    requestSeq: 0,
+    searchDebounceTimer: null,
   };
 
   const els = {
@@ -26,23 +29,43 @@
     headers: document.querySelectorAll(".bs-table thead th[data-sort]"),
   };
 
-  function fetchJson(url) {
-    return fetch(url, { cache: "no-store" }).then((r) => {
+  function fetchJson(url, signal) {
+    return fetch(url, { cache: "no-store", signal }).then((r) => {
       if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
     });
   }
 
   function loadAll() {
+    if (state.requestController) {
+      state.requestController.abort();
+    }
+    state.requestController = new AbortController();
+    const requestId = ++state.requestSeq;
+
     setLoading();
     return Promise.all([
-      fetchJson(ARTICLES_URL).catch(() => []),
-      fetchJson(VIEWS_URL).catch(() => ({ views: {} })),
+      fetchJson(ARTICLES_URL, state.requestController.signal).catch((error) => {
+        if (error?.name === "AbortError") throw error;
+        return [];
+      }),
+      fetchJson(VIEWS_URL, state.requestController.signal).catch((error) => {
+        if (error?.name === "AbortError") throw error;
+        return { views: {} };
+      }),
     ]).then(([articles, viewsResp]) => {
+      if (requestId !== state.requestSeq) return;
       state.articles = Array.isArray(articles) ? articles : [];
       state.views = (viewsResp && viewsResp.views) || {};
       buildCategoryOptions();
       render();
+    }).catch((error) => {
+      if (error?.name === "AbortError") return;
+      els.tbody.innerHTML = '<tr><td colspan="5" class="bs-empty">Ошибка загрузки данных</td></tr>';
+    }).finally(() => {
+      if (requestId === state.requestSeq) {
+        state.requestController = null;
+      }
     });
   }
 
@@ -194,7 +217,17 @@
   els.headers.forEach((th) => {
     th.addEventListener("click", () => setSort(th.getAttribute("data-sort")));
   });
-  els.search.addEventListener("input", (e) => { state.search = e.target.value; render(); });
+  els.search.addEventListener("input", (e) => {
+    const nextValue = e.target.value;
+    if (state.searchDebounceTimer) {
+      clearTimeout(state.searchDebounceTimer);
+    }
+    state.searchDebounceTimer = setTimeout(() => {
+      state.search = nextValue;
+      render();
+      state.searchDebounceTimer = null;
+    }, 200);
+  });
   els.category.addEventListener("change", (e) => { state.category = e.target.value; render(); });
   els.sort.addEventListener("change", (e) => {
     const v = e.target.value;
