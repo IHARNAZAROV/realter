@@ -123,3 +123,22 @@ Fix:
 - `index.html` — bumped `js/lazy-loaders.js` to `?v=20260424-3`.
 
 Remaining recommendations (not yet applied — require deeper refactor): split FontAwesome subsets per page, critical CSS extraction.
+
+## Real Estate JSON Object Generator (April 25, 2026)
+New admin tool at `adminka_objects/json-generator.html` that converts a Russian-language property description into a JSON object matching `data/objects.json` schema.
+
+Files:
+- `adminka_objects/json-generator.html` — page shell (textarea input + JSON output + copy button + toast).
+- `adminka_objects/json-generator.css` — dark-theme styling consistent with the admin panel.
+- `adminka_objects/json-generator.js` — vanilla-JS IIFE exposing `window.JsonGenerator.generateJSON(text)`.
+- `adminka_objects/admin-sidebar.js` — sidebar entry «Генератор JSON» added.
+
+Architecture (`json-generator.js`):
+- **TEMPLATE** — frozen reference object describing every key in the canonical schema with `null` scalars and `[]` arrays.
+- **mapTemplate(data, template)** — pure recursive function that copies the template structure, filling in `data[key]` when present, otherwise leaving the template default.
+- **PARSERS** — map of `{ schemaKey: fn(text) }` regex-based extractors for free-text descriptions (type, dealType, city, address, areas, year, materials, heating/water/sewerage, infrastructure, contract number, location, etc.).
+- **LABEL_MAP + parseLabeledFields(text)** — extracts structured `Label\nValue` and `Label: Value` pairs from "Параметры объекта" blocks (Тип объекта, Площадь участка/общая, Уровней в доме → floorsTotal, Год постройки, Материал стен/крыши, Отопление, Канализация, Электроснабжение, Вода, Гараж, Статус земли, Условия продажи, Номер договора, Координаты, Населённый пункт, Улица, etc.).
+- **extractSection(text, headings)** — pulls multi-line section bodies (e.g. «Описание», «Примечание») by reading until the next known header or blank line.
+- **Pipeline** in `parseObjectFromText`: (1) labeled values take highest priority, (2) regex parsers fill in any still-empty keys, (3) derived fields — `buildTitle(data)` (e.g. «Дом в г. Лида на улице Л.Чайкиной») and `buildSlug(...)` (transliterated kebab-case).
+- UI: error border on parse failure, «Скопировано» toast after copy, output auto-scrolls to top after generation.
+- Cyrillic-safe regex throughout (uses `[а-яё]*` and `(?:^|[^а-яё])` instead of `\b` / `\w` since JS doesn't treat Cyrillic letters as word chars without the `u` flag).

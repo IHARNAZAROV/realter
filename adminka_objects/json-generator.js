@@ -124,10 +124,24 @@
   //  PARSERS — каждое правило возвращает значение или null.
   // =====================================================================
   function parseTitle(text) {
-    var first = text.split('\n')[0];
-    if (!first) return null;
-    // если первая строка похожа на заголовок (короткая, без знаков-маркеров)
-    if (first.length <= 140) return first;
+    // ищем первую строку, которая ВЫГЛЯДИТ как заголовок объекта
+    // (начинается с "Дом", "Квартира", "N-комнатная", "Коттедж" и т.п.).
+    // Если первая контентная строка не похожа на заголовок — возвращаем null,
+    // чтобы потом сработал buildTitle().
+    var lines = text.split('\n');
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) continue;
+      if (KNOWN_HEADERS_RE && KNOWN_HEADERS_RE.test(line)) continue;
+      if (/^(описание|параметры\s*объекта|местоположение|инфраструктура|примечание)\s*:?\s*$/i.test(line)) continue;
+      if (/:\s*$/.test(line)) continue;
+      // должно начинаться с типа объекта или "N-комнатная"
+      if (/^(дом|квартира|коттедж|таунхаус|участок|\d+[\-\s]*комнатн)/i.test(line) && line.length <= 140) {
+        return line;
+      }
+      // первая «контентная» строка — не похожа на title, прекращаем
+      return null;
+    }
     return null;
   }
 
@@ -145,10 +159,11 @@
   }
 
   function parseCity(text) {
-    if (/лидск(?:ий|ого)\s+район/i.test(text)) return 'Лидский район';
+    // явный город "г. <Имя>" имеет приоритет над названием района
     var m = text.match(/(?:^|[^а-яё])г\.?\s*([А-ЯЁ][а-яё\-]+)/);
     if (m) return m[1];
     if (/(?:^|[^а-яё])лида(?:[^а-яё]|$)/i.test(text)) return 'Лида';
+    if (/лидск(?:ий|ого)\s+район/i.test(text)) return 'Лидский район';
     return null;
   }
 
@@ -156,8 +171,8 @@
     var patterns = [
       /(?:^|[^а-яё])(д\.\s*[А-ЯЁ][а-яё\-]+(?:\s+[А-ЯЁ][а-яё\-]+)?)/,
       /(деревн[яе]\s+[А-ЯЁ][а-яё\-]+)/i,
-      /(ул\.\s*[А-ЯЁ][а-яё\-]+(?:[,\s]*д\.?\s*\d+[а-яА-Я]?)?(?:[,\s]*корпус\s*\d+)?)/i,
-      /(улица\s+[А-ЯЁ][а-яё\-]+)/i,
+      /(ул\.\s*[А-ЯЁ][а-яё\.\-]+(?:\s+[А-ЯЁ][а-яё\-]+)?(?:[,\s]*д\.?\s*\d+[а-яА-Я]?)?(?:[,\s]*корпус\s*\d+)?)/i,
+      /(улица\s+[А-ЯЁ][а-яё\-]+(?:\s+[А-ЯЁ][а-яё\-]+)?)/i,
       /(пер\.\s*[А-ЯЁ][а-яё\-]+)/i,
       /(пр-?т\.?\s*[А-ЯЁ][а-яё\-]+)/i,
       /(южный\s+городок(?:[,\s]*д\.?\s*\d+)?)/i,
@@ -354,10 +369,13 @@
   }
 
   function parseLocation(text) {
-    var m = text.match(/(?:координаты|location|coords?)[^0-9\-]*(-?\d+\.\d+)[\s,;]+(-?\d+\.\d+)/i);
+    // "Координаты\n53.884503, 25.280047" или "Координаты: 53.884503, 25.280047"
+    var m = text.match(/координаты[\s:]*\n?\s*(-?\d+\.\d+)\s*[,;\s]+\s*(-?\d+\.\d+)/i);
     if (m) return { lat: parseFloat(m[1]), lng: parseFloat(m[2]) };
-    var m2 = text.match(/lat[^0-9\-]*(-?\d+\.\d+)[\s\S]*?lng[^0-9\-]*(-?\d+\.\d+)/i);
+    var m2 = text.match(/(?:location|coords?)[^0-9\-]*(-?\d+\.\d+)[\s,;]+(-?\d+\.\d+)/i);
     if (m2) return { lat: parseFloat(m2[1]), lng: parseFloat(m2[2]) };
+    var m3 = text.match(/lat[^0-9\-]*(-?\d+\.\d+)[\s\S]{0,40}?lng[^0-9\-]*(-?\d+\.\d+)/i);
+    if (m3) return { lat: parseFloat(m3[1]), lng: parseFloat(m3[2]) };
     return null;
   }
 
@@ -405,19 +423,28 @@
   }
 
   function parseInfrastructure(text) {
-    var items = parseListBy(text, ['инфраструктура', 'рядом', 'окружение']);
-    if (items.length) return items;
-    // fallback — собираем по ключевым словам
+    // 1) Если есть структурный блок "Инфраструктура" — берём всё до следующей секции.
+    var section = extractSection(text, ['инфраструктура', 'рядом', 'окружение']);
+    if (section) {
+      var items = section.split('\n')
+        .map(function (l) { return l.replace(/^[\-•–*]\s*/, '').trim(); })
+        .filter(function (l) { return l && l.length < 120; });
+      if (items.length) return dedupe(items);
+    }
+    // 2) старый bullet-парсер
+    var bullets = parseListBy(text, ['инфраструктура', 'рядом', 'окружение']);
+    if (bullets.length) return dedupe(bullets);
+    // 3) fallback — собираем по ключевым словам
     var bag = [];
     var KW = [
-      ['сад', 'Сад'],
+      ['сад(?:[^а-яё]|$)', 'Сад'],
       ['огород', 'Огород'],
       ['рядом\\s*лес', 'Рядом лес'],
       ['водоем|водоём|озер|река', 'Водоем'],
       ['хозпостро', 'Хозпостройки'],
       ['остановк', 'Остановка общественного транспорта рядом'],
       ['школ', 'Школа рядом'],
-      ['сад[иыа]?к|детск\\w*\\s*сад', 'Детский сад рядом'],
+      ['детск[а-яё]*\\s*сад', 'Детский сад рядом'],
       ['поликлиник', 'Поликлиника рядом'],
       ['магазин', 'Магазины рядом']
     ];
@@ -428,6 +455,48 @@
     }
     return bag;
   }
+
+  function dedupe(arr) {
+    var seen = {}, out = [];
+    arr.forEach(function (v) { if (!seen[v]) { seen[v] = 1; out.push(v); } });
+    return out;
+  }
+
+  // Извлекает содержимое секции (между заголовком и следующей пустой строкой
+  // ИЛИ следующим известным заголовком).
+  function extractSection(text, headings) {
+    var lines = text.split('\n');
+    var collecting = false;
+    var collected = [];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      var lower = line.toLowerCase();
+      if (!collecting) {
+        var isHeader = headings.some(function (h) {
+          return lower === h || lower === h + ':' || lower.indexOf(h + ':') === 0;
+        });
+        if (isHeader) {
+          collecting = true;
+          // если значение в той же строке после ":"
+          var idx = line.indexOf(':');
+          if (idx !== -1) {
+            var tail = line.slice(idx + 1).trim();
+            if (tail) collected.push(tail);
+          }
+        }
+        continue;
+      }
+      // мы внутри секции
+      if (line === '') continue;
+      // если строка похожа на следующий заголовок секции — стоп
+      if (KNOWN_HEADERS_RE.test(line)) break;
+      collected.push(line);
+    }
+    return collected.join('\n');
+  }
+
+  // Заголовки структурированных секций — используются для определения границ.
+  var KNOWN_HEADERS_RE = /^(?:параметры\s*объекта|тип\s*объекта|площад[ьи]\s*(?:участка|общая|жилая|кухни)|уровней\s*в\s*доме|год\s*постройки|материал\s*(?:стен|крыши)|отопление|газ|канализация|электроснабжение|вода|баня|гараж|балкон|тип\s*дома|ремонт|санузел|статус\s*земли|условия\s*продажи|номер\s*договора|инфраструктура|примечание|описание|местоположение|область|район|населенн[а-яё]*\s*пункт|улица|координаты|особенности|комнат[а-яё]*|раздельных\s*комнат|этаж[а-яё]*|этажност[а-яё]*|цена\s*(?:byn|usd))[\s:]*$/i;
 
   function parseAdditionalBuildings(text) {
     return parseListBy(text, ['дополнительные постройки', 'постройки', 'хозпостройки']);
@@ -445,18 +514,24 @@
   }
 
   function parsePublishedAt(text) {
-    var m = text.match(/(\d{4})-(\d{2})-(\d{2})/);
-    if (m) return m[0];
-    var m2 = text.match(/(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})/);
-    if (m2) {
-      return m2[3] + '-' + ('0' + m2[2]).slice(-2) + '-' + ('0' + m2[1]).slice(-2);
-    }
+    // 1) явная метка "Опубликовано" / "Дата публикации"
+    var m = text.match(/(?:опубликовано|дата\s*публикации)[\s:]*?(\d{4}-\d{2}-\d{2})/i);
+    if (m) return m[1];
+    var m1 = text.match(/(?:опубликовано|дата\s*публикации)[\s:]*?(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})/i);
+    if (m1) return m1[3] + '-' + ('0' + m1[2]).slice(-2) + '-' + ('0' + m1[1]).slice(-2);
+    // 2) дата из номера договора → "Договор № X от DD.MM.YYYY"
+    var m2 = text.match(/договор[\s\S]{0,40}?от\s+(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})/i);
+    if (m2) return m2[3] + '-' + ('0' + m2[2]).slice(-2) + '-' + ('0' + m2[1]).slice(-2);
     return null;
   }
 
   function parseContractNumber(text) {
-    var m = text.match(/(Договор\s*№\s*[\w\/\-]+(?:\s+от\s+\d{1,2}[.\/]\d{1,2}[.\/]\d{4})?)/i);
-    return m ? m[1] : null;
+    var m = text.match(/(Договор\s*№\s*[\d\/\-]+(?:\s+от\s+\d{1,2}[.\/]\d{1,2}[.\/]\d{4})?)/i);
+    if (m) return m[1].replace(/\s+/g, ' ').trim();
+    // формат "Номер договора\n92/4 от 24.04.2026"
+    m = text.match(/номер\s*договора[\s:]*\n?\s*(\d+\/\d+(?:\s+от\s+\d{1,2}[.\/]\d{1,2}[.\/]\d{4})?)/i);
+    if (m) return 'Договор № ' + m[1].replace(/\s+/g, ' ').trim();
+    return null;
   }
 
   function parseRecommended(text) {
@@ -465,14 +540,20 @@
   }
 
   function parseDescription(text) {
+    // если есть структурный блок "Описание" / "Примечание" — берём только его
+    var section = extractSection(text, ['описание', 'примечание']);
+    if (section && section.length > 20) return section;
     return text || null;
   }
 
   function parseCardDescription(text) {
     // первое короткое предложение после заголовка, в идеале содержащее площадь
     var paragraphs = text.split('\n').filter(Boolean);
-    for (var i = 1; i < paragraphs.length; i++) {
-      var p = paragraphs[i];
+    for (var i = 0; i < paragraphs.length; i++) {
+      var p = paragraphs[i].trim();
+      // пропускаем заголовки секций
+      if (KNOWN_HEADERS_RE.test(p)) continue;
+      if (/^(описание|параметры\s*объекта|местоположение|инфраструктура|примечание)\s*:?\s*$/i.test(p)) continue;
       if (p.length > 30 && p.length < 240 && /площад|кварт|дом|участ|сот|м²/i.test(p)) {
         return p;
       }
@@ -488,6 +569,136 @@
     if (!parts.length && title) parts.push(title);
     if (!parts.length) return null;
     return transliterate(parts.join(' '));
+  }
+
+  function buildTitle(data) {
+    if (!data.type && !data.city && !data.address) return null;
+    var parts = [];
+    if (data.rooms) parts.push(data.rooms + '-комнатная');
+    if (data.type) parts.push(data.type === 'Квартира' ? 'квартира' : data.type);
+    if (data.city) {
+      if (/район/i.test(data.city)) parts.push('в ' + data.city);
+      else parts.push('в г. ' + data.city);
+    }
+    if (data.address) {
+      var a = data.address;
+      if (/^ул\./i.test(a)) parts.push('на ' + a.replace(/^ул\./i, 'улице'));
+      else if (/^улица/i.test(a)) parts.push('на ' + a);
+      else if (/^д\./i.test(a) || /^деревн[яе]/i.test(a)) parts.push(a);
+      else parts.push(a);
+    }
+    var t = parts.join(' ');
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+
+  // =====================================================================
+  //  LABELED FIELDS — структурный извлекатель пар "Label\nValue"
+  //  и "Label: Value". Используется для блока "Параметры объекта".
+  // =====================================================================
+  var LABEL_MAP = {
+    'тип объекта':            { key: 'type', map: function (v) { return v; } },
+    'тип дома':               { key: 'houseType', map: function (v) { return v; } },
+    'площадь участка':        { key: 'areaPlot', map: toNumber },
+    'площадь общая':          { key: 'areaTotal', map: toNumber },
+    'площадь жилая':          { key: 'areaLiving', map: toNumber },
+    'площадь кухни':          { key: 'areaKitchen', map: toNumber },
+    'площадь по снб':         { key: 'areaSNB', map: toNumber },
+    'комнат':                 { key: 'rooms', map: function (v) { return parseInt(v, 10) || null; } },
+    'комнаты':                { key: 'rooms', map: function (v) { return parseInt(v, 10) || null; } },
+    'раздельных комнат':      { key: 'roomsSeparate', map: function (v) { return parseInt(v, 10) || null; } },
+    'этаж':                   { key: 'floor', map: function (v) { return parseInt(v, 10) || null; } },
+    'этажность':              { key: 'floorsTotal', map: function (v) { return parseInt(v, 10) || null; } },
+    'уровней в доме':         { key: 'floorsTotal', map: function (v) { return parseInt(v, 10) || null; } },
+    'год постройки':          { key: 'yearBuilt', map: function (v) { return parseInt(v, 10) || null; } },
+    'процент готовности':     { key: 'readinessPercent', map: function (v) { return parseInt(v, 10); } },
+    'материал стен':          { key: 'houseMaterial', map: function (v) { return v; } },
+    'материал крыши':         { key: 'roofMaterial', map: function (v) { return v; } },
+    'отопление':              { key: 'heating', map: function (v) { return v; } },
+    'газ':                    { key: 'gas', map: function (v) { return v; } },
+    'канализация':            { key: 'sewerage', map: function (v) { return v; } },
+    'электроснабжение':       { key: 'electricity', map: function (v) { return v; } },
+    'вода':                   { key: 'water', map: function (v) { return v; } },
+    'баня':                   { key: 'bathhouse', map: function (v) { return v; } },
+    'гараж':                  { key: 'garage', map: function (v) { return v; } },
+    'балкон':                 { key: 'balcony', map: function (v) { return v; } },
+    'санузел':                { key: 'bathroom', map: function (v) { return v; } },
+    'ремонт':                 { key: 'renovation', map: function (v) { return v; } },
+    'статус земли':           { key: 'landStatus', map: function (v) { return v; } },
+    'условия продажи':        { key: 'saleTerms', map: function (v) { return v; } },
+    'номер договора':         { key: 'contractNumber', map: function (v) {
+                                  if (!v) return null;
+                                  return /договор/i.test(v) ? v : 'Договор № ' + v;
+                                } },
+    'цена byn':               { key: 'priceBYN', map: toNumber },
+    'цена usd':               { key: 'priceUSD', map: toNumber },
+    'населенный пункт':       { key: 'city', map: function (v) {
+                                  return v.replace(/^г\.\s*/i, '').trim();
+                                } },
+    // 'район' намеренно не маппится в city — приоритет за "Населённый пункт".
+    'улица':                  { key: 'address', map: function (v) {
+                                  // "Л.Чайкиной ул." → "ул. Л.Чайкиной"
+                                  var s = v.trim();
+                                  s = s.replace(/\s*ул\.?\s*$/i, '');
+                                  if (!/^ул\./i.test(s)) s = 'ул. ' + s;
+                                  return s;
+                                } },
+    'координаты':             { key: 'location', map: function (v) {
+                                  var m = v.match(/(-?\d+\.\d+)\s*[,;\s]+\s*(-?\d+\.\d+)/);
+                                  return m ? { lat: parseFloat(m[1]), lng: parseFloat(m[2]) } : null;
+                                } }
+    // 'описание' / 'примечание' намеренно не здесь — они многострочные,
+    // их обрабатывает parseDescription через extractSection.
+  };
+
+  // Вытаскивает значения по схеме "Label\nValue" / "Label: Value".
+  // Возвращает объект { ключ_шаблона: значение, ... }.
+  function parseLabeledFields(text) {
+    var lines = text.split('\n');
+    var result = {};
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (!line) continue;
+
+      // вариант 1: "Label: value" в одной строке
+      var inlineMatch = line.match(/^([А-ЯЁа-яё][а-яёА-ЯЁ\s]+?)\s*:\s*(.+)$/);
+      if (inlineMatch) {
+        var labelInline = inlineMatch[1].trim().toLowerCase();
+        var valueInline = inlineMatch[2].trim();
+        if (LABEL_MAP[labelInline]) {
+          assignLabeled(result, labelInline, valueInline);
+          continue;
+        }
+      }
+
+      // вариант 2: "Label" на одной строке, значение на следующей
+      var labelKey = line.toLowerCase().replace(/[:\s]+$/, '');
+      if (LABEL_MAP[labelKey]) {
+        var nextValue = '';
+        for (var j = i + 1; j < lines.length; j++) {
+          var nl = lines[j].trim();
+          if (!nl) continue;
+          // если следующая строка — тоже заголовок, оставляем пустым
+          if (LABEL_MAP[nl.toLowerCase().replace(/[:\s]+$/, '')] || KNOWN_HEADERS_RE.test(nl)) break;
+          nextValue = nl;
+          i = j;
+          break;
+        }
+        if (nextValue) assignLabeled(result, labelKey, nextValue);
+      }
+    }
+    return result;
+  }
+
+  function assignLabeled(target, labelKey, rawValue) {
+    var spec = LABEL_MAP[labelKey];
+    if (!spec) return;
+    var mapped;
+    try { mapped = spec.map(rawValue); }
+    catch (e) { mapped = null; }
+    if (mapped == null || mapped === '') return;
+    // не перетираем уже заданное непустое значение (чтобы "Район" не затёр "Населённый пункт")
+    if (target[spec.key] != null && target[spec.key] !== '' && spec.key === 'city') return;
+    target[spec.key] = mapped;
   }
 
   // =====================================================================
@@ -552,21 +763,38 @@
 
   // =====================================================================
   //  parseObjectFromText — прогоняет текст через все парсеры.
+  //
+  //  Приоритеты (более высокий перетирает более низкий):
+  //    1) структурные пары "Label\nValue" / "Label: Value" (LABEL_MAP)
+  //    2) свободно-текстовые регулярки (PARSERS) — заполняют недостающее
   // =====================================================================
   function parseObjectFromText(text) {
     var data = {};
+
+    // 1) структурные значения
+    var labeled = parseLabeledFields(text);
+    Object.keys(labeled).forEach(function (k) {
+      var v = labeled[k];
+      if (v !== undefined && v !== null && v !== '') data[k] = v;
+    });
+
+    // 2) регекс-парсеры — только для пустых полей
     Object.keys(PARSERS).forEach(function (key) {
+      if (data[key] != null && !(Array.isArray(data[key]) && data[key].length === 0)) return;
       try {
         var v = PARSERS[key](text);
         if (v !== undefined && v !== null && !(typeof v === 'string' && v === '')) {
-          data[key] = v;
+          if (!Array.isArray(v) || v.length > 0) data[key] = v;
         }
       } catch (e) {
         // молча пропускаем ошибки отдельного парсера
       }
     });
 
-    // производные поля
+    // 3) производные поля
+    if (!data.title) {
+      data.title = buildTitle(data);
+    }
     if (!data.slug) {
       data.slug = buildSlug(data.title, data.type, data.city, data.address);
     }
