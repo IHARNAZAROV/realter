@@ -4,8 +4,8 @@
 $deployFile = __DIR__ . '/.deploy';
 
 if (file_exists($deployFile)) {
-    echo filemtime($deployFile);
-} else {
-    // fallback, если файл случайно удалят
-    echo time();
+    return (string) filemtime($deployFile);
 }
+
+// fallback, если файл случайно удалят
+return (string) time();
