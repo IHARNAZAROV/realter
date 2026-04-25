@@ -4,11 +4,11 @@ window.MORTGAGE_PROGRAMS = [
     bankSlug: "belarusbank",
     bankLogo: "ББ",
     programName: "Ипотека Экспресс (вторичный рынок)",
-    interestRate: 18.5,
+    interestRate: 16.9,
     maxTermYears: 20,
     minDownPaymentPercent: 10,
     description:
-      "Кредит на покупку квартиры на вторичном рынке. Ставка зависит от категории заемщика и составляет до 18.5%."
+      "Кредит на покупку квартиры у физлица на вторичном рынке. Ставка 16.9% (для очередников в их населённом пункте — 15.5%)."
   },
 
   {
@@ -16,7 +16,7 @@ window.MORTGAGE_PROGRAMS = [
     bankSlug: "belarusbank",
     bankLogo: "ББ",
     programName: "Партнёрская новостройка",
-    interestRate: 16.75,
+    interestRate: 15.9,
     graceInterestRate: {
       min: 3.75,
       max: 10.25,
@@ -25,7 +25,7 @@ window.MORTGAGE_PROGRAMS = [
     maxTermYears: 20,
     minDownPaymentPercent: 10,
     description:
-      "Кредит на покупку жилья у аккредитованных застройщиков. Первые 12 месяцев действует льготная ставка, затем применяется основная."
+      "Кредит на покупку готовой квартиры у застройщика. Базовая ставка 15.9% (для очередников — 13.75%). Первые 12 месяцев действует льготная ставка, затем применяется основная."
   },
 
   {

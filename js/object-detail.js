@@ -1449,7 +1449,7 @@ function initMortgageCalculator(obj) {
   if (!mortgageEl) return;
 
   const startLoad = function () {
-    loadScriptOnce("/js/mortgage-programs.js")
+    loadScriptOnce("/js/mortgage-programs.js?v=20260425-1")
       .then(function () { return loadScriptOnce("/js/mortgage-calculator.js"); })
       .then(function () {
         if (typeof window.initMultiBankMortgageCalculator === "function") {
