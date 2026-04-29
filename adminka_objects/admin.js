@@ -357,6 +357,8 @@ const previewImages = {
     "dom-lida-ul-kievskaya":"/images/objects/pic56.webp",
     "kvartira-lida-ul-kooperativnaya-50": "/images/objects/pic57.webp",
     "dom-feliksovo-ekaterininskiy-trakt": "/images/objects/pic58.webp",
+     "dom-ogorodniki-molodezhnaya-24" :"/images/objects/pic60.webp",
+     "dom-lida-ul-dobrolyubova":"/images/objects/pic59.webp",
 };
 
 /* ======================================================
