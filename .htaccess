@@ -57,6 +57,10 @@ RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteCond %{THE_REQUEST} \s/+services/?\?slug=([^\s&]+) [NC]
 RewriteRule ^services/?$ https://turko.by/services/%1? [R=301,L,NE]
 
+RewriteCond %{ENV:REDIRECT_STATUS} ^$
+RewriteCond %{THE_REQUEST} \s/+raion(?:\.php)?\?slug=([^\s&]+) [NC]
+RewriteRule ^raion(?:\.php)?$ https://turko.by/raion/%1? [R=301,L,NE]
+
 # Legacy detail URLs without slug → redirect to section index (only .html, not .php)
 RewriteCond %{ENV:REDIRECT_STATUS} ^$
 RewriteRule ^blog-detail(?:\.html)?/?$ https://turko.by/blog [R=301,L]
@@ -72,6 +76,7 @@ RewriteRule ^services-detail(?:\.html)?/?$ https://turko.by/rieltor-lida [R=301,
 RewriteRule ^objects/([^/]+)/?$ /object-detail.php?slug=$1 [L,QSA,NC]
 RewriteRule ^blog/([^/]+)/?$ /blog-detail.php?slug=$1 [L,QSA,NC]
 RewriteRule ^services/([^/]+)/?$ /services-detail.php?slug=$1 [L,QSA,NC]
+RewriteRule ^raion/([^/]+)/?$ /raion.php?slug=$1 [L,QSA,NC]
 
 # -------------------------------------------------
 # PRETTY URL (.html hidden)
