@@ -4,6 +4,9 @@ $slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
 $canonicalUrl = $slug !== '' ? "https://turko.by/services/$slug" : "https://turko.by/rieltor-lida";
 
 $breadcrumbLeafName = "Услуга риэлтера";
+$serviceMetaTitle = "Услуги риэлтера в Лиде — Ольга Турко";
+$serviceMetaDescription = "Услуги риэлтера в Лиде: сопровождение сделок, продажа, покупка и консультации по недвижимости от Ольги Турко.";
+$currentService = null;
 if ($slug !== '') {
     $servicesFile = __DIR__ . '/data/services.json';
     if (is_file($servicesFile)) {
@@ -11,8 +14,13 @@ if ($slug !== '') {
         $list = isset($servicesData['services']) && is_array($servicesData['services']) ? $servicesData['services'] : (is_array($servicesData) ? $servicesData : []);
         foreach ($list as $svc) {
             if (isset($svc['slug']) && $svc['slug'] === $slug) {
+                $currentService = $svc;
                 if (!empty($svc['title'])) {
                     $breadcrumbLeafName = $svc['title'];
+                    $serviceMetaTitle = $svc['title'] . ' — услуги риэлтера в Лиде | Ольга Турко';
+                }
+                if (!empty($svc['description'])) {
+                    $serviceMetaDescription = mb_substr(trim(strip_tags((string)$svc['description'])), 0, 280);
                 }
                 break;
             }
@@ -40,22 +48,22 @@ $breadcrumbJsonLd = json_encode([
       <meta charset="utf-8" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>Услуги риэлтера в Лиде — Ольга Турко</title>
+      <title><?php echo htmlspecialchars($serviceMetaTitle, ENT_QUOTES, 'UTF-8'); ?></title>
       <meta name="author" content="Ольга Турко, риэлтер в Лиде, Беларусь" />
       <meta
          name="description"
-         content="Услуги риэлтера в Лиде: сопровождение сделок, продажа, покупка и консультации по недвижимости от Ольги Турко."
+         content="<?php echo htmlspecialchars($serviceMetaDescription, ENT_QUOTES, 'UTF-8'); ?>"
       />
       <meta name="robots" content="index, follow" />
       <link rel="canonical" href="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
       <meta property="og:type" content="website" />
-      <meta property="og:title" content="Услуги риэлтера в Лиде — Ольга Турко" />
-      <meta property="og:description" content="Сопровождение продажи, покупки и обмена недвижимости в Лиде: консультации, документы, безопасность сделки." />
+      <meta property="og:title" content="<?php echo htmlspecialchars($serviceMetaTitle, ENT_QUOTES, 'UTF-8'); ?>" />
+      <meta property="og:description" content="<?php echo htmlspecialchars($serviceMetaDescription, ENT_QUOTES, 'UTF-8'); ?>" />
       <meta property="og:url" content="<?php echo htmlspecialchars($canonicalUrl, ENT_QUOTES); ?>" />
       <meta property="og:image" content="https://turko.by/images/main-slider/2.webp" />
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Услуги риэлтера в Лиде — Ольга Турко" />
-      <meta name="twitter:description" content="Сопровождение продажи, покупки и обмена недвижимости в Лиде: консультации, документы, безопасность сделки." />
+      <meta name="twitter:title" content="<?php echo htmlspecialchars($serviceMetaTitle, ENT_QUOTES, 'UTF-8'); ?>" />
+      <meta name="twitter:description" content="<?php echo htmlspecialchars($serviceMetaDescription, ENT_QUOTES, 'UTF-8'); ?>" />
       <meta name="twitter:image" content="https://turko.by/images/main-slider/2.webp" />
 
       <!-- Breadcrumbs (JSON-LD) -->
@@ -241,8 +249,7 @@ $breadcrumbJsonLd = json_encode([
                      <!-- TITLE + LEAD (из JSON) -->
                      <div class="banner-title-outer">
                         <div class="banner-title-name">
-                           <!-- JS пишет сюда -->
-                           <h1 class="page-intro-title" id="service-title"></h1>
+                           <h1 class="page-intro-title" id="service-title"><?php echo htmlspecialchars($breadcrumbLeafName, ENT_QUOTES, 'UTF-8'); ?></h1>
 
                            <!-- JS пишет сюда -->
                            <p
