@@ -239,7 +239,7 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
         <div class="logo-header">
           <div class="logo-header-inner logo-header-one">
             <a href="/">
-              <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" />
+              <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" width="180" height="48" loading="lazy" decoding="async" />
             </a>
           </div>
         </div>
@@ -408,7 +408,7 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
                     <i class="fa-brands fa-instagram instagram-icon"></i>
 
                     <div class="instagram-media">
-            <img loading="lazy" data-instagram-image alt="Instagram Ольги Турко — риэлтер в Лиде" />
+            <img loading="lazy" decoding="async" width="600" height="600" data-instagram-image alt="Instagram Ольги Турко — риэлтер в Лиде" />
                     </div>
 
                     <div class="instagram-related-content">
@@ -474,25 +474,25 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
                     <ul class="p-a10 bg-white clearfix">
                       <li>
                         <div class="sx-post-thum">
-                        <img src="/images/about-slider/2.webp" alt="Ольга Турко консультирует клиентов по недвижимости в Лиде" />
+                        <img src="/images/about-slider/2.webp" alt="Ольга Турко консультирует клиентов по недвижимости в Лиде" width="1200" height="800" loading="lazy" decoding="async" />
                         </div>
                       </li>
 
                       <li>
                         <div class="sx-post-thum">
-                        <img src="/images/about-slider/1.webp" alt="Риэлтер Ольга Турко на показе недвижимости в Лиде" />
+                        <img src="/images/about-slider/1.webp" alt="Риэлтер Ольга Турко на показе недвижимости в Лиде" width="1200" height="800" loading="lazy" decoding="async" />
                         </div>
                       </li>
 
                       <li>
                         <div class="sx-post-thum">
-                        <img src="/images/about-slider/3.webp" alt="Сопровождение сделки с недвижимостью в Лиде — Ольга Турко" />
+                        <img src="/images/about-slider/3.webp" alt="Сопровождение сделки с недвижимостью в Лиде — Ольга Турко" width="1200" height="800" loading="lazy" decoding="async" />
                         </div>
                       </li>
 
                       <li>
                         <div class="sx-post-thum">
-                        <img src="/images/about-slider/4.webp" alt="Ольга Турко — эксперт по продаже квартир и домов в Лиде" />
+                        <img src="/images/about-slider/4.webp" alt="Ольга Турко — эксперт по продаже квартир и домов в Лиде" width="1200" height="800" loading="lazy" decoding="async" />
                         </div>
                       </li>
                     </ul>
@@ -516,7 +516,7 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
               <div class="widget widget_about">
                 <div class="logo-footer clearfix p-b15">
                   <a href="/">
-                    <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" />
+                    <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" width="180" height="48" loading="lazy" decoding="async" />
                   </a>
                 </div>
                 <p>

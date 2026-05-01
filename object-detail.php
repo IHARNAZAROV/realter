@@ -224,7 +224,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
         <div class="logo-header">
           <div class="logo-header-inner logo-header-one">
             <a href="/">
-              <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" />
+              <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" width="180" height="48" loading="lazy" decoding="async" />
             </a>
           </div>
         </div>
@@ -512,6 +512,10 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
                             <img
                               src="/images/main-slider/2.webp"
                               alt="Ольга Турко"
+                              width="320"
+                              height="320"
+                              loading="lazy"
+                              decoding="async"
                             />
                           </div>
 
@@ -786,7 +790,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
                 <div class="widget widget_about">
                   <div class="logo-footer clearfix p-b15">
                     <a href="/"
-                      ><img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" />
+                      ><img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" width="180" height="48" loading="lazy" decoding="async" />
                     </a>
                   </div>
                   <p>
@@ -986,7 +990,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
         <div class="share-qr-box__title">Сканируйте QR-код</div>
         <div class="share-qr-box__hint">Откроет страницу объекта<br>на любом устройстве</div>
         <div class="share-qr-img-wrap">
-          <img id="share-qr-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect fill='%23f3f3f3' width='180' height='180'/%3E%3C/svg%3E" alt="QR-код объекта" width="180" height="180" />
+          <img id="share-qr-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect fill='%23f3f3f3' width='180' height='180'/%3E%3C/svg%3E" alt="QR-код объекта" width="180" height="180" loading="lazy" decoding="async" />
         </div>
         <div class="share-qr-box__url" id="share-qr-url"></div>
       </div>
