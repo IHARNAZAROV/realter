@@ -631,15 +631,16 @@ function renderObjects(list) {
   // Batch-вставка всех элементов за раз
   objectsList.appendChild(fragment);
 
-  // ОПТИМИЗИРОВАНО: Один requestAnimationFrame вместо двух
+  // Двойной rAF: первый кадр — браузер фиксирует новые элементы в дереве,
+  // второй — применяем is-visible, чтобы CSS-переход сработал без forced layout
   requestAnimationFrame(() => {
-    document.querySelectorAll(".object-item.is-visible").length; // flush layout
-    
-    nextItems.forEach((obj) => {
-      const li = objectsList.querySelector(`[data-slug="${obj.slug}"]`)?.closest(".object-item");
-      if (li) {
-        li.classList.add("is-visible");
-      }
+    requestAnimationFrame(() => {
+      nextItems.forEach((obj) => {
+        const li = objectsList.querySelector(`[data-slug="${obj.slug}"]`)?.closest(".object-item");
+        if (li) {
+          li.classList.add("is-visible");
+        }
+      });
     });
   });
 
