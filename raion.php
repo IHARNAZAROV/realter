@@ -345,7 +345,7 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
           <div class="bg-white p-a20 shadow" style="border-radius:12px;position:sticky;top:100px;">
             <div class="agent-card">
               <div class="agent-avatar" style="margin-bottom:12px;">
-                <img src="/images/agent/olga-turko.webp"
+                <img src="/images/about-slider/1-ab.webp"
                      onerror="this.style.display='none'"
                      alt="Ольга Турко — риэлтер в Лиде"
                      width="80" height="80"
