@@ -8,6 +8,7 @@ $ogImage = "https://turko.by/images/main-slider/2.webp";
 $ogTitle = "Объект недвижимости в Лиде — Ольга Турко";
 $ogDescription = "Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко.";
 $breadcrumbLeafName = "Объект недвижимости";
+$currentObject = null;
 if ($slug !== '') {
     $objectsFile = __DIR__ . '/data/objects.json';
     if (is_file($objectsFile)) {
@@ -15,6 +16,7 @@ if ($slug !== '') {
         if (is_array($objectsData)) {
             foreach ($objectsData as $obj) {
                 if (isset($obj['slug']) && $obj['slug'] === $slug) {
+                    $currentObject = $obj;
                     if (isset($obj['id']) && preg_match('/(\d+)/', (string)$obj['id'], $m)) {
                         $picPath = "/images/objects/pic{$m[1]}.webp";
                         if (is_file(__DIR__ . $picPath)) {
@@ -33,6 +35,71 @@ if ($slug !== '') {
             }
         }
     }
+}
+
+$jsonLdProduct = null;
+if (is_array($currentObject)) {
+    $descriptionSource = $currentObject['description'] ?? ($currentObject['cardDescription'] ?? '');
+    $description = mb_substr(trim(strip_tags((string)$descriptionSource)), 0, 280);
+    $images = array_values(array_filter(array_map(
+        static function ($path) {
+            if (!is_string($path) || $path === '') {
+                return null;
+            }
+
+            return 'https://turko.by' . $path;
+        },
+        $currentObject['images'] ?? []
+    )));
+    $isSold = isset($currentObject['status']['type']) && $currentObject['status']['type'] === 'sold';
+    $category = (($currentObject['type'] ?? '') === 'Дом') ? 'House' : 'Apartment';
+
+    $jsonLdProduct = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $currentObject['title'] ?? $breadcrumbLeafName,
+        'description' => $description,
+        'image' => $images,
+        'sku' => $currentObject['id'] ?? null,
+        'category' => $category,
+        'brand' => [
+            '@type' => 'RealEstateAgent',
+            'name' => 'Ольга Турко',
+            'url' => 'https://turko.by/',
+        ],
+        'offers' => [
+            '@type' => 'Offer',
+            'priceCurrency' => 'BYN',
+            'price' => $currentObject['priceBYN'] ?? null,
+            'availability' => $isSold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+            'url' => $canonicalUrl,
+            'priceValidUntil' => date('Y-12-31'),
+            'seller' => [
+                '@type' => 'RealEstateAgent',
+                'name' => 'Ольга Турко',
+                'telephone' => '+375291809516',
+            ],
+        ],
+        'additionalProperty' => array_values(array_filter([
+            isset($currentObject['areaTotal']) ? ['@type' => 'PropertyValue', 'name' => 'Площадь общая', 'value' => $currentObject['areaTotal']] : null,
+            isset($currentObject['areaLiving']) ? ['@type' => 'PropertyValue', 'name' => 'Площадь жилая', 'value' => $currentObject['areaLiving']] : null,
+            isset($currentObject['areaPlot']) ? ['@type' => 'PropertyValue', 'name' => 'Участок (соток)', 'value' => $currentObject['areaPlot']] : null,
+            isset($currentObject['rooms']) ? ['@type' => 'PropertyValue', 'name' => 'Комнат', 'value' => $currentObject['rooms']] : null,
+        ])),
+    ];
+
+    if (!empty($currentObject['location']['lat']) && !empty($currentObject['location']['lng'])) {
+        $jsonLdProduct['geo'] = [
+            '@type' => 'GeoCoordinates',
+            'latitude' => $currentObject['location']['lat'],
+            'longitude' => $currentObject['location']['lng'],
+        ];
+    }
+
+    $jsonLdProduct = json_encode(
+        $jsonLdProduct,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS
+    );
 }
 $breadcrumbJsonLd = json_encode([
     '@context' => 'https://schema.org',
@@ -95,6 +162,9 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <meta name="twitter:image:height" content="630" />
     <!-- Breadcrumbs (JSON-LD) -->
     <script type="application/ld+json"><?php echo $breadcrumbJsonLd; ?></script>
+    <?php if ($jsonLdProduct !== null): ?>
+    <script type="application/ld+json"><?php echo $jsonLdProduct; ?></script>
+    <?php endif; ?>
     <!-- Favicons -->
     <link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
