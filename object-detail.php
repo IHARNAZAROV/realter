@@ -204,6 +204,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <!-- Main Styles -->
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned/>
     <link rel="stylesheet" href="/css/object-share.css" />
+    <link rel="stylesheet" href="/css/district-info.css" />
 
 
   
@@ -759,6 +760,8 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
   </details>
 </section>
 
+<div data-district-info hidden></div>
+
 <div class="object-map">
   <h4 class="object-map-title">Расположение на карте</h4>
   <div id="objectMap"></div>
@@ -1004,6 +1007,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
       <script src="/js/optimize.js" defer data-versioned></script>
     <script src="/js/live-price.js?v=20260417-2" defer></script>
     <script src="/js/object-detail.js?v=20260424-2" defer></script>
+    <script src="/js/district-info.js" defer></script>
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/cookie-consent.js" defer></script>
     <script src="/js/footer-post.js" defer></script>
