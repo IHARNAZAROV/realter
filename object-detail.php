@@ -8,6 +8,7 @@ $ogImage = "https://turko.by/images/main-slider/2.webp";
 $ogTitle = "Объект недвижимости в Лиде — Ольга Турко";
 $ogDescription = "Детальная карточка объекта недвижимости в Лиде: фото, параметры, цена и консультация риэлтера Ольги Турко.";
 $breadcrumbLeafName = "Объект недвижимости";
+$currentObject = null;
 if ($slug !== '') {
     $objectsFile = __DIR__ . '/data/objects.json';
     if (is_file($objectsFile)) {
@@ -15,6 +16,7 @@ if ($slug !== '') {
         if (is_array($objectsData)) {
             foreach ($objectsData as $obj) {
                 if (isset($obj['slug']) && $obj['slug'] === $slug) {
+                    $currentObject = $obj;
                     if (isset($obj['id']) && preg_match('/(\d+)/', (string)$obj['id'], $m)) {
                         $picPath = "/images/objects/pic{$m[1]}.webp";
                         if (is_file(__DIR__ . $picPath)) {
@@ -33,6 +35,71 @@ if ($slug !== '') {
             }
         }
     }
+}
+
+$jsonLdProduct = null;
+if (is_array($currentObject)) {
+    $descriptionSource = $currentObject['description'] ?? ($currentObject['cardDescription'] ?? '');
+    $description = mb_substr(trim(strip_tags((string)$descriptionSource)), 0, 280);
+    $images = array_values(array_filter(array_map(
+        static function ($path) {
+            if (!is_string($path) || $path === '') {
+                return null;
+            }
+
+            return 'https://turko.by' . $path;
+        },
+        $currentObject['images'] ?? []
+    )));
+    $isSold = isset($currentObject['status']['type']) && $currentObject['status']['type'] === 'sold';
+    $category = (($currentObject['type'] ?? '') === 'Дом') ? 'House' : 'Apartment';
+
+    $jsonLdProduct = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $currentObject['title'] ?? $breadcrumbLeafName,
+        'description' => $description,
+        'image' => $images,
+        'sku' => $currentObject['id'] ?? null,
+        'category' => $category,
+        'brand' => [
+            '@type' => 'RealEstateAgent',
+            'name' => 'Ольга Турко',
+            'url' => 'https://turko.by/',
+        ],
+        'offers' => [
+            '@type' => 'Offer',
+            'priceCurrency' => 'BYN',
+            'price' => $currentObject['priceBYN'] ?? null,
+            'availability' => $isSold ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+            'url' => $canonicalUrl,
+            'priceValidUntil' => date('Y-12-31'),
+            'seller' => [
+                '@type' => 'RealEstateAgent',
+                'name' => 'Ольга Турко',
+                'telephone' => '+375291809516',
+            ],
+        ],
+        'additionalProperty' => array_values(array_filter([
+            isset($currentObject['areaTotal']) ? ['@type' => 'PropertyValue', 'name' => 'Площадь общая', 'value' => $currentObject['areaTotal']] : null,
+            isset($currentObject['areaLiving']) ? ['@type' => 'PropertyValue', 'name' => 'Площадь жилая', 'value' => $currentObject['areaLiving']] : null,
+            isset($currentObject['areaPlot']) ? ['@type' => 'PropertyValue', 'name' => 'Участок (соток)', 'value' => $currentObject['areaPlot']] : null,
+            isset($currentObject['rooms']) ? ['@type' => 'PropertyValue', 'name' => 'Комнат', 'value' => $currentObject['rooms']] : null,
+        ])),
+    ];
+
+    if (!empty($currentObject['location']['lat']) && !empty($currentObject['location']['lng'])) {
+        $jsonLdProduct['geo'] = [
+            '@type' => 'GeoCoordinates',
+            'latitude' => $currentObject['location']['lat'],
+            'longitude' => $currentObject['location']['lng'],
+        ];
+    }
+
+    $jsonLdProduct = json_encode(
+        $jsonLdProduct,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS
+    );
 }
 $breadcrumbJsonLd = json_encode([
     '@context' => 'https://schema.org',
@@ -95,6 +162,9 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <meta name="twitter:image:height" content="630" />
     <!-- Breadcrumbs (JSON-LD) -->
     <script type="application/ld+json"><?php echo $breadcrumbJsonLd; ?></script>
+    <?php if ($jsonLdProduct !== null): ?>
+    <script type="application/ld+json"><?php echo $jsonLdProduct; ?></script>
+    <?php endif; ?>
     <!-- Favicons -->
     <link rel="icon" href="https://turko.by/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="https://turko.by/favicon.svg" />
@@ -154,7 +224,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
         <div class="logo-header">
           <div class="logo-header-inner logo-header-one">
             <a href="/">
-              <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" />
+              <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" width="180" height="48" loading="lazy" decoding="async" />
             </a>
           </div>
         </div>
@@ -265,11 +335,11 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
         Детали объекта
       </span>
 
-      <!-- TITLE (из JSON) -->
+      <!-- TITLE -->
       <h1
         class="page-intro-title"
         data-page-title
-      ></h1>
+      ><?php echo htmlspecialchars($breadcrumbLeafName, ENT_QUOTES, 'UTF-8'); ?></h1>
 
       <!-- DESCRIPTION (статичный текст, как было) -->
       <p class="page-intro-description">
@@ -442,6 +512,10 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
                             <img
                               src="/images/main-slider/2.webp"
                               alt="Ольга Турко"
+                              width="320"
+                              height="320"
+                              loading="lazy"
+                              decoding="async"
                             />
                           </div>
 
@@ -716,7 +790,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
                 <div class="widget widget_about">
                   <div class="logo-footer clearfix p-b15">
                     <a href="/"
-                      ><img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" />
+                      ><img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" width="180" height="48" loading="lazy" decoding="async" />
                     </a>
                   </div>
                   <p>
@@ -916,7 +990,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
         <div class="share-qr-box__title">Сканируйте QR-код</div>
         <div class="share-qr-box__hint">Откроет страницу объекта<br>на любом устройстве</div>
         <div class="share-qr-img-wrap">
-          <img id="share-qr-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect fill='%23f3f3f3' width='180' height='180'/%3E%3C/svg%3E" alt="QR-код объекта" width="180" height="180" />
+          <img id="share-qr-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect fill='%23f3f3f3' width='180' height='180'/%3E%3C/svg%3E" alt="QR-код объекта" width="180" height="180" loading="lazy" decoding="async" />
         </div>
         <div class="share-qr-box__url" id="share-qr-url"></div>
       </div>
