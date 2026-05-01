@@ -205,9 +205,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <link rel="stylesheet" type="text/css" href="css/style.css" data-versioned/>
     <link rel="stylesheet" href="/css/object-share.css" />
     <link rel="stylesheet" href="/css/district-info.css" />
-
-
-  
+    <link rel="stylesheet" href="/css/object-faq.css" />
     <link rel="stylesheet" href="/css/contact-widget.css">
 </head>
 
