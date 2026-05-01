@@ -197,11 +197,7 @@
         dot.setAttribute("aria-hidden", "true");
         cell.appendChild(dot);
 
-        /* Обработчики */
-        cell.addEventListener("click", function () { openPopup(dateKey); });
-        cell.addEventListener("keydown", function (e) {
-          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPopup(dateKey); }
-        });
+        cell.dataset.calDate = dateKey;
       }
 
       elGrid.appendChild(cell);
@@ -353,6 +349,18 @@
       console.warn("[CalendarSidebar] Не найдены элементы .calendar-title или .calendar-grid");
       return;
     }
+
+    /* Event delegation на сетку вместо обработчиков на каждую ячейку.
+       dateKey хранится в data-cal-date кликнутой ячейки. */
+    elGrid.addEventListener("click", function (e) {
+      const cell = e.target.closest("[data-cal-date]");
+      if (cell) openPopup(cell.dataset.calDate);
+    });
+    elGrid.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      const cell = e.target.closest("[data-cal-date]");
+      if (cell) { e.preventDefault(); openPopup(cell.dataset.calDate); }
+    });
 
     /* SVG в кнопках навигации */
     const prevBtn = elSidebar.querySelector(".calendar-prev");

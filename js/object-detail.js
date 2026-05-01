@@ -1686,6 +1686,10 @@ function initObjectMap(obj) {
   
   window._cleanupObjectDetail = cleanupResources;
 
+  // bfcache: браузер «замораживает» страницу вместо выгрузки —
+  // cleanupResources должна сработать до заморозки
+  window.addEventListener("pagehide", cleanupResources);
+
   /* =====================================================
      INIT
   ===================================================== */
