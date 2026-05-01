@@ -8,6 +8,7 @@ $ogImage = "https://turko.by/images/main-slider/2.webp";
 $ogTitle = "Статья о недвижимости в Лиде — Ольга Турко";
 $ogDescription = "Читайте разборы и рекомендации по рынку недвижимости Лиды: документы, этапы сделки и важные нюансы.";
 $breadcrumbLeafName = "Статья";
+$currentArticle = null;
 if ($slug !== '') {
     $articlesFile = __DIR__ . '/data/blog-articles.json';
     if (is_file($articlesFile)) {
@@ -15,6 +16,7 @@ if ($slug !== '') {
         if (is_array($articlesData)) {
             foreach ($articlesData as $art) {
                 if (isset($art['slug']) && $art['slug'] === $slug) {
+                    $currentArticle = $art;
                     if (!empty($art['image'])) {
                         $imgPath = $art['image'];
                         if (strpos($imgPath, 'http') === 0) {
@@ -51,6 +53,52 @@ $breadcrumbJsonLd = json_encode([
         ['@type' => 'ListItem', 'position' => 3, 'name' => $breadcrumbLeafName, 'item' => $canonicalUrl],
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$articleJsonLd = null;
+if (is_array($currentArticle)) {
+    $articleImage = $currentArticle['image'] ?? '/images/og/blog-default.webp';
+    if (!is_string($articleImage) || $articleImage === '') {
+        $articleImage = '/images/og/blog-default.webp';
+    }
+    if (strpos($articleImage, 'http') !== 0) {
+        if ($articleImage[0] !== '/') {
+            $articleImage = '/' . $articleImage;
+        }
+        $articleImage = 'https://turko.by' . $articleImage;
+    }
+
+    $articleDescription = $currentArticle['excerpt'] ?? ($currentArticle['metaDescription'] ?? '');
+    if (!is_string($articleDescription) || trim($articleDescription) === '') {
+        $articleDescription = mb_substr(strip_tags((string)($currentArticle['content'] ?? '')), 0, 200);
+    }
+
+    $articleLd = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BlogPosting',
+        'headline' => $currentArticle['title'] ?? $breadcrumbLeafName,
+        'description' => trim($articleDescription),
+        'image' => $articleImage,
+        'datePublished' => $currentArticle['publishedAt'] ?? null,
+        'dateModified' => $currentArticle['updatedAt'] ?? ($currentArticle['publishedAt'] ?? null),
+        'author' => [
+            '@type' => 'Person',
+            'name' => 'Ольга Турко',
+            'url' => 'https://turko.by/rieltor-lida',
+        ],
+        'publisher' => [
+            '@type' => 'Organization',
+            'name' => 'Ольга Турко — Риэлтер в Лиде',
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => 'https://turko.by/images/logo-dark.webp',
+            ],
+        ],
+        'mainEntityOfPage' => $canonicalUrl,
+        'articleSection' => $currentArticle['category'] ?? 'Недвижимость',
+        'keywords' => !empty($currentArticle['tags']) && is_array($currentArticle['tags']) ? implode(', ', $currentArticle['tags']) : null,
+    ];
+
+    $articleJsonLd = json_encode($articleLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS);
+}
 
 // =========================================================
 // Related links (контекстные ссылки на услуги/каталог)
@@ -58,12 +106,6 @@ $breadcrumbJsonLd = json_encode([
 // =========================================================
 $relatedLinks = [];
 $ctaBlock = null;
-$currentArticle = null;
-if ($slug !== '' && isset($articlesData) && is_array($articlesData)) {
-    foreach ($articlesData as $art) {
-        if (isset($art['slug']) && $art['slug'] === $slug) { $currentArticle = $art; break; }
-    }
-}
 if ($currentArticle !== null) {
     $relatedMapFile = __DIR__ . '/data/blog-related-map.json';
     $ctaMapFile = __DIR__ . '/data/blog-cta-map.json';
@@ -138,6 +180,9 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
     <meta name="twitter:image" content="<?php echo $ogImageEsc; ?>" />
     <!-- Breadcrumbs (JSON-LD) -->
     <script type="application/ld+json"><?php echo $breadcrumbJsonLd; ?></script>
+    <?php if ($articleJsonLd !== null): ?>
+    <script type="application/ld+json"><?php echo $articleJsonLd; ?></script>
+    <?php endif; ?>
     <!-- =========================================
        3. ICONS & FONTS
        ========================================= -->
