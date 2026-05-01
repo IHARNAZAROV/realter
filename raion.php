@@ -4,6 +4,7 @@ $slug = preg_replace('/[^a-zA-Z0-9_\-]/', '', $rawSlug);
 
 $districtsFile = __DIR__ . '/data/districts.json';
 $district = null;
+$all = [];
 
 if ($slug !== '' && file_exists($districtsFile)) {
     $all = json_decode(file_get_contents($districtsFile), true);
@@ -37,22 +38,28 @@ $lat         = $district['coordinates']['lat'] ?? 53.8985;
 $lng         = $district['coordinates']['lng'] ?? 25.2975;
 $canonicalUrl = 'https://turko.by/raion/' . $slug;
 
-$streets = array_map(function ($s) {
-    return mb_strtolower(str_replace('ё', 'е', $s), 'UTF-8');
-}, $district['streets'] ?? []);
+function normalizeDistrictValue($value) {
+    $stringValue = (string)$value;
+    $stringValue = trim($stringValue);
+    $stringValue = mb_strtolower($stringValue, 'UTF-8');
+    $stringValue = str_replace('ё', 'е', $stringValue);
+    $stringValue = str_replace(['_', ' '], '-', $stringValue);
+    $stringValue = preg_replace('/[^a-zа-я0-9\-]+/u', '', $stringValue);
+    $stringValue = preg_replace('/-+/', '-', $stringValue);
+    return trim((string)$stringValue, '-');
+}
 
 $matchedObjects = [];
 $objectsFile = __DIR__ . '/data/objects.json';
 if (file_exists($objectsFile)) {
     $objects = json_decode(file_get_contents($objectsFile), true);
     if (is_array($objects)) {
+        $normalizedCurrentSlug = normalizeDistrictValue($slug);
         foreach ($objects as $obj) {
-            $addr = mb_strtolower(str_replace('ё', 'е', $obj['address'] ?? ''), 'UTF-8');
-            foreach ($streets as $st) {
-                if ($st !== '' && mb_strpos($addr, $st, 0, 'UTF-8') !== false) {
-                    $matchedObjects[] = $obj;
-                    break;
-                }
+            $objectDistrict = $obj['district'] ?? '';
+            $normalizedObjectDistrict = normalizeDistrictValue($objectDistrict);
+            if ($normalizedObjectDistrict !== '' && $normalizedObjectDistrict === $normalizedCurrentSlug) {
+                $matchedObjects[] = $obj;
             }
         }
     }
@@ -194,7 +201,7 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
         <p class="page-intro-description"><?= htmlspecialchars($shortDesc, ENT_QUOTES, 'UTF-8') ?></p>
         <?php endif; ?>
         <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
-          <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+          <ol class="sx-breadcrumb breadcrumb-style-2" itemscope itemtype="https://schema.org/BreadcrumbList">
             <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
               <a href="/" itemprop="item"><span itemprop="name">Главная</span></a>
               <meta itemprop="position" content="1" />
@@ -373,6 +380,20 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
                   <li>Помощь с ипотекой и документами</li>
                 </ul>
               </div>
+              <hr style="margin:20px 0;border-color:#eee;" />
+              <div class="district-sidebar__title">Другие районы</div>
+              <ul class="district-sidebar__list">
+                <?php foreach ($all as $otherDistrict):
+                  if (!is_array($otherDistrict) || empty($otherDistrict['slug']) || empty($otherDistrict['nameFull'])) continue;
+                  if ($otherDistrict['slug'] === $slug) continue;
+                ?>
+                <li>
+                  <a href="/raion/<?= htmlspecialchars($otherDistrict['slug'], ENT_QUOTES, 'UTF-8') ?>">
+                    <?= htmlspecialchars($otherDistrict['nameFull'], ENT_QUOTES, 'UTF-8') ?>
+                  </a>
+                </li>
+                <?php endforeach; ?>
+              </ul>
             </div>
           </div>
         </div>
@@ -497,5 +518,15 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
 <script src="/js/footer-post.js" defer></script>
 <script src="/js/sw-register.js" defer></script>
 <script src="/contact-widget.js" defer></script>
+<script>
+window.addEventListener('unhandledrejection', function (event) {
+  if (!event || !event.reason) return;
+  if (event.reason.name !== 'AbortError') return;
+  var message = String(event.reason.message || '');
+  if (message.indexOf('Transition was skipped') !== -1) {
+    event.preventDefault();
+  }
+});
+</script>
 </body>
 </html>
