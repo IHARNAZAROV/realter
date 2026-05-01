@@ -35,3 +35,14 @@
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none; }
 }
+
+/* ============================================
+   CLS-fix: placeholder для галереи объекта
+   Резервирует место до того, как JS вставит
+   картинки, предотвращая прыжок контента.
+   ============================================ */
+[data-hero-images] {
+  aspect-ratio: 16 / 10;
+  background: #efece8;
+  border-radius: 16px;
+}
