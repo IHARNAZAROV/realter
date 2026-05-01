@@ -706,6 +706,59 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
 
 
 
+<section class="object-faq" itemscope itemtype="https://schema.org/FAQPage">
+  <h4 class="object-faq__title">Частые вопросы по этому объекту</h4>
+
+  <details class="object-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <summary class="object-faq__question" itemprop="name">Возможна ли ипотека на этот объект?</summary>
+    <div class="object-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">Да, объект подходит под ипотечные программы Беларусбанка и Белагропромбанка. Минимальный первоначальный взнос — от 20%. Риэлтер поможет подготовить пакет документов для подачи в банк и сопроводит до момента получения одобрения.</p>
+    </div>
+  </details>
+
+  <details class="object-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <summary class="object-faq__question" itemprop="name">Можно ли торговаться по цене?</summary>
+    <div class="object-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">Торг уместен. Окончательная цена обсуждается напрямую с собственником после просмотра объекта. Обратитесь к риэлтеру — она поможет аргументированно договориться о скидке, опираясь на актуальный анализ рынка.</p>
+    </div>
+  </details>
+
+  <details class="object-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <summary class="object-faq__question" itemprop="name">Когда можно посмотреть объект?</summary>
+    <div class="object-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">Просмотры организуются в удобное для вас время — в будни и выходные. Запишитесь через форму бронирования на этой странице или позвоните напрямую риэлтеру Ольге Турко. Как правило, показ назначается в течение 1–2 дней.</p>
+    </div>
+  </details>
+
+  <details class="object-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <summary class="object-faq__question" itemprop="name">Есть ли задолженности по коммунальным платежам?</summary>
+    <div class="object-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">Перед выходом на сделку риэлтер запрашивает справку об отсутствии задолженностей по ЖКУ и взносам. Передача объекта с долгами исключена — это обязательное условие любой сделки купли-продажи в Беларуси.</p>
+    </div>
+  </details>
+
+  <details class="object-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <summary class="object-faq__question" itemprop="name">Сколько собственников у объекта?</summary>
+    <div class="object-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">Информация о количестве собственников уточняется при первом обращении. Риэлтер проверяет выписку из ЕГРНИ (реестра прав на недвижимость), чтобы вы знали полный состав правообладателей и убедились в чистоте сделки.</p>
+    </div>
+  </details>
+
+  <details class="object-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <summary class="object-faq__question" itemprop="name">Можно ли купить с использованием материнского капитала?</summary>
+    <div class="object-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">Да, материнский капитал принимается в качестве части оплаты при соответствии объекта требованиям программы (жилое помещение, соответствующее санитарным нормам). Риэлтер заранее проконсультирует, подходит ли конкретный объект под эти условия.</p>
+    </div>
+  </details>
+
+  <details class="object-faq__item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+    <summary class="object-faq__question" itemprop="name">Во сколько обойдётся переоформление?</summary>
+    <div class="object-faq__answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+      <p itemprop="text">Стандартные расходы покупателя при переоформлении: государственная пошлина за регистрацию права собственности (0,1% от стоимости объекта), нотариальное удостоверение договора (фиксированная ставка согласно тарифам) и услуги риэлтера. Точный расчёт — при обращении.</p>
+    </div>
+  </details>
+</section>
+
 <div class="object-map">
   <h4 class="object-map-title">Расположение на карте</h4>
   <div id="objectMap"></div>
