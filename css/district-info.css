@@ -388,3 +388,30 @@
   background: var(--color-primary, #155945);
   color: #fff;
 }
+
+.page-intro-breadcrumb .sx-breadcrumb {
+  background: transparent !important;
+}
+
+.district-sidebar__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-secondary, #23252d);
+  margin-bottom: 8px;
+}
+
+.district-sidebar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.district-sidebar__list li + li {
+  margin-top: 6px;
+}
+
+.district-sidebar__list a {
+  color: var(--color-primary, #155945);
+  font-size: 13px;
+  line-height: 1.4;
+}
