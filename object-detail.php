@@ -335,11 +335,11 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
         Детали объекта
       </span>
 
-      <!-- TITLE (из JSON) -->
+      <!-- TITLE -->
       <h1
         class="page-intro-title"
         data-page-title
-      ></h1>
+      ><?php echo htmlspecialchars($breadcrumbLeafName, ENT_QUOTES, 'UTF-8'); ?></h1>
 
       <!-- DESCRIPTION (статичный текст, как было) -->
       <p class="page-intro-description">
