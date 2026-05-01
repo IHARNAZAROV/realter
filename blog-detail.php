@@ -408,7 +408,7 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
                     <i class="fa-brands fa-instagram instagram-icon"></i>
 
                     <div class="instagram-media">
-                      <img loading="lazy" data-instagram-image />
+            <img loading="lazy" data-instagram-image alt="Instagram Ольги Турко — риэлтер в Лиде" />
                     </div>
 
                     <div class="instagram-related-content">
@@ -474,25 +474,25 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
                     <ul class="p-a10 bg-white clearfix">
                       <li>
                         <div class="sx-post-thum">
-                          <img src="/images/about-slider/2.webp" alt="" />
+                        <img src="/images/about-slider/2.webp" alt="Ольга Турко консультирует клиентов по недвижимости в Лиде" />
                         </div>
                       </li>
 
                       <li>
                         <div class="sx-post-thum">
-                          <img src="/images/about-slider/1.webp" alt="" />
+                        <img src="/images/about-slider/1.webp" alt="Риэлтер Ольга Турко на показе недвижимости в Лиде" />
                         </div>
                       </li>
 
                       <li>
                         <div class="sx-post-thum">
-                          <img src="/images/about-slider/3.webp" alt="" />
+                        <img src="/images/about-slider/3.webp" alt="Сопровождение сделки с недвижимостью в Лиде — Ольга Турко" />
                         </div>
                       </li>
 
                       <li>
                         <div class="sx-post-thum">
-                          <img src="/images/about-slider/4.webp" alt="" />
+                        <img src="/images/about-slider/4.webp" alt="Ольга Турко — эксперт по продаже квартир и домов в Лиде" />
                         </div>
                       </li>
                     </ul>
