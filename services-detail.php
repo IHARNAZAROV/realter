@@ -36,6 +36,50 @@ $breadcrumbJsonLd = json_encode([
         ['@type' => 'ListItem', 'position' => 3, 'name' => $breadcrumbLeafName, 'item' => $canonicalUrl],
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+$serviceJsonLd = null;
+if (is_array($currentService)) {
+    $serviceDescription = $currentService['description'] ?? ($currentService['meta']['description'] ?? $serviceMetaDescription);
+    if ((!is_string($serviceDescription) || trim($serviceDescription) === '') && !empty($currentService['sections']) && is_array($currentService['sections'])) {
+        foreach ($currentService['sections'] as $section) {
+            if (!empty($section['content']) && is_string($section['content'])) {
+                $serviceDescription = $section['content'];
+                break;
+            }
+        }
+    }
+    $serviceDescription = mb_substr(trim(strip_tags((string)$serviceDescription)), 0, 280);
+
+    $serviceLd = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Service',
+        'name' => $currentService['title'] ?? $breadcrumbLeafName,
+        'serviceType' => $currentService['category'] ?? 'Real Estate Service',
+        'description' => $serviceDescription,
+        'areaServed' => [
+            '@type' => 'City',
+            'name' => 'Лида',
+            'addressCountry' => 'BY',
+        ],
+        'provider' => [
+            '@type' => 'RealEstateAgent',
+            'name' => 'Ольга Турко',
+            'telephone' => '+375291809516',
+            'url' => 'https://turko.by/',
+        ],
+        'offers' => [
+            '@type' => 'Offer',
+            'priceCurrency' => 'BYN',
+            'price' => $currentService['price'] ?? '0',
+            'priceSpecification' => [
+                '@type' => 'PriceSpecification',
+                'priceCurrency' => 'BYN',
+                'price' => $currentService['price'] ?? '0',
+            ],
+        ],
+    ];
+
+    $serviceJsonLd = json_encode($serviceLd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS);
+}
 ?>
 <!doctype html>
 
@@ -68,6 +112,9 @@ $breadcrumbJsonLd = json_encode([
 
       <!-- Breadcrumbs (JSON-LD) -->
       <script type="application/ld+json"><?php echo $breadcrumbJsonLd; ?></script>
+      <?php if ($serviceJsonLd !== null): ?>
+      <script type="application/ld+json"><?php echo $serviceJsonLd; ?></script>
+      <?php endif; ?>
 
       <!-- =========================================
        3. ICONS & FONTS
