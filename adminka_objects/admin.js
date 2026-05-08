@@ -7,9 +7,9 @@ let objects = [];
 let isDirty = false;
 let currentFilter = "all";
 let statsFilters = {
-  rooms: null,  
-  city: null,   
-  priceRange: null 
+  rooms: null,
+  city: null,
+  priceRange: null,
 };
 let selectedDate = null;
 let objectsListEl;
@@ -94,7 +94,7 @@ const METRICS_INFO = {
 <p class="metric-note">
 Значение рассчитывается автоматически и обновляется при изменении портфеля.
 </p>
-    `
+    `,
   },
 
   liquidity: {
@@ -141,7 +141,7 @@ const METRICS_INFO = {
 <p class="metric-note">
 Индекс пересчитывается автоматически при изменении цены и состава портфеля.
 </p>
-    `
+    `,
   },
 
   layout: {
@@ -185,7 +185,7 @@ const METRICS_INFO = {
 <p class="metric-note">
 Показатель используется при расчёте ликвидности и потенциала перепродажи.
 </p>
-    `
+    `,
   },
 
   resale: {
@@ -219,8 +219,8 @@ const METRICS_INFO = {
 <p class="metric-note">
 Показатель не гарантирует прибыль, но помогает оценить инвестиционный риск.
 </p>
-    `
-  }
+    `,
+  },
 };
 
 METRICS_INFO.exposure = {
@@ -234,7 +234,7 @@ METRICS_INFO.exposure = {
       <li>Помогает понять, продаётся ли объект в нормальном режиме</li>
       <li>Долгая экспозиция часто указывает на завышенную цену</li>
     </ul>
-  `
+  `,
 };
 
 METRICS_INFO.stagnation = {
@@ -256,7 +256,7 @@ METRICS_INFO.stagnation = {
       <li><b>Средняя</b> — стоит пересмотреть стратегию</li>
       <li><b>Высокая</b> — объект «завис», рекомендуется корректировка цены</li>
     </ul>
-  `
+  `,
 };
 
 const SCHEMA = {
@@ -267,7 +267,7 @@ const SCHEMA = {
     cardDescription: { label: "Описание карточки", type: "textarea" },
     description: { label: "Полное описание", type: "textarea" },
     recommended: { label: "Рекомендуемый", type: "checkbox" },
-    contractNumber: { label: "Номер договора", type: "text" }
+    contractNumber: { label: "Номер договора", type: "text" },
   },
 
   flat: {
@@ -281,7 +281,7 @@ const SCHEMA = {
     houseType: { label: "Тип дома", type: "text" },
     balcony: { label: "Балкон", type: "text" },
     renovation: { label: "Ремонт", type: "text" },
-    bathroom: { label: "Санузел", type: "text" }
+    bathroom: { label: "Санузел", type: "text" },
   },
 
   house: {
@@ -294,8 +294,8 @@ const SCHEMA = {
     water: { label: "Вода", type: "text" },
     sewerage: { label: "Канализация", type: "text" },
     electricity: { label: "Электроснабжение", type: "text" },
-    landStatus: { label: "Статус земли", type: "text" }
-  }
+    landStatus: { label: "Статус земли", type: "text" },
+  },
 };
 
 const previewImages = {
@@ -318,47 +318,48 @@ const previewImages = {
   "kvartira-lida-ul-kosmonavtov": "/images/objects/pic17.webp",
   "kvartira-lida-ul-zarechnaya-7": "/images/objects/pic18.webp",
   "dom-lidskiy-rayon-ostrovlya-novoselov": "/images/objects/pic19.webp",
-  "kvartira-laykovshchina-lidskiy-rayon":"/images/objects/pic20.webp",
+  "kvartira-laykovshchina-lidskiy-rayon": "/images/objects/pic20.webp",
   "kvartira-lida-ul-prolygina-4": "/images/objects/pic21.webp",
-  "dom-shchuchinskiy-rayon-skribovtsy":"/images/objects/pic22.webp",
-  "dom-shchuchinskiy-rayon-boyary-zheludokskie":"/images/objects/pic23.webp",
+  "dom-shchuchinskiy-rayon-skribovtsy": "/images/objects/pic22.webp",
+  "dom-shchuchinskiy-rayon-boyary-zheludokskie": "/images/objects/pic23.webp",
   "kvartira-volkovysk-centr": "/images/objects/pic24.webp",
-  "kvartira-lida-knyazya-gedimina-7":"/images/objects/pic25.webp",
-  "sto-lida-ignatova-42-veras-avto":"/images/objects/pic26.webp",
-  "kvartira-volkovysk-socialisticheskaya":"/images/objects/pic27.webp",
-  "dom-lida-ul-shchedrina":"/images/objects/pic28.webp",
-  "kvartira-lida-ul-tavlaya-25a":"/images/objects/pic29.webp",
-  "kvartira-shchuchin-ul-ostrovskogo-5":"/images/objects/pic30.webp",
-  "kvartira-lida-ul-nevskogo-20a":"/images/objects/pic31.webp",
+  "kvartira-lida-knyazya-gedimina-7": "/images/objects/pic25.webp",
+  "sto-lida-ignatova-42-veras-avto": "/images/objects/pic26.webp",
+  "kvartira-volkovysk-socialisticheskaya": "/images/objects/pic27.webp",
+  "dom-lida-ul-shchedrina": "/images/objects/pic28.webp",
+  "kvartira-lida-ul-tavlaya-25a": "/images/objects/pic29.webp",
+  "kvartira-shchuchin-ul-ostrovskogo-5": "/images/objects/pic30.webp",
+  "kvartira-lida-ul-nevskogo-20a": "/images/objects/pic31.webp",
   "kvartira-lida-ul-sovetskaya-36": "/images/objects/pic32.webp",
   "kvartira-lida-ul-respublikanskaya-7": "/images/objects/pic33.webp",
   "kvartira-lida-ul-kosmonavtov-12-k1": "/images/objects/pic34.webp",
   "dom-yodki-ul-sadovaya": "/images/objects/pic35.webp",
   "kvartira-lida-ul-urickogo-60": "/images/objects/pic36.webp",
   "kvartira-lida-ul-yuzhnyy-gorodok-24": "/images/objects/pic37.webp",
-  "kvartira-lida-ul-tukhachevskogo-65":"/images/objects/pic38.webp",
+  "kvartira-lida-ul-tukhachevskogo-65": "/images/objects/pic38.webp",
   "kvartira-lida-ul-sovetskaya-36-stalinka": "/images/objects/pic39.webp",
-  "kvartira-lida-ul-nevskogo-20-cheshka":"/images/objects/pic40.webp",
-  "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero":"/images/objects/pic41.webp",
-  "kvartira-lida-ul-hasanovskaya-1-64":"/images/objects/pic42.webp",
+  "kvartira-lida-ul-nevskogo-20-cheshka": "/images/objects/pic40.webp",
+  "kvartira-lida-ul-naberezhnaya-1-vid-na-ozero": "/images/objects/pic41.webp",
+  "kvartira-lida-ul-hasanovskaya-1-64": "/images/objects/pic42.webp",
   "kvartira-lida-ul-sovetskaya-5-center": "/images/objects/pic43.webp",
   "kvartira-volkovysk-ul-novye-borki-23": "/images/objects/pic44.webp",
   "dom-lida-ul-novoprudskaya-2": "/images/objects/pic45.webp",
-  "kvartira-lida-ul-nevskogo-44-severny":"/images/objects/pic46.webp",
-  "kvartira-lida-ul-rybinovskogo-22" : "/images/objects/pic47.webp",
-  "kvartira-lida-ul-masherova-15-2":"/images/objects/pic48.webp",
-  "dom-lida-ul-poselkovaya-industrialny":"/images/objects/pic49.webp",
-  "kvartira-lida-ul-kommunisticheskaya-49":"/images/objects/pic50.webp",
-   "kvartira-shchuchin-ul-ostrovskogo-22":"/images/objects/pic51.webp",
-   "kvartira-lida-yuzhny-gorodok-13-stary-yuzhny":"/images/objects/pic52.webp",
-   "dom-lida-ul-urickogo-chast-doma":"/images/objects/pic53.webp",
-    "kvartira-lida-ul-gastello-65":"/images/objects/pic54.webp",
-    "kvartira-lida-ul-kommunisticheskaya-39k1":"/images/objects/pic55.webp",
-    "dom-lida-ul-kievskaya":"/images/objects/pic56.webp",
-    "kvartira-lida-ul-kooperativnaya-50": "/images/objects/pic57.webp",
-    "dom-feliksovo-ekaterininskiy-trakt": "/images/objects/pic58.webp",
-     "dom-ogorodniki-molodezhnaya-24" :"/images/objects/pic60.webp",
-     "dom-lida-ul-dobrolyubova":"/images/objects/pic59.webp",
+  "kvartira-lida-ul-nevskogo-44-severny": "/images/objects/pic46.webp",
+  "kvartira-lida-ul-rybinovskogo-22": "/images/objects/pic47.webp",
+  "kvartira-lida-ul-masherova-15-2": "/images/objects/pic48.webp",
+  "dom-lida-ul-poselkovaya-industrialny": "/images/objects/pic49.webp",
+  "kvartira-lida-ul-kommunisticheskaya-49": "/images/objects/pic50.webp",
+  "kvartira-shchuchin-ul-ostrovskogo-22": "/images/objects/pic51.webp",
+  "kvartira-lida-yuzhny-gorodok-13-stary-yuzhny": "/images/objects/pic52.webp",
+  "dom-lida-ul-urickogo-chast-doma": "/images/objects/pic53.webp",
+  "kvartira-lida-ul-gastello-65": "/images/objects/pic54.webp",
+  "kvartira-lida-ul-kommunisticheskaya-39k1": "/images/objects/pic55.webp",
+  "dom-lida-ul-kievskaya": "/images/objects/pic56.webp",
+  "kvartira-lida-ul-kooperativnaya-50": "/images/objects/pic57.webp",
+  "dom-feliksovo-ekaterininskiy-trakt": "/images/objects/pic58.webp",
+  "dom-ogorodniki-molodezhnaya-24": "/images/objects/pic60.webp",
+  "dom-lida-ul-dobrolyubova": "/images/objects/pic59.webp",
+  "dom-lida-ul-proletarskaya-sloboda": "/images/objects/pic61.webp",
 };
 
 /* ======================================================
@@ -398,18 +399,17 @@ const cancelDeleteConfirm = document.getElementById("cancelDeleteConfirm");
 const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 let pendingDeleteIndex = null;
 
-
 /* ======================================================
    LOAD DATA
 ====================================================== */
 let isInitialized = false;
 
 fetch("/data/objects.json")
-  .then(r => r.json())
-  .then(data => syncObjectsWithLivePrices(data))
-  .then(data => {
+  .then((r) => r.json())
+  .then((data) => syncObjectsWithLivePrices(data))
+  .then((data) => {
     objects = data || [];
-    
+
     // Инициализируем event delegation только один раз
     if (!isInitialized) {
       setupEventDelegation();
@@ -420,11 +420,9 @@ fetch("/data/objects.json")
       bindDashboardFilters();
       isInitialized = true;
     }
-    
+
     render();
   });
-
-
 
 /* ======================================================
    DIRTY STATE + AUTOSAVE
@@ -436,7 +434,7 @@ function setDirty(state = true) {
 
 // Инициализируем createdAt за один раз, без срабатывания setDirty()
 let hasCreatedAtUpdates = false;
-objects.forEach(obj => {
+objects.forEach((obj) => {
   if (!obj.createdAt) {
     obj.createdAt = obj.publishedAt || new Date().toISOString();
     hasCreatedAtUpdates = true;
@@ -458,13 +456,13 @@ function render() {
   list = sortObjects(list);
 
   // 🔥 2.1 РЕНДЕРИМ СТАТИСТИКУ ПОРТФЕЛЯ (НАД СПИСКОМ)
-  renderPortfolioStats(list); 
+  renderPortfolioStats(list);
 
   // 3. рендерим объекты с индексом из массива objects
   const indexMap = new Map();
   objects.forEach((obj, i) => indexMap.set(obj, i));
-  
-  list.forEach(obj => {
+
+  list.forEach((obj) => {
     const index = indexMap.get(obj);
     container.appendChild(renderObject(obj, index));
   });
@@ -472,7 +470,7 @@ function render() {
   // 4. обновляем статистику
   updateStats();
   renderDashboardCharts();
-  
+
   // 5. переинициализируем drag-and-drop (только DOM заново создан)
   enableDragAndDrop(container, objects);
 }
@@ -493,7 +491,7 @@ function enableDragAndDrop(container, dataArray) {
     container.addEventListener("dragstart", (e) => {
       const item = e.target.closest(".object");
       if (!item) return;
-      
+
       container.__dndState.draggedEl = item;
       item.classList.add("dragging");
     });
@@ -501,7 +499,7 @@ function enableDragAndDrop(container, dataArray) {
     container.addEventListener("dragend", (e) => {
       const item = e.target.closest(".object");
       if (!item) return;
-      
+
       item.classList.remove("dragging");
       container.__dndState.draggedEl = null;
     });
@@ -529,7 +527,7 @@ function enableDragAndDrop(container, dataArray) {
 
       container.insertBefore(
         draggedEl,
-        isAfter ? dropTarget.nextSibling : dropTarget
+        isAfter ? dropTarget.nextSibling : dropTarget,
       );
 
       /* ===== 2. ОБНОВЛЯЕМ МАССИВ ===== */
@@ -564,14 +562,14 @@ function renderObject(obj, index) {
 
   // 🆕 Возраст экспозиции
   const exposureHtml =
-    metrics?.exposureDays != null
-      ? `${metrics.exposureDays} дн.`
-      : "—";
+    metrics?.exposureDays != null ? `${metrics.exposureDays} дн.` : "—";
 
   // 🆕 Стагнация — цвет
   let stagnationClass = "";
-  if (metrics?.stagnation?.label === "Средняя") stagnationClass = "stagnation-medium";
-  if (metrics?.stagnation?.label === "Высокая") stagnationClass = "stagnation-high";
+  if (metrics?.stagnation?.label === "Средняя")
+    stagnationClass = "stagnation-medium";
+  if (metrics?.stagnation?.label === "Высокая")
+    stagnationClass = "stagnation-high";
 
   div.innerHTML = `
     <!-- ФОТО -->
@@ -685,7 +683,7 @@ function renderObject(obj, index) {
 ====================================================== */
 function setupEventDelegation() {
   // Используем event delegation на контейнер вместо привязки к каждому элементу
-  container.addEventListener("input", e => {
+  container.addEventListener("input", (e) => {
     const index = e.target.dataset.index;
     if (!index) return;
 
@@ -698,7 +696,7 @@ function setupEventDelegation() {
     }
   });
 
-  container.addEventListener("change", e => {
+  container.addEventListener("change", (e) => {
     const index = e.target.dataset.index;
     if (!index) return;
 
@@ -710,7 +708,7 @@ function setupEventDelegation() {
       if (e.target.value === "sold") {
         objects[index].status = {
           type: "sold",
-          date: new Date().toISOString().slice(0, 10)
+          date: new Date().toISOString().slice(0, 10),
         };
       } else {
         delete objects[index].status;
@@ -744,7 +742,7 @@ if (openAddModal && addModal) {
   closeAddModal?.addEventListener("click", closeModal);
   cancelAdd?.addEventListener("click", closeModal);
 
-  addModal.addEventListener("click", e => {
+  addModal.addEventListener("click", (e) => {
     if (e.target === addModal) closeModal();
   });
 }
@@ -760,12 +758,15 @@ addType.addEventListener("change", () => {
   addHouse.hidden = addType.value !== "Дом";
 });
 
-addForm.addEventListener("submit", e => {
+addForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const fd = new FormData(addForm);
 
-  const features = fd.getAll("feature").map(f => f.trim()).filter(Boolean);
+  const features = fd
+    .getAll("feature")
+    .map((f) => f.trim())
+    .filter(Boolean);
 
   const obj = {
     id: "obj-" + Date.now(),
@@ -780,7 +781,7 @@ addForm.addEventListener("submit", e => {
     cardDescription: fd.get("cardDescription"),
     description: fd.get("description"),
     features,
-    publishedAt: new Date().toISOString().slice(0, 10)
+    publishedAt: new Date().toISOString().slice(0, 10),
   };
 
   if (obj.type === "Квартира") {
@@ -797,7 +798,7 @@ addForm.addEventListener("submit", e => {
       repair: fd.get("repair"),
       ceilingHeight: fd.get("ceilingHeight"),
       bathroom: fd.get("bathroom"),
-      contractNumber: fd.get("contractNumber")
+      contractNumber: fd.get("contractNumber"),
     });
   }
 
@@ -818,7 +819,7 @@ addForm.addEventListener("submit", e => {
       electricity: fd.get("electricity"),
       water: fd.get("water"),
       landStatus: fd.get("landStatus"),
-      contractNumber: fd.get("contractNumber")
+      contractNumber: fd.get("contractNumber"),
     });
   }
 
@@ -837,10 +838,9 @@ addForm.addEventListener("submit", e => {
    SAVE / DOWNLOAD
 ====================================================== */
 function downloadJSON(filename) {
-  const blob = new Blob(
-    [JSON.stringify(objects, null, 2)],
-    { type: "application/json" }
-  );
+  const blob = new Blob([JSON.stringify(objects, null, 2)], {
+    type: "application/json",
+  });
 
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -861,7 +861,7 @@ function askAndStoreAdminToken() {
   const currentToken = (localStorage.getItem("adminSaveToken") || "").trim();
   const typed = prompt(
     "Введите токен для сохранения на сервере.\nОставьте пустым, чтобы удалить токен.",
-    currentToken
+    currentToken,
   );
 
   if (typed === null) {
@@ -885,7 +885,7 @@ async function saveObjectsToServer() {
   const adminToken = localStorage.getItem("adminSaveToken") || "";
   const headers = {
     "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest"
+    "X-Requested-With": "XMLHttpRequest",
   };
 
   if (adminToken) {
@@ -895,7 +895,7 @@ async function saveObjectsToServer() {
   const response = await fetch("/adminka_objects/save.php", {
     method: "POST",
     headers,
-    body: JSON.stringify(objects)
+    body: JSON.stringify(objects),
   });
 
   let payload = null;
@@ -963,7 +963,7 @@ function showErrors(errors) {
 
   errorsBox.innerHTML = `
     <strong>Ошибки:</strong>
-    <ul>${errors.map(e => `<li>${e}</li>`).join("")}</ul>
+    <ul>${errors.map((e) => `<li>${e}</li>`).join("")}</ul>
   `;
   errorsBox.style.display = "block";
 }
@@ -973,16 +973,43 @@ function showErrors(errors) {
 ====================================================== */
 function slugifyLatin(text) {
   const map = {
-    а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",
-    й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",
-    у:"u",ф:"f",х:"h",ц:"c",ч:"ch",ш:"sh",щ:"sch",ы:"y",э:"e",
-    ю:"yu",я:"ya"
+    а: "a",
+    б: "b",
+    в: "v",
+    г: "g",
+    д: "d",
+    е: "e",
+    ё: "e",
+    ж: "zh",
+    з: "z",
+    и: "i",
+    й: "y",
+    к: "k",
+    л: "l",
+    м: "m",
+    н: "n",
+    о: "o",
+    п: "p",
+    р: "r",
+    с: "s",
+    т: "t",
+    у: "u",
+    ф: "f",
+    х: "h",
+    ц: "c",
+    ч: "ch",
+    ш: "sh",
+    щ: "sch",
+    ы: "y",
+    э: "e",
+    ю: "yu",
+    я: "ya",
   };
 
   return text
     .toLowerCase()
     .split("")
-    .map(c => map[c] || c)
+    .map((c) => map[c] || c)
     .join("")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
@@ -995,18 +1022,18 @@ function generateFeaturesFromDescription(text, type) {
   const t = text.toLowerCase();
 
   const common = [
-    { re: /(\d+[,\.]?\d*)\s*м²/, f: v => `Площадь ${v} м²` },
+    { re: /(\d+[,\.]?\d*)\s*м²/, f: (v) => `Площадь ${v} м²` },
     { re: /(центр|центре)/, f: () => "Центральный район" },
     { re: /(тихий|спокойный)/, f: () => "Тихий район" },
-    { re: /(школ|сад|магазин)/, f: () => "Развитая инфраструктура" }
+    { re: /(школ|сад|магазин)/, f: () => "Развитая инфраструктура" },
   ];
 
   const flatRules = [
-    { re: /(\d+)[-\s]?комнат/, f: v => `${v}-комнатная` },
-    { re: /этаж\s*(\d+)/, f: v => `Этаж ${v}` },
-    { re: /(\d+)[-\s]?этажного/, f: v => `${v}-этажный дом` },
-    { re: /(балкон|лоджия)/, f: v => `Есть ${v}` },
-    { re: /(ремонт|отремонтирован)/, f: () => "Хорошее состояние" }
+    { re: /(\d+)[-\s]?комнат/, f: (v) => `${v}-комнатная` },
+    { re: /этаж\s*(\d+)/, f: (v) => `Этаж ${v}` },
+    { re: /(\d+)[-\s]?этажного/, f: (v) => `${v}-этажный дом` },
+    { re: /(балкон|лоджия)/, f: (v) => `Есть ${v}` },
+    { re: /(ремонт|отремонтирован)/, f: () => "Хорошее состояние" },
   ];
 
   const houseRules = [
@@ -1014,16 +1041,16 @@ function generateFeaturesFromDescription(text, type) {
     { re: /(отоплен|печ)/, f: () => "Отопление" },
     { re: /(вода|скважин)/, f: () => "Вода заведена" },
     { re: /(канализац)/, f: () => "Канализация" },
-    { re: /(гараж)/, f: () => "Есть гараж" }
+    { re: /(гараж)/, f: () => "Есть гараж" },
   ];
 
   const rules = [
     ...common,
     ...(type === "Квартира" ? flatRules : []),
-    ...(type === "Дом" ? houseRules : [])
+    ...(type === "Дом" ? houseRules : []),
   ];
 
-  rules.forEach(r => {
+  rules.forEach((r) => {
     const m = t.match(r.re);
     if (m) {
       const val = m[1] || m[0];
@@ -1032,23 +1059,24 @@ function generateFeaturesFromDescription(text, type) {
     }
   });
 
-  const fallback = type === "Дом"
-    ? [
-        "Подходит для постоянного проживания",
-        "Удобный подъезд",
-        "Хорошее состояние",
-        "Документы готовы",
-        "Выгодная цена",
-        "Перспективный район"
-      ]
-    : [
-        "Удобная планировка",
-        "Хорошее состояние",
-        "Подходит для проживания",
-        "Документы готовы",
-        "Выгодное предложение",
-        "Комфортный район"
-      ];
+  const fallback =
+    type === "Дом"
+      ? [
+          "Подходит для постоянного проживания",
+          "Удобный подъезд",
+          "Хорошее состояние",
+          "Документы готовы",
+          "Выгодная цена",
+          "Перспективный район",
+        ]
+      : [
+          "Удобная планировка",
+          "Хорошее состояние",
+          "Подходит для проживания",
+          "Документы готовы",
+          "Выгодное предложение",
+          "Комфортный район",
+        ];
 
   while (features.length < 6) {
     const next = fallback[features.length % fallback.length];
@@ -1057,7 +1085,6 @@ function generateFeaturesFromDescription(text, type) {
 
   return features.slice(0, 8);
 }
-
 
 const descriptionField = addForm.querySelector('[name="description"]');
 
@@ -1104,7 +1131,7 @@ descField.addEventListener("blur", () => {
   regenerateFeatures();
 });
 
-addForm.querySelectorAll('input[name="feature"]').forEach(input => {
+addForm.querySelectorAll('input[name="feature"]').forEach((input) => {
   input.addEventListener("input", () => {
     input.dataset.auto = "0";
   });
@@ -1124,18 +1151,15 @@ function renderField(key, config, value, onChange) {
     input = document.createElement("textarea");
     input.rows = 3;
     input.value = value ?? "";
-  } 
-  else if (config.type === "checkbox") {
+  } else if (config.type === "checkbox") {
     input = document.createElement("input");
     input.type = "checkbox";
     input.checked = !!value;
-  } 
-  else if (config.type === "number") {
+  } else if (config.type === "number") {
     input = document.createElement("input");
     input.type = "number";
     input.value = value ?? "";
-  }
-  else if (config.type === "float") {
+  } else if (config.type === "float") {
     input = document.createElement("input");
     input.type = "text";
     input.inputMode = "decimal";
@@ -1149,8 +1173,7 @@ function renderField(key, config, value, onChange) {
         setDirty();
       }
     });
-  }
-  else {
+  } else {
     input = document.createElement("input");
     input.type = "text";
     input.value = value ?? "";
@@ -1163,8 +1186,8 @@ function renderField(key, config, value, onChange) {
         config.type === "checkbox"
           ? input.checked
           : config.type === "number"
-          ? Number(input.value)
-          : input.value;
+            ? Number(input.value)
+            : input.value;
 
       onChange(newValue);
       setDirty();
@@ -1175,7 +1198,6 @@ function renderField(key, config, value, onChange) {
   return wrapper;
 }
 
-
 function renderObjectEditor(obj) {
   const container = document.createElement("div");
   container.className = "object-editor";
@@ -1185,7 +1207,7 @@ function renderObjectEditor(obj) {
 
   Object.entries(SCHEMA.common).forEach(([key, cfg]) => {
     if (key in obj) {
-      const field = renderField(key, cfg, obj[key], val => (obj[key] = val));
+      const field = renderField(key, cfg, obj[key], (val) => (obj[key] = val));
       if (["title", "cardDescription", "description"].includes(key)) {
         field.classList.add("full");
       }
@@ -1198,16 +1220,14 @@ function renderObjectEditor(obj) {
 
   container.appendChild(
     renderSection(
-      obj.type === "Квартира"
-        ? "Параметры квартиры"
-        : "Параметры дома"
-    )
+      obj.type === "Квартира" ? "Параметры квартиры" : "Параметры дома",
+    ),
   );
 
   Object.entries(SCHEMA[typeKey]).forEach(([key, cfg]) => {
     if (key in obj) {
       container.appendChild(
-        renderField(key, cfg, obj[key], val => (obj[key] = val))
+        renderField(key, cfg, obj[key], (val) => (obj[key] = val)),
       );
     }
   });
@@ -1221,18 +1241,17 @@ function renderObjectEditor(obj) {
         "contractNumber",
         SCHEMA.common.contractNumber,
         obj.contractNumber,
-        val => (obj.contractNumber = val)
-      )
+        (val) => (obj.contractNumber = val),
+      ),
     );
   }
 
   return container;
 }
 
-
 function bindEditButtons() {
   // Используем event delegation для кнопок редактирования
-  container.addEventListener("click", e => {
+  container.addEventListener("click", (e) => {
     const editBtn = e.target.closest(".edit-btn");
     if (!editBtn) return;
 
@@ -1263,7 +1282,7 @@ function closeDeleteConfirmModal() {
 
 function bindDeleteButtons() {
   // Используем event delegation для кнопок удаления
-  container.addEventListener("click", e => {
+  container.addEventListener("click", (e) => {
     const deleteBtn = e.target.closest(".delete-btn");
     if (!deleteBtn) return;
 
@@ -1281,7 +1300,7 @@ function openEditModal(index) {
   modalBody.appendChild(renderObjectEditor(obj));
 
   editModal.classList.add("is-open");
-document.body.style.overflow = "hidden";
+  document.body.style.overflow = "hidden";
 }
 
 function closeEdit() {
@@ -1293,14 +1312,14 @@ function closeEdit() {
 closeEditModal.addEventListener("click", closeEdit);
 cancelEdit.addEventListener("click", closeEdit);
 
-editModal.addEventListener("click", e => {
+editModal.addEventListener("click", (e) => {
   if (e.target === editModal) closeEdit();
 });
 
 closeDeleteConfirm?.addEventListener("click", closeDeleteConfirmModal);
 cancelDeleteConfirm?.addEventListener("click", closeDeleteConfirmModal);
 
-deleteConfirmModal?.addEventListener("click", e => {
+deleteConfirmModal?.addEventListener("click", (e) => {
   if (e.target === deleteConfirmModal) closeDeleteConfirmModal();
 });
 
@@ -1338,10 +1357,9 @@ function renderSection(title) {
   return wrap;
 }
 
-
 function bindQuickActions() {
   // Используем event delegation для badge кликов
-  container.addEventListener("click", e => {
+  container.addEventListener("click", (e) => {
     const statusBadge = e.target.closest(".status-badge");
     const recommendStar = e.target.closest(".recommend-toggle");
 
@@ -1354,7 +1372,7 @@ function bindQuickActions() {
       } else {
         obj.status = {
           type: "sold",
-          date: new Date().toISOString().slice(0, 10)
+          date: new Date().toISOString().slice(0, 10),
         };
       }
 
@@ -1373,7 +1391,7 @@ function bindQuickActions() {
 
 function bindInlinePriceEdit() {
   // Используем event delegation для inline редактирования цены
-  container.addEventListener("click", e => {
+  container.addEventListener("click", (e) => {
     const editablePrice = e.target.closest(".editable-price");
     if (!editablePrice || editablePrice.querySelector("input")) return;
 
@@ -1395,7 +1413,7 @@ function bindInlinePriceEdit() {
       render();
     }
 
-    input.addEventListener("keydown", e => {
+    input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") save();
       if (e.key === "Escape") render();
     });
@@ -1406,28 +1424,27 @@ function bindInlinePriceEdit() {
 
 function updateStats() {
   const total = objects.length;
-  const sold = objects.filter(o => o.status?.type === "sold").length;
+  const sold = objects.filter((o) => o.status?.type === "sold").length;
   const active = total - sold;
-  const recommended = objects.filter(o => o.recommended).length;
+  const recommended = objects.filter((o) => o.recommended).length;
 
-animateNumber(document.getElementById("statTotal"), total);
-animateNumber(document.getElementById("statActive"), active);
-animateNumber(document.getElementById("statSold"), sold);
-animateNumber(document.getElementById("statRecommended"), recommended);
+  animateNumber(document.getElementById("statTotal"), total);
+  animateNumber(document.getElementById("statActive"), active);
+  animateNumber(document.getElementById("statSold"), sold);
+  animateNumber(document.getElementById("statRecommended"), recommended);
 }
-
 
 function renderDashboardCharts() {
   // ⏱ временная ось
-  const publishedStats = groupByDate(objects, o => o.publishedAt);
+  const publishedStats = groupByDate(objects, (o) => o.publishedAt);
 
   // 🔴 продажи
-  const soldStats = groupByDate(objects, o => o.status?.date);
+  const soldStats = groupByDate(objects, (o) => o.status?.date);
 
   // ⭐ рекомендованные
   const recommendedStats = groupByDate(
-    objects.filter(o => o.recommended),
-    o => o.publishedAt
+    objects.filter((o) => o.recommended),
+    (o) => o.publishedAt,
   );
 
   const cards = document.querySelectorAll(".admin-stats .stat");
@@ -1446,11 +1463,8 @@ function renderDashboardCharts() {
         break;
 
       case 1: // В продаже
-        data = publishedStats.filter(d =>
-          objects.some(o =>
-            !o.status &&
-            o.publishedAt?.startsWith(d.date)
-          )
+        data = publishedStats.filter((d) =>
+          objects.some((o) => !o.status && o.publishedAt?.startsWith(d.date)),
         );
         color = "#22c55e";
         break;
@@ -1466,41 +1480,33 @@ function renderDashboardCharts() {
         break;
     }
 
-    drawInteractiveDateChart(
-      canvas,
-      data,
-      color,
-      date => {
-        selectedDate = selectedDate === date ? null : date;
-        render();
-      }
-    );
+    drawInteractiveDateChart(canvas, data, color, (date) => {
+      selectedDate = selectedDate === date ? null : date;
+      render();
+    });
   });
 }
-const createdStats = groupByDate(objects, o => o.createdAt);
-const soldStats = groupByDate(objects, o => o.status?.date);
+const createdStats = groupByDate(objects, (o) => o.createdAt);
+const soldStats = groupByDate(objects, (o) => o.status?.date);
 
 const canvases = document.querySelectorAll(".admin-stats canvas");
 
+document.querySelectorAll(".admin-stats .stat").forEach((card, i) => {
+  const canvas = card.querySelector("canvas");
+  if (!canvas) return;
 
-document
-  .querySelectorAll(".admin-stats .stat")
-  .forEach((card, i) => {
-    const canvas = card.querySelector("canvas");
-    if (!canvas) return;
-
-    const colors = ["#3b82f6", "#22c55e", "#ef4444", "#f59e0b"];
-    drawMiniChart(canvas, colors[i]);
-  });
+  const colors = ["#3b82f6", "#22c55e", "#ef4444", "#f59e0b"];
+  drawMiniChart(canvas, colors[i]);
+});
 
 function bindDashboardFilters() {
-  document.querySelectorAll(".admin-stats .stat").forEach(card => {
+  document.querySelectorAll(".admin-stats .stat").forEach((card) => {
     card.addEventListener("click", () => {
       currentFilter = card.dataset.filter || "all";
 
       document
         .querySelectorAll(".admin-stats .stat")
-        .forEach(c => c.classList.remove("is-active"));
+        .forEach((c) => c.classList.remove("is-active"));
 
       card.classList.add("is-active");
       render();
@@ -1514,8 +1520,9 @@ function drawMiniChart(canvas, color) {
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
 
-  const points = Array.from({ length: 12 }, () =>
-    Math.random() * canvas.height * 0.6 + 8
+  const points = Array.from(
+    { length: 12 },
+    () => Math.random() * canvas.height * 0.6 + 8,
   );
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1549,7 +1556,7 @@ function animateNumber(el, to) {
 function groupByDate(objects, getter) {
   const map = {};
 
-  objects.forEach(obj => {
+  objects.forEach((obj) => {
     const date = getter(obj);
     if (!date) return;
 
@@ -1577,16 +1584,13 @@ function drawInteractiveDateChart(canvas, points, color, onPointClick) {
 
   if (!points || points.length < 2) return;
 
-  const max = Math.max(...points.map(p => p.value));
+  const max = Math.max(...points.map((p) => p.value));
   const padding = 6;
 
   // ✅ КЭШИРУЕМ координаты (вычисляем один раз)
   const coords = points.map((p, i) => {
     const x = (width / (points.length - 1)) * i;
-    const y =
-      height -
-      (p.value / max) * (height - padding * 2) -
-      padding;
+    const y = height - (p.value / max) * (height - padding * 2) - padding;
     return { ...p, x, y };
   });
 
@@ -1600,12 +1604,12 @@ function drawInteractiveDateChart(canvas, points, color, onPointClick) {
   ctx.stroke();
 
   // ✅ Используем кэшированные координаты при mousemove (не пересчитываем)
-  canvas.onmousemove = e => {
+  canvas.onmousemove = (e) => {
     const rect = canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
 
     const nearest = coords.reduce((a, b) =>
-      Math.abs(b.x - mx) < Math.abs(a.x - mx) ? b : a
+      Math.abs(b.x - mx) < Math.abs(a.x - mx) ? b : a,
     );
 
     tooltip.textContent = `${nearest.date}: ${nearest.value}`;
@@ -1618,12 +1622,12 @@ function drawInteractiveDateChart(canvas, points, color, onPointClick) {
     tooltip.style.opacity = 0;
   };
 
-  canvas.onclick = e => {
+  canvas.onclick = (e) => {
     const rect = canvas.getBoundingClientRect();
     const mx = e.clientX - rect.left;
 
     const nearest = coords.reduce((a, b) =>
-      Math.abs(b.x - mx) < Math.abs(a.x - mx) ? b : a
+      Math.abs(b.x - mx) < Math.abs(a.x - mx) ? b : a,
     );
 
     onPointClick(nearest.date);
@@ -1635,27 +1639,28 @@ function applyFilter(list) {
 
   /* ===== existing filters ===== */
   if (currentFilter === "active") {
-    result = result.filter(o => !o.status);
+    result = result.filter((o) => !o.status);
   }
 
   if (currentFilter === "sold") {
-    result = result.filter(o => o.status?.type === "sold");
+    result = result.filter((o) => o.status?.type === "sold");
   }
 
   if (currentFilter === "recommended") {
-    result = result.filter(o => o.recommended);
+    result = result.filter((o) => o.recommended);
   }
 
   if (selectedDate) {
-    result = result.filter(o =>
-      o.publishedAt?.startsWith(selectedDate) ||
-      o.status?.date?.startsWith(selectedDate)
+    result = result.filter(
+      (o) =>
+        o.publishedAt?.startsWith(selectedDate) ||
+        o.status?.date?.startsWith(selectedDate),
     );
   }
 
   /* ===== STATS FILTERS ===== */
   if (statsFilters.rooms) {
-    result = result.filter(o => {
+    result = result.filter((o) => {
       if (!o.rooms) return false;
       return statsFilters.rooms === "4+"
         ? o.rooms >= 4
@@ -1664,13 +1669,12 @@ function applyFilter(list) {
   }
 
   if (statsFilters.city) {
-    result = result.filter(o => o.city === statsFilters.city);
+    result = result.filter((o) => o.city === statsFilters.city);
   }
-
 
   /* ===== PRICE RANGE FILTER ===== */
   if (statsFilters.priceRange) {
-    result = result.filter(o => {
+    result = result.filter((o) => {
       const price = o.priceUSD;
       if (!price) return false;
 
@@ -1691,7 +1695,7 @@ function applyFilter(list) {
           return true;
       }
     });
-  } 
+  }
 
   return result;
 }
@@ -1721,7 +1725,7 @@ document.addEventListener("click", (e) => {
   window.open(
     `https://turko.by/objects/${encodeURIComponent(slug)}`,
     "_blank",
-    "noopener"
+    "noopener",
   );
 });
 
@@ -1735,12 +1739,12 @@ function calculateMetrics(obj) {
     price: scorePrice(market.deviation),
     object: scoreObject(obj, layoutIndex),
     location: scoreLocation(obj),
-    market: scoreMarket(objects, obj)
+    market: scoreMarket(objects, obj),
   });
 
   let layoutImpact = 0;
   if (layoutIndex !== null) {
-    if (layoutIndex >= 0.60) layoutImpact = +10;
+    if (layoutIndex >= 0.6) layoutImpact = +10;
     else if (layoutIndex >= 0.55) layoutImpact = +5;
     else if (layoutIndex >= 0.48) layoutImpact = 0;
     else if (layoutIndex >= 0.42) layoutImpact = -5;
@@ -1752,14 +1756,14 @@ function calculateMetrics(obj) {
   const resale = calculateResale(obj, {
     deviation: market.deviation,
     layoutIndex,
-    liquidity
+    liquidity,
   });
 
   // 🆕 Возраст и стагнация
   const exposureDays = calculateExposureDays(obj);
   const stagnation = calculateStagnation(obj, {
     deviation: market.deviation,
-    liquidity
+    liquidity,
   });
 
   return {
@@ -1772,12 +1776,16 @@ function calculateMetrics(obj) {
 
     // 🆕 новые метрики
     exposureDays,
-    stagnation
+    stagnation,
   };
 }
 const metricsInfoModal = document.getElementById("metricsModal");
-const metricsInfoTitle = metricsInfoModal.querySelector(".metrics-modal__title");
-const metricsInfoContent = metricsInfoModal.querySelector(".metrics-modal__content");
+const metricsInfoTitle = metricsInfoModal.querySelector(
+  ".metrics-modal__title",
+);
+const metricsInfoContent = metricsInfoModal.querySelector(
+  ".metrics-modal__content",
+);
 
 document.addEventListener("click", (e) => {
   const metricEl = e.target.closest(".metric");
@@ -1802,12 +1810,16 @@ document.addEventListener("click", (e) => {
     const renderGroup = (title, items) => `
       <h4>${title}</h4>
       <ul class="liquidity-explain">
-        ${items.map(i => `
+        ${items
+          .map(
+            (i) => `
           <li class="${i.value > 0 ? "plus" : "minus"}">
             <span class="value">${i.value > 0 ? "+" : ""}${i.value}</span>
             <span>${i.label}</span>
           </li>
-        `).join("")}
+        `,
+          )
+          .join("")}
       </ul>
     `;
 
@@ -1822,10 +1834,14 @@ document.addEventListener("click", (e) => {
         ex.advice.length
           ? `<h4>Как повысить ликвидность</h4>
              <ul class="liquidity-advice">
-               ${ex.advice.map(a => `
+               ${ex.advice
+                 .map(
+                   (a) => `
                  <li>💡 ${a.label}
                  <strong>(≈ +${a.delta} баллов)</strong></li>
-               `).join("")}
+               `,
+                 )
+                 .join("")}
              </ul>`
           : ""
       }
@@ -1845,7 +1861,6 @@ document.addEventListener("click", (e) => {
   metricsInfoContent.innerHTML = info.html;
   metricsInfoModal.hidden = false;
 });
-
 
 metricsInfoModal.addEventListener("click", (e) => {
   if (
@@ -1869,8 +1884,8 @@ function sortObjects(list) {
     case "new":
     default:
       return arr.sort((a, b) => {
-        const da = new Date(a.publishedAt  || 0).getTime();
-        const db = new Date(b.publishedAt  || 0).getTime();
+        const da = new Date(a.publishedAt || 0).getTime();
+        const db = new Date(b.publishedAt || 0).getTime();
         return db - da;
       });
   }
@@ -1887,24 +1902,33 @@ if (sortSelect) {
 
 function formatRoomsLabel(key) {
   switch (key) {
-    case "1": return "Однокомнатные";
-    case "2": return "Двухкомнатные";
-    case "3": return "Трёхкомнатные";
-    case "4+": return "4+ комнаты";
-    default: return `${key}-комнатные`;
+    case "1":
+      return "Однокомнатные";
+    case "2":
+      return "Двухкомнатные";
+    case "3":
+      return "Трёхкомнатные";
+    case "4+":
+      return "4+ комнаты";
+    default:
+      return `${key}-комнатные`;
   }
 }
 
 function formatPriceRangeLabel(key) {
   switch (key) {
-    case "<30000": return "Меньше 30 тыс. $";
-    case "30000-50000": return "30–50 тыс. $";
-    case "50000-80000": return "50–80 тыс. $";
-    case "80000+": return "Более 80 тыс. $";
-    default: return key;
+    case "<30000":
+      return "Меньше 30 тыс. $";
+    case "30000-50000":
+      return "30–50 тыс. $";
+    case "50000-80000":
+      return "50–80 тыс. $";
+    case "80000+":
+      return "Более 80 тыс. $";
+    default:
+      return key;
   }
 }
-
 
 function renderPortfolioStats(objects) {
   const stats = PortfolioStatistics.calculate(objects);
@@ -1920,13 +1944,11 @@ function renderAvgPrice(data) {
   if (!footer) return;
 
   const parts = Object.entries(data).map(
-    ([rooms, price]) =>
-      `${formatRoomsLabel(rooms)} — ${price} $/м²`
+    ([rooms, price]) => `${formatRoomsLabel(rooms)} — ${price} $/м²`,
   );
 
   footer.textContent = `Средняя цена за м²: ${parts.join(" | ")}`;
 }
-
 
 function renderStatsCards(containerId, data, type) {
   const container = document.getElementById(containerId);
@@ -1971,8 +1993,7 @@ function renderStatsCards(containerId, data, type) {
         statsFilters.city = statsFilters.city === key ? null : key;
       }
       if (type === "prices") {
-        statsFilters.priceRange =
-          statsFilters.priceRange === key ? null : key;
+        statsFilters.priceRange = statsFilters.priceRange === key ? null : key;
       }
       render();
     });
@@ -2002,9 +2023,9 @@ function getAreaCoef(area) {
   if (!area) return 1;
 
   if (area < 35) return 1.08;
-  if (area < 55) return 1.00;
+  if (area < 55) return 1.0;
   if (area < 80) return 0.95;
-  return 0.90;
+  return 0.9;
 }
 
 function calculateMarketDeviation(obj, objects) {
@@ -2015,7 +2036,7 @@ function calculateMarketDeviation(obj, objects) {
 
   const pricePerM2 = priceUSD / areaTotal;
 
-  const analogs = objects.filter(o => {
+  const analogs = objects.filter((o) => {
     if (o === obj) return false;
     if (o.status?.type === "sold") return false;
     if (o.type !== obj.type) return false;
@@ -2035,42 +2056,37 @@ function calculateMarketDeviation(obj, objects) {
   let marketPricePerM2;
 
   if (analogs.length >= 3) {
-    const prices = analogs.map(o => num(o.priceUSD) / num(o.areaTotal));
+    const prices = analogs.map((o) => num(o.priceUSD) / num(o.areaTotal));
     marketPricePerM2 = trimmedMean(prices, 0.1);
-
   } else if (analogs.length > 0) {
-    const prices = analogs.map(o => num(o.priceUSD) / num(o.areaTotal));
+    const prices = analogs.map((o) => num(o.priceUSD) / num(o.areaTotal));
     marketPricePerM2 = average(prices);
-
   } else {
     // 🔥 FALLBACK — СТАТИСТИКА ПОРТФЕЛЯ
     const stats = PortfolioStatistics.calculate(objects);
-    const roomKey =
-      obj.rooms >= 4 ? "4+" : String(obj.rooms);
+    const roomKey = obj.rooms >= 4 ? "4+" : String(obj.rooms);
 
     marketPricePerM2 =
-      stats?.avgPricePerM2?.[roomKey] ||
-      (obj.type === "Квартира" ? 800 : 400);
+      stats?.avgPricePerM2?.[roomKey] || (obj.type === "Квартира" ? 800 : 400);
   }
 
   marketPricePerM2 *= getAreaCoef(areaTotal);
 
-  const deviation =
-    ((pricePerM2 - marketPricePerM2) / marketPricePerM2) * 100;
+  const deviation = ((pricePerM2 - marketPricePerM2) / marketPricePerM2) * 100;
 
   return {
     pricePerM2: Math.round(pricePerM2),
     marketPricePerM2: Math.round(marketPricePerM2),
-    deviation: Math.round(deviation)
+    deviation: Math.round(deviation),
   };
 }
 
 function scorePrice(deviation) {
   if (deviation <= -15) return 100;
-  if (deviation <= -7)  return 85;
-  if (deviation <= 0)   return 70;
-  if (deviation <= 5)   return 55;
-  if (deviation <= 10)  return 35;
+  if (deviation <= -7) return 85;
+  if (deviation <= 0) return 70;
+  if (deviation <= 5) return 55;
+  if (deviation <= 10) return 35;
   return 15;
 }
 
@@ -2123,10 +2139,8 @@ function scoreLocation(obj) {
 }
 
 function scoreMarket(objects, obj) {
-  const active = objects.filter(o =>
-    !o.status &&
-    o.type === obj.type &&
-    o.city === obj.city
+  const active = objects.filter(
+    (o) => !o.status && o.type === obj.type && o.city === obj.city,
   ).length;
 
   if (active < 5) return 75;
@@ -2137,9 +2151,9 @@ function scoreMarket(objects, obj) {
 function calculateLiquidity(scores) {
   return Math.round(
     scores.price * 0.4 +
-    scores.object * 0.3 +
-    scores.location * 0.2 +
-    scores.market * 0.1
+      scores.object * 0.3 +
+      scores.location * 0.2 +
+      scores.market * 0.1,
   );
 }
 
@@ -2151,9 +2165,7 @@ function calculateLayoutIndex(obj) {
   if (!total || !living) return null;
 
   // 1. Полезная площадь
-  const useful =
-    living +
-    (Number.isFinite(kitchen) ? kitchen * 0.6 : 0);
+  const useful = living + (Number.isFinite(kitchen) ? kitchen * 0.6 : 0);
 
   let ratio = useful / total;
 
@@ -2187,9 +2199,9 @@ function calculateResale(obj, metrics) {
   // 2️⃣ Планировка
   let layoutScore = 50;
   if (layoutIndex !== null) {
-    if (layoutIndex >= 0.60) layoutScore = 100;
+    if (layoutIndex >= 0.6) layoutScore = 100;
     else if (layoutIndex >= 0.55) layoutScore = 80;
-    else if (layoutIndex >= 0.50) layoutScore = 60;
+    else if (layoutIndex >= 0.5) layoutScore = 60;
     else if (layoutIndex >= 0.45) layoutScore = 40;
     else layoutScore = 20;
   }
@@ -2199,9 +2211,7 @@ function calculateResale(obj, metrics) {
 
   // 4️⃣ Итоговый resaleScore
   const resaleScore = Math.round(
-    priceScore * 0.5 +
-    layoutScore * 0.3 +
-    liquidityScore * 0.2
+    priceScore * 0.5 + layoutScore * 0.3 + liquidityScore * 0.2,
   );
 
   // 5️⃣ Категория
@@ -2211,7 +2221,7 @@ function calculateResale(obj, metrics) {
 
   return {
     score: resaleScore,
-    label
+    label,
   };
 }
 
@@ -2258,6 +2268,6 @@ function calculateStagnation(obj, metrics) {
   return {
     days,
     score,
-    label
+    label,
   };
 }
