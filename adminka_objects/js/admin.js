@@ -892,7 +892,7 @@ async function saveObjectsToServer() {
     headers["X-Admin-Token"] = adminToken;
   }
 
-  const response = await fetch("/adminka_objects/save.php", {
+  const response = await fetch("/adminka_objects/api/save.php", {
     method: "POST",
     headers,
     body: JSON.stringify(objects),
