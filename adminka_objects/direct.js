@@ -310,7 +310,7 @@ const DirectAPI = (function () {
 
   async function exchangeCodeForToken(code, clientId, clientSecret) {
     try {
-      const response = await fetch('/adminka_objects/api/api-direct.php', {
+      const response = await fetch('/adminka_objects/api-direct.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -409,7 +409,7 @@ const DirectAPI = (function () {
         '<tr class="empty-row"><td colspan="5">Загрузка данных...</td></tr>';
 
       // Call backend API
-      const response = await fetch('/adminka_objects/api/api-direct.php', {
+      const response = await fetch('/adminka_objects/api-direct.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

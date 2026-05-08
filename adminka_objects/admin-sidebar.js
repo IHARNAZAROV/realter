@@ -3,31 +3,31 @@
 
   var ITEMS = [
     {
-      href: '/adminka_objects/pages/index.html',
+      href: '/adminka_objects/index.html',
       title: 'Объекты',
       sub: 'Недвижимость',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>'
     },
     {
-      href: '/adminka_objects/pages/tasks.html',
+      href: '/adminka_objects/tasks.html',
       title: 'Задачи',
       sub: 'To-do и доски',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>'
     },
     {
-      href: '/adminka_objects/pages/direct.html',
+      href: '/adminka_objects/direct.html',
       title: 'Яндекс Директ',
       sub: 'Реклама и аналитика',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'
     },
     {
-      href: '/adminka_objects/pages/blog-stats.html',
+      href: '/adminka_objects/blog-stats.html',
       title: 'Статистика блога',
       sub: 'Просмотры статей',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
     },
     {
-      href: '/adminka_objects/pages/json-generator.html',
+      href: '/adminka_objects/json-generator.html',
       title: 'Генератор JSON',
       sub: 'Объект из текста',
       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
@@ -39,7 +39,7 @@
   function getCurrentPath() {
     var p = (window.location.pathname || '').toLowerCase();
     if (p === '/adminka_objects/' || p === '/adminka_objects') {
-      p = '/adminka_objects/pages/index.html';
+      p = '/adminka_objects/index.html';
     }
     return p;
   }
