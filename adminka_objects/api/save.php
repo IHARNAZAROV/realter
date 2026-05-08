@@ -40,7 +40,7 @@ function authorizeRequest(): void {
   // 2) Token fallback auth if auth.php is absent.
   $expectedToken = getenv('REALTER_ADMIN_TOKEN') ?: '';
   if ($expectedToken === '') {
-    respond(500, ['error' => 'Auth is not configured: add adminka_objects/auth.php or REALTER_ADMIN_TOKEN']);
+    respond(500, ['error' => 'Auth is not configured: add adminka_objects/api/auth.php or REALTER_ADMIN_TOKEN']);
   }
 
   $providedToken = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? readBearerToken() ?? '';
