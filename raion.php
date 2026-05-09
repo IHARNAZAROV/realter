@@ -38,6 +38,48 @@ $lat         = $district['coordinates']['lat'] ?? 53.8985;
 $lng         = $district['coordinates']['lng'] ?? 25.2975;
 $canonicalUrl = 'https://turko.by/raion/' . $slug;
 
+function russianPlural($number, $forms) {
+    if (!is_array($forms) || count($forms) < 3) {
+        return '';
+    }
+
+    $n = abs((int)$number);
+    $mod100 = $n % 100;
+    if ($mod100 >= 11 && $mod100 <= 14) {
+        return $forms[2];
+    }
+
+    $mod10 = $n % 10;
+    if ($mod10 === 1) {
+        return $forms[0];
+    }
+
+    if ($mod10 >= 2 && $mod10 <= 4) {
+        return $forms[1];
+    }
+
+    return $forms[2];
+}
+
+function getDistrictInPrepositionalCase($district) {
+    if (!empty($district['nameInPrepositional'])) {
+        return (string)$district['nameInPrepositional'];
+    }
+
+    $nameFull = (string)($district['nameFull'] ?? $district['name'] ?? '');
+    if ($nameFull === '') return '';
+
+    if (preg_match('/^(.+)\s+микрорайон$/u', $nameFull, $m)) {
+        $base = trim($m[1]);
+        if (preg_match('/(ий|ый)$/u', $base)) {
+            return preg_replace('/(ий|ый)$/u', 'ом', $base) . ' районе';
+        }
+        return $base . ' районе';
+    }
+
+    return $nameFull;
+}
+
 function normalizeDistrictValue($value) {
     $stringValue = (string)$value;
     $stringValue = trim($stringValue);
@@ -227,12 +269,25 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
       <!-- STATS -->
       <div class="district-page-stats">
         <?php
-        $statMap = ['toCenter' => 'До центра', 'schools' => 'Школ', 'clinics' => 'Поликлиник', 'shops' => 'Магазинов'];
-        foreach ($statMap as $key => $label):
+        $districtNamePrepositional = getDistrictInPrepositionalCase($district);
+        $statMap = [
+          'toCenter' => ['defaultLabel' => 'До центра'],
+          'schools' => ['forms' => ['школа', 'школы', 'школ']],
+          'clinics' => ['forms' => ['поликлиника', 'поликлиники', 'поликлиник']],
+          'shops' => ['forms' => ['магазин', 'магазина', 'магазинов']],
+        ];
+        foreach ($statMap as $key => $config):
           if (!isset($stats[$key])) continue;
+          $value = $stats[$key];
+          $label = $config['defaultLabel'] ?? '';
+          if (isset($config['forms']) && is_numeric($value)) {
+            $label = russianPlural((int)$value, $config['forms']);
+          } elseif (isset($config['forms'])) {
+            $label = $config['forms'][2];
+          }
         ?>
         <div class="district-page-stat">
-          <span class="district-page-stat__value"><?= htmlspecialchars((string)$stats[$key], ENT_QUOTES, 'UTF-8') ?></span>
+          <span class="district-page-stat__value"><?= htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8') ?></span>
           <span class="district-page-stat__label"><?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?></span>
         </div>
         <?php endforeach; ?>
@@ -273,7 +328,7 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
           <!-- OBJECTS LIST -->
           <header class="section-head section-head--bracket m-b20">
             <h2 class="section-title" style="font-size:20px;">
-              Объекты в <?= htmlspecialchars($nameFull, ENT_QUOTES, 'UTF-8') ?>
+              Объекты в <?= htmlspecialchars($districtNamePrepositional !== '' ? $districtNamePrepositional : $nameFull, ENT_QUOTES, 'UTF-8') ?>
               <?php if (!empty($matchedObjects)): ?>
               <span style="font-size:14px;font-weight:400;color:#787878;margin-left:8px;">(<?= count($matchedObjects) ?>)</span>
               <?php endif; ?>
@@ -348,9 +403,9 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
         </div>
 
         <!-- SIDEBAR -->
-        <div class="col-lg-4 col-md-12 sticky_column">
+        <div class="col-lg-4 col-md-12">
           <div class="bg-white p-a20 shadow" style="border-radius:12px;position:sticky;top:100px;">
-            <div class="agent-card">
+            <div class="agent-card" style="display:block;visibility:visible;opacity:1;">
               <div class="agent-avatar" style="margin-bottom:12px;">
                 <img src="/images/about-slider/1-ab.webp"
                      onerror="this.style.display='none'"
