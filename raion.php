@@ -61,6 +61,18 @@ function russianPlural($number, $forms) {
     return $forms[2];
 }
 
+function getShortDistrictLabel($name) {
+    $label = trim((string)$name);
+    if ($label === '') {
+        return '';
+    }
+
+    $label = preg_replace('/\b(микрорайон|квартал)\b/iu', '', $label);
+    $label = preg_replace('/\s{2,}/u', ' ', trim($label));
+
+    return $label;
+}
+
 function getDistrictInPrepositionalCase($district) {
     if (!empty($district['nameInPrepositional'])) {
         return (string)$district['nameInPrepositional'];
@@ -445,7 +457,7 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
 
         <!-- SIDEBAR -->
         <div class="col-lg-4 col-md-12">
-          <div class="bg-white p-a20 shadow" style="border-radius:12px;position:sticky;top:100px;">
+          <div class="bg-white p-a20 shadow district-sidebar-shell" style="border-radius:12px;position:sticky;top:100px;">
             <div class="agent-card" style="display:block;visibility:visible;opacity:1;">
               <div class="agent-avatar" style="margin-bottom:12px;">
                 <img src="/images/about-slider/1-ab.webp"
@@ -476,20 +488,22 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
                   <li>Помощь с ипотекой и документами</li>
                 </ul>
               </div>
-              <hr style="margin:20px 0;border-color:#eee;" />
-              <div class="district-sidebar__title">Другие районы</div>
-              <ul class="district-sidebar__list">
+              <hr class="district-sidebar__divider" style="margin:20px 0;border-color:#eee;" />
+              <div class="district-sidebar__section">
+                <div class="district-sidebar__title">Другие районы</div>
+                <ul class="district-sidebar__list">
                 <?php foreach ($all as $otherDistrict):
                   if (!is_array($otherDistrict) || empty($otherDistrict['slug']) || empty($otherDistrict['nameFull'])) continue;
                   if ($otherDistrict['slug'] === $slug) continue;
                 ?>
                 <li>
                   <a href="/raion/<?= htmlspecialchars($otherDistrict['slug'], ENT_QUOTES, 'UTF-8') ?>">
-                    <?= htmlspecialchars($otherDistrict['nameFull'], ENT_QUOTES, 'UTF-8') ?>
+                    <?= htmlspecialchars(getShortDistrictLabel($otherDistrict['nameFull']), ENT_QUOTES, 'UTF-8') ?>
                   </a>
                 </li>
                 <?php endforeach; ?>
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -540,7 +554,8 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
                 <li><a href="/contact">Контакты</a></li>
                 <li><a href="/Privacy">Политика конфиденциальности</a></li>
                 <li><a href="/cookies-policy">Политика использования cookies</a></li>
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="col-lg-3 col-md-6 col-sm-6">
@@ -551,7 +566,8 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
                 <li><a href="mailto:olgaturko1975@gmail.com">olgaturko1975@gmail.com</a></li>
                 <li><a href="tel:+375291809516">(+375) 29 180 95 16</a></li>
                 <li><a href="tel:+375445019090">(+375) 44 501 90 90</a></li>
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
