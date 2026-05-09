@@ -61,6 +61,18 @@ function russianPlural($number, $forms) {
     return $forms[2];
 }
 
+function getShortDistrictLabel($name) {
+    $label = trim((string)$name);
+    if ($label === '') {
+        return '';
+    }
+
+    $label = preg_replace('/\b(микрорайон|квартал)\b/iu', '', $label);
+    $label = preg_replace('/\s{2,}/u', ' ', trim($label));
+
+    return $label;
+}
+
 function getDistrictInPrepositionalCase($district) {
     if (!empty($district['nameInPrepositional'])) {
         return (string)$district['nameInPrepositional'];
@@ -486,7 +498,7 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
                 ?>
                 <li>
                   <a href="/raion/<?= htmlspecialchars($otherDistrict['slug'], ENT_QUOTES, 'UTF-8') ?>">
-                    <?= htmlspecialchars($otherDistrict['nameFull'], ENT_QUOTES, 'UTF-8') ?>
+                    <?= htmlspecialchars(getShortDistrictLabel($otherDistrict['nameFull']), ENT_QUOTES, 'UTF-8') ?>
                   </a>
                 </li>
                 <?php endforeach; ?>
