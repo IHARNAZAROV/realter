@@ -91,16 +91,57 @@ function normalizeDistrictValue($value) {
     return trim((string)$stringValue, '-');
 }
 
+function normalizeStreetValue($value) {
+    $stringValue = (string)$value;
+    $stringValue = trim($stringValue);
+    $stringValue = mb_strtolower($stringValue, 'UTF-8');
+    $stringValue = str_replace('ё', 'е', $stringValue);
+    $stringValue = preg_replace('/[^a-zа-я0-9]+/u', ' ', $stringValue);
+    $stringValue = preg_replace('/\s+/u', ' ', $stringValue);
+    return trim($stringValue);
+}
+
+function objectMatchesDistrictByStreet($objectAddress, $districtStreets) {
+    if (!is_string($objectAddress) || trim($objectAddress) === '' || !is_array($districtStreets)) {
+        return false;
+    }
+
+    $normalizedAddress = normalizeStreetValue($objectAddress);
+    if ($normalizedAddress === '') {
+        return false;
+    }
+
+    foreach ($districtStreets as $street) {
+        $normalizedStreet = normalizeStreetValue($street);
+        if ($normalizedStreet === '') {
+            continue;
+        }
+
+        if (mb_strpos($normalizedAddress, $normalizedStreet) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 $matchedObjects = [];
 $objectsFile = __DIR__ . '/data/objects.json';
 if (file_exists($objectsFile)) {
     $objects = json_decode(file_get_contents($objectsFile), true);
     if (is_array($objects)) {
         $normalizedCurrentSlug = normalizeDistrictValue($slug);
+        $districtStreets = $district['streets'] ?? [];
         foreach ($objects as $obj) {
             $objectDistrict = $obj['district'] ?? '';
             $normalizedObjectDistrict = normalizeDistrictValue($objectDistrict);
             if ($normalizedObjectDistrict !== '' && $normalizedObjectDistrict === $normalizedCurrentSlug) {
+                $matchedObjects[] = $obj;
+                continue;
+            }
+
+            $objectAddress = $obj['address'] ?? '';
+            if (objectMatchesDistrictByStreet($objectAddress, $districtStreets)) {
                 $matchedObjects[] = $obj;
             }
         }
