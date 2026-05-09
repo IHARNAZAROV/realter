@@ -227,8 +227,8 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
   <link rel="preload" href="/css/fontawesome/css/regular.min.css"     as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="/css/fontawesome/css/solid.min.css"       as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="stylesheet" type="text/css" href="/css/style.css" data-versioned />
-  <link rel="stylesheet" href="/css/district-info.css" />
-  <link rel="stylesheet" href="/css/contact-widget.css" />
+  <link rel="stylesheet" href="/css/district-info.css" data-versioned />
+  <link rel="stylesheet" href="/css/contact-widget.css" data-versioned />
 </head>
 <body id="bg">
 <div class="page-wraper">
@@ -491,7 +491,7 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
               <hr class="district-sidebar__divider" style="margin:20px 0;border-color:#eee;" />
               <div class="district-sidebar__section">
                 <div class="district-sidebar__title">Другие районы</div>
-                <ul class="district-sidebar__list">
+                <ul class="district-sidebar__list" style="list-style:none;margin:0;padding:0;">
                 <?php foreach ($all as $otherDistrict):
                   if (!is_array($otherDistrict) || empty($otherDistrict['slug']) || empty($otherDistrict['nameFull'])) continue;
                   if ($otherDistrict['slug'] === $slug) continue;
