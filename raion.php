@@ -38,6 +38,16 @@ $lat         = $district['coordinates']['lat'] ?? 53.8985;
 $lng         = $district['coordinates']['lng'] ?? 25.2975;
 $canonicalUrl = 'https://turko.by/raion/' . $slug;
 
+function districtStatIsZero($value) {
+    if ($value === null || $value === '') {
+        return false;
+    }
+    if (is_numeric($value) && (float)$value === 0.0) {
+        return true;
+    }
+    return false;
+}
+
 function russianPlural($number, $forms) {
     if (!is_array($forms) || count($forms) < 3) {
         return '';
@@ -227,6 +237,7 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
   <link rel="preload" href="/css/fontawesome/css/regular.min.css"     as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="/css/fontawesome/css/solid.min.css"       as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="stylesheet" type="text/css" href="/css/style.css" data-versioned />
+  <link rel="stylesheet" href="/css/flaticon.min.css" data-versioned />
   <link rel="stylesheet" href="/css/district-info.css" data-versioned />
   <link rel="stylesheet" href="/css/contact-widget.css" data-versioned />
 </head>
@@ -326,12 +337,16 @@ $canonicalEsc = htmlspecialchars($canonicalUrl, ENT_QUOTES, 'UTF-8');
         $statMap = [
           'toCenter' => ['defaultLabel' => 'До центра'],
           'schools' => ['forms' => ['школа', 'школы', 'школ']],
+          'kindergartens' => ['forms' => ['детский сад', 'детских сада', 'детских садов']],
           'clinics' => ['forms' => ['поликлиника', 'поликлиники', 'поликлиник']],
           'shops' => ['forms' => ['магазин', 'магазина', 'магазинов']],
         ];
         foreach ($statMap as $key => $config):
           if (!isset($stats[$key])) continue;
           $value = $stats[$key];
+          if (districtStatIsZero($value)) {
+            continue;
+          }
           $label = $config['defaultLabel'] ?? '';
           if (isset($config['forms']) && is_numeric($value)) {
             $label = russianPlural((int)$value, $config['forms']);

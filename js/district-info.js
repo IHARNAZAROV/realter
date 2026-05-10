@@ -26,21 +26,84 @@
     return false;
   }
 
+  function russianPlural(number, forms) {
+    var n = Math.abs(parseInt(number, 10));
+    if (isNaN(n)) return forms[2];
+    var mod100 = n % 100;
+    if (mod100 >= 11 && mod100 <= 14) return forms[2];
+    var mod10 = n % 10;
+    if (mod10 === 1) return forms[0];
+    if (mod10 >= 2 && mod10 <= 4) return forms[1];
+    return forms[2];
+  }
+
+  function isWholeNumber(val) {
+    return typeof val === 'number' || (typeof val === 'string' && /^\d+$/.test(val.trim()));
+  }
+
+  /** Скрывать карточку показателя, если в данных явно указан числовой ноль. */
+  function statValueIsZero(val) {
+    if (val === undefined || val === null) return false;
+    if (typeof val === 'number' && val === 0) return true;
+    if (typeof val === 'string') {
+      var t = val.trim();
+      if (t === '0') return true;
+      if (/^\d+$/.test(t) && parseInt(t, 10) === 0) return true;
+    }
+    return false;
+  }
+
   function formatStat(key, stats) {
     switch (key) {
-      case 'toCenter': return { value: stats.toCenter, label: 'До центра' };
-      case 'schools':  return { value: stats.schools,  label: 'Школ' };
-      case 'clinics':  return { value: stats.clinics,  label: 'Поликлиник' };
-      case 'shops':    return { value: stats.shops,    label: 'Магазинов' };
-      default: return null;
+      case 'toCenter':
+        return stats.toCenter != null && stats.toCenter !== ''
+          ? { value: stats.toCenter, label: 'До центра' }
+          : null;
+      case 'schools':
+        if (stats.schools === undefined || stats.schools === null || stats.schools === '') return null;
+        if (isWholeNumber(stats.schools)) {
+          var sn = parseInt(stats.schools, 10);
+          return { value: stats.schools, label: russianPlural(sn, ['школа', 'школы', 'школ']) };
+        }
+        return { value: stats.schools, label: 'школ' };
+      case 'kindergartens':
+        if (stats.kindergartens === undefined || stats.kindergartens === null || stats.kindergartens === '') return null;
+        if (isWholeNumber(stats.kindergartens)) {
+          var kn = parseInt(stats.kindergartens, 10);
+          return {
+            value: stats.kindergartens,
+            label: russianPlural(kn, ['детский сад', 'детских сада', 'детских садов'])
+          };
+        }
+        return { value: stats.kindergartens, label: 'детских садов' };
+      case 'clinics':
+        if (stats.clinics === undefined || stats.clinics === null || stats.clinics === '') return null;
+        if (isWholeNumber(stats.clinics)) {
+          var cn = parseInt(stats.clinics, 10);
+          return {
+            value: stats.clinics,
+            label: russianPlural(cn, ['поликлиника', 'поликлиники', 'поликлиник'])
+          };
+        }
+        return { value: stats.clinics, label: 'поликлиник' };
+      case 'shops':
+        if (stats.shops === undefined || stats.shops === null || stats.shops === '') return null;
+        if (isWholeNumber(stats.shops)) {
+          var shn = parseInt(stats.shops, 10);
+          return { value: stats.shops, label: russianPlural(shn, ['магазин', 'магазина', 'магазинов']) };
+        }
+        return { value: stats.shops, label: 'магазинов' };
+      default:
+        return null;
     }
   }
 
   function renderDistrictBlock(container, district) {
     var stats = district.stats;
-    var statKeys = ['toCenter', 'schools', 'clinics', 'shops'];
+    var statKeys = ['toCenter', 'schools', 'kindergartens', 'clinics', 'shops'];
 
     var statsHtml = statKeys.map(function (k) {
+      if (statValueIsZero(stats[k])) return '';
       var s = formatStat(k, stats);
       if (!s) return '';
       return '<div class="district-stat">' +
