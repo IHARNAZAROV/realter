@@ -4,7 +4,7 @@
 
 .team-section {
   padding: 80px 0 90px;
-  background: #fff;
+  background: var(--color-bg-light);
   overflow: hidden;
 }
 
@@ -48,7 +48,8 @@
 /* Card */
 .team-card {
   border-radius: 20px;
-  overflow: hidden;
+  /* NOTE: no overflow:hidden here — it would clip the absolutely-positioned
+     info panel that slides up on hover. Clipping is handled per-child. */
   background: #e8eeec;
   position: relative;
   display: flex;
@@ -65,7 +66,8 @@
   width: 100%;
   aspect-ratio: 300 / 340;
   position: relative;
-  overflow: hidden;
+  overflow: hidden;                  /* clip the image, not the whole card */
+  border-radius: 20px 20px 0 0;     /* only round top corners */
   background: #d1ddd9;
   display: flex;
   align-items: center;
@@ -317,7 +319,7 @@
 
 .team-detail-wrap {
   padding: 60px 0 80px;
-  background: #fff;
+  background: var(--color-bg-light);
 }
 
 .team-detail-card {

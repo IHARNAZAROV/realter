@@ -23,22 +23,55 @@
     return `<a href="${href}" class="team-detail-social-btn" target="_blank" rel="noopener noreferrer" aria-label="${meta.label}"><i class="${meta.icon}" aria-hidden="true"></i>${meta.label}</a>`;
   }
 
+  function buildFooterContacts(member) {
+    const col = document.getElementById('footer-member-col');
+    if (!col) return;
+
+    const phoneHref = member.phone ? 'tel:' + member.phone.replace(/\s/g, '') : '#';
+    const emailHref = member.email ? 'mailto:' + member.email : '#';
+
+    const socialIcons = {
+      instagram: { icon: 'fa-brands fa-instagram', label: 'Instagram' },
+      telegram:  { icon: 'fa-brands fa-telegram',  label: 'Telegram'  },
+      viber:     { icon: 'fa-brands fa-viber',      label: 'Viber'     },
+      vk:        { icon: 'fa-brands fa-vk',         label: 'ВКонтакте' },
+      whatsapp:  { icon: 'fa-brands fa-whatsapp',   label: 'WhatsApp'  },
+    };
+
+    const socialLinks = member.socials
+      ? Object.entries(member.socials)
+          .filter(([, href]) => href && href !== '#')
+          .map(([key, href]) => {
+            const m = socialIcons[key] || { icon: 'fa-solid fa-link', label: key };
+            return `<li><a href="${href}" target="_blank" rel="noopener noreferrer"><i class="${m.icon}" aria-hidden="true"></i> ${m.label}</a></li>`;
+          }).join('')
+      : '';
+
+    col.innerHTML = `
+      <div class="widget widget_services ftr-list-center">
+        <h4 class="widget-title">Контакты ${member.name.split(' ')[0]}</h4>
+        <ul class="contact-info">
+          ${member.phone ? `<li><a href="${phoneHref}" style="color:inherit">${member.phone}</a></li>` : ''}
+          ${member.email ? `<li><a href="${emailHref}" style="color:inherit">${member.email}</a></li>` : ''}
+          ${member.location ? `<li><p>${member.location}</p></li>` : '<li><p>Лида, Беларусь</p></li>'}
+          ${socialLinks}
+        </ul>
+      </div>`;
+  }
+
   function render(member) {
     document.title = `${member.name} — ${member.position} | turko.by`;
 
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute('content', member.shortDescription || '');
 
-    const bc = document.querySelector('.team-detail-breadcrumb ol');
-    if (bc) {
-      bc.innerHTML = `
-        <li><a href="/">Главная</a><span class="sep" aria-hidden="true">›</span></li>
-        <li class="current" aria-current="page">${member.name}</li>
-      `;
-    }
+    const bcName = document.getElementById('breadcrumb-name');
+    if (bcName) bcName.textContent = member.name;
 
     const nameEl = document.getElementById('team-detail-name');
     if (nameEl) { nameEl.textContent = member.name; nameEl.setAttribute('itemprop', 'name'); }
+
+    buildFooterContacts(member);
 
     const posEl = document.getElementById('team-detail-position');
     if (posEl) { posEl.textContent = member.position; }
