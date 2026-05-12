@@ -109,6 +109,8 @@
         <link rel="stylesheet" href="/css/nav-market-status.css?v=8">
     </noscript>
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <link rel="preload" href="/css/team-slider.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/team-slider.css"></noscript>
     <style>
         .nav-market-status-li{list-style:none;padding:0;margin-left:14px;align-self:center!important;margin-top:8px!important}
         .nav-market-status{display:flex!important;align-items:center!important;padding:5px 14px!important;background:rgba(61,214,176,.07)!important;border:1px solid rgba(61,214,176,.25)!important}
@@ -1137,6 +1139,32 @@
         </div>
 
         <!-- ==============================================
+           SECTION: Team Slider
+        =============================================== -->
+        <section class="team-section" aria-label="Наша команда">
+            <div class="container">
+                <header class="section-head section-head--bracket">
+                    <h2 class="section-title">Наша команда</h2>
+                    <p>Профессионалы, которым можно доверять</p>
+                </header>
+                <div class="team-swiper-wrap">
+                    <div class="swiper team-swiper" role="region" aria-label="Слайдер команды">
+                        <div class="swiper-wrapper">
+                            <!-- Карточки загружаются динамически из /data/team.json -->
+                        </div>
+                    </div>
+                    <div class="team-swiper-pagination" role="group" aria-label="Навигация по слайдам"></div>
+                    <button class="team-swiper-btn team-swiper-prev" aria-label="Предыдущий специалист">
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    </button>
+                    <button class="team-swiper-btn team-swiper-next" aria-label="Следующий специалист">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
            CONTENT END
       =============================================== -->
         <!-- ==============================================
@@ -1542,6 +1570,7 @@
     <script src="/js/objects-smart-badge.js" defer></script>
     <script src="/js/filters-custom-select.js" defer></script>
     <script src="/js/lazy-loaders.js?v=20260424-3" defer></script>
+    <script src="/js/team-slider.js" defer></script>
 
     <!-- Contact widget -->
     <div class="cw" data-cw-root>
