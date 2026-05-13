@@ -565,7 +565,7 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
                         ></h4>
 
                         <!-- AGENT CARD -->
-                        <div class="agent-card">
+                        <div class="agent-card" style="position:relative">
                           <div class="agent-avatar">
                             <img
                               src="<?= $agentPhoto ?>"
@@ -590,19 +590,20 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
                             <a
                               href="<?= htmlspecialchars($agentPhoneHref) ?>"
                               class="site-button-secondry btn-half agent-action-btn"
+                              style="position:relative;z-index:2"
                             >
                               <span>Позвонить</span>
                             </a>
 
                             <a
                               href="<?= $agentDetailUrl ?>"
-                              class="site-button-secondry btn-half agent-action-btn agent-action-btn--outline"
+                              class="site-button-secondry btn-half agent-action-btn agent-action-btn--outline stretched-link"
                             >
                               <span>Подробнее</span>
                             </a>
                           </div>
                           <?php if ($agentSocialsHtml): ?>
-                          <div class="agent-socials">
+                          <div class="agent-socials" style="position:relative;z-index:2">
                             <?= $agentSocialsHtml ?>
                           </div>
                           <?php endif; ?>
