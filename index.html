@@ -91,6 +91,9 @@
     <!-- Дополнительные иконки -->
     <link rel="preload" href="/css/flaticon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
+    <!-- Команда риэлтеров -->
+    <link rel="stylesheet" href="/css/team-slider.css" data-versioned>
+
     <!-- Стили блога -->
     <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/nav-market-status.css?v=8" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -1132,8 +1135,36 @@
                     <strong>Мои услуги</strong>
                 </div>
             </div>
-            <!-- SECTION: Clients -->
+            <!-- SECTION: Team -->
 
+        </div>
+
+        <!-- SECTION: Team Slider -->
+        <div id="team-section" class="section-full mobile-page-padding p-t80 p-b60 bg-gray bg-repeat" style="background-image: url(images/background/bg-5.png)">
+            <div class="container">
+                <header class="section-head section-head--bracket">
+                    <h2 class="section-title">Наша команда</h2>
+                    <p>Аттестованные риэлтеры агентства ГермесГрупп</p>
+                </header>
+                <div class="section-content">
+                    <div class="team-swiper-wrap">
+                        <div class="swiper team-swiper">
+                            <div class="swiper-wrapper" id="team-swiper-wrapper">
+                                <!-- Карточки генерируются через team-slider.js -->
+                            </div>
+                        </div>
+                        <div class="team-swiper-controls">
+                            <button class="team-swiper-btn team-swiper-prev" aria-label="Предыдущий слайд">
+                                <i class="fa fa-angle-left" aria-hidden="true"></i>
+                            </button>
+                            <div class="team-swiper-pagination" role="tablist" aria-label="Навигация по команде"></div>
+                            <button class="team-swiper-btn team-swiper-next" aria-label="Следующий слайд">
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ==============================================
@@ -1622,6 +1653,7 @@
     <script src="/js/sw-register.js" defer></script>
     <script src="contact-widget.js" defer></script>
     <script src="/js/nav-market-status.js" defer></script>
+    <script src="/js/team-slider.js" defer data-versioned></script>
 </body>
 
 </html>

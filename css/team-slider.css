@@ -1,0 +1,524 @@
+/* ============================================
+   Team Slider — Слайдер команды риэлтеров
+   Палитра сайта:
+     --color-primary   #155945
+     --color-secondary #23252d
+     --color-bg-light  #fff5f0
+     --color-border    #ebebeb
+   ============================================ */
+
+/* === Swiper override: reset global .swiper для team === */
+.team-swiper {
+  width: 100%;
+  height: auto !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  padding-bottom: 6px;
+}
+
+.team-swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.team-swiper .swiper-slide {
+  height: auto;
+  box-sizing: border-box;
+}
+
+/* === Карточка === */
+.team-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(21, 89, 69, 0.10);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
+
+.team-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 56px rgba(21, 89, 69, 0.18);
+}
+
+/* === Фотография === */
+.team-card__photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background-color: #ebf3ef;
+  flex-shrink: 0;
+}
+
+.team-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.team-card:hover .team-card__photo img {
+  transform: scale(1.06);
+}
+
+/* Плейсхолдер с инициалами (если фото нет или не загрузилось) */
+.team-card__photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #d0e8dc 0%, #ebf3ef 100%);
+  font-family: var(--font-main);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 2px;
+  user-select: none;
+  position: absolute;
+  inset: 0;
+}
+
+/* Оверлей при hover: тёмно-зелёный градиент снизу */
+.team-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(21, 89, 69, 0) 30%,
+    rgba(21, 89, 69, 0.78) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 20px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.team-card:hover .team-card__overlay {
+  opacity: 1;
+}
+
+/* Иконки соцсетей в оверлее */
+.team-card__socials {
+  display: flex;
+  gap: 10px;
+  transform: translateY(14px);
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.team-card:hover .team-card__socials {
+  transform: translateY(0);
+}
+
+.team-card__social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-primary) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  text-decoration: none !important;
+  transition: background 0.2s, transform 0.2s;
+  flex-shrink: 0;
+  border: none;
+}
+
+.team-card__social-link:hover {
+  background: #ffffff;
+  transform: scale(1.15);
+}
+
+/* Бейдж «опыт» в углу фото */
+.team-card__experience {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-family: var(--font-main);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 999px;
+  z-index: 2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* === Тело карточки === */
+.team-card__body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-top: 3px solid var(--color-primary);
+}
+
+.team-card__name {
+  font-family: var(--font-main);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  margin: 0 0 4px;
+  line-height: 1.3;
+  transition: color 0.22s;
+}
+
+.team-card:hover .team-card__name {
+  color: var(--color-primary);
+}
+
+.team-card__position {
+  font-family: var(--font-main);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 0 0 10px;
+}
+
+.team-card__desc {
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: var(--color-text-light);
+  margin: 0;
+  flex: 1;
+  padding-bottom: 14px;
+}
+
+/* Нижняя строка карточки: телефон + ссылка */
+.team-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.team-card__phone {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-secondary) !important;
+  text-decoration: none !important;
+  transition: color 0.22s;
+  white-space: nowrap;
+}
+
+.team-card__phone:hover {
+  color: var(--color-primary) !important;
+}
+
+/* === Враппер Swiper + навигация === */
+.team-swiper-wrap {
+  position: relative;
+}
+
+/* Контролы: кнопки + пагинация */
+.team-swiper-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.team-swiper-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: var(--color-primary);
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(21, 89, 69, 0.14);
+  transition: background 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.team-swiper-btn:hover {
+  background: var(--color-primary);
+  color: #ffffff;
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(21, 89, 69, 0.28);
+}
+
+.team-swiper-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.team-swiper-btn.swiper-button-disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Пагинация — кастомные точки */
+.team-swiper-pagination {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.team-swiper-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: rgba(21, 89, 69, 0.22);
+  border-radius: 50%;
+  opacity: 1;
+  transition: background 0.25s, width 0.3s;
+  cursor: pointer;
+  display: block;
+  margin: 0 !important;
+}
+
+.team-swiper-pagination .swiper-pagination-bullet-active {
+  background: var(--color-primary);
+  width: 22px;
+  border-radius: 4px;
+}
+
+/* === Состояние загрузки / ошибки === */
+.team-swiper-wrap--loading .team-swiper-wrap__inner {
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+.team-swiper-error {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+}
+
+/* ============================================
+   TEAM-DETAIL страница
+   ============================================ */
+.td-hero {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.td-photo-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(21, 89, 69, 0.14);
+  background: #ebf3ef;
+  aspect-ratio: 3 / 4;
+  position: relative;
+}
+
+.td-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.td-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #d0e8dc 0%, #ebf3ef 100%);
+  font-family: var(--font-main);
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 3px;
+  position: absolute;
+  inset: 0;
+}
+
+.td-info {
+  padding-top: 8px;
+}
+
+.td-experience-badge {
+  display: inline-block;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.td-name {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-secondary);
+  margin: 0 0 6px;
+  line-height: 1.15;
+}
+
+.td-position {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 24px;
+}
+
+.td-divider {
+  width: 44px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), #6aba9a);
+  border-radius: 2px;
+  margin-bottom: 24px;
+}
+
+.td-description {
+  font-size: 1rem;
+  line-height: 1.72;
+  color: #3a3a3a;
+  margin-bottom: 28px;
+  max-width: 560px;
+}
+
+/* Контактные строки */
+.td-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.td-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.td-contact-item i {
+  width: 20px;
+  color: var(--color-primary);
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.td-contact-item a {
+  color: var(--color-secondary) !important;
+  text-decoration: none !important;
+  font-weight: 600;
+  transition: color 0.22s;
+}
+
+.td-contact-item a:hover {
+  color: var(--color-primary) !important;
+}
+
+/* Кнопки соцсетей */
+.td-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.td-social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-secondary) !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
+  white-space: nowrap;
+}
+
+.td-social-btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+/* CTA-кнопка связи */
+.td-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--color-primary);
+  color: #fff !important;
+  border-radius: 999px;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-decoration: none !important;
+  text-transform: uppercase;
+  transition: transform 0.28s, box-shadow 0.28s, background 0.28s;
+}
+
+.td-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(21, 89, 69, 0.32);
+  background: #0e3d2f;
+}
+
+/* === Responsive team-detail === */
+@media (max-width: 991px) {
+  .td-hero {
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+  }
+  .td-name { font-size: 1.8rem; }
+}
+
+@media (max-width: 767px) {
+  .td-hero {
+    grid-template-columns: 1fr;
+  }
+  .td-photo-wrap {
+    max-width: 280px;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
+  }
+  .td-name { font-size: 1.6rem; }
+}
+
+/* ============================================
+   RESPONSIVE team-slider
+   ============================================ */
+@media (max-width: 575px) {
+  .team-card__body { padding: 14px 16px 16px; }
+  .team-card__name { font-size: 0.95rem; }
+}

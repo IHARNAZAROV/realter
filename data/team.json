@@ -1,0 +1,117 @@
+[
+  {
+    "id": "olga-turko",
+    "name": "Ольга Турко",
+    "position": "Аттестованный риэлтер",
+    "phone": "+375 29 180-95-16",
+    "email": "olgaturko1975@gmail.com",
+    "photo": "images/team/olga-turko.webp",
+    "shortDescription": "Специалист по жилой недвижимости в Лиде. Сопровождение сделок купли-продажи квартир и домов от А до Я.",
+    "experience": "7 лет опыта",
+    "socials": {
+      "instagram": "https://www.instagram.com/rielter_olga_lida",
+      "telegram": "https://t.me/TurkoOlga",
+      "viber": "viber://chat?number=%2B375291809516"
+    }
+  },
+  {
+    "id": "natalia-kovaleva",
+    "name": "Наталья Ковалёва",
+    "position": "Риэлтер",
+    "phone": "+375 29 234-56-78",
+    "email": "kovaleva@germesgroup.by",
+    "photo": "images/team/natalia-kovaleva.webp",
+    "shortDescription": "Специализация — загородная недвижимость и земельные участки. Помогу найти дом вашей мечты.",
+    "experience": "5 лет опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#"
+    }
+  },
+  {
+    "id": "sergey-ivanov",
+    "name": "Сергей Иванов",
+    "position": "Риэлтер",
+    "phone": "+375 44 312-44-55",
+    "email": "ivanov@germesgroup.by",
+    "photo": "images/team/sergey-ivanov.webp",
+    "shortDescription": "Эксперт по коммерческой недвижимости. Офисы, склады, торговые площади в Лиде и районе.",
+    "experience": "8 лет опыта",
+    "socials": {
+      "telegram": "#",
+      "viber": "viber://chat?number=%2B375443124455"
+    }
+  },
+  {
+    "id": "elena-sokolova",
+    "name": "Елена Соколова",
+    "position": "Риэлтер",
+    "phone": "+375 29 445-67-89",
+    "email": "sokolova@germesgroup.by",
+    "photo": "images/team/elena-sokolova.webp",
+    "shortDescription": "Специалист по новостройкам и ипотечным сделкам. Подберу квартиру в новом доме на выгодных условиях.",
+    "experience": "4 года опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "viber://chat?number=%2B375294456789"
+    }
+  },
+  {
+    "id": "andrey-petrov",
+    "name": "Андрей Петров",
+    "position": "Риэлтер",
+    "phone": "+375 44 567-89-01",
+    "email": "petrov@germesgroup.by",
+    "photo": "images/team/andrey-petrov.webp",
+    "shortDescription": "Продажа и покупка квартир в многоквартирных домах. Опыт сопровождения сложных сделок с долями.",
+    "experience": "6 лет опыта",
+    "socials": {
+      "telegram": "#",
+      "vk": "#"
+    }
+  },
+  {
+    "id": "marina-stepanova",
+    "name": "Марина Степанова",
+    "position": "Риэлтер",
+    "phone": "+375 29 678-90-12",
+    "email": "stepanova@germesgroup.by",
+    "photo": "images/team/marina-stepanova.webp",
+    "shortDescription": "Помогу продать квартиру быстро и по максимальной цене. Профессиональная подготовка объекта к продаже.",
+    "experience": "3 года опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "tiktok": "#"
+    }
+  },
+  {
+    "id": "dmitry-novikov",
+    "name": "Дмитрий Новиков",
+    "position": "Старший риэлтер",
+    "phone": "+375 44 789-01-23",
+    "email": "novikov@germesgroup.by",
+    "photo": "images/team/dmitry-novikov.webp",
+    "shortDescription": "Специалист по обменным операциям с недвижимостью. Провёл более 150 сделок по обмену жилья.",
+    "experience": "10 лет опыта",
+    "socials": {
+      "telegram": "#",
+      "viber": "viber://chat?number=%2B375447890123"
+    }
+  },
+  {
+    "id": "irina-morozova",
+    "name": "Ирина Морозова",
+    "position": "Риэлтер",
+    "phone": "+375 29 890-12-34",
+    "email": "morozova@germesgroup.by",
+    "photo": "images/team/irina-morozova.webp",
+    "shortDescription": "Работаю с элитной жилой недвижимостью и домами в частном секторе. Индивидуальный подход к каждому клиенту.",
+    "experience": "5 лет опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#"
+    }
+  }
+]
