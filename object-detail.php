@@ -37,6 +37,65 @@ if ($slug !== '') {
     }
 }
 
+// Load the agent assigned to this object from team.json
+$currentAgent = null;
+$teamFile = __DIR__ . '/data/team.json';
+if (is_array($currentObject) && !empty($currentObject['rieltor']) && is_file($teamFile)) {
+    $teamData = json_decode(file_get_contents($teamFile), true);
+    if (is_array($teamData)) {
+        foreach ($teamData as $member) {
+            if (isset($member['id']) && $member['id'] === $currentObject['rieltor']) {
+                $currentAgent = $member;
+                break;
+            }
+        }
+    }
+}
+// Fallback to Olga Turko if no agent found
+if (!$currentAgent) {
+    $currentAgent = [
+        'id'               => 'olga-turko',
+        'name'             => 'Ольга Турко',
+        'position'         => 'Старший риэлтер',
+        'phone'            => '+375 29 180 95 16',
+        'email'            => 'olgaturko1975@gmail.com',
+        'photo'            => '/images/main-slider/2.webp',
+        'shortDescription' => 'Помогаю безопасно купить и продать недвижимость в Лиде и районе. Подбираю объекты под задачу, а не «по списку».',
+        'socials'          => [
+            'telegram'  => 'https://t.me/TurkoOlga',
+            'instagram' => 'https://www.instagram.com/rielter_olga_lida',
+            'tiktok'    => 'https://www.tiktok.com/@rieltor_olga_lida',
+        ],
+    ];
+}
+$agentPhone    = $currentAgent['phone'] ?? '';
+$agentPhoneHref = 'tel:' . preg_replace('/\s/', '', $agentPhone);
+$agentPhoto    = !empty($currentAgent['photo']) ? htmlspecialchars($currentAgent['photo']) : '/images/main-slider/2.webp';
+$agentName     = htmlspecialchars($currentAgent['name'] ?? 'Риэлтер');
+$agentPosition = htmlspecialchars($currentAgent['position'] ?? '');
+$agentDesc     = htmlspecialchars($currentAgent['shortDescription'] ?? '');
+$agentDetailUrl = '/team-detail.html?id=' . urlencode($currentAgent['id'] ?? '');
+
+// Build social icons HTML
+$socialIconMap = [
+    'instagram' => ['fa-brands fa-instagram', 'Instagram'],
+    'telegram'  => ['fa-brands fa-telegram',  'Telegram'],
+    'viber'     => ['fa-brands fa-viber',      'Viber'],
+    'vk'        => ['fa-brands fa-vk',         'ВКонтакте'],
+    'whatsapp'  => ['fa-brands fa-whatsapp',   'WhatsApp'],
+    'tiktok'    => ['fa-brands fa-tiktok',     'TikTok'],
+];
+$agentSocialsHtml = '';
+if (!empty($currentAgent['socials'])) {
+    foreach ($currentAgent['socials'] as $key => $href) {
+        if (empty($href) || $href === '#') continue;
+        [$iconClass, $label] = $socialIconMap[$key] ?? ['fa-solid fa-link', $key];
+        $agentSocialsHtml .= '<a href="' . htmlspecialchars($href) . '" target="_blank" rel="noopener" aria-label="' . htmlspecialchars($label) . '">'
+            . '<i class="' . $iconClass . '"></i>'
+            . '</a>';
+    }
+}
+
 $jsonLdProduct = null;
 if (is_array($currentObject)) {
     $descriptionSource = $currentObject['description'] ?? ($currentObject['cardDescription'] ?? '');
@@ -506,70 +565,48 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
                         ></h4>
 
                         <!-- AGENT CARD -->
-                        <div class="agent-card">
+                        <div class="agent-card" style="position:relative">
                           <div class="agent-avatar">
                             <img
-                              src="/images/main-slider/2.webp"
-                              alt="Ольга Турко"
+                              src="<?= $agentPhoto ?>"
+                              alt="<?= $agentName ?>"
                               width="320"
                               height="320"
                               loading="lazy"
                               decoding="async"
+                              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
                             />
+                            <div class="agent-avatar-fallback" style="display:none;width:100%;height:100%;background:var(--color-primary);color:#fff;font-size:2rem;font-weight:700;align-items:center;justify-content:center;border-radius:50%">
+                              <?= mb_strtoupper(mb_substr($currentAgent['name'] ?? '?', 0, 1)) ?>
+                            </div>
                           </div>
 
-                          <h5 class="agent-name">Ольга Турко</h5>
-                          <div class="agent-role">Аттестованный риэлтер</div>
+                          <h5 class="agent-name"><?= $agentName ?></h5>
+                          <div class="agent-role"><?= $agentPosition ?></div>
 
-                          <p class="agent-desc">
-                            Помогаю безопасно купить и продать недвижимость в
-                            Лиде и районе. Подбираю объекты под задачу, а не «по
-                            списку».
-                          </p>
+                          <p class="agent-desc"><?= $agentDesc ?></p>
 
                           <div class="agent-actions">
                             <a
-                              href="tel:+375291809516"
+                              href="<?= htmlspecialchars($agentPhoneHref) ?>"
                               class="site-button-secondry btn-half agent-action-btn"
+                              style="position:relative;z-index:2"
                             >
                               <span>Позвонить</span>
                             </a>
 
                             <a
-                              href="/contact"
-                              class="site-button-secondry btn-half agent-action-btn agent-action-btn--outline"
+                              href="<?= $agentDetailUrl ?>"
+                              class="site-button-secondry btn-half agent-action-btn agent-action-btn--outline stretched-link"
                             >
-                              <span>Написать</span>
+                              <span>Подробнее</span>
                             </a>
                           </div>
-                          <div class="agent-socials">
-                            <a
-                              href="https://t.me/TurkoOlga"
-                              target="_blank"
-                              rel="noopener"
-                              aria-label="Telegram"
-                            >
-                              <i class="fa-brands fa-telegram"></i>
-                            </a>
-
-                            <a
-                              href="https://www.instagram.com/rielter_olga_lida"
-                              target="_blank"
-                              rel="noopener"
-                              aria-label="Instagram"
-                            >
-                              <i class="fa-brands fa-instagram"></i>
-                            </a>
-
-                            <a
-                              href="https://www.tiktok.com/@rieltor_olga_lida"
-                              target="_blank"
-                              rel="noopener"
-                              aria-label="TikTok"
-                            >
-                              <i class="fa-brands fa-tiktok"></i>
-                            </a>
+                          <?php if ($agentSocialsHtml): ?>
+                          <div class="agent-socials" style="position:relative;z-index:2">
+                            <?= $agentSocialsHtml ?>
                           </div>
+                          <?php endif; ?>
                         </div>
 
                         <div class="mortgage-calculator" data-mortgage-calculator>

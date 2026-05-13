@@ -1,0 +1,122 @@
+[
+  {
+    "id": "olga-turko",
+    "name": "Ольга Турко",
+    "position": "Старший риэлтер",
+    "phone": "+375 29 180 95 16",
+    "email": "olgaturko1975@gmail.com",
+    "photo": "/images/team/olga-turko.webp",
+    "shortDescription": "Специалист по жилой недвижимости в Лиде. Более 7 лет помогаю клиентам находить лучшие решения.",
+    "experience": "7 лет опыта",
+    "socials": {
+      "instagram": "https://www.instagram.com/rielter_olga_lida",
+      "telegram": "https://t.me/TurkoOlga",
+      "viber": "viber://chat?number=%2B375291809516"
+    }
+  },
+  {
+    "id": "anna-kovaleva",
+    "name": "Анна Ковалёва",
+    "position": "Риэлтер",
+    "phone": "+375 29 500-11-22",
+    "email": "anna.kovaleva@example.com",
+    "photo": "/images/team/anna-kovaleva.webp",
+    "shortDescription": "Эксперт по загородной и коммерческой недвижимости. Работаю с Лидским районом.",
+    "experience": "5 лет опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "#"
+    }
+  },
+  {
+    "id": "marina-lukasheva",
+    "name": "Марина Лукашева",
+    "position": "Риэлтер",
+    "phone": "+375 29 600-22-33",
+    "email": "marina.lukasheva@example.com",
+    "photo": "/images/team/marina-lukasheva.webp",
+    "shortDescription": "Специализируюсь на первичном рынке и новостройках. Помогу выбрать квартиру мечты.",
+    "experience": "4 года опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "#"
+    }
+  },
+  {
+    "id": "igor-sorokin",
+    "name": "Игорь Сорокин",
+    "position": "Риэлтер",
+    "phone": "+375 29 700-33-44",
+    "email": "igor.sorokin@example.com",
+    "photo": "/images/team/igor-sorokin.webp",
+    "shortDescription": "Специалист по аренде и вторичному жилью. Индивидуальный подход к каждому клиенту.",
+    "experience": "3 года опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "#"
+    }
+  },
+  {
+    "id": "elena-petrova",
+    "name": "Елена Петрова",
+    "position": "Юрист-консультант",
+    "phone": "+375 29 800-44-55",
+    "email": "elena.petrova@example.com",
+    "photo": "/images/team/elena-petrova.webp",
+    "shortDescription": "Юридическое сопровождение сделок с недвижимостью. Проверка документов и безопасность.",
+    "experience": "6 лет опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "#"
+    }
+  },
+  {
+    "id": "dmitry-novikov",
+    "name": "Дмитрий Новиков",
+    "position": "Риэлтер",
+    "phone": "+375 29 900-55-66",
+    "email": "dmitry.novikov@example.com",
+    "photo": "/images/team/dmitry-novikov.webp",
+    "shortDescription": "Специалист по ипотечному кредитованию и обмену недвижимости.",
+    "experience": "4 года опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "#"
+    }
+  },
+  {
+    "id": "svetlana-zueva",
+    "name": "Светлана Зуева",
+    "position": "Риэлтер",
+    "phone": "+375 29 100-66-77",
+    "email": "svetlana.zueva@example.com",
+    "photo": "/images/team/svetlana-zueva.webp",
+    "shortDescription": "Помогаю семьям найти уютное жильё в Лиде. Работаю с материнским капиталом.",
+    "experience": "2 года опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "#"
+    }
+  },
+  {
+    "id": "alexey-morozov",
+    "name": "Алексей Морозов",
+    "position": "Риэлтер",
+    "phone": "+375 29 200-77-88",
+    "email": "alexey.morozov@example.com",
+    "photo": "/images/team/alexey-morozov.webp",
+    "shortDescription": "Специализируюсь на продаже домов и земельных участков в Лидском районе.",
+    "experience": "3 года опыта",
+    "socials": {
+      "instagram": "#",
+      "telegram": "#",
+      "viber": "#"
+    }
+  }
+]
