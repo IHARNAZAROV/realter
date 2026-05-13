@@ -38,24 +38,26 @@
       whatsapp:  { icon: 'fa-brands fa-whatsapp',   label: 'WhatsApp'  },
     };
 
-    const socialLinks = member.socials
+    const ROW = 'display:block; padding:0 0 .85rem; border-bottom:1px solid rgba(255,255,255,.08); margin-bottom:.85rem; font-size:.875rem;';
+    const LINK_STYLE = 'color:rgba(255,255,255,.7); text-decoration:none;';
+    const LINK_HOVER = 'onmouseover="this.style.color=\'#d7b39a\'" onmouseout="this.style.color=\'rgba(255,255,255,.7)\'"';
+
+    const socialRows = member.socials
       ? Object.entries(member.socials)
           .filter(([, href]) => href && href !== '#')
           .map(([key, href]) => {
             const m = socialIcons[key] || { icon: 'fa-solid fa-link', label: key };
-            return `<li><a href="${href}" target="_blank" rel="noopener noreferrer"><i class="${m.icon}" aria-hidden="true"></i> ${m.label}</a></li>`;
+            return `<div style="${ROW}"><a href="${href}" target="_blank" rel="noopener noreferrer" style="${LINK_STYLE}" ${LINK_HOVER}><i class="${m.icon}" aria-hidden="true" style="margin-right:6px"></i>${m.label}</a></div>`;
           }).join('')
       : '';
 
     col.innerHTML = `
       <div class="footer-member-contacts">
-        <h4 class="widget-title">Контакты ${member.name.split(' ')[0]}</h4>
-        <ul>
-          ${member.phone ? `<li><p><a href="${phoneHref}">${member.phone}</a></p></li>` : ''}
-          ${member.email ? `<li><p><a href="${emailHref}">${member.email}</a></p></li>` : ''}
-          <li><p>${member.location || 'Лида, Беларусь'}</p></li>
-          ${socialLinks}
-        </ul>
+        <h4 style="color:#d7b39a; font-size:.9375rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:20px;">Контакты ${member.name.split(' ')[0]}</h4>
+        ${member.phone ? `<div style="${ROW}"><a href="${phoneHref}" style="${LINK_STYLE}" ${LINK_HOVER}>${member.phone}</a></div>` : ''}
+        ${member.email ? `<div style="${ROW}"><a href="${emailHref}" style="${LINK_STYLE}" ${LINK_HOVER}>${member.email}</a></div>` : ''}
+        <div style="${ROW}">${member.location || 'Лида, Беларусь'}</div>
+        ${socialRows}
       </div>`;
   }
 

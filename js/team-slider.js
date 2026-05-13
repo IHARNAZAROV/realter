@@ -113,17 +113,22 @@
 
       swWrap.innerHTML = members.map(buildSlide).join('');
 
-      // JS-based hover — reliable across all Swiper versions/touch modes
-      swWrap.querySelectorAll('.team-card').forEach(function (card) {
-        card.addEventListener('mouseenter', function () {
-          card.classList.add('is-hovered');
-        });
-        card.addEventListener('mouseleave', function () {
-          card.classList.remove('is-hovered');
-        });
-      });
-
       initSwiper();
+
+      // Event delegation on the fixed container — works with Swiper loop clones.
+      // mouseover/mouseout bubble unlike mouseenter/mouseleave.
+      wrap.addEventListener('mouseover', function (e) {
+        var card = e.target.closest && e.target.closest('.team-card');
+        if (card) card.classList.add('is-hovered');
+      });
+      wrap.addEventListener('mouseout', function (e) {
+        var card = e.target.closest && e.target.closest('.team-card');
+        if (!card) return;
+        // Only clear when the cursor truly leaves the card (not moving between children)
+        if (!card.contains(e.relatedTarget)) {
+          card.classList.remove('is-hovered');
+        }
+      });
     } catch (err) {
       const section = wrap.closest('.team-swiper-wrap') || wrap.parentElement;
       section.innerHTML = `<p class="team-swiper-error">Не удалось загрузить данные команды.</p>`;
