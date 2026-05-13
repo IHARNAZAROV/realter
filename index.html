@@ -1139,31 +1139,38 @@
 
         </div>
 
-        <!-- SECTION: Team Slider -->
-        <div id="team-section" class="section-full mobile-page-padding p-t80 p-b60 bg-gray bg-repeat" style="background-image: url(images/background/bg-5.png)">
+        <!-- SECTION: Team Showcase -->
+        <div id="team-section" class="section-full mobile-page-padding p-t80 p-b80 bg-white">
             <div class="container">
-                <header class="section-head section-head--bracket">
-                    <h2 class="section-title">Наша команда</h2>
-                    <p>Аттестованные риэлтеры агентства ГермесГрупп</p>
-                </header>
-                <div class="section-content">
-                    <div class="team-swiper-wrap">
-                        <div class="swiper team-swiper">
-                            <div class="swiper-wrapper" id="team-swiper-wrapper">
-                                <!-- Карточки генерируются через team-slider.js -->
+
+                <!-- Шапка секции: заголовок слева, описание + кнопка справа -->
+                <div class="team-hdr">
+                    <div class="team-hdr__left">
+                        <h2 class="team-hdr__title">Мы — профессиональная<br>команда ГермесГрупп</h2>
+                    </div>
+                    <div class="team-hdr__right">
+                        <p class="team-hdr__desc">Аттестованные риэлтеры, которые помогут с покупкой, продажей и обменом недвижимости в Лиде.</p>
+                        <a href="/rieltor-lida" class="team-view-all-btn">Посмотреть о нас <span aria-hidden="true">↗</span></a>
+                    </div>
+                </div>
+
+                <!-- Основной блок: статичная большая карточка + вертикальный слайдер -->
+                <div class="team-showcase">
+                    <!-- Статичная большая карточка (первый участник команды) -->
+                    <div class="team-featured" id="team-featured">
+                        <!-- Генерируется JS -->
+                    </div>
+
+                    <!-- Правая колонка: вертикальный слайдер 2×2 -->
+                    <div class="team-grid-right">
+                        <div class="swiper team-v-swiper">
+                            <div class="swiper-wrapper" id="team-v-wrapper">
+                                <!-- Пары карточек генерируются JS -->
                             </div>
-                        </div>
-                        <div class="team-swiper-controls">
-                            <button class="team-swiper-btn team-swiper-prev" aria-label="Предыдущий слайд">
-                                <i class="fa fa-angle-left" aria-hidden="true"></i>
-                            </button>
-                            <div class="team-swiper-pagination" role="tablist" aria-label="Навигация по команде"></div>
-                            <button class="team-swiper-btn team-swiper-next" aria-label="Следующий слайд">
-                                <i class="fa fa-angle-right" aria-hidden="true"></i>
-                            </button>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 

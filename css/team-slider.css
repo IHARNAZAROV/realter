@@ -1,63 +1,231 @@
 /* ============================================
-   Team Slider — Слайдер команды риэлтеров
+   Team Showcase — Команда риэлтеров
+   Макет: большая статичная карточка слева +
+          вертикальный слайдер 2×2 справа
    ============================================ */
 
-/* ——— Обёртка слайдера ——— */
-.team-swiper-wrap {
+/* ——— Переменные высоты ——— */
+:root {
+  --team-h: 560px;        /* высота всего блока на desktop */
+  --team-h-md: 440px;     /* tablet */
+  --team-gap: 20px;
+}
+
+/* ——— Шапка секции ——— */
+.team-hdr {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.team-hdr__title {
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+  font-weight: 800;
+  color: #23252d;
+  line-height: 1.22;
+  margin: 0;
+}
+
+.team-hdr__desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #5a5a5a;
+  margin: 0 0 18px;
+}
+
+.team-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border: 1.5px solid #23252d;
+  border-radius: 999px;
+  color: #23252d !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+  white-space: nowrap;
+}
+
+.team-view-all-btn:hover {
+  background: #155945;
+  border-color: #155945;
+  color: #fff !important;
+}
+
+/* ——— Витрина: 2 колонки одинаковой высоты ——— */
+.team-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--team-gap);
+  height: var(--team-h);   /* явная высота — оба столбца ровно по ней */
+}
+
+/* ——— Большая статичная карточка (слева) ——— */
+.team-featured {
+  height: var(--team-h);
+}
+
+.team-featured-card {
+  /* Явная высота (не 100%) для надёжности */
+  height: var(--team-h);
+  border-radius: 18px;
+  overflow: hidden;
   position: relative;
-}
-
-.team-swiper {
-  width: 100%;
-  height: auto !important;
-  border-radius: 0 !important;
-  /* overflow видимый чтобы тень карточек была видна */
-  overflow: visible !important;
-  padding-bottom: 8px;
-}
-
-.team-swiper .swiper-wrapper {
-  align-items: stretch;
-}
-
-.team-swiper .swiper-slide {
-  height: auto;
-  box-sizing: border-box;
-  /* боковые отступы чтобы тень не обрезалась */
-  padding: 4px 2px 8px;
-}
-
-/* ——— Карточка ——— */
-.team-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(21, 89, 69, 0.10);
-  transition: transform 0.30s ease, box-shadow 0.30s ease;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow: hidden;
+  background: linear-gradient(135deg, #c8e0d4, #e2f0ea);
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
-.team-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 18px 48px rgba(21, 89, 69, 0.17);
-}
-
-/* ——— Фото-блок ——— */
-.team-card__photo {
+/* Фото-зона — flex:1 растягивается */
+.team-featured-card__img {
+  flex: 1;
   position: relative;
-  width: 100%;
-  /* Трюк для square: padding-bottom = 100% */
-  padding-bottom: 100%;
   overflow: hidden;
-  background: linear-gradient(135deg, #d0e8dc, #ebf3ef);
+  min-height: 0;          /* важно для flex в Firefox */
+  background: linear-gradient(135deg, #c8e0d4, #e2f0ea);
+}
+
+.team-featured-card__img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.55s ease;
+}
+
+.team-featured-card:hover .team-featured-card__img img {
+  transform: scale(1.04);
+}
+
+/* Инициалы-плейсхолдер */
+.team-featured-card__initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  font-weight: 800;
+  color: #155945;
+  letter-spacing: 4px;
+  user-select: none;
+}
+
+/* Информационная панель внизу */
+.team-featured-card__body {
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.team-featured-card__info { flex: 1; min-width: 0; }
+
+.team-featured-card__name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #23252d;
+  margin: 0 0 2px;
+  line-height: 1.25;
+}
+
+.team-featured-card__position {
+  font-size: 0.78rem;
+  color: #787878;
+  margin: 0;
+}
+
+/* Соцсети в нижней панели */
+.team-featured-card__socials {
+  display: flex;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-.team-card__photo img {
+.team-featured-card__social {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  color: #23252d !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  text-decoration: none !important;
+  transition: background 0.22s, border-color 0.22s, color 0.22s, transform 0.22s;
+}
+
+.team-featured-card__social:hover {
+  background: #155945;
+  border-color: #155945;
+  color: #fff !important;
+  transform: scale(1.1);
+}
+
+/* ——— Правая колонка: вертикальный Swiper ——— */
+.team-grid-right {
+  height: var(--team-h);   /* явная высота */
+  overflow: hidden;
+  border-radius: 0;
+}
+
+/*
+  Swiper вертикальный — ОБЯЗАТЕЛЕН явный px-height.
+  Без него direction:vertical рушится.
+*/
+.team-v-swiper {
+  width: 100%;
+  height: var(--team-h) !important;
+  overflow: hidden !important;
+}
+
+/* Каждый слайд = одна строка из двух мини-карточек */
+.team-v-swiper .swiper-slide {
+  height: calc((var(--team-h) - var(--team-gap)) / 2) !important;
+  box-sizing: border-box;
+}
+
+.team-mini-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--team-gap);
+  height: 100%;
+}
+
+/* ——— Мини-карточки ——— */
+.team-mini-card {
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  height: 100%;
+  text-decoration: none !important;
+  background: linear-gradient(135deg, #c8e0d4, #e2f0ea);
+  cursor: pointer;
+}
+
+.team-mini-card__img {
   position: absolute;
   inset: 0;
+}
+
+.team-mini-card__img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -66,215 +234,124 @@
   transition: transform 0.50s ease;
 }
 
-.team-card:hover .team-card__photo img {
-  transform: scale(1.04);
+.team-mini-card:hover .team-mini-card__img img {
+  transform: scale(1.06);
 }
 
-/* Плейсхолдер с инициалами */
-.team-card__initials {
+/* Инициалы для мини-карточки */
+.team-mini-card__initials {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #c8e0d4, #e2f0ea);
-  font-size: 3rem;
+  font-size: 2.6rem;
   font-weight: 800;
   color: #155945;
   letter-spacing: 2px;
   user-select: none;
 }
 
-/* Бейдж «опыт» */
-.team-card__badge {
+/* Оверлей с именем / должностью поверх фото */
+.team-mini-card__overlay {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: #155945;
-  color: #fff;
-  font-size: 0.68rem;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px 14px 14px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0)    0%,
+    rgba(0, 0, 0, 0.62) 100%
+  );
+  transition: background 0.3s;
+}
+
+.team-mini-card:hover .team-mini-card__overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0)    0%,
+    rgba(0, 0, 0, 0.78) 100%
+  );
+}
+
+.team-mini-card__name {
+  font-size: 0.93rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 999px;
-  z-index: 2;
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-/* ——— Тело карточки ——— */
-.team-card__body {
-  padding: 18px 20px 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  border-top: 3px solid #155945;
-  background: #fff;
-}
-
-.team-card__name {
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #23252d;
-  margin: 0 0 3px;
-  line-height: 1.3;
-  transition: color 0.22s;
-}
-
-.team-card:hover .team-card__name {
-  color: #155945;
-}
-
-.team-card__position {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #155945;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0 0 12px;
-}
-
-.team-card__desc {
-  font-size: 0.83rem;
-  line-height: 1.62;
-  color: #5a5a5a;
-  margin: 0 0 14px;
-  flex: 1;
-}
-
-/* Иконки соцсетей — всегда в теле карточки */
-.team-card__socials {
-  display: flex;
-  gap: 7px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-}
-
-.team-card__social-link {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: #ebf3ef;
-  color: #155945;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.82rem;
-  text-decoration: none !important;
-  transition: background 0.22s, color 0.22s, transform 0.22s;
-  flex-shrink: 0;
-}
-
-.team-card__social-link:hover {
-  background: #155945;
   color: #fff;
-  transform: scale(1.1);
+  margin: 0 0 2px;
+  line-height: 1.25;
 }
 
-/* Нижняя строка: телефон + кнопка */
-.team-card__footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding-top: 14px;
-  border-top: 1px solid #ebebeb;
-  flex-wrap: wrap;
-  margin-top: auto;
+.team-mini-card__position {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
 }
 
-.team-card__phone {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #23252d !important;
-  text-decoration: none !important;
-  transition: color 0.22s;
-  white-space: nowrap;
+/* ——— Адаптив ——— */
+@media (max-width: 1199px) {
+  :root {
+    --team-h: 480px;
+    --team-gap: 16px;
+  }
 }
 
-.team-card__phone:hover {
-  color: #155945 !important;
+@media (max-width: 991px) {
+  :root {
+    --team-h: 400px;
+    --team-gap: 14px;
+  }
+  .team-hdr { gap: 20px; }
+  .team-featured-card__name { font-size: 0.95rem; }
+  .team-featured-card__initials { font-size: 3.5rem; }
 }
 
-/* ——— Контролы: кнопки + пагинация ——— */
-.team-swiper-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 28px;
+@media (max-width: 767px) {
+  :root { --team-gap: 12px; }
+
+  .team-hdr {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .team-showcase {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .team-featured {
+    height: 360px;
+  }
+
+  .team-featured-card {
+    height: 360px;
+  }
+
+  .team-grid-right {
+    height: 300px;
+  }
+
+  .team-v-swiper {
+    height: 300px !important;
+  }
+
+  .team-v-swiper .swiper-slide {
+    height: calc((300px - 12px) / 2) !important;
+  }
 }
 
-.team-swiper-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  background: #fff;
-  color: #155945;
-  font-size: 1.05rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(21, 89, 69, 0.14);
-  transition: background 0.25s, color 0.25s, transform 0.25s;
-  flex-shrink: 0;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.team-swiper-btn:hover {
-  background: #155945;
-  color: #fff;
-  transform: scale(1.08);
-}
-
-.team-swiper-btn:focus-visible {
-  outline: 2px solid #155945;
-  outline-offset: 3px;
-}
-
-.team-swiper-btn.swiper-button-disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-/* Пагинация */
-.team-swiper-pagination {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.team-swiper-pagination .swiper-pagination-bullet {
-  width: 8px;
-  height: 8px;
-  background: rgba(21, 89, 69, 0.22);
-  border-radius: 50%;
-  opacity: 1;
-  transition: background 0.25s, width 0.30s;
-  cursor: pointer;
-  display: block;
-  margin: 0 !important;
-}
-
-.team-swiper-pagination .swiper-pagination-bullet-active {
-  background: #155945;
-  width: 22px;
-  border-radius: 4px;
-}
-
-/* Ошибка загрузки */
-.team-swiper-error {
-  text-align: center;
-  padding: 48px 20px;
-  color: #787878;
-  font-size: 0.95rem;
+@media (max-width: 479px) {
+  .team-featured,
+  .team-featured-card { height: 300px; }
+  .team-grid-right,
+  .team-v-swiper { height: 260px !important; }
+  .team-v-swiper .swiper-slide {
+    height: calc((260px - 12px) / 2) !important;
+  }
+  .team-mini-card__name { font-size: 0.82rem; }
+  .team-mini-card__initials { font-size: 2rem; }
 }
 
 /* ============================================
@@ -282,7 +359,7 @@
    ============================================ */
 .td-hero {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 300px 1fr;
   gap: 48px;
   align-items: start;
 }
@@ -293,9 +370,8 @@
   box-shadow: 0 12px 40px rgba(21, 89, 69, 0.14);
   background: linear-gradient(135deg, #c8e0d4, #e2f0ea);
   position: relative;
-  /* square */
-  padding-bottom: 100%;
   width: 100%;
+  padding-bottom: 120%;
 }
 
 .td-photo-wrap img {
@@ -314,15 +390,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4.5rem;
+  font-size: 4rem;
   font-weight: 800;
   color: #155945;
   letter-spacing: 4px;
 }
 
-.td-info {
-  padding-top: 4px;
-}
+.td-info { padding-top: 4px; }
 
 .td-experience-badge {
   display: inline-block;
@@ -334,7 +408,7 @@
   text-transform: uppercase;
   padding: 5px 14px;
   border-radius: 999px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .td-name {
@@ -346,12 +420,12 @@
 }
 
 .td-position {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #155945;
   text-transform: uppercase;
   letter-spacing: 0.09em;
-  margin: 0 0 20px;
+  margin: 0 0 18px;
 }
 
 .td-divider {
@@ -359,14 +433,14 @@
   height: 3px;
   background: linear-gradient(90deg, #155945, #6aba9a);
   border-radius: 2px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .td-description {
   font-size: 0.97rem;
   line-height: 1.74;
   color: #3a3a3a;
-  margin-bottom: 26px;
+  margin-bottom: 24px;
   max-width: 540px;
 }
 
@@ -374,7 +448,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .td-contact-item {
@@ -398,9 +472,7 @@
   transition: color 0.22s;
 }
 
-.td-contact-item a:hover {
-  color: #155945 !important;
-}
+.td-contact-item a:hover { color: #155945 !important; }
 
 .td-socials {
   display: flex;
@@ -422,7 +494,6 @@
   font-weight: 600;
   text-decoration: none !important;
   transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
-  white-space: nowrap;
 }
 
 .td-social-btn:hover {
@@ -454,29 +525,13 @@
   background: #0e3d2f;
 }
 
-/* ——— Адаптив team-detail ——— */
 @media (max-width: 991px) {
-  .td-hero {
-    grid-template-columns: 220px 1fr;
-    gap: 28px;
-  }
+  .td-hero { grid-template-columns: 220px 1fr; gap: 28px; }
   .td-name { font-size: 1.65rem; }
 }
 
 @media (max-width: 767px) {
-  .td-hero {
-    grid-template-columns: 1fr;
-  }
-  .td-photo-wrap {
-    max-width: 240px;
-    margin: 0 auto;
-  }
+  .td-hero { grid-template-columns: 1fr; }
+  .td-photo-wrap { max-width: 240px; margin: 0 auto; padding-bottom: 80%; }
   .td-name { font-size: 1.5rem; }
-}
-
-/* ——— Адаптив team-slider ——— */
-@media (max-width: 575px) {
-  .team-card__body { padding: 14px 16px 16px; }
-  .team-card__name { font-size: 0.95rem; }
-  .team-card__initials { font-size: 2.5rem; }
 }

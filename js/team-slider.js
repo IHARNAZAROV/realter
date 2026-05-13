@@ -1,24 +1,19 @@
 (function () {
   'use strict';
 
-  var WRAPPER_ID = 'team-swiper-wrapper';
-  var swiperInstance = null;
-
+  /* ——— helpers ——— */
   function esc(str) {
     return String(str || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   function getInitials(name) {
-    return (name || '').trim().split(/\s+/).slice(0, 2).map(function (w) {
-      return w[0] ? w[0].toUpperCase() : '';
-    }).join('');
+    return (name || '').trim().split(/\s+/).slice(0, 2)
+      .map(function (w) { return w[0] ? w[0].toUpperCase() : ''; }).join('');
   }
 
-  var SOCIAL_META = {
+  var SOCIALS = {
     instagram: { icon: 'fa-brands fa-square-instagram', label: 'Instagram'  },
     telegram:  { icon: 'fa-brands fa-telegram',         label: 'Telegram'   },
     viber:     { icon: 'fa-brands fa-viber',             label: 'Viber'      },
@@ -26,140 +21,147 @@
     tiktok:    { icon: 'fa-brands fa-tiktok',            label: 'TikTok'     }
   };
 
-  /* Строит ряд иконок соцсетей для тела карточки */
-  function buildSocials(socials) {
-    if (!socials) return '';
-    var links = Object.keys(SOCIAL_META).reduce(function (acc, key) {
-      var url = socials[key];
-      if (!url || url === '#') return acc;
-      var m = SOCIAL_META[key];
-      return acc +
-        '<a href="' + esc(url) + '"' +
-        ' class="team-card__social-link"' +
-        ' target="_blank" rel="noopener noreferrer"' +
-        ' aria-label="' + esc(m.label) + '">' +
-        '<i class="' + m.icon + '" aria-hidden="true"></i>' +
-        '</a>';
-    }, '');
-    return links ? '<div class="team-card__socials">' + links + '</div>' : '';
+  /* onerror: скрыть сломанное фото, показать инициалы */
+  function onErrAttr(initials) {
+    return 'onerror="' +
+      'this.style.display=\'none\';' +
+      'var p=this.parentNode;' +
+      'var el=p&&p.querySelector(\'.team-featured-card__initials,.team-mini-card__initials\');' +
+      'if(el)el.style.display=\'flex\';"';
   }
 
-  /* Строит одну карточку */
-  function buildCard(member) {
+  /* ——— БОЛЬШАЯ КАРТОЧКА (featured) ——— */
+  function buildFeatured(member) {
     var initials = getInitials(member.name);
-    var telHref  = member.phone ? 'tel:' + member.phone.replace(/[^+\d]/g, '') : '';
-
-    /* Фото: img с fallback на инициалы */
-    var photoHtml;
-    if (member.photo) {
-      photoHtml =
-        '<img loading="lazy"' +
-        ' src="' + esc(member.photo) + '"' +
-        ' alt="' + esc(member.name) + ', ' + esc(member.position) + '"' +
-        ' width="300" height="300"' +
-        ' onerror="this.style.display=\'none\'">' +
-        '<div class="team-card__initials" aria-hidden="true">' + esc(initials) + '</div>';
-    } else {
-      photoHtml = '<div class="team-card__initials" aria-hidden="true">' + esc(initials) + '</div>';
-    }
-
-    var badge = member.experience
-      ? '<span class="team-card__badge">' + esc(member.experience) + '</span>'
-      : '';
-
-    var phoneLine = member.phone
-      ? '<a href="' + esc(telHref) + '" class="team-card__phone"' +
-        ' aria-label="Позвонить ' + esc(member.name) + '">' + esc(member.phone) + '</a>'
-      : '<span></span>';
-
     var detailUrl = '/team-detail.html?id=' + esc(member.id);
 
+    /* Фото */
+    var photoHtml = member.photo
+      ? '<img loading="eager" src="' + esc(member.photo) + '"' +
+        ' alt="' + esc(member.name) + '" width="540" height="720"' +
+        ' onerror="this.style.display=\'none\';' +
+        'var fb=this.parentNode.querySelector(\'.team-featured-card__initials\');' +
+        'if(fb){fb.style.display=\'flex\'}">' +
+        '<div class="team-featured-card__initials" style="display:none" aria-hidden="true">' + esc(initials) + '</div>'
+      : '<div class="team-featured-card__initials" aria-hidden="true">' + esc(initials) + '</div>';
+
+    /* Соцсети */
+    var socialsHtml = '';
+    if (member.socials) {
+      Object.keys(SOCIALS).forEach(function (key) {
+        var url = member.socials[key];
+        if (!url || url === '#') return;
+        var m = SOCIALS[key];
+        socialsHtml +=
+          '<a href="' + esc(url) + '" class="team-featured-card__social"' +
+          ' target="_blank" rel="noopener noreferrer" aria-label="' + esc(m.label) + '">' +
+          '<i class="' + m.icon + '" aria-hidden="true"></i></a>';
+      });
+    }
+
+    return (
+      '<a href="' + detailUrl + '" class="team-featured-card"' +
+      ' style="text-decoration:none;display:flex;flex-direction:column;height:100%">' +
+        '<div class="team-featured-card__img">' + photoHtml + '</div>' +
+        '<div class="team-featured-card__body">' +
+          '<div class="team-featured-card__info">' +
+            '<p class="team-featured-card__name" itemprop="name">' + esc(member.name) + '</p>' +
+            '<p class="team-featured-card__position" itemprop="jobTitle">' + esc(member.position) + '</p>' +
+          '</div>' +
+          (socialsHtml
+            ? '<div class="team-featured-card__socials" onclick="event.preventDefault()">' + socialsHtml + '</div>'
+            : '') +
+        '</div>' +
+      '</a>'
+    );
+  }
+
+  /* ——— МИНИ-КАРТОЧКА ——— */
+  function buildMiniCard(member) {
+    var initials = getInitials(member.name);
+    var detailUrl = '/team-detail.html?id=' + esc(member.id);
+
+    var photoHtml = member.photo
+      ? '<img loading="lazy" src="' + esc(member.photo) + '"' +
+        ' alt="' + esc(member.name) + '" width="280" height="280"' +
+        ' onerror="this.style.display=\'none\';' +
+        'var fb=this.parentNode.querySelector(\'.team-mini-card__initials\');' +
+        'if(fb){fb.style.display=\'flex\'}">' +
+        '<div class="team-mini-card__initials" style="display:none" aria-hidden="true">' + esc(initials) + '</div>'
+      : '<div class="team-mini-card__initials" aria-hidden="true">' + esc(initials) + '</div>';
+
+    return (
+      '<a href="' + detailUrl + '" class="team-mini-card"' +
+      ' aria-label="' + esc(member.name) + ', ' + esc(member.position) + '">' +
+        '<div class="team-mini-card__img">' + photoHtml + '</div>' +
+        '<div class="team-mini-card__overlay">' +
+          '<p class="team-mini-card__name">' + esc(member.name) + '</p>' +
+          '<p class="team-mini-card__position">' + esc(member.position) + '</p>' +
+        '</div>' +
+      '</a>'
+    );
+  }
+
+  /* ——— СЛАЙД-ПАРА (2 мини-карточки в строку) ——— */
+  function buildPairSlide(pair) {
     return (
       '<div class="swiper-slide">' +
-      '<article class="team-card" itemscope itemtype="https://schema.org/Person">' +
-
-        /* Фото */
-        '<div class="team-card__photo">' +
-          photoHtml + badge +
+        '<div class="team-mini-row">' +
+          pair.map(buildMiniCard).join('') +
         '</div>' +
-
-        /* Тело */
-        '<div class="team-card__body">' +
-          '<h3 class="team-card__name" itemprop="name">' + esc(member.name) + '</h3>' +
-          '<p class="team-card__position" itemprop="jobTitle">' + esc(member.position) + '</p>' +
-          '<p class="team-card__desc" itemprop="description">' + esc(member.shortDescription) + '</p>' +
-
-          buildSocials(member.socials) +
-
-          '<div class="team-card__footer">' +
-            phoneLine +
-            '<a href="' + detailUrl + '" class="site-button-link"' +
-            ' aria-label="Подробнее о ' + esc(member.name) + '">Подробнее</a>' +
-          '</div>' +
-        '</div>' +
-
-      '</article>' +
       '</div>'
     );
   }
 
+  var vSwiperInstance = null;
+
   function destroySwiper() {
-    if (swiperInstance) {
-      try { swiperInstance.destroy(true, true); } catch (e) {}
-      swiperInstance = null;
+    if (vSwiperInstance) {
+      try { vSwiperInstance.destroy(true, true); } catch (e) {}
+      vSwiperInstance = null;
     }
   }
 
-  function initSwiper() {
-    if (typeof Swiper === 'undefined') return;
-    var el = document.querySelector('.team-swiper');
+  function initVerticalSwiper(pairsCount) {
+    if (typeof Swiper === 'undefined' || pairsCount < 1) return;
+    var el = document.querySelector('.team-v-swiper');
     if (!el) return;
     destroySwiper();
-    swiperInstance = new Swiper('.team-swiper', {
-      slidesPerView: 1,
+
+    var shouldLoop = pairsCount > 2;
+
+    vSwiperInstance = new Swiper('.team-v-swiper', {
+      direction: 'vertical',
+      slidesPerView: 2,
       spaceBetween: 20,
-      loop: true,
-      grabCursor: true,
-      keyboard: { enabled: true, onlyInViewport: true },
+      loop: shouldLoop,
+      speed: 700,
       autoplay: {
-        delay: 4500,
+        delay: 3200,
         disableOnInteraction: false,
         pauseOnMouseEnter: true
       },
-      pagination: {
-        el: '.team-swiper-pagination',
-        clickable: true
-      },
-      navigation: {
-        nextEl: '.team-swiper-next',
-        prevEl: '.team-swiper-prev',
-        disabledClass: 'swiper-button-disabled'
-      },
+      keyboard: { enabled: true, onlyInViewport: true },
       a11y: {
         enabled: true,
-        prevSlideMessage: 'Предыдущий слайд',
-        nextSlideMessage: 'Следующий слайд'
-      },
-      breakpoints: {
-        576:  { slidesPerView: 2, spaceBetween: 16 },
-        992:  { slidesPerView: 3, spaceBetween: 20 },
-        1200: { slidesPerView: 4, spaceBetween: 22 }
+        prevSlideMessage: 'Предыдущая строка',
+        nextSlideMessage: 'Следующая строка'
       }
     });
   }
 
-  function showError(wrap) {
-    if (!wrap) return;
-    wrap.innerHTML =
-      '<div class="team-swiper-error">' +
-      '<p>Не удалось загрузить данные команды. Попробуйте обновить страницу.</p>' +
-      '</div>';
+  function showError(container, msg) {
+    if (container) {
+      container.innerHTML =
+        '<div style="color:#787878;font-size:.9rem;padding:20px 0">' +
+        (msg || 'Не удалось загрузить данные команды.') + '</div>';
+    }
   }
 
   function init() {
-    var wrapper = document.getElementById(WRAPPER_ID);
-    if (!wrapper) return;
-    var wrap = wrapper.closest('.team-swiper-wrap');
+    var featuredEl = document.getElementById('team-featured');
+    var vWrapper   = document.getElementById('team-v-wrapper');
+    if (!featuredEl && !vWrapper) return;
 
     fetch('/data/team.json')
       .then(function (r) {
@@ -168,11 +170,36 @@
       })
       .then(function (team) {
         if (!Array.isArray(team) || !team.length) throw new Error('empty');
-        wrapper.innerHTML = team.map(buildCard).join('');
-        initSwiper();
+
+        /* Первый участник — большая карточка */
+        if (featuredEl) {
+          featuredEl.innerHTML = buildFeatured(team[0]);
+        }
+
+        /* Остальные — вертикальный слайдер парами */
+        if (vWrapper) {
+          var rest = team.slice(1);
+          if (rest.length === 0) {
+            /* Если только один участник — дублируем для заполнения */
+            rest = [team[0]];
+          }
+
+          /* Разбиваем на пары */
+          var pairs = [];
+          for (var i = 0; i < rest.length; i += 2) {
+            var pair = rest.slice(i, i + 2);
+            /* Если последняя пара нечётная — дублируем первый элемент */
+            if (pair.length === 1) pair.push(pair[0]);
+            pairs.push(pair);
+          }
+
+          vWrapper.innerHTML = pairs.map(buildPairSlide).join('');
+          initVerticalSwiper(pairs.length);
+        }
       })
-      .catch(function () {
-        showError(wrap);
+      .catch(function (err) {
+        showError(featuredEl, 'Не удалось загрузить данные команды.');
+        console.error('[team-slider]', err);
       });
   }
 
