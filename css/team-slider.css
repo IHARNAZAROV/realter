@@ -133,9 +133,8 @@
   z-index: 2;
 }
 
-/* Both selectors: Swiper captures mouse on the slide wrapper first */
-.swiper-slide:hover .team-card__info,
-.team-card:hover .team-card__info {
+/* Shown via JS mouseenter — class toggled on .team-card */
+.team-card.is-hovered .team-card__info {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
@@ -332,7 +331,7 @@
   color: var(--color-text-light) !important;
 }
 
-/* Footer dynamic contacts — no white box, matches dark footer */
+/* Footer dynamic contacts — matches dark footer, no white box */
 .footer-member-contacts .widget-title {
   color: var(--color-primary);
   font-size: 0.9375rem;
@@ -341,11 +340,15 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+.footer-member-contacts ul,
+.footer-member-contacts ul li {
+  list-style: none !important;
+  list-style-type: none !important;
+  padding-left: 0 !important;
+  background: transparent !important;
+}
 .footer-member-contacts ul {
-  list-style: none;
-  padding: 0;
   margin: 0;
-  background: transparent;
 }
 .footer-member-contacts ul li {
   padding: 0 0 0.9375rem;
@@ -353,8 +356,14 @@
   margin-bottom: 0.9375rem;
   line-height: 1.4;
 }
+.footer-member-contacts ul li::before,
+.footer-member-contacts ul li::marker {
+  display: none !important;
+  content: none !important;
+}
 .footer-member-contacts ul li:last-child {
   border-bottom: none;
+  margin-bottom: 0;
 }
 .footer-member-contacts ul li p {
   margin: 0;
@@ -368,7 +377,7 @@
   transition: color 0.2s;
 }
 .footer-member-contacts ul li a:hover {
-  color: var(--color-primary);
+  color: #d7b39a;
 }
 
 /* ============================================

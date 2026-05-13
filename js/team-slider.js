@@ -112,6 +112,17 @@
       if (!Array.isArray(members) || members.length === 0) throw new Error('empty');
 
       swWrap.innerHTML = members.map(buildSlide).join('');
+
+      // JS-based hover — reliable across all Swiper versions/touch modes
+      swWrap.querySelectorAll('.team-card').forEach(function (card) {
+        card.addEventListener('mouseenter', function () {
+          card.classList.add('is-hovered');
+        });
+        card.addEventListener('mouseleave', function () {
+          card.classList.remove('is-hovered');
+        });
+      });
+
       initSwiper();
     } catch (err) {
       const section = wrap.closest('.team-swiper-wrap') || wrap.parentElement;

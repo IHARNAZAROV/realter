@@ -107,13 +107,15 @@
     </div>
 
     <!-- BREADCRUMB -->
-    <div class="team-detail-breadcrumb-bar" style="background:var(--color-bg-light); border-bottom:1px solid var(--color-border); padding:10px 0;">
+    <div style="background:var(--color-bg-light); border-bottom:1px solid var(--color-border); padding:10px 0;">
         <div class="container">
-            <nav class="page-intro-breadcrumb" aria-label="Хлебные крошки">
-                <ul>
-                    <li><a href="/">Главная</a></li>
-                    <li><a href="/#team">Команда</a></li>
-                    <li id="breadcrumb-name">Специалист</li>
+            <nav aria-label="Хлебные крошки">
+                <ul style="list-style:none; margin:0; padding:0; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                    <li style="text-transform:uppercase; font-size:.75rem; letter-spacing:.05em;"><a href="/" style="color:#23252d; text-decoration:none;">Главная</a></li>
+                    <li style="color:#787878; font-size:.75rem;">—</li>
+                    <li style="text-transform:uppercase; font-size:.75rem; letter-spacing:.05em;"><a href="/#team" style="color:#23252d; text-decoration:none;">Команда</a></li>
+                    <li style="color:#787878; font-size:.75rem;">—</li>
+                    <li id="breadcrumb-name" style="text-transform:uppercase; font-size:.75rem; letter-spacing:.05em; color:#787878;">Специалист</li>
                 </ul>
             </nav>
         </div>
