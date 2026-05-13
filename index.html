@@ -109,6 +109,7 @@
         <link rel="stylesheet" href="/css/nav-market-status.css?v=8">
     </noscript>
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <link rel="stylesheet" href="/css/team-section.css" data-versioned>
     <style>
         .nav-market-status-li{list-style:none;padding:0;margin-left:14px;align-self:center!important;margin-top:8px!important}
         .nav-market-status{display:flex!important;align-items:center!important;padding:5px 14px!important;background:rgba(61,214,176,.07)!important;border:1px solid rgba(61,214,176,.25)!important}
@@ -1140,6 +1141,25 @@
            CONTENT END
       =============================================== -->
         <!-- ==============================================
+           TEAM SECTION START
+      =============================================== -->
+        <section class="team-section">
+            <div class="team-section__container">
+                <div class="team-section__header">
+                    <h2 class="team-section__subtitle">Наша команда</h2>
+                    <h2 class="team-section__title">Профессиональный коллектив риэлтеров</h2>
+                    <p class="team-section__description">
+                        Команда опытных специалистов, готовых помочь вам в любом вопросе недвижимости. 
+                        Каждый член нашей команды привносит свой опыт и знания для достижения ваших целей.
+                    </p>
+                </div>
+                <div id="team-section"></div>
+            </div>
+        </section>
+        <!-- ==============================================
+           TEAM SECTION END
+      =============================================== -->
+        <!-- ==============================================
            FOOTER START
       =============================================== -->
         <footer class="site-footer footer-large footer-dark footer-wide">
@@ -1622,6 +1642,25 @@
     <script src="/js/sw-register.js" defer></script>
     <script src="contact-widget.js" defer></script>
     <script src="/js/nav-market-status.js" defer></script>
+    <!-- Team Section Scripts -->
+    <script src="/js/services/team-service.js" defer></script>
+    <script src="/js/team-slider.js" defer></script>
+    <script src="/js/team-renderer.js" defer></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sectionElement = document.getElementById('team-section');
+            if (sectionElement) {
+                const renderer = new TeamRenderer({
+                    sectionId: 'team-section',
+                    teamService: teamService,
+                    lazyLoadImages: true
+                });
+                renderer.render().catch(err => {
+                    console.error('Failed to render team section:', err);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
