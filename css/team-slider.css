@@ -66,8 +66,8 @@
   width: 100%;
   aspect-ratio: 300 / 340;
   position: relative;
-  overflow: hidden;                  /* clip the image, not the whole card */
-  border-radius: 20px 20px 0 0;     /* only round top corners */
+  overflow: hidden;
+  border-radius: 20px;              /* all corners — hides green card-bg at corners */
   background: #d1ddd9;
   display: flex;
   align-items: center;
@@ -116,22 +116,25 @@
   background: #1a6b55;
 }
 
-/* Info panel — visible on hover */
+/* Info panel — hidden by default, shown on hover */
 .team-card__info {
   position: absolute;
-  bottom: -1px;
-  left: -1px;
-  right: -1px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: #fff;
   border-radius: 16px;
   padding: 14px 18px 16px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
   pointer-events: none;
+  z-index: 2;
 }
 
+/* Both selectors: Swiper captures mouse on the slide wrapper first */
+.swiper-slide:hover .team-card__info,
 .team-card:hover .team-card__info {
   opacity: 1;
   transform: translateY(0);
@@ -311,6 +314,61 @@
   .team-swiper-btn {
     display: none;
   }
+}
+
+/* ============================================
+   Team Detail — breadcrumb colour override
+   (sits on var(--color-bg-light) background)
+   ============================================ */
+.team-detail-breadcrumb-bar .page-intro-breadcrumb li,
+.team-detail-breadcrumb-bar .page-intro-breadcrumb li a {
+  color: var(--color-secondary) !important;
+  opacity: 1;
+}
+.team-detail-breadcrumb-bar .page-intro-breadcrumb li a:hover {
+  color: var(--color-primary) !important;
+}
+.team-detail-breadcrumb-bar .page-intro-breadcrumb li:last-child {
+  color: var(--color-text-light) !important;
+}
+
+/* Footer dynamic contacts — no white box, matches dark footer */
+.footer-member-contacts .widget-title {
+  color: var(--color-primary);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.footer-member-contacts ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+.footer-member-contacts ul li {
+  padding: 0 0 0.9375rem;
+  border-bottom: 1px solid var(--color-border-dark);
+  margin-bottom: 0.9375rem;
+  line-height: 1.4;
+}
+.footer-member-contacts ul li:last-child {
+  border-bottom: none;
+}
+.footer-member-contacts ul li p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.875rem;
+}
+.footer-member-contacts ul li a {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-member-contacts ul li a:hover {
+  color: var(--color-primary);
 }
 
 /* ============================================

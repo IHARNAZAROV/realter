@@ -48,12 +48,12 @@
       : '';
 
     col.innerHTML = `
-      <div class="widget widget_services ftr-list-center">
+      <div class="footer-member-contacts">
         <h4 class="widget-title">Контакты ${member.name.split(' ')[0]}</h4>
-        <ul class="contact-info">
-          ${member.phone ? `<li><a href="${phoneHref}" style="color:inherit">${member.phone}</a></li>` : ''}
-          ${member.email ? `<li><a href="${emailHref}" style="color:inherit">${member.email}</a></li>` : ''}
-          ${member.location ? `<li><p>${member.location}</p></li>` : '<li><p>Лида, Беларусь</p></li>'}
+        <ul>
+          ${member.phone ? `<li><p><a href="${phoneHref}">${member.phone}</a></p></li>` : ''}
+          ${member.email ? `<li><p><a href="${emailHref}">${member.email}</a></p></li>` : ''}
+          <li><p>${member.location || 'Лида, Беларусь'}</p></li>
           ${socialLinks}
         </ul>
       </div>`;
