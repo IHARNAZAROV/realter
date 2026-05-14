@@ -45,12 +45,14 @@
 .team-leader-img-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 3/4;
+  padding-top: 133.333%; /* 4:3 portrait ratio */
   overflow: hidden;
   background: var(--color-gray-bg);
 }
 
 .team-leader-img-wrap img {
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -228,13 +230,15 @@
 .team-card-img-wrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
+  padding-top: 56.25%; /* 16:9 ratio */
   overflow: hidden;
   background: var(--color-gray-bg);
   flex-shrink: 0;
 }
 
 .team-card-img-wrap img {
+  position: absolute;
+  top: 0; left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -645,8 +649,8 @@
   }
 
   .team-leader-img-wrap {
-    aspect-ratio: auto;
-    min-height: 260px;
+    padding-top: 0;
+    height: 260px;
   }
 
   .team-detail-hero__inner {
@@ -669,7 +673,8 @@
   }
 
   .team-leader-img-wrap {
-    aspect-ratio: 4/3;
+    padding-top: 75%; /* 4:3 */
+    height: auto;
   }
 
   .team-slide {
