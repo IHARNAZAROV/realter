@@ -91,6 +91,10 @@
     <!-- Дополнительные иконки -->
     <link rel="preload" href="/css/flaticon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 
+    <!-- Стили команды -->
+    <link rel="preload" href="/css/team.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/team.css"></noscript>
+
     <!-- Стили блога -->
     <link rel="preload" href="/css/blog-badge.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="/css/nav-market-status.css?v=8" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -1136,6 +1140,53 @@
 
         </div>
 
+        <!-- ============================================
+             SECTION: TEAM
+        ============================================ -->
+        <section class="section-team" id="teamSection" aria-label="Наша команда">
+            <div class="container" style="position:relative;z-index:1">
+                <header class="section-head section-head--bracket m-b40">
+                    <h2 class="section-title">Наша команда</h2>
+                    <p class="get-in-touch-btn">Профессионалы, которым доверяют</p>
+                </header>
+
+                <div class="team-layout">
+                    <!-- Left: static leader card -->
+                    <div id="teamLeaderCard" class="team-leader-card" aria-label="Руководитель">
+                        <!-- Rendered by team-slider.js -->
+                        <div class="team-avatar-fallback" style="height:300px">ОТ</div>
+                    </div>
+
+                    <!-- Right: slider column -->
+                    <div class="team-slider-col">
+                        <div class="team-slider-header">
+                            <p class="get-in-touch-btn" style="margin:0">Специалисты агентства</p>
+                            <div class="team-slider-controls" role="group" aria-label="Управление слайдером">
+                                <button class="team-slider-btn" id="teamPrev" aria-label="Предыдущий слайд">
+                                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                                </button>
+                                <button class="team-slider-btn" id="teamNext" aria-label="Следующий слайд">
+                                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="team-slider-viewport" id="teamViewport" aria-live="polite">
+                            <div class="team-slider-track" id="teamTrack">
+                                <!-- Rendered by team-slider.js -->
+                            </div>
+                        </div>
+
+                        <div class="team-slider-dots" id="teamDots" role="tablist" aria-label="Слайды команды"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hilite-title text-left p-l50 text-uppercase">
+                <strong>Команда</strong>
+            </div>
+        </section>
+
         <!-- ==============================================
            CONTENT END
       =============================================== -->
@@ -1538,6 +1589,7 @@
     <!-- Analytics loader (GTM + Metrika after consent) -->
     <script src="/js/analytics-consent-loader.js" defer></script>
     <script src="/js/live-price.js?v=20260417-2" defer></script>
+    <script src="/js/team-slider.js" defer></script>
     <script src="/js/blog-smart-badge.js" defer></script>
     <script src="/js/objects-smart-badge.js" defer></script>
     <script src="/js/filters-custom-select.js" defer></script>

@@ -22,6 +22,12 @@ if (preg_match('#^/blog/([a-zA-Z0-9_\-]+)/?$#', $uri, $m)) {
     return;
 }
 
+// /team/{slug} → team-detail.html (with ?slug= param forwarded)
+if (preg_match('#^/team/([a-zA-Z0-9_\-]+)/?$#', $uri, $m)) {
+    header('Location: /team-detail.html?slug=' . rawurlencode($m[1]), true, 301);
+    exit;
+}
+
 // Clean URL aliases for static HTML pages
 $htmlMap = [
     '/nedvizhimost-lida' => 'nedvizhimost-lida.html',

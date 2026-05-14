@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <!-- BASE META -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#155945">
+  <meta name="robots" content="index, follow">
+
+  <!-- Title & description updated by JS -->
+  <title>Специалист | turko.by</title>
+
+  <!-- FAVICONS -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- CRITICAL CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/team.css">
+
+  <!-- NON-CRITICAL CSS (async) -->
+  <link rel="preload" href="/css/fontawesome/css/solid.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/css/fontawesome/css/solid.min.css"></noscript>
+
+  <link rel="preload" href="/css/fontawesome/css/brands.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/css/fontawesome/css/brands.min.css"></noscript>
+
+  <link rel="preload" href="/css/flaticon.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/css/flaticon.min.css"></noscript>
+</head>
+
+<body>
+
+<!-- ============================================
+     HEADER (same as main site)
+============================================ -->
+<div class="page-wraper">
+
+  <header class="site-header header-style-1 nav-wide mobile-sider-drawer-menu">
+    <div class="top-bar bg-gray">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <ul class="contact-info e-p-bx m-b0">
+            <li><i class="fa fa-phone" aria-hidden="true"></i> <a href="tel:+375291112233">+375 (29) 111-22-33</a></li>
+            <li><i class="fa fa-map-marker-alt" aria-hidden="true"></i> г. Лида, Беларусь</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sticky-header main-bar-wraper navbar-expand-lg">
+      <div class="main-bar">
+        <div class="container clearfix">
+          <div class="logo-header">
+            <a href="/">
+              <img src="/images/logo-dark.svg" alt="Ольга Турко Риэлтер" class="site-logo site-logo--dark" width="140" height="48">
+            </a>
+          </div>
+          <nav class="header-nav navbar-collapse collapse justify-content-end" id="navbarToggle" role="navigation" aria-label="Основная навигация">
+            <ul class="nav navbar-nav">
+              <li><a href="/">Главная</a></li>
+              <li><a href="/nedvizhimost-lida">Объекты</a></li>
+              <li><a href="/blog">Блог</a></li>
+              <li><a href="/contact">Контакты</a></li>
+            </ul>
+          </nav>
+          <button class="navbar-toggler" type="button" aria-label="Открыть меню">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================
+       TEAM DETAIL CONTENT (rendered by JS)
+  ============================================ -->
+  <main class="page-content" id="teamDetailRoot" aria-live="polite">
+    <!-- Loading state -->
+    <div class="container" style="padding:80px 0;text-align:center">
+      <div style="width:48px;height:48px;border:4px solid var(--color-border);border-top-color:var(--color-primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px"></div>
+      <p style="color:var(--color-text-light)">Загрузка...</p>
+    </div>
+  </main>
+
+  <!-- ============================================
+       FOOTER
+  ============================================ -->
+  <footer class="site-footer footer-large footer-dark footer-wide">
+    <div class="footer-top overlay-wraper">
+      <div class="overlay-main"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="widget widget_about">
+              <div class="logo-footer clearfix p-b15">
+                <a href="/"><img src="/images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко Риэлтер" width="140"></a>
+              </div>
+              <p><b>Найти квартиру — легко. Найти свою — искусство.</b></p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="widget widget_services">
+              <h5 class="widget-title">Навигация</h5>
+              <ul>
+                <li><a href="/">Главная</a></li>
+                <li><a href="/nedvizhimost-lida">Недвижимость</a></li>
+                <li><a href="/blog">Блог</a></li>
+                <li><a href="/contact">Контакты</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="widget widget_address_outer">
+              <h5 class="widget-title">Контакты</h5>
+              <ul class="contact-info">
+                <li><i class="fa fa-map-marker-alt"></i> г. Лида, Беларусь</li>
+                <li><i class="fa fa-phone"></i> <a href="tel:+375291112233">+375 (29) 111-22-33</a></li>
+                <li><i class="fa fa-envelope"></i> <a href="mailto:olga@turko.by">olga@turko.by</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom overlay-wraper">
+      <div class="overlay-main"></div>
+      <div class="container">
+        <div class="sx-footer-bot-left">
+          <span class="copyrights-text">© <span id="footerYear"></span> turko.by — Все права защищены</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Spinner keyframes -->
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<!-- SCRIPTS -->
+<script>document.getElementById('footerYear').textContent = new Date().getFullYear();</script>
+<script src="/js/team-detail.js" defer></script>
+
+</body>
+</html>
