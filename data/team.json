@@ -8,6 +8,7 @@
     "photo": "images/team/olga-turko.webp",
     "shortDescription": "Специалист по жилой недвижимости в Лиде. Сопровождение сделок купли-продажи квартир и домов от А до Я.",
     "experience": "7 лет опыта",
+    "isManager": true,
     "socials": {
       "instagram": "https://www.instagram.com/rielter_olga_lida",
       "telegram": "https://t.me/TurkoOlga",

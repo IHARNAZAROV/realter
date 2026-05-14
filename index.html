@@ -1144,31 +1144,42 @@
             <div class="container">
 
                 <!-- Шапка секции: заголовок слева, описание + кнопка справа -->
-                <div class="team-hdr">
-                    <div class="team-hdr__left">
-                        <h2 class="team-hdr__title">Мы — профессиональная<br>команда ГермесГрупп</h2>
+                <div class="ts-hdr">
+                    <div class="ts-hdr__left">
+                        <h2 class="ts-hdr__title">Мы — профессиональная<br>команда ГермесГрупп</h2>
                     </div>
-                    <div class="team-hdr__right">
-                        <p class="team-hdr__desc">Аттестованные риэлтеры, которые помогут с покупкой, продажей и обменом недвижимости в Лиде.</p>
-                        <a href="/rieltor-lida" class="team-view-all-btn">Посмотреть о нас <span aria-hidden="true">↗</span></a>
+                    <div class="ts-hdr__right">
+                        <p class="ts-hdr__desc">Аттестованные риэлтеры, которые помогут с покупкой, продажей и обменом недвижимости в Лиде.</p>
+                        <a href="/rieltor-lida" class="ts-hdr__btn">Посмотреть о нас <span aria-hidden="true">↗</span></a>
                     </div>
                 </div>
 
-                <!-- Основной блок: статичная большая карточка + вертикальный слайдер -->
-                <div class="team-showcase">
-                    <!-- Статичная большая карточка (первый участник команды) -->
-                    <div class="team-featured" id="team-featured">
-                        <!-- Генерируется JS -->
+                <!-- Основной блок: статичная большая карточка + вертикальный скроллер -->
+                <div class="row ts-showcase">
+
+                    <!-- Левая колонка: большая статичная карточка -->
+                    <div class="col-lg-6 col-md-6 ts-left">
+                        <!-- Скелетон (до загрузки) -->
+                        <div class="ts-skel-left" id="ts-skel-left"></div>
+                        <!-- Карточка генерируется JS (.ts-featured) -->
+                        <div id="team-featured" style="display:none"></div>
                     </div>
 
-                    <!-- Правая колонка: вертикальный слайдер 2×2 -->
-                    <div class="team-grid-right">
-                        <div class="swiper team-v-swiper">
-                            <div class="swiper-wrapper" id="team-v-wrapper">
-                                <!-- Пары карточек генерируются JS -->
+                    <!-- Правая колонка: 2×2 бесконечный вертикальный скроллер -->
+                    <div class="col-lg-6 col-md-6 ts-right-col">
+                        <div class="ts-right">
+                            <!-- Скелетон (до загрузки) -->
+                            <div class="ts-skel-right" id="ts-skel-right">
+                                <div class="ts-skel-cell"></div>
+                                <div class="ts-skel-cell"></div>
+                                <div class="ts-skel-cell"></div>
+                                <div class="ts-skel-cell"></div>
                             </div>
+                            <!-- Бесконечная анимация (генерируется JS) -->
+                            <div class="ts-track" id="team-track" style="display:none"></div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
