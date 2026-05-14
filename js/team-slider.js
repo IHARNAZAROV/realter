@@ -243,10 +243,7 @@
   ========================================================= */
   function observeEntrance() {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced || !('IntersectionObserver' in window)) {
-      document.querySelectorAll('.team-card, .team-leader-card').forEach(el => el.classList.add('is-visible'));
-      return;
-    }
+    if (prefersReduced || !('IntersectionObserver' in window)) return;
 
     const io = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -256,17 +253,21 @@
         setTimeout(() => el.classList.add('is-visible'), delay);
         io.unobserve(el);
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
     const leader = document.querySelector('.team-leader-card');
-    if (leader) io.observe(leader);
+    if (leader) {
+      leader.classList.add('will-animate');
+      io.observe(leader);
+    }
 
     setTimeout(() => {
       document.querySelectorAll('.team-card').forEach((el, i) => {
-        el.dataset.delay = i * 70;
+        el.classList.add('will-animate');
+        el.dataset.delay = i * 60;
         io.observe(el);
       });
-    }, 80);
+    }, 50);
   }
 
   /* =========================================================
