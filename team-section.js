@@ -43,7 +43,7 @@
 
   const render = () => {
     track.innerHTML = slides.map(group => `
-      <article class="slide">${group.map(agent => `<article class="agent-card">${cardTemplate(agent)}</article>`).join('')}</article>
+      <article class="team-slide">${group.map(agent => `<article class="agent-card">${cardTemplate(agent)}</article>`).join('')}</article>
     `).join('');
     pagination.innerHTML = slides.map((_, i) => `<button class="team-dot ${i===current?'is-active':''}" aria-label="Перейти к слайду ${i+1}" data-index="${i}"></button>`).join('');
     update();
@@ -63,7 +63,7 @@
     autoplayId = setInterval(next, AUTOPLAY_MS);
   };
 
-  fetch('team.json')
+  fetch('/team.json')
     .then(r => r.json())
     .then(data => {
       const manager = data.find(p => p.isManager) || data[0];
@@ -73,7 +73,8 @@
       render();
       startAutoplay();
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error('[team-section] failed to load team.json', error);
       managerRoot.innerHTML = '<div class="card-body"><p>Не удалось загрузить данные команды.</p></div>';
     });
 
@@ -108,7 +109,7 @@
   window.addEventListener('resize', () => {
     const cards = Array.from(track.querySelectorAll('.agent-card')).map((_, i) => i);
     if (!cards.length) return;
-    fetch('team.json').then(r => r.json()).then(data => {
+    fetch('/team.json').then(r => r.json()).then(data => {
       slides = buildSlides(data.filter(p => !p.isManager));
       current = 0;
       render();

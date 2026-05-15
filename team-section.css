@@ -49,7 +49,7 @@
 
 .agents-slider__viewport { overflow: hidden; }
 .agents-slider__track { display: flex; transition: transform .7s cubic-bezier(.22,.61,.36,1); }
-.slide { min-width: 100%; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
+.team-slide { min-width: 100%; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
 .agent-card { cursor: pointer; transition: transform .32s ease, box-shadow .32s ease; }
 .agent-card:hover { transform: translateY(-6px); box-shadow: 0 24px 45px rgba(16,38,32,.12); }
 .agent-card .card-name { font-size:22px; }
@@ -62,12 +62,12 @@
 @media (max-width: 1024px){
   .team-section { padding:60px 16px; }
   .team-section__layout { grid-template-columns: 1fr; }
-  .slide { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .team-slide { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .manager-card .card-name { font-size:30px; }
 }
 @media (max-width: 700px){
   .team-section__header { padding-right:0; }
   .team-section__controls { position: static; margin-top: 18px; }
-  .slide { grid-template-columns: 1fr; }
+  .team-slide { grid-template-columns: 1fr; }
   .agent-card .card-media { height: 230px; }
 }
