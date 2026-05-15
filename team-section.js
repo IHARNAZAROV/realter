@@ -14,6 +14,7 @@
   let current = 0;
   let autoplayId = null;
   const AUTOPLAY_MS = 4500;
+  const TEAM_JSON_CANDIDATES = ['/team.json', './team.json', '/data/team.json'];
 
   const safe = (v) => String(v ?? '').replace(/[<>&"']/g, (m) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]));
 
@@ -63,8 +64,7 @@
     autoplayId = setInterval(next, AUTOPLAY_MS);
   };
 
-  fetch('/team.json')
-    .then(r => r.json())
+  loadTeamData()
     .then(data => {
       const manager = data.find(p => p.isManager) || data[0];
       const agents = data.filter(p => !p.isManager);
@@ -109,11 +109,30 @@
   window.addEventListener('resize', () => {
     const cards = Array.from(track.querySelectorAll('.agent-card')).map((_, i) => i);
     if (!cards.length) return;
-    fetch('/team.json').then(r => r.json()).then(data => {
+    loadTeamData().then(data => {
       slides = buildSlides(data.filter(p => !p.isManager));
       current = 0;
       render();
       startAutoplay();
+    }).catch((error) => {
+      console.error('[team-section] failed to reload team data on resize', error);
     });
   });
 })();
+  const loadTeamData = async () => {
+    let lastError = null;
+    for (const url of TEAM_JSON_CANDIDATES) {
+      try {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
+        const payload = await response.json();
+        if (!Array.isArray(payload) || payload.length === 0) {
+          throw new Error(`${url} -> invalid payload`);
+        }
+        return payload;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    throw lastError || new Error('team data not found');
+  };
