@@ -15,6 +15,13 @@
   let autoplayId = null;
   const AUTOPLAY_MS = 4500;
   const TEAM_JSON_CANDIDATES = ['/team.json', './team.json', '/data/team.json'];
+  const FALLBACK_TEAM_DATA = [
+    { id: 1, name: 'Ольга Турко', position: 'Руководитель филиала', specialization: 'Эксперт по недвижимости Лиды', experience: 12, deals: 340, city: 'Лида', photo: '/images/team/olga-turko.webp', isManager: true, description: 'Эксперт по недвижимости Лиды с 12-летним опытом. Провела более 340 успешных сделок.' },
+    { id: 2, name: 'Артём Лисовский', position: 'Риэлтер', specialization: 'Новостройки и инвестиции', experience: 8, deals: 188, city: 'Гродно', photo: '/images/team/artem-lisovskiy.webp', isManager: false },
+    { id: 3, name: 'Марина Кравчук', position: 'Риэлтер', specialization: 'Семейные квартиры', experience: 6, deals: 145, city: 'Лида', photo: '/images/team/marina-kravchuk.webp', isManager: false },
+    { id: 4, name: 'Дмитрий Ярош', position: 'Риэлтер', specialization: 'Загородные дома', experience: 10, deals: 231, city: 'Щучин', photo: '/images/team/dmitriy-yarosh.webp', isManager: false },
+    { id: 5, name: 'Екатерина Полещук', position: 'Риэлтер', specialization: 'Коммерческая недвижимость', experience: 9, deals: 164, city: 'Волковыск', photo: '/images/team/ekaterina-poleschuk.webp', isManager: false }
+  ];
 
   const loadTeamData = async () => {
     let lastError = null;
@@ -31,7 +38,8 @@
         lastError = error;
       }
     }
-    throw lastError || new Error('team data not found');
+    console.error('[team-section] all team.json sources failed, fallback to embedded data', lastError);
+    return FALLBACK_TEAM_DATA;
   };
 
   const safe = (v) => String(v ?? '').replace(/[<>&"']/g, (m) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]));
