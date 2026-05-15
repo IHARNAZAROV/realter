@@ -10,18 +10,14 @@
   const sliderRegion = section.querySelector('.agents-slider');
 
   const chunkSize = () => (window.innerWidth <= 700 ? 1 : 4);
+  const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23e8ecea'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23687a75' font-family='Arial' font-size='24'%3EФото недоступно%3C/text%3E%3C/svg%3E";
   let slides = [];
   let current = 0;
   let autoplayId = null;
+  let rawTeam = [];
+  let resizeTimer = null;
   const AUTOPLAY_MS = 4500;
   const TEAM_JSON_CANDIDATES = ['/team.json', './team.json', '/data/team.json'];
-  const FALLBACK_TEAM_DATA = [
-    { id: 1, name: 'Ольга Турко', position: 'Руководитель филиала', specialization: 'Эксперт по недвижимости Лиды', experience: 12, deals: 340, city: 'Лида', photo: '/images/team/olga-turko.webp', isManager: true, description: 'Эксперт по недвижимости Лиды с 12-летним опытом. Провела более 340 успешных сделок.' },
-    { id: 2, name: 'Артём Лисовский', position: 'Риэлтер', specialization: 'Новостройки и инвестиции', experience: 8, deals: 188, city: 'Гродно', photo: '/images/team/artem-lisovskiy.webp', isManager: false },
-    { id: 3, name: 'Марина Кравчук', position: 'Риэлтер', specialization: 'Семейные квартиры', experience: 6, deals: 145, city: 'Лида', photo: '/images/team/marina-kravchuk.webp', isManager: false },
-    { id: 4, name: 'Дмитрий Ярош', position: 'Риэлтер', specialization: 'Загородные дома', experience: 10, deals: 231, city: 'Щучин', photo: '/images/team/dmitriy-yarosh.webp', isManager: false },
-    { id: 5, name: 'Екатерина Полещук', position: 'Риэлтер', specialization: 'Коммерческая недвижимость', experience: 9, deals: 164, city: 'Волковыск', photo: '/images/team/ekaterina-poleschuk.webp', isManager: false }
-  ];
 
   const loadTeamData = async () => {
     const inlineDataEl = document.getElementById('team-data');
@@ -50,8 +46,7 @@
         lastError = error;
       }
     }
-    console.error('[team-section] all team.json sources failed, fallback to embedded data', lastError);
-    return FALLBACK_TEAM_DATA;
+    throw lastError || new Error('Team data is unavailable');
   };
 
   const safe = (v) => String(v ?? '').replace(/[<>&"']/g, (m) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]));
@@ -105,8 +100,9 @@
 
   loadTeamData()
     .then(data => {
-      const manager = data.find(p => p.isManager) || data[0];
-      const agents = data.filter(p => !p.isManager);
+      rawTeam = data;
+      const manager = rawTeam.find((p) => p.isManager) || rawTeam[0];
+      const agents = rawTeam.filter((p) => !p.isManager);
       managerRoot.innerHTML = cardTemplate(manager, true);
       slides = buildSlides(agents);
       render();
@@ -146,22 +142,20 @@
   }, { passive: true });
 
   window.addEventListener('resize', () => {
-    const cards = Array.from(track.querySelectorAll('.agent-card')).map((_, i) => i);
-    if (!cards.length) return;
-    loadTeamData().then(data => {
-      slides = buildSlides(data.filter(p => !p.isManager));
+    if (!rawTeam.length) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      slides = buildSlides(rawTeam.filter((p) => !p.isManager));
       current = 0;
       render();
       startAutoplay();
-    }).catch((error) => {
-      console.error('[team-section] failed to reload team data on resize', error);
-    });
+    }, 120);
   });
 
   track.addEventListener('error', (event) => {
     const image = event.target;
     if (!(image instanceof HTMLImageElement)) return;
-    image.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23e8ecea'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23687a75' font-family='Arial' font-size='24'%3EФото недоступно%3C/text%3E%3C/svg%3E";
+    image.src = FALLBACK_IMAGE;
     image.alt = `${image.alt}. Фото временно недоступно`;
   }, true);
 })();
