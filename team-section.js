@@ -24,6 +24,18 @@
   ];
 
   const loadTeamData = async () => {
+    const inlineDataEl = document.getElementById('team-data');
+    if (inlineDataEl) {
+      try {
+        const inlinePayload = JSON.parse(inlineDataEl.textContent || '[]');
+        if (Array.isArray(inlinePayload) && inlinePayload.length > 0) {
+          return inlinePayload;
+        }
+      } catch (error) {
+        console.error('[team-section] failed to parse inline #team-data JSON', error);
+      }
+    }
+
     let lastError = null;
     for (const url of TEAM_JSON_CANDIDATES) {
       try {
