@@ -12,7 +12,8 @@
 .team-section {
   display: block;
   position: relative;
-  z-index: 2;
+  z-index: 120;
+  isolation: isolate;
   background: radial-gradient(circle at top right, #fefdfb 0%, var(--team-bg) 65%);
   padding: 72px 20px;
   color: var(--team-primary);
@@ -20,6 +21,15 @@
 }
 .team-section,
 .team-section * { box-sizing: border-box; }
+.team-section,
+.team-section .manager-card,
+.team-section .agent-card,
+.team-section .agents-slider,
+.team-section .agents-slider__track,
+.team-section .team-slide {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
 .team-section__shell { max-width: 1320px; margin: 0 auto; }
 .team-section__header { position: relative; margin-bottom: 34px; padding-right: 130px; }
 .team-section__eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 12px; color: #71847f; margin: 0 0 10px; }
