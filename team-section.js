@@ -69,6 +69,7 @@
   };
 
   const render = () => {
+    sliderRegion.classList.toggle('is-empty', slides.length === 0);
     track.innerHTML = slides.map(group => `
       <article class="team-slide">${group.map(agent => `<article class="agent-card">${cardTemplate(agent)}</article>`).join('')}</article>
     `).join('');

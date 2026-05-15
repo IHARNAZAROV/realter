@@ -10,11 +10,16 @@
 }
 
 .team-section {
+  display: block;
+  position: relative;
+  z-index: 2;
   background: radial-gradient(circle at top right, #fefdfb 0%, var(--team-bg) 65%);
   padding: 72px 20px;
   color: var(--team-primary);
   font-family: "Inter", "Segoe UI", sans-serif;
 }
+.team-section,
+.team-section * { box-sizing: border-box; }
 .team-section__shell { max-width: 1320px; margin: 0 auto; }
 .team-section__header { position: relative; margin-bottom: 34px; padding-right: 130px; }
 .team-section__eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: 12px; color: #71847f; margin: 0 0 10px; }
@@ -48,7 +53,7 @@
 .card-link:hover { gap: 10px; }
 
 .agents-slider__viewport { overflow: hidden; }
-.agents-slider__track { display: flex; transition: transform .7s cubic-bezier(.22,.61,.36,1); }
+.agents-slider__track { display: flex; width: 100%; min-height: 200px; transition: transform .7s cubic-bezier(.22,.61,.36,1); }
 .team-slide { min-width: 100%; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 18px; }
 .agent-card { cursor: pointer; transition: transform .32s ease, box-shadow .32s ease; }
 .agent-card:hover { transform: translateY(-6px); box-shadow: 0 24px 45px rgba(16,38,32,.12); }
@@ -58,6 +63,17 @@
 .agents-slider__pagination { display:flex; justify-content:center; gap:10px; margin-top:22px; }
 .team-dot { width:10px; height:10px; border-radius:50%; border:0; background:#c9d4d0; cursor:pointer; transition:all .25s; }
 .team-dot.is-active { width:28px; border-radius:99px; background:var(--team-primary); }
+
+.agents-slider.is-empty .agents-slider__viewport {
+  border: 1px dashed #d6ddd8;
+  border-radius: 18px;
+}
+.agents-slider.is-empty .agents-slider__track::before {
+  content: "Карточки специалистов временно недоступны";
+  display: block;
+  padding: 32px 20px;
+  color: #6f7d79;
+}
 
 @media (max-width: 1024px){
   .team-section { padding:60px 16px; }
