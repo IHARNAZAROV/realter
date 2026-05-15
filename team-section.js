@@ -16,6 +16,24 @@
   const AUTOPLAY_MS = 4500;
   const TEAM_JSON_CANDIDATES = ['/team.json', './team.json', '/data/team.json'];
 
+  const loadTeamData = async () => {
+    let lastError = null;
+    for (const url of TEAM_JSON_CANDIDATES) {
+      try {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
+        const payload = await response.json();
+        if (!Array.isArray(payload) || payload.length === 0) {
+          throw new Error(`${url} -> invalid payload`);
+        }
+        return payload;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    throw lastError || new Error('team data not found');
+  };
+
   const safe = (v) => String(v ?? '').replace(/[<>&"']/g, (m) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]));
 
   const cardTemplate = (agent, manager = false) => `
@@ -118,21 +136,11 @@
       console.error('[team-section] failed to reload team data on resize', error);
     });
   });
+
+  track.addEventListener('error', (event) => {
+    const image = event.target;
+    if (!(image instanceof HTMLImageElement)) return;
+    image.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23e8ecea'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23687a75' font-family='Arial' font-size='24'%3EФото недоступно%3C/text%3E%3C/svg%3E";
+    image.alt = `${image.alt}. Фото временно недоступно`;
+  }, true);
 })();
-  const loadTeamData = async () => {
-    let lastError = null;
-    for (const url of TEAM_JSON_CANDIDATES) {
-      try {
-        const response = await fetch(url, { cache: 'no-store' });
-        if (!response.ok) throw new Error(`${url} -> HTTP ${response.status}`);
-        const payload = await response.json();
-        if (!Array.isArray(payload) || payload.length === 0) {
-          throw new Error(`${url} -> invalid payload`);
-        }
-        return payload;
-      } catch (error) {
-        lastError = error;
-      }
-    }
-    throw lastError || new Error('team data not found');
-  };
