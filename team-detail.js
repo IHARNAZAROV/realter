@@ -6,7 +6,7 @@
   const safe = (v='') => String(v).replace(/[<>&"']/g,m=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[m]));
 
   async function loadTeam(){
-    for (const u of ['/team.json','/data/team.json']) {
+    for (const u of ['/data/team.json']) {
       try { const r = await fetch(u,{cache:'no-store'}); if(!r.ok) continue; const d=await r.json(); if(Array.isArray(d)) return d; } catch {}
     }
     return [];
