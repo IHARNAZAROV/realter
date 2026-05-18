@@ -46,6 +46,8 @@
   const AGENT_INFO_TEMPLATE = `
     <div class="widget_address" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.1);">
       <div style="font-size: 13px; line-height: 1.6; color: #666;">
+        <div style="font-weight: 600; margin-bottom: 8px;">Агентство недвижимости</div>
+        <p style="margin: 0 0 6px;"><strong>${AGENCY_DATA.name}</strong></p>
         <p style="margin: 0 0 6px;">УНП ${AGENCY_DATA.unp}</p>
         <p style="margin: 0 0 6px;">Лицензия: ${AGENCY_DATA.license} от ${AGENCY_DATA.licenseDate}</p>
         <p style="margin: 0;">Страховой полис Серия ${AGENCY_DATA.insurance.series} № ${AGENCY_DATA.insurance.number}, с ${AGENCY_DATA.insurance.from} по ${AGENCY_DATA.insurance.to}</p>
@@ -128,6 +130,8 @@
       // Add agency info to sidebar footer with data-agent-info marker
       const agencyInfoHtml = `
         <div data-agent-info style="font-size: 13px; line-height: 1.6; color: #666; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.1);">
+          <div style="font-weight: 600; margin-bottom: 8px;">Агентство недвижимости</div>
+          <p style="margin: 0 0 6px;"><strong>${AGENCY_DATA.name}</strong></p>
           <p style="margin: 0 0 6px;">УНП ${AGENCY_DATA.unp}</p>
           <p style="margin: 0 0 6px;">Лицензия: ${AGENCY_DATA.license} от ${AGENCY_DATA.licenseDate}</p>
           <p style="margin: 0;">Страховой полис Серия ${AGENCY_DATA.insurance.series} № ${AGENCY_DATA.insurance.number}, с ${AGENCY_DATA.insurance.from} по ${AGENCY_DATA.insurance.to}</p>
