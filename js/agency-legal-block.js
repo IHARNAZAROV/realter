@@ -44,11 +44,14 @@
 
   // Template for agent info block (object pages sidebar)
   const AGENT_INFO_TEMPLATE = `
-    <div class="agent-info-block" data-agent-info>
-      <div class="agent-info-block__title">Объект сопровождает:</div>
-      <div class="agent-info-block__name">${AGENT_DATA.name}</div>
-      <div class="agent-info-block__role">${AGENT_DATA.role}</div>
-      <div class="agent-info-block__agency">${AGENCY_DATA.name}</div>
+    <div class="widget_address" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.1);">
+      <div style="font-size: 13px; line-height: 1.6; color: #666;">
+        <div style="font-weight: 600; margin-bottom: 8px;">Агентство недвижимости</div>
+        <p style="margin: 0 0 6px;"><strong>${AGENCY_DATA.name}</strong></p>
+        <p style="margin: 0 0 6px;">УНП ${AGENCY_DATA.unp}</p>
+        <p style="margin: 0 0 6px;">Лицензия: ${AGENCY_DATA.license} от ${AGENCY_DATA.licenseDate}</p>
+        <p style="margin: 0;">Страховой полис Серия ${AGENCY_DATA.insurance.series} № ${AGENCY_DATA.insurance.number}, с ${AGENCY_DATA.insurance.from} по ${AGENCY_DATA.insurance.to}</p>
+      </div>
     </div>
   `;
 
@@ -110,7 +113,7 @@
   }
 
   /**
-   * Add agent info block to object sidebar
+   * Add agent info block to object sidebar footer
    */
   function addAgentInfoBlock(container) {
     if (!container) return;
@@ -120,16 +123,21 @@
       return;
     }
 
-    // Look for agent card or sidebar
-    const agentCard = container.querySelector('.agent-card');
-    const sidebar = container.querySelector('.object-sidebar');
+    // Look for sidebar footer where address is
+    const sidebarFooter = container.querySelector('[data-sidebar-footer]');
 
-    if (agentCard && agentCard.parentNode) {
-      // Insert after agent card
-      agentCard.insertAdjacentHTML('afterend', AGENT_INFO_TEMPLATE);
-    } else if (sidebar) {
-      // Append to sidebar
-      sidebar.insertAdjacentHTML('beforeend', AGENT_INFO_TEMPLATE);
+    if (sidebarFooter) {
+      // Add agency info to sidebar footer with data-agent-info marker
+      const agencyInfoHtml = `
+        <div data-agent-info style="font-size: 13px; line-height: 1.6; color: #666; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.1);">
+          <div style="font-weight: 600; margin-bottom: 8px;">Агентство недвижимости</div>
+          <p style="margin: 0 0 6px;"><strong>${AGENCY_DATA.name}</strong></p>
+          <p style="margin: 0 0 6px;">УНП ${AGENCY_DATA.unp}</p>
+          <p style="margin: 0 0 6px;">Лицензия: ${AGENCY_DATA.license} от ${AGENCY_DATA.licenseDate}</p>
+          <p style="margin: 0;">Страховой полис Серия ${AGENCY_DATA.insurance.series} № ${AGENCY_DATA.insurance.number}, с ${AGENCY_DATA.insurance.from} по ${AGENCY_DATA.insurance.to}</p>
+        </div>
+      `;
+      sidebarFooter.insertAdjacentHTML('beforeend', agencyInfoHtml);
     }
   }
 
@@ -178,12 +186,11 @@
    * Initialize all components
    */
   function init() {
-    // Add agency legal info to object pages
+    // Add agency legal info to object pages sidebar footer
     const objectContent = document.querySelector('[data-sidebar-footer]');
     if (objectContent) {
-      // This is an object detail page
-      addAgencyLegalBlock(document.body);
-      addAgentInfoBlock(document.querySelector('.object-sidebar'));
+      // This is an object detail page - add info to sidebar footer
+      addAgentInfoBlock(document.body);
     }
 
     // Update footer on all pages
