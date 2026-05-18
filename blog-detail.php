@@ -224,6 +224,8 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
     <link rel="stylesheet" href="/css/blog-views.css" />
     <link rel="stylesheet" href="/css/blog-related.css" />
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <!-- Legal & Compliance -->
+    <link rel="stylesheet" href="/css/agency-legal.css">
 </head>
   <body>
 
@@ -769,5 +771,8 @@ $ctaJson = $ctaBlock ? json_encode($ctaBlock, JSON_UNESCAPED_UNICODE | JSON_UNES
     </div>
     <script src="/js/sw-register.js" defer></script>
     <script src="contact-widget.js" defer></script>
+    <!-- Legal & Compliance Components -->
+    <script src="/js/agency-legal-block.js" defer></script>
+    <script src="/js/consent-checkbox.js" defer></script>
 </body>
 </html>

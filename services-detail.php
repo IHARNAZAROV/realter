@@ -166,6 +166,8 @@ if (is_array($currentService)) {
       <link rel="stylesheet" href="/css/fontawesome/css/brands.min.css" />
       <link rel="stylesheet" href="/css/fontawesome/css/solid.min.css" />
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <!-- Legal & Compliance -->
+    <link rel="stylesheet" href="/css/agency-legal.css">
 </head>
 
    <body>
@@ -651,6 +653,7 @@ if (is_array($currentService)) {
       </div>
     </div>
     <script src="/js/sw-register.js" defer></script>
-    <script src="contact-widget.js" defer></script>
-</body>
+    <script src="contact-widget.js" defer></script>      <!-- Legal & Compliance Components -->
+      <script src="/js/agency-legal-block.js" defer></script>
+      <script src="/js/consent-checkbox.js" defer></script></body>
 </html>

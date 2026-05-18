@@ -207,6 +207,8 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     <link rel="stylesheet" href="/css/district-info.css" />
     <link rel="stylesheet" href="/css/object-faq.css" />
     <link rel="stylesheet" href="/css/contact-widget.css">
+    <!-- Legal & Compliance -->
+    <link rel="stylesheet" href="/css/agency-legal.css">
 </head>
 
   <body id="bg">
@@ -1128,5 +1130,8 @@ $ogDescriptionEsc = htmlspecialchars($ogDescription, ENT_QUOTES);
     </div>
     <script src="/js/sw-register.js" defer></script>
     <script src="contact-widget.js" defer></script>
+    <!-- Legal & Compliance Components -->
+    <script src="/js/agency-legal-block.js" defer></script>
+    <script src="/js/consent-checkbox.js" defer></script>
 </body>
 </html>
