@@ -181,177 +181,49 @@
 <body>
     <div class="page-wraper">
 
-        <!-- ==============================================
-           HEADER
-        =============================================== -->
-        <header class="site-header header-style-1 nav-wide mobile-sider-drawer-menu">
-            <!-- Top Bar -->
-            <div class="top-bar bg-gray">
-                <div class="container">
-                    <div class="d-flex justify-content-end">
-                        <ul class="list-unstyled e-p-bx">
-                            <li>
-                                <span>Инстаграм:</span>
-                                <a href="https://instagram.com/Rielter_olga_lida" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary)">@Rielter_olga_lida</a>
-                            </li>
-                            <li>
-                                <span>Телефон:</span>
-                                <a href="tel:+375291809516" style="color: var(--color-primary)">+375 29 180 95 16</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- Sticky Nav -->
-            <div class="sticky-header main-bar-wraper navbar-expand-lg">
-                <div class="main-bar header-left-gray-block bg-white">
-                    <div class="container clearfix">
-                        <!-- Logo -->
-                        <div class="logo-header">
-                            <div class="logo-header-inner logo-header-one">
-                                <a href="/">
-                                    <img src="/images/logo-dark.svg" class="site-logo site-logo--dark" alt="Логотип риэлтера Ольга Турко - Недвижимость в Лиде" />
-                                </a>
-                            </div>
-                        </div>
-                        <!-- NAV Toggle Button -->
-                        <button id="mobile-side-drawer" data-target=".header-nav" data-toggle="collapse" type="button" class="navbar-toggler collapsed">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar icon-bar-first"></span>
-                            <span class="icon-bar icon-bar-two"></span>
-                            <span class="icon-bar icon-bar-three"></span>
-                        </button>
-                        <!-- Extra Nav (CTA) -->
-                        <div class="extra-nav">
-                            <div class="extra-cell header-quick-actions">
-                                <div class="header-center">
-                                    <button type="button" class="client-quiz-launch header-quick-actions__btn" data-client-quiz-open aria-haspopup="dialog" aria-controls="clientQuizModal">
-                                        Подберу решение
-                                    </button>
-                                </div>
-                                <div class="contact-slide-show">
-                                    <a href="javascript:;" class="get-in-touch-btn client-quiz-launch client-quiz-launch--featured header-quick-actions__btn">Я всегда на связи</a>
-                                </div>
-                                <div class="contact-slide-show documents-checklist-launch">
-                                    <button type="button" class="get-in-touch-btn documents-checklist-launch__btn client-quiz-launch header-quick-actions__btn" data-documents-checklist-open aria-haspopup="dialog" aria-controls="documentsChecklistModal">
-                                        Чеклист документов
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Main Navigation -->
-                        <div class="header-nav nav-dark justify-content-start">
-                            <ul class="nav navbar-nav">
-                                <li><a href="/">Главная</a></li>
-                                <li><a href="/rieltor-lida">Обо мне</a></li>
-                                <li class="nav-objects">
-                                    <a href="/nedvizhimost-lida">
-                                        Объекты
-                                        <span id="objectsBadge" class="nav-badge"></span>
-                                    </a>
-                                </li>
-                                <li class="active"><a href="/rynok-nedvizhimosti-lida">Рынок</a></li>
-                                <li class="nav-blog">
-                                    <a href="/blog">
-                                        Блог
-                                        <span id="blogBadge" class="nav-badge"></span>
-                                    </a>
-                                </li>
-                                <li><a href="/faq">Вопросы</a></li>
-                                <li><a href="/contact">Контакты</a></li>
-                                <li class="nav-market-status-li">
-                                    <div class="nav-market-status" id="marketStatus" aria-live="polite" aria-atomic="true">
-                                        <span class="status-indicator" aria-hidden="true"></span>
-                                        <div class="status-text-wrapper">
-                                            <div class="status-text current"></div>
-                                            <div class="status-text next"></div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Contact Slide Dropdown -->
-                        <div class="contact-slide-hide" style="background-image: url(/images/background/bg-map.webp)">
-                            <div class="contact-slide-overlay"></div>
-                            <div class="contact-slide-content">
-                                <div class="contact-nav">
-                                    <a href="javascript:void(0)" class="contact_close">×</a>
-                                    <div class="contact-nav-form">
-                                        <div class="row">
-                                            <div class="col-xl-6 col-lg-6 col-md-12">
-                                                <div class="contact-nav-info">
-                                                    <div class="sx-icon-box-wraper left p-b30">
-                                                        <div class="icon-xs inline-icon m-b20 scale-in-center">
-                                                            <i class="fa-solid fa-phone"></i>
-                                                        </div>
-                                                        <div class="icon-content">
-                                                            <h6 class="m-t0">Мой телефон</h6>
-                                                            <p>+375 29 180 95 16</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="sx-icon-box-wraper left p-b30">
-                                                        <div class="icon-xs inline-icon m-b20 scale-in-center">
-                                                            <i class="fa fa-envelope"></i>
-                                                        </div>
-                                                        <div class="icon-content">
-                                                            <h6 class="m-t0">Электронная почта</h6>
-                                                            <p>olgaturko1975@gmail.com</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="sx-icon-box-wraper left p-b30">
-                                                        <div class="icon-xs inline-icon m-b20 scale-in-center">
-                                                            <i class="fa fa-map-marker"></i>
-                                                        </div>
-                                                        <div class="icon-content">
-                                                            <h6 class="m-t0">Мой адрес</h6>
-                                                            <p>город Лида, бульвар Князя Гедимина, 12</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="full-social-bg">
-                                                        <ul>
-                                                            <li>
-                                                                <a href="https://www.tiktok.com/@rieltor_olga_lida" target="_blank" rel="noopener noreferrer" class="facebook" aria-label="TikTok"><i class="fa-brands fa-tiktok" aria-hidden="true"></i></a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="mailto:olgaturko1975@gmail.com" class="google" aria-label="Написать на Email"><i class="fa-duotone fa-solid fa-envelope" aria-hidden="true"></i></a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="https://www.instagram.com/rielter_olga_lida" target="_blank" rel="noopener noreferrer" class="instagram" aria-label="Instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="viber://chat?number=%2B375291809516" target="_blank" rel="noopener noreferrer" class="tumblr" aria-label="Написать в Viber"><i class="fa-brands fa-viber" aria-hidden="true"></i></a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="https://t.me/TurkoOlga" target="_blank" rel="noopener noreferrer" class="twitter" aria-label="Написать в Telegram"><i class="fa-brands fa-telegram" aria-hidden="true"></i></a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="https://wa.me/375291809516" class="youtube" aria-label="Написать в WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-6 col-lg-6 col-md-12">
-                                                <div class="contact-nav-field shadow-lg p-a30 bg-white" style="background-image: url(/images/background/bg-map.webp)">
-                                                    <div class="cons-contact-info form-transparent">
-                                                        <span class="spin">Узнать больше, записаться на консультацию</span>
-                                                        <div class="text-left p-t10">
-                                                            <a href="tel:+375291809516" class="site-button-secondry btn-half">
-                                                                <span class="hermes">+375 29 180 95 16</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+<header class="site-header nav-wide nav-transparent">
+  <div class="sticky-header is-stuck main-bar-wraper navbar-expand-lg">
+    <div class="main-bar">
+      <div class="container clearfix">
+
+        <!-- Logo -->
+        <div class="logo-header">
+          <div class="logo-header-inner logo-header-one">
+            <a href="/">
+              <img src="images/logo-light.svg" class="site-logo site-logo--light" alt="Ольга Турко — риэлтер в Лиде" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button
+          id="mobile-side-drawer"
+          type="button"
+          class="navbar-toggler"
+          aria-label="Открыть меню"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar icon-bar-first"></span>
+          <span class="icon-bar icon-bar-two"></span>
+          <span class="icon-bar icon-bar-three"></span>
+        </button>
+
+        <!-- Desktop Navigation ONLY -->
+        <div class="header-nav nav-dark justify-content-start">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Главная</a></li>
+            <li><a href="/rieltor-lida">Обо мне</a></li>
+            <li><a href="/nedvizhimost-lida">Объекты</a></li>
+            <li class="active"><a href="/rynok-nedvizhimosti-lida">Рынок</a></li>
+            <li><a href="/blog">Блог</a></li>
+            <li><a href="/faq">Вопросы</a></li>
+            <li><a href="/contact">Контакты</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 
         <!-- MOBILE MENU -->
         <div class="mnav-overlay" id="mnavOverlay"></div>
@@ -468,18 +340,13 @@
             <!-- =============================================
                КАЛЬКУЛЯТОР — перенесён со страницы FAQ
             ============================================== -->
-            <section class="rem-calc-section" id="kalkulator-nedvizhimosti" aria-label="Калькулятор откладывания покупки">
-                <div class="container">
+            <section class="delay-calc" id="delay-calculator" aria-label="Калькулятор откладывания покупки">
+               <header class="section-head section-head--bracket">
+  <h2 class="section-title">Интерактивный калькулятор</h2>
+</header>
 
-                    <div class="rem-section-intro rem-reveal">
-                        <span class="rem-section-eyebrow">Интерактивный инструмент</span>
-                        <header class="section-head section-head--bracket">
-                            <h2 class="section-title">Сколько стоит ждать?</h2>
-                        </header>
-                        <p>Введите данные о планируемой покупке — калькулятор покажет полную картину финансовых потерь от откладывания на год.</p>
-                    </div>
-
-                    <div class="delay-calc__inner rem-reveal rem-reveal--delay-1">
+        <div class="container">
+          <div class="delay-calc__inner">
 
                         <span class="delay-calc__eyebrow">Интерактивный калькулятор</span>
                         <h3 class="delay-calc__title">Что я теряю, если отложу покупку на год?</h3>
