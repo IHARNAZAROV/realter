@@ -24,13 +24,16 @@ if (preg_match('#^/blog/([a-zA-Z0-9_\-]+)/?$#', $uri, $m)) {
 
 // Clean URL aliases for static HTML pages
 $htmlMap = [
-    '/nedvizhimost-lida' => 'nedvizhimost-lida.html',
-    '/rieltor-lida'      => 'rieltor-lida.html',
-    '/blog'              => 'blog.html',
-    '/contact'           => 'contact.html',
-    '/faq'               => 'faq.html',
-    '/Privacy'           => 'Privacy.html',
-    '/cookies-policy'    => 'cookies-policy.html',
+    '/nedvizhimost-lida'           => 'nedvizhimost-lida.html',
+    '/rieltor-lida'                => 'rieltor-lida.html',
+    '/blog'                        => 'blog.html',
+    '/contact'                     => 'contact.html',
+    '/faq'                         => 'faq.html',
+    '/Privacy'                     => 'Privacy.html',
+    '/cookies-policy'              => 'cookies-policy.html',
+    '/rynok-nedvizhimosti-lida'    => 'rynok-nedvizhimosti-lida.html',
+    '/analitika-nedvizhimosti-lida'=> 'rynok-nedvizhimosti-lida.html',
+    '/ceny-nedvizhimosti-lida'     => 'rynok-nedvizhimosti-lida.html',
 ];
 
 $uriClean = rtrim($uri, '/');
