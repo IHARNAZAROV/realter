@@ -381,148 +381,89 @@
         =============================================== -->
         <div class="page-content">
 
-            <!-- =============================================
-               HERO
-            ============================================== -->
-            <section class="rem-hero" aria-label="Рынок недвижимости Лиды">
-                <div class="rem-hero__grid" aria-hidden="true"></div>
-                <div class="rem-hero__floater rem-hero__floater--1" aria-hidden="true"></div>
-                <div class="rem-hero__floater rem-hero__floater--2" aria-hidden="true"></div>
-                <div class="rem-hero__floater rem-hero__floater--3" aria-hidden="true"></div>
-
+            <!-- Inner Banner -->
+            <section class="page-intro">
                 <div class="container">
-                    <div class="rem-hero__inner">
+                    <div class="page-intro-inner">
 
-                        <span class="rem-hero__eyebrow">
-                            <i class="fa-solid fa-chart-line"></i>
-                            Аналитика · 2026
+                        <span class="page-intro-eyebrow">
+                            Аналитика рынка · 2026
                         </span>
 
-                        <h1 class="rem-hero__h1">
-                            Рынок недвижимости<br>
-                            <span>Лиды</span>
+                        <h1 class="page-intro-title">
+                            Рынок недвижимости Лиды
                         </h1>
 
-                        <p class="rem-hero__desc">
-                            Актуальные цены, аналитика, обзоры и статистика рынка недвижимости в Лиде.
+                        <p class="page-intro-description">
+                            Актуальные цены, аналитика, обзоры и статистика рынка недвижимости в Лиде.<br>
                             Данные обновляются автоматически на основе реальных объявлений.
                         </p>
 
-                        <p class="rem-hero__seo-text">
-                            Рынок недвижимости Лиды в 2026 году демонстрирует устойчивую динамику. Средние цены на квартиры,
-                            дома и коммерческую недвижимость формируются под влиянием инфляции, покупательского спроса
-                            и ипотечных программ. На этой странице собраны актуальные данные, аналитика трендов и
-                            инструменты для принятия взвешенного решения о покупке или продаже.
-                        </p>
+                        <div class="page-intro-divider"></div>
 
-                        <div class="rem-hero__stats" aria-label="Ключевые показатели рынка">
-                            <div class="rem-hero__stat">
-                                <span class="rem-hero__stat-num" data-rem-count="8" data-rem-suffix="%" data-rem-dur="1400">8%</span>
-                                <span class="rem-hero__stat-lbl">рост цен/год</span>
-                            </div>
-                            <div class="rem-hero__stat">
-                                <span class="rem-hero__stat-num" data-rem-count="20" data-rem-suffix="+" data-rem-dur="1200">20+</span>
-                                <span class="rem-hero__stat-lbl">объектов в базе</span>
-                            </div>
-                            <div class="rem-hero__stat">
-                                <span class="rem-hero__stat-num" data-rem-count="15" data-rem-suffix="лет" data-rem-dur="1600">15 лет</span>
-                                <span class="rem-hero__stat-lbl">на рынке</span>
-                            </div>
-                            <div class="rem-hero__stat">
-                                <span class="rem-hero__stat-num" data-rem-count="100" data-rem-suffix="%" data-rem-dur="1000">100%</span>
-                                <span class="rem-hero__stat-lbl">реальных данных</span>
-                            </div>
-                        </div>
-
-                        <nav aria-label="breadcrumb">
-                            <ol class="rem-hero__breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
-                                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                                    <a href="/" itemprop="item"><span itemprop="name">Главная</span></a>
-                                    <meta itemprop="position" content="1">
-                                </li>
-                                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-                                    <span itemprop="name">Рынок недвижимости Лиды</span>
-                                    <meta itemprop="position" content="2">
-                                </li>
-                            </ol>
+                        <nav class="page-intro-breadcrumb" aria-label="breadcrumb">
+                            <ul>
+                                <li><a href="/">Главная</a></li>
+                                <li>Рынок недвижимости Лиды</li>
+                            </ul>
                         </nav>
 
                     </div>
                 </div>
             </section>
 
-            <!-- =============================================
-               БЛОК ЦЕН — перенесён с главной страницы
-            ============================================== -->
-            <section class="rem-section rem-section--gray" id="ceny-nedvizhimosti" aria-labelledby="pricesHeading">
+            <!-- SECTION: Market analytics -->
+            <div class="section-full mobile-page-padding p-t80 p-b50 bg-gray">
                 <div class="container">
+                    <header class="section-head section-head--bracket m-b30">
+                        <h2 class="section-title">Средние цены недвижимости в Лиде</h2>
+                    </header>
 
-                    <div class="rem-section-intro rem-reveal">
-                        <span class="rem-section-eyebrow">Актуальные данные</span>
-                        <header class="section-head section-head--bracket">
-                            <h2 class="section-title" id="pricesHeading">Средние цены недвижимости в Лиде</h2>
-                        </header>
-                        <p>Цены рассчитываются автоматически из реальных объявлений в базе. Обновляются при каждом визите.</p>
+                    <div class="market-analytics" id="market-analytics">
+                        <div class="market-analytics__stats">
+                            <article class="market-card" data-kind="apartment">
+                                <p class="market-card__label">Средняя стоимость квартир</p>
+                                <p class="market-card__price" id="avg-apartment-price">—</p>
+                                <p class="market-card__sqm" id="avg-apartment-sqm">—</p>
+                            </article>
+
+                            <article class="market-card market-card--trend" data-kind="trend">
+                                <p class="market-card__label">Индикатор тренда</p>
+                                <p class="market-card__trend" id="market-trend">—</p>
+                                <p class="market-card__sqm" id="market-trend-details">—</p>
+                            </article>
+
+                            <article class="market-card" data-kind="room-1">
+                                <p class="market-card__label">1-комнатные квартиры</p>
+                                <p class="market-card__price" id="avg-room-1-price">—</p>
+                                <p class="market-card__sqm" id="avg-room-1-sqm">—</p>
+                            </article>
+
+                            <article class="market-card" data-kind="room-2">
+                                <p class="market-card__label">2-комнатные квартиры</p>
+                                <p class="market-card__price" id="avg-room-2-price">—</p>
+                                <p class="market-card__sqm" id="avg-room-2-sqm">—</p>
+                            </article>
+
+                            <article class="market-card" data-kind="room-3">
+                                <p class="market-card__label">3-комнатные квартиры</p>
+                                <p class="market-card__price" id="avg-room-3-price">—</p>
+                                <p class="market-card__sqm" id="avg-room-3-sqm">—</p>
+                            </article>
+
+                            <article class="market-card" data-kind="room-4">
+                                <p class="market-card__label">4-комнатные квартиры</p>
+                                <p class="market-card__price" id="avg-room-4-price">—</p>
+                                <p class="market-card__sqm" id="avg-room-4-sqm">—</p>
+                            </article>
+                        </div>
+
+                        <div class="market-analytics__chart-wrap">
+                            <canvas id="market-price-chart" aria-label="График динамики средней стоимости квартир в Лиде" role="img"></canvas>
+                        </div>
                     </div>
-
-                    <!-- Расширенные карточки с иконками и дельтой -->
-                    <div class="rem-prices-grid rem-reveal rem-reveal--delay-1">
-
-                        <article class="rem-price-card rem-price-card--accent" data-kind="apartment">
-                            <div class="rem-price-card__icon"><i class="fa-solid fa-building" aria-hidden="true"></i></div>
-                            <p class="rem-price-card__label">Средняя стоимость квартир</p>
-                            <p class="rem-price-card__value" id="avg-apartment-price">—</p>
-                            <p class="rem-price-card__sub" id="avg-apartment-sqm">—</p>
-                        </article>
-
-                        <article class="rem-price-card" data-kind="trend">
-                            <div class="rem-price-card__icon"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i></div>
-                            <p class="rem-price-card__label">Индикатор тренда</p>
-                            <p class="rem-price-card__value" id="market-trend">—</p>
-                            <p class="rem-price-card__sub" id="market-trend-details">—</p>
-                        </article>
-
-                        <article class="rem-price-card" data-kind="room-1">
-                            <div class="rem-price-card__icon"><i class="fa-solid fa-door-open" aria-hidden="true"></i></div>
-                            <p class="rem-price-card__label">1-комнатные квартиры</p>
-                            <p class="rem-price-card__value" id="avg-room-1-price">—</p>
-                            <p class="rem-price-card__sub" id="avg-room-1-sqm">—</p>
-                            <span class="rem-price-card__delta rem-price-card__delta--up">↑ 8%/год</span>
-                        </article>
-
-                        <article class="rem-price-card" data-kind="room-2">
-                            <div class="rem-price-card__icon"><i class="fa-solid fa-couch" aria-hidden="true"></i></div>
-                            <p class="rem-price-card__label">2-комнатные квартиры</p>
-                            <p class="rem-price-card__value" id="avg-room-2-price">—</p>
-                            <p class="rem-price-card__sub" id="avg-room-2-sqm">—</p>
-                            <span class="rem-price-card__delta rem-price-card__delta--up">↑ 8%/год</span>
-                        </article>
-
-                        <article class="rem-price-card" data-kind="room-3">
-                            <div class="rem-price-card__icon"><i class="fa-solid fa-house-user" aria-hidden="true"></i></div>
-                            <p class="rem-price-card__label">3-комнатные квартиры</p>
-                            <p class="rem-price-card__value" id="avg-room-3-price">—</p>
-                            <p class="rem-price-card__sub" id="avg-room-3-sqm">—</p>
-                            <span class="rem-price-card__delta rem-price-card__delta--up">↑ 7%/год</span>
-                        </article>
-
-                        <article class="rem-price-card" data-kind="room-4">
-                            <div class="rem-price-card__icon"><i class="fa-solid fa-city" aria-hidden="true"></i></div>
-                            <p class="rem-price-card__label">4-комнатные квартиры</p>
-                            <p class="rem-price-card__value" id="avg-room-4-price">—</p>
-                            <p class="rem-price-card__sub" id="avg-room-4-sqm">—</p>
-                            <span class="rem-price-card__delta rem-price-card__delta--flat">→ стабильно</span>
-                        </article>
-
-                    </div>
-
-                    <!-- График динамики цен -->
-                    <div class="rem-chart-wrap rem-reveal rem-reveal--delay-2">
-                        <canvas id="market-price-chart" aria-label="График динамики средней стоимости квартир в Лиде" role="img"></canvas>
-                    </div>
-
                 </div>
-            </section>
+            </div>
 
             <!-- =============================================
                КАЛЬКУЛЯТОР — перенесён со страницы FAQ
