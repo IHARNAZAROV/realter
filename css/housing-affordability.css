@@ -36,47 +36,11 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(21,89,69,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(21,89,69,0.04) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
   animation: haiGridShift 25s linear infinite;
 }
 
-/* Soft glow orbs */
-.hai-section::after {
-  content: '';
-  position: absolute;
-  top: -120px;
-  right: -120px;
-  width: 480px;
-  height: 480px;
-  background: radial-gradient(circle, rgba(21,89,69,0.06) 0%, transparent 70%);
-  pointer-events: none;
-  animation: haiOrbPulse 10s ease-in-out infinite alternate;
-}
-
-.hai-glow-orb {
-  position: absolute;
-  bottom: -100px;
-  left: -80px;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(215,179,154,0.12) 0%, transparent 70%);
-  pointer-events: none;
-  animation: haiOrbPulse 12s ease-in-out infinite alternate-reverse;
-}
-
-@keyframes haiGridShift {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(48px); }
-}
-
-@keyframes haiOrbPulse {
-  0%   { opacity: 0.5; transform: scale(1); }
-  100% { opacity: 1;   transform: scale(1.12); }
-}
 
 /* ---- HEADER ---- */
 .hai-header {
