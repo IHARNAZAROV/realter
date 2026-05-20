@@ -156,13 +156,13 @@
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: 'rgba(10,22,40,0.95)',
-            borderColor: 'rgba(61,214,176,0.3)',
+            backgroundColor: 'rgba(35,37,45,0.94)',
+            borderColor: 'rgba(21,89,69,0.3)',
             borderWidth: 1,
             padding: 16,
-            titleColor: '#e8edf5',
+            titleColor: '#ffffff',
             titleFont: { size: 14, weight: '700' },
-            bodyColor: 'rgba(232,237,245,0.7)',
+            bodyColor: 'rgba(255,255,255,0.75)',
             bodyFont: { size: 13 },
             bodySpacing: 6,
             callbacks: {
@@ -185,11 +185,11 @@
         scales: {
           x: {
             grid: {
-              color: 'rgba(255,255,255,0.05)',
+              color: 'rgba(21,89,69,0.07)',
               drawBorder: false
             },
             ticks: {
-              color: 'rgba(232,237,245,0.5)',
+              color: '#787878',
               font: { size: 12, weight: '500' }
             }
           },
@@ -197,11 +197,11 @@
             type: 'linear',
             position: 'left',
             grid: {
-              color: 'rgba(255,255,255,0.05)',
+              color: 'rgba(21,89,69,0.07)',
               drawBorder: false
             },
             ticks: {
-              color: '#3dd6b0',
+              color: '#155945',
               font: { size: 11 },
               callback: (v) => fmt(v) + ' BYN'
             }
@@ -211,7 +211,7 @@
             position: 'right',
             grid: { display: false },
             ticks: {
-              color: '#ff6b6b',
+              color: '#c0392b',
               font: { size: 11 },
               callback: (v) => v + 'k BYN'
             }
