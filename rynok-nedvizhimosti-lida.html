@@ -68,6 +68,7 @@
     <link rel="stylesheet" href="/css/style.css" data-versioned>
     <link rel="stylesheet" href="/css/delay-calc.css" data-versioned>
     <link rel="stylesheet" href="/css/real-estate-market.css" data-versioned>
+    <link rel="stylesheet" href="/css/housing-affordability.css" data-versioned>
 
     <!-- ==============================================
        8. NON-CRITICAL CSS
@@ -341,6 +342,112 @@
                     </div>
                 </div>
             </div>
+
+            <!-- =============================================
+               ИНДЕКС ДОСТУПНОСТИ ЖИЛЬЯ
+            ============================================== -->
+            <section class="hai-section" id="housing-affordability-index" aria-labelledby="haiTitle">
+                <div class="hai-glow-orb" aria-hidden="true"></div>
+                <div class="container" style="position:relative;z-index:2;">
+
+                    <!-- Header -->
+                    <div class="hai-header hai-reveal">
+                        <span class="hai-eyebrow">Аналитика доступности</span>
+                        <h2 class="hai-title" id="haiTitle">Индекс доступности жилья в Беларуси</h2>
+                        <p class="hai-subtitle">Показываем, сколько лет требуется среднестатистическому жителю Беларуси, чтобы накопить на квартиру при средней зарплате и текущих ценах на недвижимость.</p>
+                    </div>
+
+                    <!-- Highlight Card -->
+                    <div class="hai-highlight hai-reveal hai-reveal--delay-1">
+                        <div class="hai-highlight__icon" aria-hidden="true">🏠</div>
+                        <div class="hai-highlight__body">
+                            <p class="hai-highlight__label">Ключевой показатель · 2026</p>
+                            <p class="hai-highlight__text">В 2026 году среднему жителю Беларуси требуется <em>около 12 лет накоплений</em> на квартиру при откладывании 35% дохода — несмотря на устойчивый рост зарплат.</p>
+                        </div>
+                        <div class="hai-highlight__stat" aria-label="Индекс доступности 2026">
+                            <span class="hai-highlight__stat-value" id="haiHighlightYrs">—</span>
+                            <div class="hai-highlight__stat-label">лет накоплений · 2026</div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="hai-stats-row hai-reveal hai-reveal--delay-2">
+                        <div class="hai-stat-card">
+                            <div class="hai-stat-card__label">Средняя зарплата · 2026</div>
+                            <div class="hai-stat-card__value hai-stat-card__value--green"><span id="haiStatSalary">—</span>&nbsp;BYN</div>
+                            <span class="hai-stat-card__delta" id="haiDeltaSalary">—</span>
+                        </div>
+                        <div class="hai-stat-card">
+                            <div class="hai-stat-card__label">Стоимость квартиры · 2026</div>
+                            <div class="hai-stat-card__value hai-stat-card__value--red"><span id="haiStatPrice">—</span>&nbsp;BYN</div>
+                            <span class="hai-stat-card__delta" id="haiDeltaPrice">—</span>
+                        </div>
+                        <div class="hai-stat-card">
+                            <div class="hai-stat-card__label">Индекс доступности · 2026</div>
+                            <div class="hai-stat-card__value hai-stat-card__value--blue"><span id="haiStatIndex">—</span>&nbsp;лет</div>
+                            <span class="hai-stat-card__delta" id="haiDeltaIndex">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="hai-chart-wrap hai-reveal hai-reveal--delay-2">
+                        <div class="hai-chart-header">
+                            <div>
+                                <p class="hai-chart-title">Динамика зарплат, цен на жильё и индекса доступности</p>
+                                <p class="hai-chart-sub">Источники: Белстат, данные рынка недвижимости Беларуси 2020–2026</p>
+                            </div>
+                            <div class="hai-legend" aria-hidden="true">
+                                <div class="hai-legend__item"><span class="hai-legend__dot hai-legend__dot--salary"></span>Зарплата</div>
+                                <div class="hai-legend__item"><span class="hai-legend__dot hai-legend__dot--price"></span>Квартира</div>
+                                <div class="hai-legend__item"><span class="hai-legend__dot hai-legend__dot--index"></span>Лет копить</div>
+                            </div>
+                        </div>
+
+                        <!-- Toggle -->
+                        <div class="hai-toggle-wrap">
+                            <span class="hai-toggle-label">Режим отображения:</span>
+                            <div class="hai-toggle" role="group" aria-label="Переключение режима цен">
+                                <button class="hai-toggle__btn active" data-mode="nominal" aria-pressed="true">Номинальные цены</button>
+                                <button class="hai-toggle__btn" data-mode="real" aria-pressed="false">С учётом инфляции</button>
+                            </div>
+                        </div>
+
+                        <div class="hai-canvas-wrap">
+                            <canvas id="haiChart" aria-label="График доступности жилья в Беларуси 2020–2026" role="img" tabindex="0"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Cards -->
+                    <div class="hai-timeline-section hai-reveal hai-reveal--delay-3">
+                        <div class="hai-timeline-title">Сравнение по годам</div>
+                        <div class="hai-timeline" id="haiTimeline" aria-label="Данные по годам"></div>
+                    </div>
+
+                    <!-- AI-style Insight -->
+                    <div class="hai-insight hai-reveal hai-reveal--delay-3">
+                        <div class="hai-insight__header">
+                            <div class="hai-insight__icon" aria-hidden="true">📊</div>
+                            <span class="hai-insight__tag">Аналитический вывод</span>
+                        </div>
+                        <p class="hai-insight__text" id="haiInsightText">Загрузка данных...</p>
+                    </div>
+
+                    <!-- SEO Block -->
+                    <div class="hai-seo hai-reveal hai-reveal--delay-4">
+                        <h3>Насколько доступно жильё в Беларуси в 2026 году?</h3>
+                        <p>
+                            Индекс доступности жилья — ключевой показатель рынка недвижимости Беларуси.
+                            По данным Белстат, средняя зарплата в Беларуси в 2026 году составляет около 2&nbsp;750&nbsp;BYN.
+                            При средней стоимости квартиры в Беларуси 138&nbsp;000&nbsp;BYN и откладывании 35% дохода,
+                            на накопление уходит около 12 лет. Цены на квартиры в Беларуси с 2020 по 2026 год выросли
+                            на 92%, тогда как средняя зарплата выросла на 128%, что свидетельствует о постепенном
+                            улучшении доступности жилья. Тем не менее рынок недвижимости Беларуси остаётся
+                            чувствительным к инфляции и макроэкономическим факторам.
+                        </p>
+                    </div>
+
+                </div>
+            </section>
 
             <!-- =============================================
                КАЛЬКУЛЯТОР — перенесён со страницы FAQ
@@ -790,6 +897,7 @@
     <script src="/js/live-price.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
     <script src="/js/market-analytics.js" defer data-versioned></script>
+    <script src="/js/housing-affordability.js" defer data-versioned></script>
     <script src="/js/delay-calc.js" defer data-versioned></script>
     <script src="/js/real-estate-market.js" defer data-versioned></script>
     <script src="/js/blog-smart-badge.js" defer></script>
