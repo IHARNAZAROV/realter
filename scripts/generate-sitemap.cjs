@@ -16,12 +16,17 @@ const OUTPUT_SITEMAP = path.join(ROOT, "sitemap.xml");
 /* ===================== Статические страницы ===================== */
 
 const STATIC_PAGES = [
-  { loc: "/",                    priority: "1.0", changefreq: "daily"   },
-  { loc: "/nedvizhimost-lida",   priority: "0.9", changefreq: "daily"   },
-  { loc: "/rieltor-lida",        priority: "0.8", changefreq: "monthly" },
-  { loc: "/blog",                priority: "0.8", changefreq: "weekly"  },
-  { loc: "/faq",                 priority: "0.6", changefreq: "monthly" },
-  { loc: "/contact",             priority: "0.6", changefreq: "monthly" },
+  { loc: "/", priority: "1.0", changefreq: "daily" },
+  { loc: "/nedvizhimost-lida", priority: "0.9", changefreq: "daily" },
+  { loc: "/rieltor-lida", priority: "0.8", changefreq: "monthly" },
+  { loc: "/blog", priority: "0.8", changefreq: "weekly" },
+  { loc: "/faq", priority: "0.6", changefreq: "monthly" },
+  { loc: "/contact", priority: "0.6", changefreq: "monthly" },
+  {
+    loc: "/rynok-nedvizhimosti-lida.html",
+    priority: "0.8",
+    changefreq: "weekly",
+  },
 ];
 
 /* ===================== Источники из JSON ===================== */
@@ -84,7 +89,9 @@ function parseDate(str) {
   if (!match) return null;
   const [, dd, mm, yyyy] = match;
   const d = new Date(`${yyyy}-${mm}-${dd}T00:00:00+00:00`);
-  return isNaN(d.getTime()) ? null : d.toISOString().replace(/\.\d+Z$/, "+00:00");
+  return isNaN(d.getTime())
+    ? null
+    : d.toISOString().replace(/\.\d+Z$/, "+00:00");
 }
 
 function escapeXml(str) {
@@ -114,12 +121,14 @@ function generateSitemap() {
   const entries = [];
 
   STATIC_PAGES.forEach(({ loc, priority, changefreq }) => {
-    entries.push(buildUrlEntry({
-      loc: `${SITE_URL}${loc}`,
-      lastmod: now,
-      priority,
-      changefreq,
-    }));
+    entries.push(
+      buildUrlEntry({
+        loc: `${SITE_URL}${loc}`,
+        lastmod: now,
+        priority,
+        changefreq,
+      }),
+    );
   });
 
   SOURCES.forEach(({ file, buildUrl, priority, changefreq, dateField }) => {
@@ -133,12 +142,14 @@ function generateSitemap() {
 
     items.forEach((item) => {
       const lastmod = (dateField && parseDate(item[dateField])) || now;
-      entries.push(buildUrlEntry({
-        loc: buildUrl(item.slug),
-        lastmod,
-        priority,
-        changefreq,
-      }));
+      entries.push(
+        buildUrlEntry({
+          loc: buildUrl(item.slug),
+          lastmod,
+          priority,
+          changefreq,
+        }),
+      );
     });
   });
 
