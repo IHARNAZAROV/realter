@@ -216,6 +216,30 @@
     }
   }
 
+  const CANVAS_DEFAULT_H = 480;
+
+  /* Resize canvas + track to fit the tallest card (expanded or compact) */
+  function fitCanvasHeight(canvas) {
+    const track = canvas.closest('.market-timeline-track');
+    const isTop = (card) => card.classList.contains('mtl-card--top');
+
+    let needed = CANVAS_DEFAULT_H;
+    canvas.querySelectorAll('.mtl-card').forEach(card => {
+      const cardTop = parseInt(card.style.top, 10) || 0;
+      const cardH   = card.scrollHeight;
+      needed = Math.max(needed, cardTop + cardH + 32);
+    });
+
+    canvas.style.height = needed + 'px';
+    if (track) track.style.minHeight = (needed + 112) + 'px'; /* 56px padding top+bottom */
+  }
+
+  function resetCanvasHeight(canvas) {
+    const track = canvas.closest('.market-timeline-track');
+    canvas.style.height = CANVAS_DEFAULT_H + 'px';
+    if (track) track.style.minHeight = '';
+  }
+
   function expandCard(card, canvas, marker) {
     /* collapse any previously expanded card */
     const prev = canvas.querySelector('.mtl-card.is-expanded');
@@ -227,16 +251,17 @@
     card.setAttribute('aria-expanded', 'true');
     canvas.classList.add('has-expanded');
 
-    /* update expanded content aria */
     const expandedEl = card.querySelector('.mtl-card__expanded');
     if (expandedEl) expandedEl.setAttribute('aria-hidden', 'false');
 
-    /* activate marker */
     if (marker) marker.classList.add('is-active');
 
-    /* scroll card into center view */
+    /* wait for layout, then fit height and scroll into view */
     requestAnimationFrame(() => {
-      scrollCardIntoView(card);
+      requestAnimationFrame(() => {
+        fitCanvasHeight(canvas);
+        scrollCardIntoView(card);
+      });
     });
 
     expandedYear = card.dataset.year;
@@ -249,12 +274,14 @@
     const expandedEl = card.querySelector('.mtl-card__expanded');
     if (expandedEl) expandedEl.setAttribute('aria-hidden', 'true');
 
-    /* deactivate marker */
     const year = card.dataset.year;
     const marker = document.querySelector(`.mtl-year-marker[aria-label="Год: ${year}"]`);
     if (marker) marker.classList.remove('is-active');
 
-    if (!silent) canvas.classList.remove('has-expanded');
+    if (!silent) {
+      canvas.classList.remove('has-expanded');
+      resetCanvasHeight(canvas);
+    }
     expandedYear = null;
   }
 
@@ -303,14 +330,6 @@
       if (Math.abs(dist) > 4) hasDragged = true;
       track.scrollLeft = scrollLeft - dist;
     });
-
-    /* wheel → horizontal scroll */
-    track.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        track.scrollLeft += e.deltaY;
-      }
-    }, { passive: false });
 
     /* prevent card clicks after drag */
     track.addEventListener('click', (e) => {
