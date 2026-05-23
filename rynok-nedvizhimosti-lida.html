@@ -69,6 +69,7 @@
     <link rel="stylesheet" href="/css/delay-calc.css" data-versioned>
     <link rel="stylesheet" href="/css/real-estate-market.css" data-versioned>
     <link rel="stylesheet" href="/css/housing-affordability.css" data-versioned>
+    <link rel="stylesheet" href="/css/market-timeline-horizontal.css" data-versioned>
     <link rel="stylesheet" href="/css/scroll-animations.css" data-versioned>
 
     <!-- ==============================================
@@ -417,9 +418,8 @@
                         </div>
                     </div>
 
-                    <!-- Timeline Cards -->
-                    <div class="hai-timeline-section hai-reveal hai-reveal--delay-3">
-                        <div class="hai-timeline-title">Сравнение по годам</div>
+                    <!-- Timeline Cards (compact comparison, kept for chart context) -->
+                    <div class="hai-timeline-section hai-reveal hai-reveal--delay-3" style="display:none">
                         <div class="hai-timeline" id="haiTimeline" aria-label="Данные по годам"></div>
                     </div>
 
@@ -447,6 +447,38 @@
                     </div>
 
                 </div>
+            </section>
+
+            <!-- =============================================
+               TIMELINE РЫНКА НЕДВИЖИМОСТИ — Cinematic Horizontal
+            ============================================== -->
+            <section class="market-timeline-section" id="market-timeline" aria-label="Timeline рынка недвижимости Лиды 2020–2026">
+
+                <div class="mtl-particles" aria-hidden="true"></div>
+
+                <div class="market-timeline-inner">
+
+                    <div class="market-timeline-header">
+                        <span class="market-timeline-eyebrow">Хроника рынка</span>
+                        <h2 class="market-timeline-title">Timeline рынка недвижимости Лиды</h2>
+                        <p class="market-timeline-subtitle">2020–2026: ключевые события, которые сформировали рынок. Кликните на карточку, чтобы раскрыть полный анализ.</p>
+                    </div>
+
+                    <div class="market-timeline-track-wrap">
+                        <div class="market-timeline-track" role="region" aria-label="Горизонтальная лента событий рынка">
+                            <div class="market-timeline-canvas">
+                                <!-- Cards and line are injected by market-timeline-horizontal.js -->
+                            </div>
+                        </div>
+
+                        <div class="mtl-scroll-arrows" aria-label="Навигация по timeline">
+                            <button class="mtl-arrow mtl-arrow--prev" aria-label="Предыдущий период">&#8592;</button>
+                            <button class="mtl-arrow mtl-arrow--next" aria-label="Следующий период">&#8594;</button>
+                        </div>
+                    </div>
+
+                </div>
+
             </section>
 
             <!-- =============================================
@@ -899,6 +931,7 @@
     <script src="/js/scroll-animations.js" defer data-versioned></script>
     <script src="/js/market-analytics.js" defer data-versioned></script>
     <script src="/js/housing-affordability.js" defer data-versioned></script>
+    <script src="/js/market-timeline-horizontal.js" defer data-versioned></script>
     <script src="/js/delay-calc.js" defer data-versioned></script>
     <script src="/js/real-estate-market.js" defer data-versioned></script>
     <script src="/js/blog-smart-badge.js" defer></script>
