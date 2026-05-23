@@ -436,39 +436,6 @@
   }
 
   /* ----------------------------------------------------------
-     COUNT-UP: HAI STATS via MutationObserver
-     ---------------------------------------------------------- */
-  function setupHaiCountups() {
-    const cfgs = [
-      { sel: '#haiHighlightYrs', decimals: 1, duration: 1200 },
-      { sel: '#haiStatSalary',   decimals: 0, duration: 1400 },
-      { sel: '#haiStatPrice',    decimals: 0, duration: 1400 },
-      { sel: '#haiStatIndex',    decimals: 1, duration: 1200 },
-    ];
-
-    cfgs.forEach(({ sel, decimals, duration }) => {
-      const el = document.querySelector(sel);
-      if (!el) return;
-
-      const mo = new MutationObserver(() => {
-        const text = el.textContent || '';
-        if (text === '—' || text === '') return;
-        const raw = text.replace(/[^\d,.]/g, '').replace(',', '.');
-        const num = parseFloat(raw);
-        if (!isFinite(num) || num === 0) return;
-        mo.disconnect();
-
-        const obs = createRevealObserver(0.1, () => {
-          animateCountUp(el, num, duration, decimals);
-          obs.disconnect();
-        });
-        obs.observe(el);
-      });
-      mo.observe(el, { childList: true, characterData: true, subtree: true });
-    });
-  }
-
-  /* ----------------------------------------------------------
      LIVE BADGE — inject "Рынок активен" indicator
      ---------------------------------------------------------- */
   function injectLiveBadge() {
@@ -609,7 +576,6 @@
     setupDelayCalcCards();
     setupBarAnimation();
     setupMarketCountups();
-    setupHaiCountups();
     injectLiveBadge();
     setupTrendArrow();
     setupParallax();
