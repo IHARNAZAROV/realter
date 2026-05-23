@@ -65,15 +65,12 @@
   border: 1px solid rgba(21,89,69,0.18);
   border-radius: 20px;
   padding: 5px 16px;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
-.market-timeline-title {
-  font-size: clamp(26px, 3vw, 40px);
-  font-weight: 700;
-  color: var(--color-primary, #155945);
-  line-height: 1.2;
-  margin: 0 0 12px;
+/* Override global section-head margin inside timeline header */
+.market-timeline-header .section-head {
+  margin-bottom: 8px;
 }
 
 .market-timeline-subtitle {
@@ -641,21 +638,41 @@
 
 /* ---- Mobile ---- */
 @media (max-width: 768px) {
-  .market-timeline-section { padding: 60px 0 70px; }
-  .market-timeline-inner   { padding: 0 20px; }
+  .market-timeline-section { padding: 52px 0 60px; }
+  .market-timeline-inner   { padding: 0 16px; }
+
+  .market-timeline-header  { margin-bottom: 40px; }
 
   .market-timeline-track {
-    padding: 48px 40px;
+    padding: 40px 24px;
     scroll-snap-type: x mandatory;
   }
 
-  .market-timeline-canvas { height: 460px; }
+  .market-timeline-canvas { height: 440px; }
+
+  .market-timeline-subtitle {
+    font-size: 14px;
+    padding: 0 8px;
+  }
 
   .mtl-card         { width: 240px; }
   .mtl-card.is-expanded { width: 300px; }
+
+  .mtl-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 480px) {
+  .market-timeline-section { padding: 44px 0 52px; }
+  .market-timeline-inner   { padding: 0 12px; }
+
+  .market-timeline-track { padding: 32px 16px; }
+
+  .market-timeline-canvas { height: 420px; }
+
   .mtl-card         { width: 210px; }
   .mtl-card.is-expanded { width: 270px; }
 }
